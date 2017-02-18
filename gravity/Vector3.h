@@ -107,6 +107,6 @@ public:
 
 };
 
-}//namespace ti_math
+}
 
-#endif // End of VECTOR3_H_
+#endif

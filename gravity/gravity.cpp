@@ -23,8 +23,6 @@ int density;
 double zoom;
 double momentum_avrg;
 double g_const;
-double speed_of_light;
-double speed_of_l_inv;
 
 //ファイル処理関係
 HANDLE hFile;
@@ -42,35 +40,7 @@ INT_RANGE, *lpINT_RANGE;
 //距離の計算
 inline double get_distance(int i, int j)
 {
-	double dot = locat[i].Dot(locat[j]);
-	if (dot >= 1.0) // 距離ゼロを許容しない
-	{
-		printf("[warning] dot:%f >= 1\r\n", dot);
-		return DBL_MIN;
-	}
-	if (dot < -1.0)
-	{
-		printf("[warning] dot:%f < 1\r\n", dot);
-		dot = -1.0;
-	}
-	return acos(dot);
-}
-//----------------------------------------------------------------------------
-//ローレンツ因子
-/*
-p = mvγ
-から、速度イコールに変形して
-v = p / sqrt(m^2 + |p|^2 / c^2 )
-*/
-inline double lorentz_speed(double x)
-{
-	//return 1.0 / sqrt(1.0 + x * x * (1.0 / speed_of_light));
-	return 1.0 / sqrt(1.0 + x * x * speed_of_l_inv);
-}
-//ローレンツ因子の逆数
-inline double lorentz_factor_inv(double x)
-{
-	return sqrt(1.0 - x * x * (1.0 / (speed_of_light + x * x)));
+	return (locat_ln_r[i] - locat_ln_r[j]).Abs();
 }
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
@@ -82,34 +52,11 @@ unsigned __stdcall time_progress(void * pArguments)
 	double theta;
 	Vector3<double> direction;
 
-	//運動量をかける
 	for (i = para->start; i < para->end; ++i)
 	{
-		if (speed_of_light == 0.0)
-		{
-			//locat[i] *= momentum[i];
-			locat[i] = momentum[i] * locat[i];
-		}
-		else
-		{
-			//特殊相対性理論による光速度限定
-			theta = acos(momentum[i].i0);
-			theta *= lorentz_speed(theta);
-			//theta /= 2.0;
-			if (theta == theta)
-			{
-				direction.x = momentum[i].i1;
-				direction.y = momentum[i].i2;
-				direction.z = momentum[i].i3;
-				direction.Normalize();
-				locat[i] = locat[i].RotMove(theta, direction);
-			}
-			else
-			{
-				momentum[i] = Quaternion<double>::Identity;
-			}
-		}
-
+		//運動量をかける
+		//質量は簡略化ですべて1
+		locat[i] = momentum[i] * locat[i];
 		//四元数の自然対数をとって３つの角度を算出。その角度を粒子の位置にする。
 		//表示のことを考慮して拡大しておく。
 		locat_ln_r[i] = locat[i].LnV3() * zoom;
@@ -125,11 +72,8 @@ unsigned __stdcall relation(void * pArguments)
 
 	int i, j, k;
 	double theta;
-	//double dm;
 	Quaternion<double> q;
 	Vector3<double> direction;
-	//Vector3<double> moment;
-	//Vector3<double> v3;
 
 	k = para->start * num_particle - (para->start + 1) * para->start / 2;
 
@@ -138,96 +82,38 @@ unsigned __stdcall relation(void * pArguments)
 	{
 		for (j = i + 1; j < num_particle; ++j)
 		{
-			//--------------------------------------------------------------
-			//4次元回転計算方式
-
-			//積分計算のための準備
-			//以下の計算をしているが、高速性のためにdistanceに次回のための計算結果を残している。
-			//theta = 1 / (前フレームの距離) - 1 / (距離);
 			theta = distance[k];
-			//--------------------------------------------------------------
-			//衝突の計算
-			//if (theta == theta && theta > 100.0 /*&& theta < 51.0*/)
-			//{
-				/*momentum[i] = Quaternion<double>::Identity;
-				momentum[j] = Quaternion<double>::Identity;*/
-				/*q = momentum[i];
-				momentum[i] = momentum[j];
-				momentum[j] = q;*/
-				/*theta = acos(momentum[i].Dot(momentum[j]));
-				if (theta == theta)
-				{
-					theta *= 0.5;
-					direction = momentum[j].Cross7V3(momentum[i]);
-					direction.Normalize();
-					if (direction == direction)
-					{
-						momentum[i] = momentum[i].RotMove(   theta * 0.4, direction);
-						momentum[j] = momentum[j].RotMove( - theta * 0.4, direction);
-					}
-				}*/
-			//	++k;
-			//	continue;
-			//}
-			//--------------------------------------------------------------
 			distance[k] = 1.0 / get_distance(i, j);
 			theta -= distance[k];
 
+			//お互いの距離がほとんど変化しなかった場合、微分で計算し、通常は積分計算をする。
+			//すべてを積分計算にすると、計算精度以下になった時動きがなくなる。それを回避する分岐。
+			//ちなみに、すべてを微分計算にすると、位置が大幅に変化したとき(このような大雑把な
+			//シミュレーションではしばしば起きることだが)、エネルギー保存則が破壊される。
 			//	微分計算の場合
 			//	theta = get_distance(i, j);
 			//	theta = 1.0 / (theta * theta);
-			//	theta = fabs(theta);
 
 			if (theta == theta)
 			{
 				theta = fabs(theta);
 				theta *= g_const;
-
-				//位置の差
-				direction = locat[i].Cross7V3(locat[j]);
-				direction.Normalize();
-				//--------------------------------------------------------------
-				//ローレンツ短縮(Lorentz contraction)の補正
-				//運動量によって重力を受ける方向だけが変わるとしている。
-				//実装せず。以下理由
-				//・結果がそれほど変わるものではなかった
-				//・計算時間がおよそ1.5倍に増える
-				//・物理的な意味付けが不完全
-				/*if (speed_of_light != 0.0)
-				{
-					//運動量の差
-					dm = acos(momentum[i].Dot(momentum[j]));
-					if (dm == dm)
-					{
-						moment = momentum[i].Cross7V3(momentum[j]);
-						moment.Normalize();
-						direction =
-							direction +
-							lorentz_factor_inv(dm) *
-							( - moment).Dot(direction) *
-							moment;
-						direction.Normalize();
-					}
-				}*/
-				//--------------------------------------------------------------
-				if (direction == direction)
-				{
-					momentum[i] = momentum[i].RotMove(-theta, direction);
-					momentum[j] = momentum[j].RotMove(theta, direction);
-				}
+				direction = locat_ln_r[j] - locat_ln_r[i];
+				direction *= theta;
+				momentum[i] *= Quaternion<double>::Exp(direction.x, direction.y, direction.z);
+				momentum[j] *= Quaternion<double>::Exp(-direction.x, -direction.y, -direction.z);
 			}
 			else
 			{
 				printf("[warning] invalid number at distance[%d].\r\n", k);
+				distance[k] = DBL_MAX;
 			}
-			//--------------------------------------------------------------
 			++k;
 		}
 	}
 
 	return 0;
 }
-//----------------------------------------------------------------------------
 
 int main(int argc, char * argv[])
 {
@@ -254,7 +140,6 @@ int main(int argc, char * argv[])
 	zoom = ZOOM;
 	momentum_avrg = MOMENTUM_AVRG;
 	g_const = GRAVITATIONAL_CONSTANT;
-	speed_of_light = SPEED_OF_LIGHT;
 	int num_frame = NUM_FRAME;
 	int init_preset = INIT_PRESET;
 
@@ -297,9 +182,6 @@ int main(int argc, char * argv[])
 		case 'g':
 			g_const = atof(argv[i] + 1) * 0.000001;
 			break;
-		case 'c':
-			speed_of_light = atof(argv[i] + 1) * 0.000001;
-			break;
 		case 's':
 			momentum_avrg = atof(argv[i] + 1) * 0.000001;
 			break;
@@ -317,10 +199,9 @@ int main(int argc, char * argv[])
 			break;
 		}
 	}
-	printf("N-body Gravity Simulation on S3\nVersion 0.7\n");
+	printf("N-body Gravity Simulation on Quaternion Logarithm\nVersion 0.7\n");
 	printf("n:%u particles\n", num_particle);
 	printf("g:%f - G constant\n", g_const * 1000000);
-	printf("c:%f - Speed of Light (Zero means no limit)\n", speed_of_light * 1000000);
 	printf("i:%u - Initialize Preset\n", init_preset);
 	printf("s:%f - Initialize Momentum Average\n", momentum_avrg * 1000000);
 	printf("d:%d - Initialize Density\n", density);
@@ -331,9 +212,6 @@ int main(int argc, char * argv[])
 	//--------------------------------------------------
 	//重力相互作用数
 	num_collision = num_particle * (num_particle - 1) / 2;
-
-	//光速の逆数をあらかじめ計算
-	speed_of_l_inv = 1.0 / speed_of_light;
 
 	//乱数準備
 	srand((unsigned)time(NULL));
@@ -404,7 +282,6 @@ int main(int argc, char * argv[])
 	i = sprintf_s(buffer, j, "3DP NBodyGravity-S3.exe ");
 	i += sprintf_s(buffer + i, j - i, "n%u ", num_particle);
 	i += sprintf_s(buffer + i, j - i, "g%f ", g_const * 1000000);
-	i += sprintf_s(buffer + i, j - i, "c%f ", speed_of_light * 1000000);
 	i += sprintf_s(buffer + i, j - i, "s%f ", momentum_avrg * 1000000);
 	i += sprintf_s(buffer + i, j - i, "d%d ", density);
 	i += sprintf_s(buffer + i, j - i, "r%f ", zoom);
@@ -431,8 +308,6 @@ int main(int argc, char * argv[])
 			++k;
 		}
 	}
-
-	//--------------------------------------------------
 	//メインループ
 	for (count = 2; ; )
 	{
@@ -479,26 +354,6 @@ int main(int argc, char * argv[])
 		{
 			CloseHandle(thHA[i]);
 		}
-		//--------------------------------------------------
-		//念のため正規化
-		//実際どのくらい値がずれるのかは要調査
-		/*
-		if (count % 256 == 255)
-		{
-			for (i = 0; i < num_particle; ++i)
-			{
-				momentum[i].Normalize();
-				if ( ! (momentum[i] == momentum[i]))
-					momentum[i] = Quaternion<double>::Identity;
-				locat[i].Normalize();
-				if ( ! (locat[i] == locat[i]))
-				{
-					locat[i] = Quaternion<double>(rand(),rand(),rand(),rand());
-					locat[i].Normalize();
-				}
-			}
-		}*/
-		//--------------------------------------------------
 	}
 
 	//メモリ開放

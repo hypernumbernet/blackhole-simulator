@@ -8,7 +8,7 @@
 using namespace hnn;
 
 //出力するフレーム数
-#define NUM_FRAME 500
+#define NUM_FRAME 5000
 
 //粒子数
 #define NUM_PARTICLE 8000
@@ -17,7 +17,7 @@ using namespace hnn;
 #define MOMENTUM_AVRG 0.000001
 
 //重力定数
-#define GRAVITATIONAL_CONSTANT 0.000015
+#define GRAVITATIONAL_CONSTANT 0.0000004
 
 //重力計算の切り替え定数
 //#define DIFFERENTIAL_SCOPE 0.00001
@@ -30,12 +30,6 @@ using namespace hnn;
 
 //初期位置配置方式
 #define INIT_PRESET 5
-
-//距離計算方式
-//#define DISTANCE_METHOD 0
-
-//光速度の二乗
-#define SPEED_OF_LIGHT 0.000002
 
 //データファイル関連
 #define VERSION 1
@@ -69,4 +63,3 @@ extern int density;
 extern double zoom;
 extern double momentum_avrg;
 extern double g_const;
-extern double speed_of_light;
