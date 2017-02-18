@@ -50,7 +50,7 @@ inline double get_distance(int i, int j)
 	}
 	if (dot < -1.0)
 	{
-		printf("[warning] dot:%f <= 1\r\n", dot);
+		printf("[warning] dot:%f < 1\r\n", dot);
 		dot = -1.0;
 	}
 	return acos(dot);
