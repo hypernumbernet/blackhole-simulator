@@ -21,6 +21,8 @@
 //#include <stdlib.h>
 #include <time.h>
 #include <process.h>
+//#include <assert.h>
+#include <float.h>
 
 #include "Quaternion.h"
 #include "Vector3.h"

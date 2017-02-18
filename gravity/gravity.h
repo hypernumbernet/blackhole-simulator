@@ -35,7 +35,7 @@ using namespace hnn;
 //#define DISTANCE_METHOD 0
 
 //光速度の二乗
-#define SPEED_OF_LIGHT 0.000005
+#define SPEED_OF_LIGHT 0.000002
 
 //データファイル関連
 #define VERSION 1

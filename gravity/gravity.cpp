@@ -42,7 +42,18 @@ INT_RANGE, *lpINT_RANGE;
 //距離の計算
 inline double get_distance(int i, int j)
 {
-	return acos(locat[i].Dot(locat[j]));
+	double dot = locat[i].Dot(locat[j]);
+	if (dot >= 1.0) // 距離ゼロを許容しない
+	{
+		printf("[warning] dot:%f >= 1\r\n", dot);
+		return DBL_MIN;
+	}
+	if (dot < -1.0)
+	{
+		printf("[warning] dot:%f <= 1\r\n", dot);
+		dot = -1.0;
+	}
+	return acos(dot);
 }
 //----------------------------------------------------------------------------
 //ローレンツ因子
@@ -207,7 +218,7 @@ unsigned __stdcall relation(void * pArguments)
 			}
 			else
 			{
-				printf("[warning] invalid number.\r\n");
+				printf("[warning] invalid number at distance[%d].\r\n", k);
 			}
 			//--------------------------------------------------------------
 			++k;
