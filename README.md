@@ -7,3 +7,17 @@ The method of this simulation is NOT related the real universe's black hole.　T
 _3次元超球面上の重力多体シミュレーション_
 
 このシミュレーションの方式は、実際の宇宙のブラックホールとは関係がありません。このプログラムの目的は、（4次元空間中の）3次元球面上の粒子の挙動を調べることです。このシミュレータでは、すべての粒子が単位クォータニオン（四元数）上に位置し、オクトニオン（八元数）による線形球面補間によって計算されています。粒子間の重力は、ニュートンの重力の法則によって計算されます。
+
+#Images
+
+## 3-sphere branch simulation
+
+![3-sphere black hole](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/3-sphere%20black%20hole.png?raw=true)
+
+![twin black hole](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/twin%20black%20hole.png?raw=true)
+
+## quaternion-logarithm branch simulation
+
+![quaternion logarithm 001](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/galaxy%20like.png?raw=true)
+
+![quaternion logarithm 002](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/galaxy%20ling.png?raw=true)
