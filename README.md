@@ -3,6 +3,14 @@ _N-Body gravity simulation on 3-sphere_
 
 The method of this simulation is NOT related the real universe's black hole.　The purpose of this program is a research for the behavior of particles on 3-sphere (in 4 dimensions) space. In this simulator, all particles are located on the unit quaternion and calculated by the octonion slerp. The gravitational force between particles is figured out by Newton's law of gravity.
 
+## Environment
+
+Visual Studio 2015, Windows.
+
+For 8000 particles, need 300MB memory. It takes about 7 minutes on　4-core CPU with hyperthreading for 500 frames and 8000 particles. A 92MB .3dp file will be created. Play this file with 3dp-player.
+
+https://github.com/hypernumbernet/3dp-player
+
 # ブラックホールシミュレーター
 _3次元超球面上の重力多体シミュレーション_
 
