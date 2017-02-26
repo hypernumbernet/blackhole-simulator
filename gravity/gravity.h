@@ -1,13 +1,11 @@
 ﻿// @author Tomohito Inoue <hypernumbernet@users.noreply.github.com>
-//VERSION 0.71
-//Windows
 
 //重力多体シミュレータ
 //データ出力プログラム本体
 
 using namespace hnn;
 
-//出力するフレーム数
+//出力するフレーム(時間進捗)数
 #define NUM_FRAME 500
 
 //粒子数
@@ -18,9 +16,6 @@ using namespace hnn;
 
 //重力定数
 #define GRAVITATIONAL_CONSTANT 0.000015
-
-//重力計算の切り替え定数
-//#define DIFFERENTIAL_SCOPE 0.00001
 
 //表示拡大率
 #define ZOOM 100
@@ -49,20 +44,14 @@ using namespace hnn;
 //スレッド数
 #define NUM_THREAD 8
 
-//----------------------------------------------------------------------------
-//グローバル変数宣言
-//----------------------------------------------------------------------------
 //粒子間の距離を格納しておく一時変数
 extern double * distance;
 
-//粒子の位置を表す四元数
-extern Quaternion<double> * locat;
+//粒子の位置
+extern Vector3<double> * location;
 
-//四元数の対数関数から三次元に変換した位置
-extern Vector3<double> * locat_ln_r;
-
-//各粒子の運動量
-extern Quaternion<double> * momentum;
+//粒子の運動量
+extern Vector3<double> * momentum;
 
 extern int num_particle;
 extern int density;

@@ -9,14 +9,20 @@
 //粒子間の距離を格納しておく一時変数
 double * distance;
 
-//粒子の位置を表す四元数
-Quaternion<double> * locat;
+//粒子の位置
+Vector3<double> * location;
 
-//各粒子の運動量
-Quaternion<double> * momentum;
+//粒子の運動量
+Vector3<double> * momentum;
 
-//四元数の対数関数から三次元に変換した位置
-Vector3<double> * locat_ln_r;
+//粒子の四元速度
+Quaternion<double> * velocity;
+
+//粒子の質量
+double mass;
+
+//1フレームの時間
+double d_time;
 
 int num_particle;
 int density;
@@ -42,8 +48,8 @@ INT_RANGE, *lpINT_RANGE;
 //距離の計算
 inline double get_distance(int i, int j)
 {
-	double dot = locat[i].Dot(locat[j]);
-	if (dot >= 1.0) // 距離ゼロを許容しない
+	return sqrt(location[i].Dot(location[j]));
+/*	if (dot >= 1.0) // 距離ゼロを許容しない
 	{
 		printf("[warning] dot:%f >= 1\r\n", dot);
 		return DBL_MIN;
@@ -53,8 +59,9 @@ inline double get_distance(int i, int j)
 		printf("[warning] dot:%f < 1\r\n", dot);
 		dot = -1.0;
 	}
-	return acos(dot);
+	return acos(dot);*/
 }
+
 //----------------------------------------------------------------------------
 //ローレンツ因子
 /*
@@ -62,57 +69,23 @@ p = mvγ
 から、速度イコールに変形して
 v = p / sqrt(m^2 + |p|^2 / c^2 )
 */
-inline double lorentz_speed(double x)
+inline double lorentz_speed(double p2, double m)
 {
-	//return 1.0 / sqrt(1.0 + x * x * (1.0 / speed_of_light));
-	return 1.0 / sqrt(1.0 + x * x * speed_of_l_inv);
+	return 1.0 / sqrt(m + p2 * speed_of_l_inv);
 }
-//ローレンツ因子の逆数
-inline double lorentz_factor_inv(double x)
-{
-	return sqrt(1.0 - x * x * (1.0 / (speed_of_light + x * x)));
-}
+
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
 unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
-
+	Quaternion<double> q;
 	int i;
-	double theta;
-	Vector3<double> direction;
-
-	//運動量をかける
 	for (i = para->start; i < para->end; ++i)
 	{
-		if (speed_of_light == 0.0)
-		{
-			//locat[i] *= momentum[i];
-			locat[i] = momentum[i] * locat[i];
-		}
-		else
-		{
-			//特殊相対性理論による光速度限定
-			theta = acos(momentum[i].i0);
-			theta *= lorentz_speed(theta);
-			//theta /= 2.0;
-			if (theta == theta)
-			{
-				direction.x = momentum[i].i1;
-				direction.y = momentum[i].i2;
-				direction.z = momentum[i].i3;
-				direction.Normalize();
-				locat[i] = locat[i].RotMove(theta, direction);
-			}
-			else
-			{
-				momentum[i] = Quaternion<double>::Identity;
-			}
-		}
-
-		//四元数の自然対数をとって３つの角度を算出。その角度を粒子の位置にする。
-		//表示のことを考慮して拡大しておく。
-		locat_ln_r[i] = locat[i].LnV3() * zoom;
+		q = Quaternion<double>(speed_of_light, 0, 0, 0);
+		location[i] += momentum[i];
+		//locat_ln_r[i] = location[i].LnV3() * zoom;
 	}
 
 	return 0;
@@ -125,11 +98,8 @@ unsigned __stdcall relation(void * pArguments)
 
 	int i, j, k;
 	double theta;
-	//double dm;
 	Quaternion<double> q;
 	Vector3<double> direction;
-	//Vector3<double> moment;
-	//Vector3<double> v3;
 
 	k = para->start * num_particle - (para->start + 1) * para->start / 2;
 
@@ -144,7 +114,7 @@ unsigned __stdcall relation(void * pArguments)
 			//積分計算のための準備
 			//以下の計算をしているが、高速性のためにdistanceに次回のための計算結果を残している。
 			//theta = 1 / (前フレームの距離) - 1 / (距離);
-			theta = distance[k];
+//			theta = distance[k];
 			//--------------------------------------------------------------
 			//衝突の計算
 			//if (theta == theta && theta > 100.0 /*&& theta < 51.0*/)
@@ -170,21 +140,21 @@ unsigned __stdcall relation(void * pArguments)
 			//	continue;
 			//}
 			//--------------------------------------------------------------
-			distance[k] = 1.0 / get_distance(i, j);
-			theta -= distance[k];
+//			distance[k] = 1.0 / get_distance(i, j);
+//			theta -= distance[k];
 
 			//	微分計算の場合
 			//	theta = get_distance(i, j);
 			//	theta = 1.0 / (theta * theta);
 			//	theta = fabs(theta);
-
+			
 			if (theta == theta)
 			{
 				theta = fabs(theta);
 				theta *= g_const;
 
 				//位置の差
-				direction = locat[i].Cross7V3(locat[j]);
+				direction = location[i].Cross7V3(location[j]);
 				direction.Normalize();
 				//--------------------------------------------------------------
 				//ローレンツ短縮(Lorentz contraction)の補正
@@ -340,7 +310,7 @@ int main(int argc, char * argv[])
 
 	//--------------------------------------------------
 	//メモリ確保
-	locat = new Quaternion<double>[num_particle];
+	location = new Quaternion<double>[num_particle];
 	locat_ln_r = new Vector3<double>[num_particle];
 	momentum = new Quaternion<double>[num_particle];
 	distance = new double[num_collision];
@@ -502,7 +472,7 @@ int main(int argc, char * argv[])
 	}
 
 	//メモリ開放
-	delete[] locat;
+	delete[] location;
 	delete[] locat_ln_r;
 	delete[] momentum;
 	delete[] distance;

@@ -1,6 +1,6 @@
 ﻿// @author Tomohito Inoue <hypernumbernet@users.noreply.github.com>
 //Vector3.h
-//VERSION 0.31
+//VERSION 0.32
 
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
@@ -63,6 +63,15 @@ public:
 		return Vector3(a * b.x, a * b.y, a * b.z);
 	}
 
+	// 代入加算
+	Vector3& operator +=(const Vector3& a)
+	{
+		x += a.x;
+		y += a.y;
+		z += a.z;
+		return *this;
+	}
+
 	// 代入乗算
 	template <typename X>
 	inline Vector3& operator *=(X a)
@@ -107,6 +116,6 @@ public:
 
 };
 
-}//namespace ti_math
+}//namespace
 
 #endif // End of VECTOR3_H_

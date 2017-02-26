@@ -452,6 +452,6 @@ const Quaternion<T> Quaternion<T>::Zero(0, 0, 0, 0);
 template <typename T>
 const Quaternion<T> Quaternion<T>::Identity(1, 0, 0, 0);
 
-}//namespace hnn
+}//namespace
 
 #endif // End of QUATERNION_H_

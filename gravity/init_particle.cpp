@@ -30,19 +30,19 @@ void init_particle(int method)
 		for (i = 0; i < num_particle; ++i)
 		{
 			//実数部の割合を大きくすると中心部に集まる
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 64 + (density),
 				rand() % 64 - 32,
 				rand() % 64 - 32,
 				rand() % 64 - 32
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 			momentum[i] = Quaternion<double>::Exp(
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16)
 			);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -51,19 +51,19 @@ void init_particle(int method)
 		for (i = 0; i < num_particle; ++i)
 		{
 			//実数部の割合を大きくすると中心部に集まる
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 64 + (density),
 				rand() % 64,
 				rand() % 64,
 				rand() % 64
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 			momentum[i] = Quaternion<double>::Exp(
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16)
 			);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -72,20 +72,20 @@ void init_particle(int method)
 		zoom = 128;
 		for (i = 0; i < num_particle; ++i)
 		{
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 64 + 1024,
 				rand() % 64 - 32,
 				rand() % 64 - 32,
 				rand() % 64 - 32
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 			//回転
 			momentum[i] = Quaternion<double>::Exp(
-				-locat[i].i3 * 0.6,
+				-location[i].i3 * 0.6,
 				0,
-				locat[i].i1 * 0.6
+				location[i].i1 * 0.6
 			);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -99,18 +99,18 @@ void init_particle(int method)
 
 		for (i = 0; i < n2; ++i)
 		{
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 64 + density,
 				rand() % 64 - 32,
 				rand() % 64 - 32,
 				rand() % 64 - 32
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 		}
 
 		for (i = 0; i < n1; ++i)
 		{
-			locat[i] *= Quaternion<double>::Exp(
+			location[i] *= Quaternion<double>::Exp(
 				0.0,
 				0.0,
 				a
@@ -118,7 +118,7 @@ void init_particle(int method)
 		}
 		for (i = n1; i < n2; ++i)
 		{
-			locat[i] *= Quaternion<double>::Exp(
+			location[i] *= Quaternion<double>::Exp(
 				0.0,
 				0.0,
 				-a
@@ -126,17 +126,17 @@ void init_particle(int method)
 		}
 		for (i = n2; i < num_particle; ++i)
 		{
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 8000,
 				rand() % 64 - 32,
 				rand() % 64 - 32,
 				rand() % 64 - 32
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 		}
 		for (i = n2; i < num_particle; ++i)
 		{
-			locat[i] *= Quaternion<double>::Exp(
+			location[i] *= Quaternion<double>::Exp(
 				a,
 				0.0,
 				0.0
@@ -151,7 +151,7 @@ void init_particle(int method)
 				momentum_avrg * (rand() % 32 - 16)
 			);
 			//momentum[i] = Quaternion<double>::Exp(-locat[i].i3, 0, locat[i].i1);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -160,13 +160,13 @@ void init_particle(int method)
 		for (i = 0; i < num_particle; ++i)
 		{
 			//回転方向の単位ベクトル
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				0,
 				rand_0center(),
 				rand_0center(),
 				rand_0center()
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 			//それを回転させてシャッフル
 			Quaternion<double> rot = Quaternion<double>(
 				rand_0center(),
@@ -175,7 +175,7 @@ void init_particle(int method)
 				rand_0center()
 			);
 			rot.Normalize();
-			locat[i] = rot.Conjugate() * locat[i] * rot;
+			location[i] = rot.Conjugate() * location[i] * rot;
 			//それを回転させてシャッフル　2度目
 			rot = Quaternion<double>(
 				rand_0center(),
@@ -184,7 +184,7 @@ void init_particle(int method)
 				rand_0center()
 			);
 			rot.Normalize();
-			locat[i] = rot.Conjugate() * locat[i] * rot;
+			location[i] = rot.Conjugate() * location[i] * rot;
 			//それを回転させてシャッフル　3度目
 			rot = Quaternion<double>(
 				rand_0center(),
@@ -193,17 +193,17 @@ void init_particle(int method)
 				rand_0center()
 			);
 			rot.Normalize();
-			locat[i] = rot.Conjugate() * locat[i] * rot;
+			location[i] = rot.Conjugate() * location[i] * rot;
 			//回転角を決める
 			a = ((double)rand() / (double)RAND_MAX) * 0.02 + 0.05;
-			locat[i].MakeRotation(a);
+			location[i].MakeRotation(a);
 			//運動量
 			momentum[i] = Quaternion<double>::Exp(
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16),
 				momentum_avrg * (rand() % 32 - 16)
 			);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -212,19 +212,19 @@ void init_particle(int method)
 		for (i = 0; i < num_particle; ++i)
 		{
 			//実数部の割合を大きくすると中心部に集まる
-			locat[i] = Quaternion<double>(
+			location[i] = Quaternion<double>(
 				rand() % 64 + density,
 				rand() % 64 - 32,
 				rand() % 64 - 32,
 				rand() % 64 - 32
 			);
-			locat[i].Normalize();
+			location[i].Normalize();
 			momentum[i] = Quaternion<double>::Exp(
 				momentum_avrg * 2000.0,
 				momentum_avrg * rand_0center() / ((double)RAND_MAX),
 				momentum_avrg * rand_0center() / ((double)RAND_MAX)
 			);
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 		//----------------------------------------------------------------------------
@@ -243,7 +243,7 @@ void init_particle(int method)
 				--i;
 				continue;
 			}
-			locat[i] = Quaternion<double>::Exp(
+			location[i] = Quaternion<double>::Exp(
 				v.x,
 				v.y,
 				v.z
@@ -262,7 +262,7 @@ void init_particle(int method)
 			//,	v.x * /*abs(v.x) **/ 0.2
 			//);
 			//----------------------------------------------------------------------------
-			locat_ln_r[i] = locat[i].LnV3() * zoom;
+			locat_ln_r[i] = location[i].LnV3() * zoom;
 		}
 		break;
 	}
