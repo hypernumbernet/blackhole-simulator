@@ -15,8 +15,11 @@ Vector3<double> * location;
 //粒子の運動量
 Vector3<double> * momentum;
 
-//粒子の四元速度
+//粒子の1フレーム時間における時空移動距離
 Quaternion<double> * velocity;
+
+//時空のゆがみ
+Quaternion<double> * skewness;
 
 //粒子の質量
 double mass;
@@ -79,15 +82,13 @@ inline double lorentz_speed(double p2, double m)
 unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
-	Quaternion<double> q;
 	int i;
+	double dt;
 	for (i = para->start; i < para->end; ++i)
 	{
-		q = Quaternion<double>(speed_of_light, 0, 0, 0);
-		location[i] += momentum[i];
-		//locat_ln_r[i] = location[i].LnV3() * zoom;
+		dt = skewness[i].i0 / speed_of_light;
+		location[i] += Vector3<double>(skewness[i].i1, skewness[i].i2, skewness[i].i3) * dt;
 	}
-
 	return 0;
 }
 //----------------------------------------------------------------------------
