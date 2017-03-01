@@ -15,10 +15,10 @@ Vector3<double> * location;
 //粒子の運動量
 Vector3<double> * momentum;
 
-//粒子の1フレーム時間における時空移動距離
-Quaternion<double> * velocity;
+//速度：粒子の1フレーム時間における空間移動距離
+Vector3<double> * velocity;
 
-//時空のゆがみ
+//その粒子の時空のゆがみ（単位四元数）
 Quaternion<double> * skewness;
 
 //粒子の質量
@@ -52,17 +52,6 @@ INT_RANGE, *lpINT_RANGE;
 inline double get_distance(int i, int j)
 {
 	return sqrt(location[i].Dot(location[j]));
-/*	if (dot >= 1.0) // 距離ゼロを許容しない
-	{
-		printf("[warning] dot:%f >= 1\r\n", dot);
-		return DBL_MIN;
-	}
-	if (dot < -1.0)
-	{
-		printf("[warning] dot:%f < 1\r\n", dot);
-		dot = -1.0;
-	}
-	return acos(dot);*/
 }
 
 //----------------------------------------------------------------------------
@@ -83,10 +72,25 @@ unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
 	int i;
-	double dt;
+	double ds; //元の時空距離、不変量
+	double dt; //変換後の時間間隔
+	double theta; //いわば重力角（時空のゆがみの度合い）
 	for (i = para->start; i < para->end; ++i)
 	{
-		dt = skewness[i].i0 / speed_of_light;
+		//時空のゆがみをあらわす単位四元数から速度に変換
+		//ds^2 = c^2 * dt^2 - dx^2 - dy^2 - dz^2
+		//dx = Vx * dt
+		//dy = Vy * dt
+		//dz = Vz * dt
+		//ds^2 = (c^2 - Vx^2 - Vy^2 - Vz^2) * dt^2
+		//ds = sqrt(c^2 - Vx^2 - Vy^2 - Vz^2) * dt
+		ds = sqrt(speed_of_light * speed_of_light - velocity[i].Norm()) * d_time;
+		//ds^2 = c^2 * dt^2 - dx^2 - dy^2 - dz^2
+		//   1 = (cosh(theta))^2 - (sinh(theta))^2
+		//cosh(theta) = c * dt / ds
+		//sinh(theta) = sqrt(dx^2 + dy^2 + dz^2) / ds
+		theta = acos(skewness[i].i0);
+		dt = cosh(theta) * (1.0 / speed_of_light) * ds;
 		location[i] += Vector3<double>(skewness[i].i1, skewness[i].i2, skewness[i].i3) * dt;
 	}
 	return 0;
@@ -109,45 +113,8 @@ unsigned __stdcall relation(void * pArguments)
 	{
 		for (j = i + 1; j < num_particle; ++j)
 		{
-			//--------------------------------------------------------------
-			//4次元回転計算方式
+			//重力は瞬間的に伝達されるとして近似
 
-			//積分計算のための準備
-			//以下の計算をしているが、高速性のためにdistanceに次回のための計算結果を残している。
-			//theta = 1 / (前フレームの距離) - 1 / (距離);
-//			theta = distance[k];
-			//--------------------------------------------------------------
-			//衝突の計算
-			//if (theta == theta && theta > 100.0 /*&& theta < 51.0*/)
-			//{
-				/*momentum[i] = Quaternion<double>::Identity;
-				momentum[j] = Quaternion<double>::Identity;*/
-				/*q = momentum[i];
-				momentum[i] = momentum[j];
-				momentum[j] = q;*/
-				/*theta = acos(momentum[i].Dot(momentum[j]));
-				if (theta == theta)
-				{
-					theta *= 0.5;
-					direction = momentum[j].Cross7V3(momentum[i]);
-					direction.Normalize();
-					if (direction == direction)
-					{
-						momentum[i] = momentum[i].RotMove(   theta * 0.4, direction);
-						momentum[j] = momentum[j].RotMove( - theta * 0.4, direction);
-					}
-				}*/
-			//	++k;
-			//	continue;
-			//}
-			//--------------------------------------------------------------
-//			distance[k] = 1.0 / get_distance(i, j);
-//			theta -= distance[k];
-
-			//	微分計算の場合
-			//	theta = get_distance(i, j);
-			//	theta = 1.0 / (theta * theta);
-			//	theta = fabs(theta);
 			
 			if (theta == theta)
 			{
