@@ -18,7 +18,7 @@ Vector3<double> * momentum;
 //速度：粒子の1フレーム時間における空間移動距離
 Vector3<double> * velocity;
 
-//その粒子の時空のゆがみ（単位四元数）
+//その粒子の時空の歪み（単位四元数）
 Quaternion<double> * skewness;
 
 //粒子の質量
@@ -72,12 +72,15 @@ unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
 	int i;
-	double ds; //元の時空距離、不変量
-	double dt; //変換後の時間間隔
-	double theta; //いわば重力角（時空のゆがみの度合い）
+	double ds; //時空距離、不変量
+	double dt; //重力影響後の時間距離
+	double theta; //いわば重力角（時空の歪みの度合い）
+	double xyz_abs; //空間距離の絶対値
+	Vector3<double> direction; //時空の歪みの方向
+	double ratio; //時空の歪みからの空間拡大率
 	for (i = para->start; i < para->end; ++i)
 	{
-		//時空のゆがみをあらわす単位四元数から速度に変換
+		//時空の歪みをあらわす単位四元数から速度に変換
 		//ds^2 = c^2 * dt^2 - dx^2 - dy^2 - dz^2
 		//dx = Vx * dt
 		//dy = Vy * dt
@@ -91,7 +94,19 @@ unsigned __stdcall time_progress(void * pArguments)
 		//sinh(theta) = sqrt(dx^2 + dy^2 + dz^2) / ds
 		theta = acos(skewness[i].i0);
 		dt = cosh(theta) * (1.0 / speed_of_light) * ds;
-		location[i] += Vector3<double>(skewness[i].i1, skewness[i].i2, skewness[i].i3) * dt;
+		xyz_abs = sinh(theta) * ds;
+		direction = skewness[i].LnV3();
+		ratio = xyz_abs * (1.0 / direction.Abs());
+		//dx = Vx * dt
+		//Vx = dx / dt
+		velocity[i] = direction * (ratio * (1.0 / dt) * d_time);
+		location[i] += velocity[i];
+
+		//時空の歪みをリセット
+		//theta = acosh(c * dt / ds)
+		ds = sqrt(speed_of_light * speed_of_light - velocity[i].Norm()) * d_time;
+		theta = acosh(speed_of_light * d_time * (1.0 / ds));
+		//TODO
 	}
 	return 0;
 }
