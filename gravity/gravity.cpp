@@ -6,14 +6,9 @@
 //----------------------------------------------------------------------------
 //グローバル変数宣言
 //----------------------------------------------------------------------------
-//粒子間の距離を格納しておく一時変数
-//double * distance;
 
 //粒子の位置
 Vector3<double> * location;
-
-//粒子の運動量
-//Vector3<double> * momentum;
 
 //速度：粒子の1フレーム時間における空間移動距離
 Vector3<double> * velocity;
@@ -40,7 +35,6 @@ double zoom;
 double momentum_avrg;
 double g_const;
 double speed_of_light;
-double speed_of_l_inv;
 
 //ファイル処理関係
 HANDLE hFile;
@@ -55,24 +49,18 @@ typedef struct
 INT_RANGE, *lpINT_RANGE;
 
 //----------------------------------------------------------------------------
-//距離の計算
-inline double get_distance(int i, int j)
+//初期計算
+unsigned __stdcall prepare(void * pArguments)
 {
-	return sqrt(location[i].Dot(location[j]));
+	lpINT_RANGE para = (lpINT_RANGE)pArguments;
+	double constant = 2.0 * g_const * (1.0 * (speed_of_light * speed_of_light));
+	int i;
+	for (i = para->start; i < para->end; ++i)
+	{
+		rs[i] = constant * mass[i];
+	}
+	return 0;
 }
-
-//----------------------------------------------------------------------------
-//ローレンツ因子
-/*
-p = mvγ
-から、速度イコールに変形して
-v = p / sqrt(m^2 + |p|^2 / c^2 )
-*/
-inline double lorentz_speed(double p2, double m)
-{
-	return 1.0 / sqrt(m + p2 * speed_of_l_inv);
-}
-
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
 unsigned __stdcall time_progress(void * pArguments)
@@ -197,13 +185,13 @@ int main(int argc, char * argv[])
 			num_particle = atoi(argv[i] + 1);
 			break;
 		case 'g':
-			g_const = atof(argv[i] + 1) * 0.000001;
+			g_const = atof(argv[i] + 1);
 			break;
 		case 'c':
-			speed_of_light = atof(argv[i] + 1) * 0.000001;
+			speed_of_light = atof(argv[i] + 1);
 			break;
 		case 's':
-			momentum_avrg = atof(argv[i] + 1) * 0.000001;
+			momentum_avrg = atof(argv[i] + 1);
 			break;
 		case 'd':
 			density = atoi(argv[i] + 1);
@@ -219,12 +207,12 @@ int main(int argc, char * argv[])
 			break;
 		}
 	}
-	printf("N-body Gravity Simulation on S3\nVersion 0.7\n");
+	printf("N-body Gravity Simulation by General Relativity\nVersion 0.1\n");
 	printf("n:%u particles\n", num_particle);
-	printf("g:%f - G constant\n", g_const * 1000000);
-	printf("c:%f - Speed of Light (Zero means no limit)\n", speed_of_light * 1000000);
+	printf("g:%f - G constant\n", g_const);
+	printf("c:%f - Speed of Light (Zero means no limit)\n", speed_of_light);
 	printf("i:%u - Initialize Preset\n", init_preset);
-	printf("s:%f - Initialize Momentum Average\n", momentum_avrg * 1000000);
+	printf("s:%f - Initialize Momentum Average\n", momentum_avrg);
 	printf("d:%d - Initialize Density\n", density);
 	printf("r:%f - Zoom Ratio\n", zoom);
 	wprintf(L"o:%s - output\n", out_dat);
@@ -234,18 +222,18 @@ int main(int argc, char * argv[])
 	//重力相互作用数
 	num_collision = num_particle * (num_particle - 1) / 2;
 
-	//光速の逆数をあらかじめ計算
-	speed_of_l_inv = 1.0 / speed_of_light;
+	d_time = 1000.0;
 
 	//乱数準備
 	srand((unsigned)time(NULL));
 
 	//--------------------------------------------------
 	//メモリ確保
-	location = new Quaternion<double>[num_particle];
-	locat_ln_r = new Vector3<double>[num_particle];
-	momentum = new Quaternion<double>[num_particle];
-	distance = new double[num_collision];
+	location = new Vector3<double>[num_particle];
+	velocity = new Vector3<double>[num_particle];
+	skewness = new Vector3<double>[num_particle];
+	mass = new double[num_collision];
+	rs = new double[num_collision];
 	//--------------------------------------------------
 	//マルチスレッド用変数準備
 	//直角二等辺三角形の面積を等分する辺の長さを計算
@@ -303,11 +291,11 @@ int main(int argc, char * argv[])
 	{
 		buffer[i] = 0;
 	}
-	i = sprintf_s(buffer, j, "3DP NBodyGravity-S3.exe ");
+	i = sprintf_s(buffer, j, "3DP nbodysim-gr ");
 	i += sprintf_s(buffer + i, j - i, "n%u ", num_particle);
-	i += sprintf_s(buffer + i, j - i, "g%f ", g_const * 1000000);
-	i += sprintf_s(buffer + i, j - i, "c%f ", speed_of_light * 1000000);
-	i += sprintf_s(buffer + i, j - i, "s%f ", momentum_avrg * 1000000);
+	i += sprintf_s(buffer + i, j - i, "g%f ", g_const);
+	i += sprintf_s(buffer + i, j - i, "c%f ", speed_of_light);
+	i += sprintf_s(buffer + i, j - i, "s%f ", momentum_avrg);
 	i += sprintf_s(buffer + i, j - i, "d%d ", density);
 	i += sprintf_s(buffer + i, j - i, "r%f ", zoom);
 	i += sprintf_s(buffer + i, j - i, "i%u ", init_preset);
@@ -319,19 +307,25 @@ int main(int argc, char * argv[])
 	init_particle(init_preset);
 
 	//最初のフレームの粒子位置情報を出力
-	WriteFile(hFile, locat_ln_r, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
+	WriteFile(hFile, location, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
 	printf("1\r");
 
 	//--------------------------------------------------
-	//最初のフレームの粒子間距離の計算
-	k = 0;
-	for (i = 0; i < num_particle - 1; ++i)
+	for (i = 0; i < NUM_THREAD; ++i)
 	{
-		for (j = i + 1; j < num_particle; ++j)
-		{
-			distance[k] = 1.0 / get_distance(i, j);
-			++k;
-		}
+		thHA[i] = (HANDLE)_beginthreadex(
+			NULL,
+			0,
+			prepare,
+			&arg_particle[i],
+			0 /* CREATE_SUSPENDED */,
+			&thID[i]
+		);
+	}
+	WaitForMultipleObjects(NUM_THREAD, thHA, TRUE, INFINITE);
+	for (i = 0; i < NUM_THREAD; ++i)
+	{
+		CloseHandle(thHA[i]);
 	}
 
 	//--------------------------------------------------
@@ -356,7 +350,7 @@ int main(int argc, char * argv[])
 		}
 		//--------------------------------------------------
 		//粒子位置情報を出力
-		WriteFile(hFile, locat_ln_r, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
+		WriteFile(hFile, location, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
 		printf("%u\r", count);
 		//--------------------------------------------------
 		++count;
@@ -381,33 +375,14 @@ int main(int argc, char * argv[])
 		{
 			CloseHandle(thHA[i]);
 		}
-		//--------------------------------------------------
-		//念のため正規化
-		//実際どのくらい値がずれるのかは要調査
-		/*
-		if (count % 256 == 255)
-		{
-			for (i = 0; i < num_particle; ++i)
-			{
-				momentum[i].Normalize();
-				if ( ! (momentum[i] == momentum[i]))
-					momentum[i] = Quaternion<double>::Identity;
-				locat[i].Normalize();
-				if ( ! (locat[i] == locat[i]))
-				{
-					locat[i] = Quaternion<double>(rand(),rand(),rand(),rand());
-					locat[i].Normalize();
-				}
-			}
-		}*/
-		//--------------------------------------------------
 	}
 
 	//メモリ開放
 	delete[] location;
-	delete[] locat_ln_r;
-	delete[] momentum;
-	delete[] distance;
+	delete[] velocity;
+	delete[] skewness;
+	delete[] mass;
+	delete[] rs;
 
 	CloseHandle(hFile);
 
