@@ -58,6 +58,9 @@ unsigned __stdcall prepare(void * pArguments)
 	for (i = para->start; i < para->end; ++i)
 	{
 		rs[i] = constant * mass[i];
+		skewness[i].x = 1.0;
+		skewness[i].y = 1.0;
+		skewness[i].z = 1.0;
 	}
 	return 0;
 }
@@ -70,16 +73,21 @@ unsigned __stdcall time_progress(void * pArguments)
 	for (i = para->start; i < para->end; ++i)
 	{
 		//skewness = rs / r
-		//Speed = dr / dt = 1 - rs / r
-		velocity[i].x += skewness[i].x * (1.0 - fabs(skewness[i].x)) * d_time;
-		velocity[i].y += skewness[i].y * (1.0 - fabs(skewness[i].y)) * d_time;
-		velocity[i].z += skewness[i].z * (1.0 - fabs(skewness[i].z)) * d_time;
+		//Speed = dr / dt = c * (1 - rs / r)
+		velocity[i].x += get_velocity(skewness[i].x);
+		velocity[i].y += get_velocity(skewness[i].y);
+		velocity[i].z += get_velocity(skewness[i].z);
 		location[i] += velocity[i];
 		skewness[i].x = 1.0;
 		skewness[i].y = 1.0;
 		skewness[i].z = 1.0;
 	}
 	return 0;
+}
+//時空の歪みから速度の増加分を取得
+double get_velocity(double skewness)
+{
+	return skewness * (1.0 - fabs(skewness)) * d_time * speed_of_light;
 }
 //----------------------------------------------------------------------------
 //相互作用の計算
@@ -222,7 +230,7 @@ int main(int argc, char * argv[])
 	//重力相互作用数
 	num_collision = num_particle * (num_particle - 1) / 2;
 
-	d_time = 1000.0;
+	d_time = TIME_OF_ONE_FRAME;
 
 	//乱数準備
 	srand((unsigned)time(NULL));
