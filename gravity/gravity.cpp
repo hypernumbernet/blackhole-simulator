@@ -7,22 +7,29 @@
 //グローバル変数宣言
 //----------------------------------------------------------------------------
 //粒子間の距離を格納しておく一時変数
-double * distance;
+//double * distance;
 
 //粒子の位置
 Vector3<double> * location;
 
 //粒子の運動量
-Vector3<double> * momentum;
+//Vector3<double> * momentum;
 
 //速度：粒子の1フレーム時間における空間移動距離
 Vector3<double> * velocity;
 
-//その粒子の時空の歪み（単位四元数）
-Quaternion<double> * skewness;
+//その粒子の時空の歪み
+//rs / r をベクトルにして合算した値
+//from Schwarzschild metric
+//ds^2 = 0
+//dr / dt = 1 - rs / r ; (dr > 0)
+Vector3<double> * skewness;
 
 //粒子の質量
-double mass;
+double * mass;
+
+//Schwarzschild radius
+double * rs;
 
 //1フレームの時間
 double d_time;
@@ -72,41 +79,17 @@ unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
 	int i;
-	double ds; //時空距離、不変量
-	double dt; //重力影響後の時間距離
-	double theta; //いわば重力角（時空の歪みの度合い）
-	double xyz_abs; //空間距離の絶対値
-	Vector3<double> direction; //時空の歪みの方向
-	double ratio; //時空の歪みからの空間拡大率
 	for (i = para->start; i < para->end; ++i)
 	{
-		//時空の歪みをあらわす単位四元数から速度に変換
-		//ds^2 = c^2 * dt^2 - dx^2 - dy^2 - dz^2
-		//dx = Vx * dt
-		//dy = Vy * dt
-		//dz = Vz * dt
-		//ds^2 = (c^2 - Vx^2 - Vy^2 - Vz^2) * dt^2
-		//ds = sqrt(c^2 - Vx^2 - Vy^2 - Vz^2) * dt
-		ds = sqrt(speed_of_light * speed_of_light - velocity[i].Norm()) * d_time;
-		//ds^2 = c^2 * dt^2 - dx^2 - dy^2 - dz^2
-		//   1 = (cosh(theta))^2 - (sinh(theta))^2
-		//cosh(theta) = c * dt / ds
-		//sinh(theta) = sqrt(dx^2 + dy^2 + dz^2) / ds
-		theta = acos(skewness[i].i0);
-		dt = cosh(theta) * (1.0 / speed_of_light) * ds;
-		xyz_abs = sinh(theta) * ds;
-		direction = skewness[i].LnV3();
-		ratio = xyz_abs * (1.0 / direction.Abs());
-		//dx = Vx * dt
-		//Vx = dx / dt
-		velocity[i] = direction * (ratio * (1.0 / dt) * d_time);
+		//skewness = rs / r
+		//Speed = dr / dt = 1 - rs / r
+		velocity[i].x += skewness[i].x * (1.0 - fabs(skewness[i].x)) * d_time;
+		velocity[i].y += skewness[i].y * (1.0 - fabs(skewness[i].y)) * d_time;
+		velocity[i].z += skewness[i].z * (1.0 - fabs(skewness[i].z)) * d_time;
 		location[i] += velocity[i];
-
-		//時空の歪みをリセット
-		//theta = acosh(c * dt / ds)
-		ds = sqrt(speed_of_light * speed_of_light - velocity[i].Norm()) * d_time;
-		theta = acosh(speed_of_light * d_time * (1.0 / ds));
-		//TODO
+		skewness[i].x = 1.0;
+		skewness[i].y = 1.0;
+		skewness[i].z = 1.0;
 	}
 	return 0;
 }
@@ -117,8 +100,7 @@ unsigned __stdcall relation(void * pArguments)
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
 
 	int i, j, k;
-	double theta;
-	Quaternion<double> q;
+	double rinv, ri, rj;
 	Vector3<double> direction;
 
 	k = para->start * num_particle - (para->start + 1) * para->start / 2;
@@ -129,51 +111,18 @@ unsigned __stdcall relation(void * pArguments)
 		for (j = i + 1; j < num_particle; ++j)
 		{
 			//重力は瞬間的に伝達されるとして近似
-
-			
-			if (theta == theta)
-			{
-				theta = fabs(theta);
-				theta *= g_const;
-
-				//位置の差
-				direction = location[i].Cross7V3(location[j]);
-				direction.Normalize();
-				//--------------------------------------------------------------
-				//ローレンツ短縮(Lorentz contraction)の補正
-				//運動量によって重力を受ける方向だけが変わるとしている。
-				//実装せず。以下理由
-				//・結果がそれほど変わるものではなかった
-				//・計算時間がおよそ1.5倍に増える
-				//・物理的な意味付けが不完全
-				/*if (speed_of_light != 0.0)
-				{
-					//運動量の差
-					dm = acos(momentum[i].Dot(momentum[j]));
-					if (dm == dm)
-					{
-						moment = momentum[i].Cross7V3(momentum[j]);
-						moment.Normalize();
-						direction =
-							direction +
-							lorentz_factor_inv(dm) *
-							( - moment).Dot(direction) *
-							moment;
-						direction.Normalize();
-					}
-				}*/
-				//--------------------------------------------------------------
-				if (direction == direction)
-				{
-					momentum[i] = momentum[i].RotMove(-theta, direction);
-					momentum[j] = momentum[j].RotMove(theta, direction);
-				}
-			}
-			else
-			{
-				printf("[warning] invalid number at distance[%d].\r\n", k);
-			}
-			//--------------------------------------------------------------
+			//skewness = rs / r
+			direction = location[j] - location[i];
+			//rinv = 1 / r^2
+			rinv = 1.0 / direction.Norm();
+			ri = rs[i] * rinv;
+			rj = rs[j] * rinv;
+			skewness[i].x += rj * direction.x;
+			skewness[i].y += rj * direction.y;
+			skewness[i].z += rj * direction.z;
+			skewness[j].x -= ri * direction.x;
+			skewness[j].y -= ri * direction.y;
+			skewness[j].z -= ri * direction.z;
 			++k;
 		}
 	}
