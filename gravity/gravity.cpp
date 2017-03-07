@@ -10,6 +10,9 @@
 //粒子の位置
 Vector3<double> * location;
 
+//粒子の書き出し位置
+Vector3<double> * locat_w;
+
 //速度：粒子の1フレーム時間における空間移動距離
 Vector3<double> * velocity;
 
@@ -58,16 +61,17 @@ unsigned __stdcall prepare(void * pArguments)
 	for (i = para->start; i < para->end; ++i)
 	{
 		rs[i] = constant * mass[i];
-		skewness[i].x = 1.0;
-		skewness[i].y = 1.0;
-		skewness[i].z = 1.0;
+		skewness[i].x = 0.0;
+		skewness[i].y = 0.0;
+		skewness[i].z = 0.0;
+		locat_w[i] = location[i] * zoom;
 	}
 	return 0;
 }
 //時空の歪みから速度の増加分を取得
 double get_velocity(double skewness)
 {
-	return skewness * (1.0 - fabs(skewness)) * d_time * speed_of_light;
+	return skewness * (1.0 - fabs(skewness)) * d_time/* * speed_of_light*/;
 }
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
@@ -83,6 +87,8 @@ unsigned __stdcall time_progress(void * pArguments)
 		velocity[i].y += get_velocity(skewness[i].y);
 		velocity[i].z += get_velocity(skewness[i].z);
 		location[i] += velocity[i];
+		locat_w[i] = location[i] * zoom;
+		//printf("%e\n", locat_w[i].x);
 		skewness[i].x = 1.0;
 		skewness[i].y = 1.0;
 		skewness[i].z = 1.0;
@@ -108,7 +114,7 @@ unsigned __stdcall relation(void * pArguments)
 		{
 			//重力は瞬間的に伝達されるとして近似
 			//skewness = rs / r
-			direction = location[j] - location[i];
+			direction = location[i] - location[j];
 			//rinv = 1 / r^2
 			rinv = 1.0 / direction.Norm();
 			ri = rs[i] * rinv;
@@ -238,6 +244,7 @@ int main(int argc, char * argv[])
 	//--------------------------------------------------
 	//メモリ確保
 	location = new Vector3<double>[num_particle];
+	locat_w = new Vector3<double>[num_particle];
 	velocity = new Vector3<double>[num_particle];
 	skewness = new Vector3<double>[num_particle];
 	mass = new double[num_collision];
@@ -314,11 +321,6 @@ int main(int argc, char * argv[])
 	//粒子の初期化
 	init_particle(init_preset);
 
-	//最初のフレームの粒子位置情報を出力
-	WriteFile(hFile, location, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
-	printf("1\r");
-
-	//--------------------------------------------------
 	for (i = 0; i < NUM_THREAD; ++i)
 	{
 		thHA[i] = (HANDLE)_beginthreadex(
@@ -335,6 +337,11 @@ int main(int argc, char * argv[])
 	{
 		CloseHandle(thHA[i]);
 	}
+
+	//--------------------------------------------------
+	//最初のフレームの粒子位置情報を出力
+	WriteFile(hFile, locat_w, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
+	printf("1\r");
 
 	//--------------------------------------------------
 	//メインループ
@@ -358,7 +365,7 @@ int main(int argc, char * argv[])
 		}
 		//--------------------------------------------------
 		//粒子位置情報を出力
-		WriteFile(hFile, location, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
+		WriteFile(hFile, locat_w, num_particle * VECTOR3_BYTE_LEN, &dwWriteSize, NULL);
 		printf("%u\r", count);
 		//--------------------------------------------------
 		++count;
@@ -387,6 +394,7 @@ int main(int argc, char * argv[])
 
 	//メモリ開放
 	delete[] location;
+	delete[] locat_w;
 	delete[] velocity;
 	delete[] skewness;
 	delete[] mass;

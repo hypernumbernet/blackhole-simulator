@@ -5,8 +5,6 @@
 //プラスとマイナス領域均等の範囲の乱数
 double rand_0center()
 {
-	//rand() / ((double)RAND_MAX) * 2 - 1
-	//rand() - ((double)RAND_MAX) / 2
 	if (rand() % 2 == 0)
 	{
 		return (double)rand();
@@ -21,12 +19,28 @@ void init_particle(int method)
 {
 	int i;
 	int n1, n2;
-	double a;
+	double a, b;
 	switch (method)
 	{
 		//----------------------------------------------------------------------------
 		//原点を中心に立方体に配置
 	case 1:
+		a = 1.0e+3;
+		b = 1.0e-4;
+		for (i = 0; i < num_particle; ++i) 
+		{
+			location[i] = Vector3<double>(
+				rand_0center() * a,
+				rand_0center() * a,
+				rand_0center() * a
+			);
+			velocity[i] = Vector3<double>(
+				rand_0center() * b,
+				rand_0center() * b,
+				rand_0center() * b
+			);
+			mass[i] = 10.0;
+		}
 		break;
 		//----------------------------------------------------------------------------
 		//原点とずれた位置に立方体に配置
