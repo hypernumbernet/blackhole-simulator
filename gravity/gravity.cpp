@@ -64,6 +64,11 @@ unsigned __stdcall prepare(void * pArguments)
 	}
 	return 0;
 }
+//時空の歪みから速度の増加分を取得
+double get_velocity(double skewness)
+{
+	return skewness * (1.0 - fabs(skewness)) * d_time * speed_of_light;
+}
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
 unsigned __stdcall time_progress(void * pArguments)
@@ -83,11 +88,6 @@ unsigned __stdcall time_progress(void * pArguments)
 		skewness[i].z = 1.0;
 	}
 	return 0;
-}
-//時空の歪みから速度の増加分を取得
-double get_velocity(double skewness)
-{
-	return skewness * (1.0 - fabs(skewness)) * d_time * speed_of_light;
 }
 //----------------------------------------------------------------------------
 //相互作用の計算

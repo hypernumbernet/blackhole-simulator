@@ -12,7 +12,7 @@ using namespace hnn;
 #define NUM_PARTICLE 1000
 
 //重力定数(m3 s−2 kg−1)
-#define GRAVITATIONAL_CONSTANT 6.67259e−11
+#define GRAVITATIONAL_CONSTANT 6.67259e-11
 
 //光速度(m/s)
 #define SPEED_OF_LIGHT 2.99792458e+8
