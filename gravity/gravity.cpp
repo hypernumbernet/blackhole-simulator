@@ -155,7 +155,6 @@ int main(int argc, char * argv[])
 	//初期値の代入
 	num_particle = NUM_PARTICLE;
 	density = DENSITY;
-	zoom = ZOOM;
 	momentum_avrg = MOMENTUM_AVRG;
 	g_const = GRAVITATIONAL_CONSTANT;
 	speed_of_light = SPEED_OF_LIGHT;
@@ -319,7 +318,11 @@ int main(int argc, char * argv[])
 
 	//--------------------------------------------------
 	//粒子の初期化
-	init_particle(init_preset);
+	if (init_particle(init_preset))
+	{
+		printf("Failed to initialize the particles.");
+		return 1;
+	}
 
 	for (i = 0; i < NUM_THREAD; ++i)
 	{
