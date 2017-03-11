@@ -56,7 +56,7 @@ INT_RANGE, *lpINT_RANGE;
 unsigned __stdcall prepare(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
-	double constant = 2.0 * g_const * (1.0 * (speed_of_light * speed_of_light));
+	double constant = 2.0 * g_const * (1.0 / (speed_of_light * speed_of_light));
 	int i;
 	for (i = para->start; i < para->end; ++i)
 	{
@@ -71,7 +71,7 @@ unsigned __stdcall prepare(void * pArguments)
 //時空の歪みから速度の増加分を取得
 double get_velocity(double skewness)
 {
-	return skewness * (1.0 - fabs(skewness)) * d_time/* * speed_of_light*/;
+	return skewness * (1.0 - fabs(skewness)) * d_time;
 }
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
@@ -86,7 +86,7 @@ unsigned __stdcall time_progress(void * pArguments)
 		velocity[i].x += get_velocity(skewness[i].x);
 		velocity[i].y += get_velocity(skewness[i].y);
 		velocity[i].z += get_velocity(skewness[i].z);
-		location[i] += velocity[i];
+		location[i] += velocity[i] * d_time;
 		locat_w[i] = location[i] * zoom;
 		//printf("%e\n", locat_w[i].x);
 		skewness[i].x = 1.0;

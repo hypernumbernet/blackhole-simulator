@@ -9,7 +9,7 @@ using namespace hnn;
 #define NUM_FRAME 10000
 
 //粒子数
-#define NUM_PARTICLE 2000
+#define NUM_PARTICLE 2
 
 //重力定数(m3 s−2 kg−1)
 #define GRAVITATIONAL_CONSTANT 6.67259e-11
@@ -18,13 +18,13 @@ using namespace hnn;
 #define SPEED_OF_LIGHT 2.99792458e+8
 
 //1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 1
+#define TIME_OF_ONE_FRAME 3600
 
 //粒子の初期運動量の平均
 #define MOMENTUM_AVRG 0.000001
 
 //初期位置配置方式
-#define INIT_PRESET 1
+#define INIT_PRESET 2
 
 //初期位置集積度
 #define DENSITY 500
