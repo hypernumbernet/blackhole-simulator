@@ -21,7 +21,7 @@ using namespace hnn;
 #define TIME_OF_ONE_FRAME 3600
 
 //粒子の初期運動量の平均
-#define MOMENTUM_AVRG 0.000001
+#define MOMENTUM_AVRG 0
 
 //初期位置配置方式
 #define INIT_PRESET 2

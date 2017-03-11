@@ -222,13 +222,13 @@ int main(int argc, char * argv[])
 	}
 	printf("N-body Gravity Simulation by General Relativity\nVersion 0.1\n");
 	printf("n:%u particles\n", num_particle);
-	printf("g:%f - G constant\n", g_const);
-	printf("c:%f - Speed of Light (Zero means no limit)\n", speed_of_light);
+	printf("g:%1.8e - G constant\n", g_const);
+	printf("c:%1.8e - Speed of Light (Zero means no limit)\n", speed_of_light);
 	printf("i:%u - Initialize Preset\n", init_preset);
-	printf("s:%f - Initialize Momentum Average\n", momentum_avrg);
+	printf("s:%1.8e - Initialize Momentum Average\n", momentum_avrg);
 	printf("d:%d - Initialize Density\n", density);
-	printf("r:%f - Zoom Ratio\n", zoom);
-	wprintf(L"o:%s - output\n", out_dat);
+	printf("r:%1.8e - Zoom Ratio\n", zoom);
+	wprintf(L"o:%s - File Name\n", out_dat);
 	printf("f:%u frames\n", num_frame);
 	printf("\n");
 	//--------------------------------------------------
@@ -307,11 +307,11 @@ int main(int argc, char * argv[])
 	}
 	i = sprintf_s(buffer, j, "3DP nbodysim-gr ");
 	i += sprintf_s(buffer + i, j - i, "n%u ", num_particle);
-	i += sprintf_s(buffer + i, j - i, "g%f ", g_const);
-	i += sprintf_s(buffer + i, j - i, "c%f ", speed_of_light);
-	i += sprintf_s(buffer + i, j - i, "s%f ", momentum_avrg);
+	i += sprintf_s(buffer + i, j - i, "g%1.8e ", g_const);
+	i += sprintf_s(buffer + i, j - i, "c%1.8e ", speed_of_light);
+	i += sprintf_s(buffer + i, j - i, "s%1.8e ", momentum_avrg);
 	i += sprintf_s(buffer + i, j - i, "d%d ", density);
-	i += sprintf_s(buffer + i, j - i, "r%f ", zoom);
+	i += sprintf_s(buffer + i, j - i, "r%1.8e ", zoom);
 	i += sprintf_s(buffer + i, j - i, "i%u ", init_preset);
 
 	WriteFile(hFile, buffer, j, &dwWriteSize, NULL);
