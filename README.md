@@ -25,13 +25,13 @@ It is a simulation of a distorted space using Einstein's general relativity. App
 
 #Images
 
-## 3-sphere branch simulation
+## 3-sphere simulation
 
 ![3-sphere black hole](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/3-sphere%20black%20hole.png?raw=true)
 
 ![twin black hole](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/twin%20black%20hole.png?raw=true)
 
-## quaternion-logarithm branch simulation
+## quaternion-logarithm simulation
 
 ![quaternion logarithm 001](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/galaxy%20like.png?raw=true)
 
