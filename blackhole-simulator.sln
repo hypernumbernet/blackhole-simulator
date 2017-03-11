@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blackhole-simulator", "blackhole-simulator.vcxproj", "{56EAF504-7A74-43EF-84AF-8C94545C499B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "general-relativity", "general-relativity\general-relativity.vcxproj", "{174EA832-BC0A-4747-B453-3139811D40D8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3-sphere", "3-sphere\3-sphere.vcxproj", "{7E1C1057-05CB-42F8-9267-FBFF41B72615}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quaternion-logarithm", "quaternion-logarithm\quaternion-logarithm.vcxproj", "{F51B36C1-D91F-41C1-98A8-D216921A5EFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,30 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Debug|x64.ActiveCfg = Debug|x64
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Debug|x64.Build.0 = Debug|x64
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Debug|x86.ActiveCfg = Debug|Win32
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Debug|x86.Build.0 = Debug|Win32
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Release|x64.ActiveCfg = Release|x64
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Release|x64.Build.0 = Release|x64
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Release|x86.ActiveCfg = Release|Win32
-		{56EAF504-7A74-43EF-84AF-8C94545C499B}.Release|x86.Build.0 = Release|Win32
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Debug|x64.ActiveCfg = Debug|x64
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Debug|x64.Build.0 = Debug|x64
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Debug|x86.ActiveCfg = Debug|Win32
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Debug|x86.Build.0 = Debug|Win32
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Release|x64.ActiveCfg = Release|x64
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Release|x64.Build.0 = Release|x64
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Release|x86.ActiveCfg = Release|Win32
+		{174EA832-BC0A-4747-B453-3139811D40D8}.Release|x86.Build.0 = Release|Win32
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Debug|x64.ActiveCfg = Debug|x64
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Debug|x64.Build.0 = Debug|x64
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Debug|x86.ActiveCfg = Debug|Win32
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Debug|x86.Build.0 = Debug|Win32
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Release|x64.ActiveCfg = Release|x64
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Release|x64.Build.0 = Release|x64
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Release|x86.ActiveCfg = Release|Win32
+		{7E1C1057-05CB-42F8-9267-FBFF41B72615}.Release|x86.Build.0 = Release|Win32
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Debug|x64.ActiveCfg = Debug|x64
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Debug|x64.Build.0 = Debug|x64
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Debug|x86.ActiveCfg = Debug|Win32
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Debug|x86.Build.0 = Debug|Win32
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Release|x64.ActiveCfg = Release|x64
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Release|x64.Build.0 = Release|x64
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Release|x86.ActiveCfg = Release|Win32
+		{F51B36C1-D91F-41C1-98A8-D216921A5EFF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
