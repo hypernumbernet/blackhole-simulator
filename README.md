@@ -1,9 +1,7 @@
 # Black Hole Simulator
-_N-Body gravity simulation on 3-sphere_
+_N-Body gravity simulation_
 
-The method of this simulation is NOT related the real universe's black hole.　The purpose of this program is a research for the behavior of particles on 3-sphere (in 4 dimensions) space. In this simulator, all particles are located on the unit quaternion and calculated by the octonion slerp. The gravitational force between particles is figured out by Newton's law of gravity.
-
-## Environment
+## Build and execution environment
 
 Visual Studio 2015, Windows.
 
@@ -11,21 +9,30 @@ For 8000 particles, need 300MB memory. It takes about 7 minutes on　4-core CPU 
 
 https://github.com/hypernumbernet/3dp-player
 
-# ブラックホールシミュレーター
-_3次元超球面上の重力多体シミュレーション_
+## About included projects
 
-このシミュレーションの方式は、実際の宇宙のブラックホールとは関係がありません。このプログラムの目的は、（4次元空間中の）3次元球面上の粒子の挙動を調べることです。このシミュレータでは、すべての粒子が単位クォータニオン（四元数）上に位置し、オクトニオン（八元数）による線形球面補間によって計算されています。粒子間の重力は、ニュートンの重力の法則によって計算されます。
+###quaternion-logarithm
+
+All particles are in the space above the unit quaternion. The gravitational interaction is calculated with the natural log of the quaternion. Interestingly, it results in a whirlpool like a galaxy.
+
+###3-sphere
+
+The method of this simulation is not related the real universe's black hole.　The purpose of this program is a research for the behavior of particles on 3-sphere (in 4 dimensions) space. In this simulator, all particles are located on the unit quaternion and calculated by the octonion slerp. The gravitational force between particles is figured out by Newton's law of gravity.
+
+###general-relativity
+
+It is a simulation of a distorted space using Einstein's general relativity. Approximate gravity as being transmitted instantaneously, use the Schwarzschild solution and accumulate the skewness of spacetime.
 
 #Images
 
 ## 3-sphere branch simulation
 
-![3-sphere black hole](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/3-sphere%20black%20hole.png?raw=true)
+![3-sphere black hole](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/3-sphere%20black%20hole.png?raw=true)
 
-![twin black hole](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/twin%20black%20hole.png?raw=true)
+![twin black hole](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/twin%20black%20hole.png?raw=true)
 
 ## quaternion-logarithm branch simulation
 
-![quaternion logarithm 001](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/galaxy%20like.png?raw=true)
+![quaternion logarithm 001](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/galaxy%20like.png?raw=true)
 
-![quaternion logarithm 002](https://github.com/hypernumbernet/blackhole-simulator-image/blob/master/galaxy%20ling.png?raw=true)
+![quaternion logarithm 002](https://github.com/hypernumbernet/blackhole-simulator/blob/master/images/galaxy%20ling.png?raw=true)
