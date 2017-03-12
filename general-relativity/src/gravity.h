@@ -15,10 +15,10 @@ using namespace hnn;
 #define INIT_PRESET 3
 
 //1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 3600
+#define TIME_OF_ONE_FRAME 86400 * 10
 
 //初期位置集積度
-#define DENSITY 0.1
+#define DENSITY 0.3
 
 //粒子の初期運動量の平均
 #define MOMENTUM_AVRG 0

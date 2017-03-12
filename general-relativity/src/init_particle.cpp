@@ -121,9 +121,9 @@ void init_002()
 //中が空洞の球
 void init_003()
 {
-	double r = 6.96e+11;
-	double m = 5.0e+38 / num_particle;
-	double s = 1.0e+5; //回転速度
+	double r = 6.96e+8 * 1000; //半径
+	double m = 1.9891e+30 * 50000 / num_particle; //質量
+	double s = 2.0e+3; //回転速度
 	double r_xz;
 	for (int i = 0; i < num_particle; ++i)
 	{
