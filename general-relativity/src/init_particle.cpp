@@ -122,7 +122,7 @@ void init_002()
 void init_003()
 {
 	double r = 6.96e+11;
-	double m = 4.0e+38 / num_particle;
+	double m = 5.0e+38 / num_particle;
 	double s = 1.0e+5; //回転速度
 	double r_xz;
 	for (int i = 0; i < num_particle; ++i)

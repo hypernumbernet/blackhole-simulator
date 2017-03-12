@@ -6,7 +6,7 @@
 using namespace hnn;
 
 //出力するフレーム(時間進捗)数
-#define NUM_FRAME 100000
+#define NUM_FRAME 10000
 
 //粒子数
 #define NUM_PARTICLE 2000
@@ -15,7 +15,7 @@ using namespace hnn;
 #define INIT_PRESET 3
 
 //1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 14400
+#define TIME_OF_ONE_FRAME 3600
 
 //初期位置集積度
 #define DENSITY 0.1

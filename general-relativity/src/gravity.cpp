@@ -69,24 +69,19 @@ unsigned __stdcall prepare(void * pArguments)
 	}
 	return 0;
 }
-//時空の歪みから速度の増加分を取得
-double get_velocity(double skewness)
-{
-	return skewness * (1.0 - fabs(skewness)) * d_time;
-}
 //----------------------------------------------------------------------------
 //1フレーム時間が進行するごとにする計算
 unsigned __stdcall time_progress(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
-	int i;
-	for (i = para->start; i < para->end; ++i)
+	double a;
+	for (int i = para->start; i < para->end; ++i)
 	{
 		//skewness = rs / r
 		//Speed = dr / dt = c * (1 - rs / r)
-		velocity[i].x += get_velocity(skewness[i].x);
-		velocity[i].y += get_velocity(skewness[i].y);
-		velocity[i].z += get_velocity(skewness[i].z);
+		//時空の歪みから速度の増加分を取得
+		a = (1.0 - skewness[i].Abs()) * d_time;
+		velocity[i] += skewness[i] * a;
 		location[i] += velocity[i] * d_time;
 		locat_w[i] = location[i] * zoom;
 		//printf("%e\n", locat_w[i].x);
