@@ -6,28 +6,28 @@
 using namespace hnn;
 
 //出力するフレーム(時間進捗)数
-#define NUM_FRAME 10000
+#define NUM_FRAME 100000
 
 //粒子数
-#define NUM_PARTICLE 2
+#define NUM_PARTICLE 2000
+
+//初期位置配置方式
+#define INIT_PRESET 3
+
+//1フレームの時間(s)
+#define TIME_OF_ONE_FRAME 14400
+
+//初期位置集積度
+#define DENSITY 0.1
+
+//粒子の初期運動量の平均
+#define MOMENTUM_AVRG 0
 
 //重力定数(m3 s−2 kg−1)
 #define GRAVITATIONAL_CONSTANT 6.67259e-11
 
 //光速度(m/s)
 #define SPEED_OF_LIGHT 2.99792458e+8
-
-//1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 3600
-
-//粒子の初期運動量の平均
-#define MOMENTUM_AVRG 0
-
-//初期位置配置方式
-#define INIT_PRESET 2
-
-//初期位置集積度
-#define DENSITY 500
 
 //データファイル関連
 #define VERSION 1
@@ -46,7 +46,7 @@ extern Vector3<double> * velocity;
 extern Vector3<double> * skewness;
 extern double * mass;
 extern int num_particle;
-extern int density;
+extern double density;
 extern double zoom;
 extern double momentum_avrg;
 extern double g_const;

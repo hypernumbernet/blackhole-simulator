@@ -33,7 +33,7 @@ double * rs;
 double d_time;
 
 int num_particle;
-int density;
+double density;
 double zoom;
 double momentum_avrg;
 double g_const;
@@ -65,6 +65,7 @@ unsigned __stdcall prepare(void * pArguments)
 		skewness[i].y = 0.0;
 		skewness[i].z = 0.0;
 		locat_w[i] = location[i] * zoom;
+		//printf("%1.8e\n", locat_w[i].x);
 	}
 	return 0;
 }
@@ -89,9 +90,9 @@ unsigned __stdcall time_progress(void * pArguments)
 		location[i] += velocity[i] * d_time;
 		locat_w[i] = location[i] * zoom;
 		//printf("%e\n", locat_w[i].x);
-		skewness[i].x = 1.0;
-		skewness[i].y = 1.0;
-		skewness[i].z = 1.0;
+		skewness[i].x = 0.0;
+		skewness[i].y = 0.0;
+		skewness[i].z = 0.0;
 	}
 	return 0;
 }
@@ -114,7 +115,7 @@ unsigned __stdcall relation(void * pArguments)
 		{
 			//重力は瞬間的に伝達されるとして近似
 			//skewness = rs / r
-			direction = location[i] - location[j];
+			direction = location[j] - location[i];
 			//rinv = 1 / r^2
 			rinv = 1.0 / direction.Norm();
 			ri = rs[i] * rinv;
@@ -226,7 +227,7 @@ int main(int argc, char * argv[])
 	printf("c:%1.8e - Speed of Light (Zero means no limit)\n", speed_of_light);
 	printf("i:%u - Initialize Preset\n", init_preset);
 	printf("s:%1.8e - Initialize Momentum Average\n", momentum_avrg);
-	printf("d:%d - Initialize Density\n", density);
+	printf("d:%f - Initialize Density\n", density);
 	printf("r:%1.8e - Zoom Ratio\n", zoom);
 	wprintf(L"o:%s - File Name\n", out_dat);
 	printf("f:%u frames\n", num_frame);
@@ -310,7 +311,7 @@ int main(int argc, char * argv[])
 	i += sprintf_s(buffer + i, j - i, "g%1.8e ", g_const);
 	i += sprintf_s(buffer + i, j - i, "c%1.8e ", speed_of_light);
 	i += sprintf_s(buffer + i, j - i, "s%1.8e ", momentum_avrg);
-	i += sprintf_s(buffer + i, j - i, "d%d ", density);
+	i += sprintf_s(buffer + i, j - i, "d%f ", density);
 	i += sprintf_s(buffer + i, j - i, "r%1.8e ", zoom);
 	i += sprintf_s(buffer + i, j - i, "i%u ", init_preset);
 
