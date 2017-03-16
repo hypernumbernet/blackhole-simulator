@@ -97,22 +97,24 @@ unsigned __stdcall relation(void * pArguments)
 {
 	lpINT_RANGE para = (lpINT_RANGE)pArguments;
 
-	int i, j, k;
 	double rinv, ri, rj;
 	Vector3<double> direction;
 
-	k = para->start * num_particle - (para->start + 1) * para->start / 2;
-
 	//重力相互作用
-	for (i = para->start; i < para->end; ++i)
+	for (int i = para->start; i < para->end; ++i)
 	{
-		for (j = i + 1; j < num_particle; ++j)
+		for (int j = i + 1; j < num_particle; ++j)
 		{
 			//重力は瞬間的に伝達されるとして近似
 			//skewness = rs / r
 			direction = location[j] - location[i];
 			//rinv = 1 / r^2
 			rinv = 1.0 / direction.Norm();
+			/*if (rinv > 1.0e-20) {
+				Vector3<double> dv = (velocity[i] + velocity[j]) * 0.5;
+				velocity[i] = dv;
+				velocity[j] = dv;
+			}*/
 			ri = rs[i] * rinv;
 			rj = rs[j] * rinv;
 			skewness[i].x += rj * direction.x;
@@ -121,7 +123,6 @@ unsigned __stdcall relation(void * pArguments)
 			skewness[j].x -= ri * direction.x;
 			skewness[j].y -= ri * direction.y;
 			skewness[j].z -= ri * direction.z;
-			++k;
 		}
 	}
 
