@@ -11,19 +11,19 @@ https://github.com/hypernumbernet/3dp-player
 
 ## About included projects
 
-###quaternion-logarithm
+### quaternion-logarithm
 
 All particles are in the space above the unit quaternion. The gravitational interaction is calculated with the natural log of the quaternion. Interestingly, it results in a whirlpool like a galaxy.
 
-###3-sphere
+### 3-sphere
 
 The method of this simulation is not related the real universe's black hole.　The purpose of this program is a research for the behavior of particles on 3-sphere (in 4 dimensions) space. In this simulator, all particles are located on the unit quaternion and calculated by the octonion slerp. The gravitational force between particles is figured out by Newton's law of gravity.
 
-###general-relativity
+### general-relativity
 
 It is a simulation of a distorted space using Einstein's general relativity. Approximate gravity as being transmitted instantaneously, use the Schwarzschild solution and accumulate the skewness of spacetime.
 
-#Images
+# Images
 
 ## 3-sphere simulation
 
