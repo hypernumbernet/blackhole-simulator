@@ -88,8 +88,8 @@ unsigned __stdcall time_progress(void * pArguments)
 		//ブラックホール内で発散しない
 		//gnuplot> pl (1/x)*(1-0.25/x)/(1+0.25/x)**3, (1/x)*(1-1/x), (1-0.25/x)/(1+0.25/x)**3
 		double b = skewness[i].Abs() * 0.25;
-		double bplus = 1.0 + b;
-		a = (1.0 - b) * (1.0 / bplus * bplus * bplus) * d_time;
+		double bb = 1.0 + b;
+		a = (1.0 - b) * (1.0 / bb * bb * bb) * d_time;
 		
 		velocity[i] += skewness[i] * a;
 		location[i] += velocity[i] * d_time;
@@ -120,11 +120,6 @@ unsigned __stdcall relation(void * pArguments)
 			direction = location[j] - location[i];
 			//rinv = 1 / r^2
 			rinv = 1.0 / direction.Norm();
-			/*if (rinv > 1.0e-20) {
-				Vector3<double> dv = (velocity[i] + velocity[j]) * 0.5;
-				velocity[i] = dv;
-				velocity[j] = dv;
-			}*/
 			ri = rs[i] * rinv;
 			rj = rs[j] * rinv;
 			skewness[i].x += rj * direction.x;

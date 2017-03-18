@@ -124,21 +124,42 @@ void init_003()
 	double r = 6.96e+8 * 1000; //半径
 	double m = 1.9891e+30 * 1000000 / num_particle; //質量
 	double s = 2.0e+3; //回転速度
-	double r_xz;
 	for (int i = 0; i < num_particle; ++i)
 	{
 		location[i] = rand_sphere(r * (1.0 - density), r * density);
-		r_xz = sqrt(location[i].x * location[i].x 
-			+ location[i].z * location[i].z);
 		velocity[i] = Vector3<double>(
-			s * r_xz / r * location[i].z / r_xz,
+			s / r * location[i].z,
 			0.0,
-			-s * r_xz / r * location[i].x / r_xz
+			-s / r * location[i].x
 			);
 		//velocity[i] = Vector3<double>(0.0, 0.0, 0.0);
 		mass[i] = m;
 	}
 	zoom = 5.0e-12;
+}
+
+//円盤銀河
+void init_004()
+{
+	double r = 9.46073e+20; //半径 10万光年
+	double m = 1.9891e+30 * 2.0e+12 / num_particle; //質量
+	double s = 1.0e+8; //回転速度
+	for (int i = 1; i < num_particle; ++i)
+	{
+		location[i] = rand_sphere(r * (1.0 - density), r * density);
+		location[i].y *= 0.01;
+		location[i].x *= 0.1;
+		velocity[i] = Vector3<double>(
+			s / r * location[i].z,
+			0.0,
+			-s / r * location[i].x
+			);
+		mass[i] = m;
+	}
+	location[0] = Vector3<double>(0.0, 0.0, 0.0);
+	velocity[0] = Vector3<double>(0.0, 0.0, 0.0);
+	mass[0] = 1.9891e+30 * 1.0e+12;
+	zoom = 5.0e-21;
 }
 
 int init_particle(int method)
@@ -149,6 +170,7 @@ int init_particle(int method)
 	init_func[1] = init_001;
 	init_func[2] = init_002;
 	init_func[3] = init_003;
+	init_func[4] = init_004;
 	if (method < 0 || method >= init_func.size())
 	{
 		return 1;

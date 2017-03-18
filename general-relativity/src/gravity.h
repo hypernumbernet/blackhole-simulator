@@ -12,13 +12,14 @@ using namespace hnn;
 #define NUM_PARTICLE 2000
 
 //初期位置配置方式
-#define INIT_PRESET 3
+#define INIT_PRESET 4
 
 //1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 3600 * 24
+//#define TIME_OF_ONE_FRAME 3600.0 * 24.0
+#define TIME_OF_ONE_FRAME 3600.0 * 24.0 * 365.0 * 1.0e+3
 
 //初期位置集積度
-#define DENSITY 0.3
+#define DENSITY 0.9
 
 //粒子の初期運動量の平均
 #define MOMENTUM_AVRG 0
