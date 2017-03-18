@@ -89,7 +89,7 @@ unsigned __stdcall time_progress(void * pArguments)
 		//gnuplot> pl (1/x)*(1-0.25/x)/(1+0.25/x)**3, (1/x)*(1-1/x), (1-0.25/x)/(1+0.25/x)**3
 		double b = skewness[i].Abs() * 0.25;
 		double bb = 1.0 + b;
-		a = (1.0 - b) * (1.0 / bb * bb * bb) * d_time;
+		a = (1.0 - b) * (1.0 / (bb * bb * bb)) * d_time;
 		
 		velocity[i] += skewness[i] * a;
 		location[i] += velocity[i] * d_time;

@@ -148,7 +148,7 @@ void init_004()
 	{
 		location[i] = rand_sphere(r * (1.0 - density), r * density);
 		location[i].y *= 0.01;
-		location[i].x *= 0.1;
+		//location[i].x *= 0.1;
 		velocity[i] = Vector3<double>(
 			s / r * location[i].z,
 			0.0,
