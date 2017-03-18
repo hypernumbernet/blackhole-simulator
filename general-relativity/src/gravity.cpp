@@ -77,10 +77,20 @@ unsigned __stdcall time_progress(void * pArguments)
 	double a;
 	for (int i = para->start; i < para->end; ++i)
 	{
-		//skewness = rs / r
-		//Speed = dr / dt = c * (1 - rs / r)
 		//時空の歪みから速度の増加分を取得
-		a = (1.0 - skewness[i].Abs()) * d_time;
+		//skewness = rs / r
+		
+		//Schwarzschild: dr / dt = 1 - rs / r
+		//a = (1.0 - skewness[i].Abs()) * d_time;
+		
+		//等方座標
+		//(1 - rs / 4r) / (1 + rs / 4r)^3
+		//ブラックホール内で発散しない
+		//gnuplot> pl (1/x)*(1-0.25/x)/(1+0.25/x)**3, (1/x)*(1-1/x), (1-0.25/x)/(1+0.25/x)**3
+		double b = skewness[i].Abs() * 0.25;
+		double bplus = 1.0 + b;
+		a = (1.0 - b) * (1.0 / bplus * bplus * bplus) * d_time;
+		
 		velocity[i] += skewness[i] * a;
 		location[i] += velocity[i] * d_time;
 		locat_w[i] = location[i] * zoom;

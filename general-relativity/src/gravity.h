@@ -15,7 +15,7 @@ using namespace hnn;
 #define INIT_PRESET 3
 
 //1フレームの時間(s)
-#define TIME_OF_ONE_FRAME 86400 * 10
+#define TIME_OF_ONE_FRAME 3600 * 24
 
 //初期位置集積度
 #define DENSITY 0.3

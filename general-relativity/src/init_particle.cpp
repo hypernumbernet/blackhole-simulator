@@ -122,7 +122,7 @@ void init_002()
 void init_003()
 {
 	double r = 6.96e+8 * 1000; //半径
-	double m = 1.9891e+30 * 50000 / num_particle; //質量
+	double m = 1.9891e+30 * 1000000 / num_particle; //質量
 	double s = 2.0e+3; //回転速度
 	double r_xz;
 	for (int i = 0; i < num_particle; ++i)
