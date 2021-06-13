@@ -60,10 +60,13 @@ void Particles::updateParticles()
     if (numberOfParticles == 0)
         return;
     auto rot = QQuaternion::fromAxisAndAngle(QVector3D(0.0f, 0.0f, 1.0f), 1.0f);
-    auto result = rot.rotatedVector(QVector3D(location[0], location[1], location[2]));
-    location[0] = result.x();
-    location[1] = result.y();
-    location[2] = result.z();
+    for (int i = 0; i < numberOfParticles*3; i+=3)
+    {
+        auto result = rot.rotatedVector(QVector3D(location[i], location[i + 1], location[i + 2]));
+        location[i] = result.x();
+        location[i + 1] = result.y();
+        location[i + 2] = result.z();
+    }
 
     m_vao.bind();
 
