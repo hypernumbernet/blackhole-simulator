@@ -21,11 +21,15 @@ class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_3_3_Core
 public:
     explicit GraphicWindow();
     ~GraphicWindow();
+    int frameNum;
 
 public slots:
     void enableGridLines(bool enabled);
-    void btn001();
     void changeLinePosition();
+    void startSim();
+
+signals:
+    void counterUpdate();
 
 protected:
     void initializeGL() override;
@@ -60,5 +64,5 @@ private:
     WorldModels* world;
     Particles* particleModel;
 
-    int frameNum;
+    bool isSimulating;
 };

@@ -25,6 +25,12 @@ MainWidget::MainWidget(QWidget *parent)
 
 void MainWidget::initUi()
 {
+    counterLcd = new QLCDNumber(10);
+    counterLcd->setSegmentStyle(QLCDNumber::Flat);
+    counterLcd->display(graphicWindows->frameNum);
+    vLayout->addWidget(counterLcd);
+    QObject::connect(graphicWindows, &GraphicWindow::counterUpdate, this, &MainWidget::counterUpdate);
+
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
@@ -46,8 +52,19 @@ void MainWidget::initUi()
     particleNumValue->setText(QString::number(particleNumber));
     vLayout->addWidget(particleNumValue);
 
-    auto button = new QPushButton(tr("001"));
-    button->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(button);
-    QObject::connect(button, &QPushButton::clicked, graphicWindows, &GraphicWindow::btn001);
+//    auto frameNumValue = new QLabel;
+//    frameNumValue->setFrameStyle(QFrame::Box | QFrame::Raised);
+//    frameNumValue->setAlignment(Qt::AlignRight);
+//    frameNumValue->setText(QString::number(graphicWindows->frameNum));
+//    vLayout->addWidget(frameNumValue);
+
+    auto startBtn = new QPushButton(tr("Start"));
+    startBtn->setFocusPolicy(Qt::NoFocus);
+    vLayout->addWidget(startBtn);
+    QObject::connect(startBtn, &QPushButton::clicked, graphicWindows, &GraphicWindow::startSim);
+}
+
+void MainWidget::counterUpdate()
+{
+    counterLcd->display(graphicWindows->frameNum);
 }

@@ -7,8 +7,8 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLabel>
-
 #include <QScreen>
+#include <QLCDNumber>
 
 class MainWidget : public QWidget
 {
@@ -16,6 +16,9 @@ class MainWidget : public QWidget
 
 public:
     explicit MainWidget(QWidget *parent = nullptr);
+
+public slots:
+    void counterUpdate();
 
 protected:
     void initUi();
@@ -27,4 +30,5 @@ private:
     QVBoxLayout *vLayout;
 
     int particleNumber;
+    QLCDNumber* counterLcd;
 };
