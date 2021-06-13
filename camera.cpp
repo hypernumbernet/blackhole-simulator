@@ -12,10 +12,10 @@ static inline void V3RotByQua(QVector3D& axis, const QQuaternion& rot)
 }
 
 Camera::Camera(const QVector3D &pos)
-    : m_pos(pos),
-      m_forward(0.0f, 0.0f, -1.0f),
-      m_right(1.0f, 0.0f, 0.0f),
-      m_up(0.0f, 1.0f, 0.0f)
+    : m_pos(pos)
+    , m_forward(0.0f, 0.0f, -1.0f)
+    , m_right(1.0f, 0.0f, 0.0f)
+    , m_up(0.0f, 1.0f, 0.0f)
 {
 }
 

@@ -3,11 +3,12 @@
 #include "graphicwindow.h"
 
 #include <QWidget>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QPushButton>
+#include <QHBoxLayout>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QLabel>
 
-#include <QtGui/QScreen>
+#include <QScreen>
 
 class MainWidget : public QWidget
 {
@@ -24,4 +25,6 @@ private:
     QWidget *container;
     QHBoxLayout *hLayout;
     QVBoxLayout *vLayout;
+
+    int particleNumber;
 };

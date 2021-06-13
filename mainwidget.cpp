@@ -1,6 +1,8 @@
 ﻿#include "mainwidget.h"
 
-MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
+MainWidget::MainWidget(QWidget *parent)
+    : QWidget(parent)
+    , particleNumber(1000)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
@@ -33,6 +35,16 @@ void MainWidget::initUi()
     btnLineType->setFocusPolicy(Qt::NoFocus);
     vLayout->addWidget(btnLineType);
     QObject::connect(btnLineType, &QPushButton::clicked, graphicWindows, &GraphicWindow::changeLinePosition);
+
+    auto particleNumLabel = new QLabel;
+    particleNumLabel->setText(tr("Number of particles:"));
+    vLayout->addWidget(particleNumLabel);
+
+    auto particleNumValue = new QLabel;
+    particleNumValue->setFrameStyle(QFrame::Box | QFrame::Raised);
+    particleNumValue->setAlignment(Qt::AlignRight);
+    particleNumValue->setText(QString::number(particleNumber));
+    vLayout->addWidget(particleNumValue);
 
     auto button = new QPushButton(tr("001"));
     button->setFocusPolicy(Qt::NoFocus);

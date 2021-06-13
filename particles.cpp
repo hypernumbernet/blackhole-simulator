@@ -3,8 +3,8 @@
 static float randf(){return (float)rand()/(float)RAND_MAX;}
 
 Particles::Particles(int screenHeight)
-    : pointSize(30.0f),
-      initHeight(screenHeight)
+    : pointSize(30.0f)
+    , initHeight(screenHeight)
 {
 }
 

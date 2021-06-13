@@ -1,8 +1,8 @@
 #include "worldmodels.h"
 
 WorldModels::WorldModels()
-    : m_enableGridLines(true),
-      lines{
+    : m_enableGridLines(true)
+    , lines{
           0.0f, 0.0f, 0.0f,
           10.0f, 0.0f, 0.0f,
           0.0f, 0.0f, 0.0f,
