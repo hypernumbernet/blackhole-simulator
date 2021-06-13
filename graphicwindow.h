@@ -65,4 +65,5 @@ private:
     Particles* particleModel;
 
     bool isSimulating;
+    int numberOfParticle;
 };

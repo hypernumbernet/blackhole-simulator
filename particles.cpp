@@ -3,14 +3,19 @@
 static float randf(){return (float)rand()/(float)RAND_MAX;}
 
 Particles::Particles(int screenHeight)
-    : pointSize(30.0f)
+    : timePerFrame(3600.0f)
+    , pointSizeScale(1.0f)
+    , pointSize(30.0f)
     , initHeight(screenHeight)
+    , numberOfParticles(0)
 {
+    location = new float[0];
 }
 
 Particles::~Particles()
 {
     m_vao.destroy();
+    delete[] location;
 }
 
 bool Particles::initialize()
@@ -35,30 +40,37 @@ bool Particles::initialize()
     glEnable(GL_POINT_SPRITE);
     //glPointSize(pointSize);
 
-    for (int i = 0; i < 3000; ++i)
-    {
-        particlePosition[i] = randf() * 2.0f - 1.0f;
-    }
-
-    updateParticles();
-
     return true;
+}
+
+void Particles::setNumberOfParticles(int num)
+{
+    numberOfParticles = num;
+    delete[] location;
+    location = new float[numberOfParticles * 3];
+    for (int i = 0; i < numberOfParticles * 3; ++i)
+    {
+        location[i] = randf() * 2.0f - 1.0f;
+    }
+    updateParticles();
 }
 
 void Particles::updateParticles()
 {
+    if (numberOfParticles == 0)
+        return;
     auto rot = QQuaternion::fromAxisAndAngle(QVector3D(0.0f, 0.0f, 1.0f), 1.0f);
-    auto result = rot.rotatedVector(QVector3D(particlePosition[0], particlePosition[1], particlePosition[2]));
-    particlePosition[0] = result.x();
-    particlePosition[1] = result.y();
-    particlePosition[2] = result.z();
+    auto result = rot.rotatedVector(QVector3D(location[0], location[1], location[2]));
+    location[0] = result.x();
+    location[1] = result.y();
+    location[2] = result.z();
 
     m_vao.bind();
 
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(particlePosition, sizeof(particlePosition));
+    glBuf.allocate(location, numberOfParticles * 12);
     m_program.enableAttributeArray(0);
     m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
@@ -74,12 +86,14 @@ void Particles::updateParticles()
 
 void Particles::paint(QMatrix4x4 viewProjection)
 {
+    if (numberOfParticles == 0)
+        return;
     m_program.bind();
     m_program.setUniformValue("mvp_matrix", viewProjection);
     m_program.setUniformValue("size", pointSize * pointSizeScale);
     m_vao.bind();
 
-    glDrawArrays(GL_POINTS, 0, 1000);
+    glDrawArrays(GL_POINTS, 0, numberOfParticles);
 
     m_vao.release();
     m_program.release();

@@ -28,7 +28,5 @@ private:
     QWidget *container;
     QHBoxLayout *hLayout;
     QVBoxLayout *vLayout;
-
-    int particleNumber;
     QLCDNumber* counterLcd;
 };

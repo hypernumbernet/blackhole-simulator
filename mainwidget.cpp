@@ -2,7 +2,6 @@
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
-    , particleNumber(1000)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
@@ -31,6 +30,11 @@ void MainWidget::initUi()
     vLayout->addWidget(counterLcd);
     QObject::connect(graphicWindows, &GraphicWindow::counterUpdate, this, &MainWidget::counterUpdate);
 
+    auto startBtn = new QPushButton(tr("Start"));
+    startBtn->setFocusPolicy(Qt::NoFocus);
+    vLayout->addWidget(startBtn);
+    QObject::connect(startBtn, &QPushButton::clicked, graphicWindows, &GraphicWindow::startSim);
+
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
@@ -49,7 +53,7 @@ void MainWidget::initUi()
     auto particleNumValue = new QLabel;
     particleNumValue->setFrameStyle(QFrame::Box | QFrame::Raised);
     particleNumValue->setAlignment(Qt::AlignRight);
-    particleNumValue->setText(QString::number(particleNumber));
+    //particleNumValue->setText(QString::number(numberOfParticles));
     vLayout->addWidget(particleNumValue);
 
 //    auto frameNumValue = new QLabel;
@@ -57,11 +61,6 @@ void MainWidget::initUi()
 //    frameNumValue->setAlignment(Qt::AlignRight);
 //    frameNumValue->setText(QString::number(graphicWindows->frameNum));
 //    vLayout->addWidget(frameNumValue);
-
-    auto startBtn = new QPushButton(tr("Start"));
-    startBtn->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(startBtn);
-    QObject::connect(startBtn, &QPushButton::clicked, graphicWindows, &GraphicWindow::startSim);
 }
 
 void MainWidget::counterUpdate()
