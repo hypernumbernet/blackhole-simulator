@@ -59,4 +59,6 @@ private:
 
     WorldModels* world;
     Particles* particleModel;
+
+    int frameNum;
 };

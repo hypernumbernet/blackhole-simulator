@@ -40,13 +40,19 @@ bool Particles::initialize()
         particlePosition[i] = randf() * 2.0f - 1.0f;
     }
 
-    initParticles();
+    updateParticles();
 
     return true;
 }
 
-void Particles::initParticles()
+void Particles::updateParticles()
 {
+    auto rot = QQuaternion::fromAxisAndAngle(QVector3D(0.0f, 0.0f, 1.0f), 1.0f);
+    auto result = rot.rotatedVector(QVector3D(particlePosition[0], particlePosition[1], particlePosition[2]));
+    particlePosition[0] = result.x();
+    particlePosition[1] = result.y();
+    particlePosition[2] = result.z();
+
     m_vao.bind();
 
     QOpenGLBuffer glBuf;

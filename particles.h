@@ -15,15 +15,14 @@ public:
     void paint(QMatrix4x4 viewProjection);
     void resize(int height);
 
-    float pointSize;
+    void updateParticles();
+    float particlePosition[3000];
 
 private:
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
-    void initParticles();
-    float particlePosition[3000];
-
     float pointSizeScale;
+    float pointSize;
     int initHeight;
 };

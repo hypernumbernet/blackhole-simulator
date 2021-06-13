@@ -4,6 +4,7 @@ GraphicWindow::GraphicWindow()
     : walkSpeed(0.1f)
     , lookAroundSpeed(1.0f)
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
+    , frameNum(0)
 {
     m_cam.lookAtZero();
 }
@@ -64,6 +65,8 @@ void GraphicWindow::paintGL()
 
     world->paint(projection * viewMatrix);
     particleModel->paint(projection * viewMatrix);
+
+    ++frameNum;
 }
 
 void GraphicWindow::keyPressEvent(QKeyEvent *ev)
@@ -176,7 +179,7 @@ void GraphicWindow::timerEvent(QTimerEvent*)
     if (keyPressing.indexOf(Qt::Key_Tab) >= 0) {
         m_cam.lookAtZero();
     }
-
+    particleModel->updateParticles();
     update();
 }
 
