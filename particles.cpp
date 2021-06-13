@@ -116,15 +116,15 @@ void Particles::resize(int height)
 
 void Particles::initParticlesRandam()
 {
-    for (uint64_t i = 0; i < numberOfParticles; ++i)
+    for (quint64 i = 0; i < numberOfParticles; ++i)
     {
         mass[i] = randf() * 20000.0f - 10000.0f;
     }
-    for (uint64_t i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
         coordinates[i] = randf() * 2.0f - 1.0f;
     }
-    for (uint64_t i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
         velocities[i] = randf() * 0.0000002f - 0.0000001f;
     }
@@ -150,10 +150,10 @@ void Particles::initSunEarth()
 
 void Particles::calculateDistances()
 {
-    uint64_t k = 0;
-    for (uint64_t i = 0; i < numberOfParticles - 1; ++i)
+    quint64 k = 0;
+    for (quint64 i = 0; i < numberOfParticles - 1; ++i)
     {
-        for (uint64_t j = i + 1; j < numberOfParticles; ++j)
+        for (quint64 j = i + 1; j < numberOfParticles; ++j)
         {
             inversedDistances[k] = 1.0f / getDistance(i, j);
             ++k;
@@ -176,10 +176,10 @@ void Particles::newParticles()
     inversedDistances = new float[numberOfInteractions];
 }
 
-float Particles::getDistance(uint64_t a, uint64_t b)
+float Particles::getDistance(quint64 a, quint64 b)
 {
-    uint64_t ai = a * 3;
-    uint64_t bi = b * 3;
+    quint64 ai = a * 3;
+    quint64 bi = b * 3;
     float d1 = coordinates[ai] - coordinates[bi]; ++ai; ++bi;
     float d2 = coordinates[ai] - coordinates[bi]; ++ai; ++bi;
     float d3 = coordinates[ai] - coordinates[bi];
@@ -189,9 +189,9 @@ float Particles::getDistance(uint64_t a, uint64_t b)
 void Particles::timeProgress()
 {
     //debug();
-    for (uint64_t i = 0; i < numberOfParticles; ++i)
+    for (quint64 i = 0; i < numberOfParticles; ++i)
     {
-        uint64_t j = i * 3;
+        quint64 j = i * 3;
         coordinates[j] += velocities[j] * timePerFrame; ++j;
         coordinates[j] += velocities[j] * timePerFrame; ++j;
         coordinates[j] += velocities[j] * timePerFrame;
@@ -201,21 +201,19 @@ void Particles::timeProgress()
 void Particles::calculateInteraction()
 {
     float theta;
-    uint64_t k = 0;
-    for (uint64_t i = 0; i < numberOfParticles - 1; ++i)
+    quint64 k = 0;
+    for (quint64 i = 0; i < numberOfParticles - 1; ++i)
     {
-        for (uint64_t j = i + 1; j < numberOfParticles; ++j)
+        for (quint64 j = i + 1; j < numberOfParticles; ++j)
         {
-//            theta = inversedDistances[k];
-//            inversedDistances[k] = 1.0f / getDistance(i, j);
-//            theta -= inversedDistances[k];
+            // 積分計算
+            // 前回計算した距離データを使用するのでメモリコストが高い。
+            // しかし、距離変動が大きい場合はこちらで計算した方が正確か？
+            //theta = inversedDistances[k];
+            //inversedDistances[k] = 1.0f / getDistance(i, j);
+            //theta -= inversedDistances[k];
 
-            //お互いの距離がほとんど変化しなかった場合、微分で計算し、通常は積分計算をする。
-            //すべてを積分計算にすると、計算精度以下になった時動きがなくなる。
-            //これを回避したいのなら微分計算で分岐させる。（初期速度をゼロにしたい時）
-            //	微分計算の場合
-            //	theta = get_distance(i, j);
-            //	theta = 1.0 / (theta * theta);
+            // 微分計算
             theta = 1.0f / getDistance(i, j);
             theta *= theta * timePerFrame;
 
@@ -223,8 +221,8 @@ void Particles::calculateInteraction()
             {
                 theta *= GRAVITATIONAL_CONSTANT;
 
-                uint64_t a = i * 3;
-                uint64_t b = j * 3;
+                quint64 a = i * 3;
+                quint64 b = j * 3;
                 float d1 = coordinates[a] - coordinates[b];
                 float d2 = coordinates[a + 1] - coordinates[b + 1];
                 float d3 = coordinates[a + 2] - coordinates[b + 2];
@@ -241,7 +239,7 @@ void Particles::calculateInteraction()
                 velocities[b + 2] += d3 * mass[i];
 
             } else {
-                qDebug("[warning] invalid number detected");
+                qDebug() << "[warning] invalid number detected";
             }
 
             ++k;
@@ -251,12 +249,12 @@ void Particles::calculateInteraction()
 
 void Particles::debug()
 {
-    for (uint64_t i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
-        qDebug("coordinates: %lu: %f", i, coordinates[i]);
+        qDebug() << "coordinates:" << i << coordinates[i];
     }
-    for (uint64_t i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
-        qDebug("velocities: %lu: %f", i, velocities[i]);
+        qDebug() << "coordinates:" << i << velocities[i];
     }
 }

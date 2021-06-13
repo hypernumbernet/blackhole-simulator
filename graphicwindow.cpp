@@ -6,7 +6,7 @@ GraphicWindow::GraphicWindow()
     , lookAroundSpeed(1.0f)
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
     , isSimulating(false)
-    , numberOfParticle(2) // 50000 -> 4GB memory
+    , numberOfParticle(2)
 {
     m_cam.lookAtZero();
 }

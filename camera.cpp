@@ -8,7 +8,12 @@ static inline void V3RotByQua(QVector3D& axis, const QQuaternion& rot)
     axis.setX(result.x());
     axis.setY(result.y());
     axis.setZ(result.z());
+
+    // 計算毎に正規化したいなら
     //axis.normalize();
+
+    // 以下は動かない。角度が倍？
+    //axis = rot.rotatedVector(axis);
 }
 
 Camera::Camera(const QVector3D &pos)
@@ -85,6 +90,7 @@ void Camera::standXZ()
     V3RotByQua(m_right, rot);
     V3RotByQua(m_up, rot);
 
+    // 念のための正規化。実際はあまりズレない？
     m_rot.normalize();
     m_forward.normalize();
     m_right.normalize();

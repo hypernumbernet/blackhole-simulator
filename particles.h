@@ -30,8 +30,8 @@ private:
     float pointSizeScale;
     float pointSize;
     int initHeight;
-    uint64_t numberOfParticles;
-    uint64_t numberOfInteractions;
+    quint64 numberOfParticles;
+    quint64 numberOfInteractions;
 
     //↓別クラスに分離予定=============================================
     void initParticlesRandam();
@@ -39,7 +39,7 @@ private:
 
     //↓別クラスに分離予定=============================================
     void newParticles();
-    float getDistance(uint64_t a, uint64_t b);
+    float getDistance(quint64 a, quint64 b);
     void calculateDistances();
     void timeProgress();
     void calculateInteraction();
