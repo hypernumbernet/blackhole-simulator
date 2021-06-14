@@ -28,14 +28,12 @@ void MainWidget::initUi()
     auto fpsLabel = new QLabel;
     fpsLabel->setText("FPS");
     fpsLayout->addWidget(fpsLabel);
-    fpsLCD = new QLCDNumber(5);
-    fpsLCD->setSegmentStyle(QLCDNumber::Flat);
+    fpsLCD = newCounterQLCDNumber(5);
     QObject::connect(graphicWindows, &GraphicWindow::fpsUpdate, this, &MainWidget::fpsUpdate);
     fpsLayout->addWidget(fpsLCD);
     vLayout->addLayout(fpsLayout);
 
-    counterLcd = new QLCDNumber(10);
-    counterLcd->setSegmentStyle(QLCDNumber::Flat);
+    counterLcd = newCounterQLCDNumber(10);
     counterLcd->display(graphicWindows->frameNum);
     vLayout->addWidget(counterLcd);
     QObject::connect(graphicWindows, &GraphicWindow::counterUpdate, this, &MainWidget::counterUpdate);
@@ -60,17 +58,8 @@ void MainWidget::initUi()
     particleNumLabel->setText(tr("Number of particles:"));
     vLayout->addWidget(particleNumLabel);
 
-    auto particleNumValue = new QLabel;
-    particleNumValue->setFrameStyle(QFrame::Box | QFrame::Raised);
-    particleNumValue->setAlignment(Qt::AlignRight);
-    //particleNumValue->setText(QString::number(numberOfParticles));
+    particleNumValue = newNumberQLabel();
     vLayout->addWidget(particleNumValue);
-
-//    auto frameNumValue = new QLabel;
-//    frameNumValue->setFrameStyle(QFrame::Box | QFrame::Raised);
-//    frameNumValue->setAlignment(Qt::AlignRight);
-//    frameNumValue->setText(QString::number(graphicWindows->frameNum));
-//    vLayout->addWidget(frameNumValue);
 }
 
 void MainWidget::counterUpdate()
@@ -81,4 +70,25 @@ void MainWidget::counterUpdate()
 void MainWidget::fpsUpdate(int fps)
 {
     fpsLCD->display(fps);
+}
+
+QLCDNumber* MainWidget::newCounterQLCDNumber(int numDigits)
+{
+    auto myLCD = new QLCDNumber(numDigits);
+    myLCD->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    myLCD->setSegmentStyle(QLCDNumber::Flat);
+    return myLCD;
+}
+
+QLabel* MainWidget::newNumberQLabel()
+{
+    auto lbl = new QLabel();
+    lbl->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    lbl->setAlignment(Qt::AlignRight);
+    return lbl;
+}
+
+void MainWidget::setNumberOfParticles(quint64 num)
+{
+    particleNumValue->setText(QString::number(num));
 }

@@ -4,6 +4,7 @@ Particles::Particles(int screenHeight)
     : pointSizeScale(1.0f)
     , pointSize(30.0f)
     , initHeight(screenHeight)
+    , numberOfParticle(1000)
 {
 }
 
@@ -37,9 +38,9 @@ bool Particles::initialize()
     return true;
 }
 
-void Particles::setNumberOfParticles(int num)
+void Particles::selectNBodyEngine()
 {
-    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(num, 3600.0f);
+    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(numberOfParticle);
 
     updateParticles();
 }

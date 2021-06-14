@@ -2,6 +2,8 @@
 
 #include "abstractnbodyengine.h"
 
+class MainWidget;
+
 class Gravity3DMassDifferentialNBodyEngine : public AbstractNBodyEngine
 {
 public:
@@ -12,9 +14,10 @@ public:
         EarthSun,
     };
 
-    Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles,
-                                         float timePerFrame = 3600.0f,
-                                         Preset presetNumber = Preset::Random);
+    Gravity3DMassDifferentialNBodyEngine(
+            quint64 numberOfParticles,
+            float timePerFrame = 3600.0f,
+            Preset presetNumber = Preset::Random);
     ~Gravity3DMassDifferentialNBodyEngine();
 
     //void newParticles();

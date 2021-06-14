@@ -7,7 +7,6 @@ GraphicWindow::GraphicWindow()
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
     , fpsPreFrame(0)
     , isSimulating(false)
-    , numberOfParticle(200)
 {
     m_cam.lookAtZero();
 }
@@ -32,8 +31,6 @@ void GraphicWindow::initializeGL()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    initShaders();
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     //glDepthFunc(GL_LESS);
@@ -45,17 +42,13 @@ void GraphicWindow::initializeGL()
     if (!particleModel->initialize()) {
         return; // TODO error message
     }
-    particleModel->setNumberOfParticles(numberOfParticle);
+    particleModel->selectNBodyEngine();
 
     paintGL();
 
     uiTimer.start(30, this);
     fpsTimer.start(1000, this);
     simulateTimer.start(1, this);
-}
-
-void GraphicWindow::initShaders()
-{
 }
 
 void GraphicWindow::resizeGL(int w, int h)

@@ -19,10 +19,9 @@ public:
     void paint(QMatrix4x4 viewProjection);
     void resize(int height);
     void updateParticles();
-    void setNumberOfParticles(int num);
+    void selectNBodyEngine();
 
 private:
-
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
@@ -35,4 +34,5 @@ private:
     float pointSize;
 
     int initHeight;
+    int numberOfParticle;
 };

@@ -1,8 +1,9 @@
 #include "gravity3dmassdifferentialnbodyengine.h"
 
-Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles,
-                                                                           float timePerFrame,
-                                                                           Preset presetNumber)
+Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
+        quint64 numberOfParticles,
+        float timePerFrame,
+        Preset presetNumber)
     : AbstractNBodyEngine(numberOfParticles)
     , timePerFrame(timePerFrame)
 {
@@ -34,10 +35,7 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(quint
     case Preset::EarthSun:
         initEarthSun();
         break;
-    default:
-        initParticlesRandam();
     }
-
 }
 
 Gravity3DMassDifferentialNBodyEngine::~Gravity3DMassDifferentialNBodyEngine()

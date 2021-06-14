@@ -17,6 +17,8 @@ class MainWidget : public QWidget
 public:
     explicit MainWidget(QWidget *parent = nullptr);
 
+    void setNumberOfParticles(quint64);
+
 public slots:
     void counterUpdate();
     void fpsUpdate(int);
@@ -25,10 +27,14 @@ protected:
     void initUi();
 
 private:
-    GraphicWindow *graphicWindows;
-    QWidget *container;
-    QHBoxLayout *hLayout;
-    QVBoxLayout *vLayout;
+    QLCDNumber* newCounterQLCDNumber(int);
+    QLabel* newNumberQLabel();
+
+    GraphicWindow* graphicWindows;
+    QWidget* container;
+    QHBoxLayout* hLayout;
+    QVBoxLayout* vLayout;
     QLCDNumber* counterLcd;
     QLCDNumber* fpsLCD;
+    QLabel* particleNumValue;
 };

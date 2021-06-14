@@ -31,6 +31,7 @@ public slots:
 signals:
     void counterUpdate();
     void fpsUpdate(int);
+    void numberOfParticleUpdate(QString);
 
 protected:
     void initializeGL() override;
@@ -39,11 +40,10 @@ protected:
     void timerEvent(QTimerEvent*) override;
     void focusOutEvent(QFocusEvent*) override;
 
-    void initShaders();
+private:
     float walkSpeed;
     float lookAroundSpeed;
 
-private:
     Camera m_cam;
 
     void keyPressEvent(QKeyEvent*) override;
@@ -70,5 +70,4 @@ private:
     Particles* particleModel;
 
     bool isSimulating;
-    int numberOfParticle;
 };
