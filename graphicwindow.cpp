@@ -1,4 +1,4 @@
-﻿#include "graphicwindow.h"
+#include "graphicwindow.h"
 
 GraphicWindow::GraphicWindow()
     : frameNum(0)
@@ -94,7 +94,7 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     mousePressing = true;
     setCursor(Qt::BlankCursor);
     mousePressPosition = QPoint(mouseLastPosition.x(), mouseLastPosition.y());
-    if (ev->buttons() == (Qt::MidButton)) {
+    if (ev->buttons() == (Qt::MiddleButton)) {
         m_cam.lookAtZero(0.5f);
     }
 }
