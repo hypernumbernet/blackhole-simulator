@@ -1,12 +1,13 @@
 #include "graphicwindow.h"
 
-GraphicWindow::GraphicWindow()
+GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     : frameNum(0)
     , walkSpeed(0.1f)
     , lookAroundSpeed(1.0f)
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
     , fpsPreFrame(0)
     , isSimulating(false)
+    , m_updateUi(updateUi)
 {
     m_cam.lookAtZero();
 }
@@ -49,6 +50,8 @@ void GraphicWindow::initializeGL()
     uiTimer.start(30, this);
     fpsTimer.start(1000, this);
     simulateTimer.start(1, this);
+
+    emit m_updateUi->setNumberOfParticles(QString::number(200));
 }
 
 void GraphicWindow::resizeGL(int w, int h)
@@ -185,7 +188,7 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         if (keyPressing.indexOf(Qt::Key_Tab) >= 0) {
             m_cam.lookAtZero();
         }
-        emit counterUpdate();
+        emit m_updateUi->setFrameNumber(frameNum);
         update();
     } else if (ev->timerId() == fpsTimer.timerId()) {
         emit fpsUpdate(frameNum - fpsPreFrame);

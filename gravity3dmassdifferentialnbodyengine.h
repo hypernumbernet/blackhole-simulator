@@ -1,8 +1,7 @@
 #pragma once
 
 #include "abstractnbodyengine.h"
-
-class MainWidget;
+#include "updateui.h"
 
 class Gravity3DMassDifferentialNBodyEngine : public AbstractNBodyEngine
 {

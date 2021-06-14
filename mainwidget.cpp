@@ -5,7 +5,9 @@ MainWidget::MainWidget(QWidget *parent)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
-    graphicWindows = new GraphicWindow;
+    m_updateUi = new UpdateUi(this);
+
+    graphicWindows = new GraphicWindow(m_updateUi);
     container = QWidget::createWindowContainer(graphicWindows);
     container->setFocusPolicy(Qt::StrongFocus);
     container->setFocus();
@@ -34,9 +36,8 @@ void MainWidget::initUi()
     vLayout->addLayout(fpsLayout);
 
     counterLcd = newCounterQLCDNumber(10);
-    counterLcd->display(graphicWindows->frameNum);
     vLayout->addWidget(counterLcd);
-    QObject::connect(graphicWindows, &GraphicWindow::counterUpdate, this, &MainWidget::counterUpdate);
+    QObject::connect(m_updateUi, &UpdateUi::setFrameNumber, this, &MainWidget::counterUpdate);
 
     auto startBtn = new QPushButton(tr("Start"));
     startBtn->setFocusPolicy(Qt::NoFocus);
@@ -58,13 +59,16 @@ void MainWidget::initUi()
     particleNumLabel->setText(tr("Number of particles:"));
     vLayout->addWidget(particleNumLabel);
 
-    particleNumValue = newNumberQLabel();
+    auto particleNumValue = newNumberQLabel();
     vLayout->addWidget(particleNumValue);
+    QObject::connect(m_updateUi, &UpdateUi::setNumberOfParticles,
+                     particleNumValue, &QLabel::setText);
+
 }
 
-void MainWidget::counterUpdate()
+void MainWidget::counterUpdate(int num)
 {
-    counterLcd->display(graphicWindows->frameNum);
+    counterLcd->display(num);
 }
 
 void MainWidget::fpsUpdate(int fps)
@@ -86,9 +90,4 @@ QLabel* MainWidget::newNumberQLabel()
     lbl->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     lbl->setAlignment(Qt::AlignRight);
     return lbl;
-}
-
-void MainWidget::setNumberOfParticles(quint64 num)
-{
-    particleNumValue->setText(QString::number(num));
 }

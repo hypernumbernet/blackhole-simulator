@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "worldmodels.h"
 #include "particles.h"
+#include "updateui.h"
 
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
@@ -19,9 +20,8 @@ class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_3_3_Core
     Q_OBJECT
 
 public:
-    explicit GraphicWindow();
+    explicit GraphicWindow(UpdateUi*);
     ~GraphicWindow();
-    int frameNum;
 
 public slots:
     void enableGridLines(bool enabled);
@@ -29,7 +29,7 @@ public slots:
     void startSim();
 
 signals:
-    void counterUpdate();
+    //void counterUpdate();
     void fpsUpdate(int);
     void numberOfParticleUpdate(QString);
 
@@ -41,6 +41,7 @@ protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private:
+    int frameNum;
     float walkSpeed;
     float lookAroundSpeed;
 
@@ -70,4 +71,5 @@ private:
     Particles* particleModel;
 
     bool isSimulating;
+    UpdateUi* m_updateUi;
 };

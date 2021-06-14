@@ -11,6 +11,7 @@ SOURCES += \
         main.cpp \
         mainwidget.cpp \
         particles.cpp \
+        updateui.cpp \
         worldmodels.cpp
 
 HEADERS += \
@@ -20,6 +21,7 @@ HEADERS += \
     gravity3dmassdifferentialnbodyengine.h \
     mainwidget.h \
     particles.h \
+    updateui.h \
     worldmodels.h
 
 RESOURCES += \

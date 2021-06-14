@@ -1,6 +1,7 @@
 #pragma once
 
 #include "graphicwindow.h"
+#include "updateui.h"
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -17,10 +18,8 @@ class MainWidget : public QWidget
 public:
     explicit MainWidget(QWidget *parent = nullptr);
 
-    void setNumberOfParticles(quint64);
-
 public slots:
-    void counterUpdate();
+    void counterUpdate(int);
     void fpsUpdate(int);
 
 protected:
@@ -36,5 +35,5 @@ private:
     QVBoxLayout* vLayout;
     QLCDNumber* counterLcd;
     QLCDNumber* fpsLCD;
-    QLabel* particleNumValue;
+    UpdateUi* m_updateUi;
 };
