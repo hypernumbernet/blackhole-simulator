@@ -24,6 +24,16 @@ MainWidget::MainWidget(QWidget *parent)
 
 void MainWidget::initUi()
 {
+    auto fpsLayout = new QHBoxLayout();
+    auto fpsLabel = new QLabel;
+    fpsLabel->setText("FPS");
+    fpsLayout->addWidget(fpsLabel);
+    fpsLCD = new QLCDNumber(5);
+    fpsLCD->setSegmentStyle(QLCDNumber::Flat);
+    QObject::connect(graphicWindows, &GraphicWindow::fpsUpdate, this, &MainWidget::fpsUpdate);
+    fpsLayout->addWidget(fpsLCD);
+    vLayout->addLayout(fpsLayout);
+
     counterLcd = new QLCDNumber(10);
     counterLcd->setSegmentStyle(QLCDNumber::Flat);
     counterLcd->display(graphicWindows->frameNum);
@@ -66,4 +76,9 @@ void MainWidget::initUi()
 void MainWidget::counterUpdate()
 {
     counterLcd->display(graphicWindows->frameNum);
+}
+
+void MainWidget::fpsUpdate(int fps)
+{
+    fpsLCD->display(fps);
 }

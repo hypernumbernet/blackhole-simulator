@@ -19,6 +19,7 @@ public:
 
 public slots:
     void counterUpdate();
+    void fpsUpdate(int);
 
 protected:
     void initUi();
@@ -29,4 +30,5 @@ private:
     QHBoxLayout *hLayout;
     QVBoxLayout *vLayout;
     QLCDNumber* counterLcd;
+    QLCDNumber* fpsLCD;
 };

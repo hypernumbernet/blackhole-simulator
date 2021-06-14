@@ -30,6 +30,7 @@ public slots:
 
 signals:
     void counterUpdate();
+    void fpsUpdate(int);
 
 protected:
     void initializeGL() override;
@@ -59,7 +60,11 @@ private:
 
     QMatrix4x4 projection;
     QTime startTime;
-    QBasicTimer timer;
+    QBasicTimer uiTimer;
+    QBasicTimer simulateTimer;
+
+    QBasicTimer fpsTimer;
+    int fpsPreFrame;
 
     WorldModels* world;
     Particles* particleModel;

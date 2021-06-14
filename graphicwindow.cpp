@@ -5,6 +5,7 @@ GraphicWindow::GraphicWindow()
     , walkSpeed(0.1f)
     , lookAroundSpeed(1.0f)
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
+    , fpsPreFrame(0)
     , isSimulating(false)
     , numberOfParticle(2)
 {
@@ -13,7 +14,10 @@ GraphicWindow::GraphicWindow()
 
 GraphicWindow::~GraphicWindow()
 {
-    timer.stop();
+    simulateTimer.stop();
+    uiTimer.stop();
+    fpsTimer.stop();
+
     makeCurrent();
     delete world;
     delete particleModel;
@@ -45,7 +49,9 @@ void GraphicWindow::initializeGL()
 
     paintGL();
 
-    timer.start(20, this);
+    uiTimer.start(30, this);
+    fpsTimer.start(1000, this);
+    simulateTimer.start(1, this);
 }
 
 void GraphicWindow::initShaders()
@@ -135,60 +141,63 @@ void GraphicWindow::wheelEvent(QWheelEvent* ev)
     }
 }
 
-void GraphicWindow::timerEvent(QTimerEvent*)
+void GraphicWindow::timerEvent(QTimerEvent* ev)
 {
-    if (keyPressing.indexOf(Qt::Key_W) >= 0) {
-        m_cam.walk(-walkSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_S) >= 0) {
-        m_cam.walk(walkSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_D) >= 0) {
-        m_cam.strafe(-walkSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_A) >= 0) {
-        m_cam.strafe(walkSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Space) >= 0) {
-        m_cam.jump(-walkSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Control) >= 0) {
-        m_cam.jump(walkSpeed);
-    }
-
-    if (keyPressing.indexOf(Qt::Key_Up) >= 0) {
-        m_cam.pitch(-lookAroundSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Down) >= 0) {
-        m_cam.pitch(lookAroundSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Left) >= 0) {
-        m_cam.yaw(-lookAroundSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Right) >= 0) {
-        m_cam.yaw(lookAroundSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_E) >= 0) {
-        m_cam.roll(-lookAroundSpeed);
-    }
-    if (keyPressing.indexOf(Qt::Key_Q) >= 0) {
-        m_cam.roll(lookAroundSpeed);
-    }
-
-    if (keyPressing.indexOf(Qt::Key_Shift) >= 0) {
-        m_cam.standXZ();
-    }
-
-    if (keyPressing.indexOf(Qt::Key_Tab) >= 0) {
-        m_cam.lookAtZero();
-    }
-
-    if (isSimulating) {
+    if (isSimulating && ev->timerId() == simulateTimer.timerId()) {
         particleModel->updateParticles();
         ++frameNum;
+    } else if (ev->timerId() == uiTimer.timerId()) {
+        if (keyPressing.indexOf(Qt::Key_W) >= 0) {
+            m_cam.walk(-walkSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_S) >= 0) {
+            m_cam.walk(walkSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_D) >= 0) {
+            m_cam.strafe(-walkSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_A) >= 0) {
+            m_cam.strafe(walkSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Space) >= 0) {
+            m_cam.jump(-walkSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Control) >= 0) {
+            m_cam.jump(walkSpeed);
+        }
+
+        if (keyPressing.indexOf(Qt::Key_Up) >= 0) {
+            m_cam.pitch(-lookAroundSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Down) >= 0) {
+            m_cam.pitch(lookAroundSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Left) >= 0) {
+            m_cam.yaw(-lookAroundSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Right) >= 0) {
+            m_cam.yaw(lookAroundSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_E) >= 0) {
+            m_cam.roll(-lookAroundSpeed);
+        }
+        if (keyPressing.indexOf(Qt::Key_Q) >= 0) {
+            m_cam.roll(lookAroundSpeed);
+        }
+
+        if (keyPressing.indexOf(Qt::Key_Shift) >= 0) {
+            m_cam.standXZ();
+        }
+
+        if (keyPressing.indexOf(Qt::Key_Tab) >= 0) {
+            m_cam.lookAtZero();
+        }
         emit counterUpdate();
+        update();
+    } else if (ev->timerId() == fpsTimer.timerId()) {
+        emit fpsUpdate(frameNum - fpsPreFrame);
+        fpsPreFrame = frameNum;
     }
-    update();
 }
 
 void GraphicWindow::focusOutEvent(QFocusEvent*)
