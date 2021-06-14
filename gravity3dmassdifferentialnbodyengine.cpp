@@ -1,25 +1,21 @@
 #include "gravity3dmassdifferentialnbodyengine.h"
 
-Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles, float timePerFrame)
+Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles,
+                                                                           float timePerFrame,
+                                                                           Preset presetNumber)
     : AbstractNBodyEngine(numberOfParticles)
     , timePerFrame(timePerFrame)
 {
-    mass = new float[0];
+    switch (presetNumber) {
+    case Preset::Random:
+        break;
+    case Preset::SunEarth:
+    case Preset::EarthSun:
+        numberOfParticles = 2;
+        break;
+    }
+
     //inversedDistances = new float[0];
-}
-
-Gravity3DMassDifferentialNBodyEngine::~Gravity3DMassDifferentialNBodyEngine()
-{
-    delete[] mass;
-    //delete[] inversedDistances;
-}
-
-void Gravity3DMassDifferentialNBodyEngine::newParticles()
-{
-    delete[] mass;
-    delete[] coordinates;
-    delete[] velocities;
-    //delete[] inversedDistances;
 
     mass = new float[numberOfParticles];
     coordinates = new float[numberOfParticles * 3];
@@ -27,6 +23,27 @@ void Gravity3DMassDifferentialNBodyEngine::newParticles()
 
     //numberOfInteractions = numberOfParticles * (numberOfParticles - 1) / 2;
     //inversedDistances = new float[numberOfInteractions];
+
+    switch (presetNumber) {
+    case Preset::Random:
+        initParticlesRandam();
+        break;
+    case Preset::SunEarth:
+        initSunEarth();
+        break;
+    case Preset::EarthSun:
+        initEarthSun();
+        break;
+    default:
+        initParticlesRandam();
+    }
+
+}
+
+Gravity3DMassDifferentialNBodyEngine::~Gravity3DMassDifferentialNBodyEngine()
+{
+    delete[] mass;
+    //delete[] inversedDistances;
 }
 
 float Gravity3DMassDifferentialNBodyEngine::getDistance(quint64 a, quint64 b)
@@ -92,10 +109,10 @@ void Gravity3DMassDifferentialNBodyEngine::calculateInteraction()
                 float d1 = coordinates[a] - coordinates[b];
                 float d2 = coordinates[a + 1] - coordinates[b + 1];
                 float d3 = coordinates[a + 2] - coordinates[b + 2];
-                float norm = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                d1 *= theta / norm;
-                d2 *= theta / norm;
-                d3 *= theta / norm;
+                float norm = 1.0f / sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                d1 *= theta * norm;
+                d2 *= theta * norm;
+                d3 *= theta * norm;
 
                 velocities[a] -= d1 * mass[j];
                 velocities[a + 1] -= d2 * mass[j];
@@ -130,18 +147,9 @@ quint64 Gravity3DMassDifferentialNBodyEngine::getNumberOfParticle()
     return numberOfParticles;
 }
 
-void Gravity3DMassDifferentialNBodyEngine::initialize(int presetNumber)
+float Gravity3DMassDifferentialNBodyEngine::getModelScale()
 {
-    switch (presetNumber) {
-    case 0:
-        initParticlesRandam();
-        break;
-    case 1:
-        initSunEarth();
-        break;
-    default:
-        initParticlesRandam();
-    }
+    return modelScale;
 }
 
 float* Gravity3DMassDifferentialNBodyEngine::getCoordinates()
@@ -151,23 +159,27 @@ float* Gravity3DMassDifferentialNBodyEngine::getCoordinates()
 
 void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 {
+    modelScale = 1.0e-3f;
     for (quint64 i = 0; i < numberOfParticles; ++i)
     {
-        mass[i] = randf() * 20000.0f - 10000.0f;
+        //mass[i] = randf() * 2.0e+2f - 1.0e+2f;
+        mass[i] = 2.0e+2f;
     }
     for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
-        coordinates[i] = randf() * 2.0f - 1.0f;
+        coordinates[i] = randf() * 2.0e+3f - 1.0e+3f;
     }
     for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {
-        velocities[i] = randf() * 0.0000002f - 0.0000001f;
+        //velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
+        velocities[i] = 0.0f;
     }
     //calculateDistances();
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 {
+    modelScale = 1.0e-11f;
     mass[0] = 1.9891e+30f;
     coordinates[0] = coordinates[1] = coordinates[2] = 0.0f;
     velocities[0] = velocities[1] = velocities[2] = 0.0f;
@@ -179,4 +191,20 @@ void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
     velocities[3] = 0.0f;
     velocities[4] = 29780.0f;
     velocities[5] = 0.0f;
+}
+
+void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
+{
+    modelScale = 1.0e-11f;
+    mass[1] = 1.9891e+30f;
+    coordinates[3] = coordinates[4] = coordinates[5] = 0.0f;
+    velocities[3] = velocities[4] = velocities[5] = 0.0f;
+
+    mass[0] = 5.972e+24f;
+    coordinates[0] = 1.495978e+11f;
+    coordinates[1] = 0.0f;
+    coordinates[2] = 0.0f;
+    velocities[0] = 0.0f;
+    velocities[1] = 29780.0f;
+    velocities[2] = 0.0f;
 }

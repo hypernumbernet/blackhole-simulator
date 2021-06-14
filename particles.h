@@ -35,5 +35,4 @@ private:
     float pointSize;
 
     int initHeight;
-    //quint64 numberOfParticles;
 };

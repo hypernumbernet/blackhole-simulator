@@ -2,9 +2,8 @@
 
 AbstractNBodyEngine::AbstractNBodyEngine(quint64 numberOfParticles)
     : numberOfParticles(numberOfParticles)
+    , modelScale(1.0f)
 {
-    coordinates = new float[0];
-    velocities = new float[0];
 }
 
 AbstractNBodyEngine::~AbstractNBodyEngine()

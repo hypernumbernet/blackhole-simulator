@@ -7,7 +7,7 @@ GraphicWindow::GraphicWindow()
     , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
     , fpsPreFrame(0)
     , isSimulating(false)
-    , numberOfParticle(2)
+    , numberOfParticle(200)
 {
     m_cam.lookAtZero();
 }

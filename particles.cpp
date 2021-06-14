@@ -41,11 +41,6 @@ void Particles::setNumberOfParticles(int num)
 {
     m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(num, 3600.0f);
 
-    m_NBodyEngine->newParticles();
-
-    //initParticlesRandam();
-    m_NBodyEngine->initialize(1);
-
     updateParticles();
 }
 
@@ -83,7 +78,7 @@ void Particles::paint(QMatrix4x4 viewProjection)
     m_program.bind();
 
     QMatrix4x4 modelMatrix;
-    modelMatrix.scale(1.0e-11f);
+    modelMatrix.scale(m_NBodyEngine->getModelScale());
 
     m_program.setUniformValue("mvp_matrix", viewProjection * modelMatrix);
     m_program.setUniformValue("size", pointSize * pointSizeScale);

@@ -5,21 +5,31 @@
 class Gravity3DMassDifferentialNBodyEngine : public AbstractNBodyEngine
 {
 public:
-    Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles, float timePerFrame);
+
+    enum class Preset {
+        Random,
+        SunEarth,
+        EarthSun,
+    };
+
+    Gravity3DMassDifferentialNBodyEngine(quint64 numberOfParticles,
+                                         float timePerFrame = 3600.0f,
+                                         Preset presetNumber = Preset::Random);
     ~Gravity3DMassDifferentialNBodyEngine();
 
-    void newParticles();
+    //void newParticles();
     float getDistance(quint64, quint64);
     void timeProgress();
     void calculateInteraction();
     void debug();
     quint64 getNumberOfParticle();
-    void initialize(int presetNumber);
     float* getCoordinates();
+    float getModelScale();
 
 private:
     void initParticlesRandam();
     void initSunEarth();
+    void initEarthSun();
 
     //void calculateDistances();
 

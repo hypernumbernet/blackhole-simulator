@@ -11,14 +11,14 @@ public:
     AbstractNBodyEngine(quint64 numberOfParticles);
     virtual ~AbstractNBodyEngine();
 
-    virtual void newParticles() = 0;
+    //virtual void newParticles() = 0;
     virtual float getDistance(quint64, quint64) = 0;
     virtual void timeProgress() = 0;
     virtual void calculateInteraction() = 0;
     virtual void debug() = 0;
     virtual quint64 getNumberOfParticle() = 0;
-    virtual void initialize(int presetNumber) = 0;
     virtual float* getCoordinates() = 0;
+    virtual float getModelScale() = 0;
 
     static float randf(){return (float)rand()/(float)RAND_MAX;}
 
@@ -27,6 +27,7 @@ public:
 
 protected:
     quint64 numberOfParticles;
+    float modelScale;
 
     // 粒子の座標
     float* coordinates;
