@@ -39,7 +39,7 @@ void GraphicWindow::initializeGL()
     world = new WorldModels();
     world->initialize();
 
-    particleModel = new Particles(this->height());
+    particleModel = new Particles(m_updateUi, this->height());
     if (!particleModel->initialize()) {
         return; // TODO error message
     }
@@ -50,8 +50,6 @@ void GraphicWindow::initializeGL()
     uiTimer.start(30, this);
     fpsTimer.start(1000, this);
     simulateTimer.start(1, this);
-
-    emit m_updateUi->setNumberOfParticles(QString::number(200));
 }
 
 void GraphicWindow::resizeGL(int w, int h)
@@ -191,7 +189,7 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         emit m_updateUi->setFrameNumber(frameNum);
         update();
     } else if (ev->timerId() == fpsTimer.timerId()) {
-        emit fpsUpdate(frameNum - fpsPreFrame);
+        emit m_updateUi->setFps(frameNum - fpsPreFrame);
         fpsPreFrame = frameNum;
     }
 }

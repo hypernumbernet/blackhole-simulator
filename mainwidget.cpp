@@ -31,7 +31,7 @@ void MainWidget::initUi()
     fpsLabel->setText("FPS");
     fpsLayout->addWidget(fpsLabel);
     fpsLCD = newCounterQLCDNumber(5);
-    QObject::connect(graphicWindows, &GraphicWindow::fpsUpdate, this, &MainWidget::fpsUpdate);
+    QObject::connect(m_updateUi, &UpdateUi::setFps, this, &MainWidget::fpsUpdate);
     fpsLayout->addWidget(fpsLCD);
     vLayout->addLayout(fpsLayout);
 

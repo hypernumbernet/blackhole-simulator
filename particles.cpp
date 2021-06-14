@@ -1,11 +1,13 @@
 #include "particles.h"
 
-Particles::Particles(int screenHeight)
+Particles::Particles(UpdateUi* updateUi, int screenHeight)
     : pointSizeScale(1.0f)
     , pointSize(30.0f)
     , initHeight(screenHeight)
-    , numberOfParticle(1000)
-{
+    , numberOfParticle(400)
+    , m_updateUi(updateUi)
+{    
+    emit m_updateUi->setNumberOfParticles(QString::number(numberOfParticle));
 }
 
 Particles::~Particles()

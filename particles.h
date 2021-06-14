@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gravity3dmassdifferentialnbodyengine.h"
+#include "updateui.h"
 
 #include <math.h>
 
@@ -12,7 +13,7 @@
 class Particles : public QOpenGLFunctions_3_3_Core
 {
 public:
-    Particles(int screenHeight);
+    Particles(UpdateUi*, int screenHeight);
     ~Particles();
 
     bool initialize();
@@ -35,4 +36,6 @@ private:
 
     int initHeight;
     int numberOfParticle;
+
+    UpdateUi* m_updateUi;
 };

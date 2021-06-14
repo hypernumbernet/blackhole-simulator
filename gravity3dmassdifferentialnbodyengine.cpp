@@ -160,8 +160,8 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
     modelScale = 1.0e-3f;
     for (quint64 i = 0; i < numberOfParticles; ++i)
     {
-        //mass[i] = randf() * 2.0e+2f - 1.0e+2f;
-        mass[i] = 2.0e+2f;
+        mass[i] = randf() * 2.0e+2f - 1.0e+2f;
+        //mass[i] = 2.0e+2f;
     }
     for (quint64 i = 0; i < numberOfParticles * 3; ++i)
     {

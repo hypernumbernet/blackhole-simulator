@@ -28,11 +28,6 @@ public slots:
     void changeLinePosition();
     void startSim();
 
-signals:
-    //void counterUpdate();
-    void fpsUpdate(int);
-    void numberOfParticleUpdate(QString);
-
 protected:
     void initializeGL() override;
     void resizeGL(int, int) override;
