@@ -71,15 +71,16 @@ void Camera::jump(const float amount)
     m_pos += amount * m_up;
 }
 
-void Camera::standXZ()
+bool Camera::standXZ(const bool resetY, const float rate)
 {
-    m_pos.setY(-0.3f);
+    if (resetY)
+        m_pos.setY(-1.0f);
 
     auto direction = QVector3D(0.0f, 1.0f, 0.0f);
     auto cosVal = QVector3D::dotProduct(direction, m_up);
-    if (cosVal > 0.9999f)
-        return;
-    auto angle = acos(cosVal) * 0.3f;
+    if (cosVal > 0.999f)
+        return false;
+    auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_up);
     cross.normalize();
     auto rot = QQuaternion(cos(angle), sin(angle) * cross);
@@ -95,15 +96,16 @@ void Camera::standXZ()
     m_forward.normalize();
     m_right.normalize();
     m_up.normalize();
+    return true;
 }
 
-void Camera::lookAtZero(const float rate)
+bool Camera::lookAtZero(const float rate)
 {
     auto direction = m_pos.normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
-    if (cosVal > 0.9999f)
-        return;
-    auto angle = acos(cosVal) * rate;
+    if (cosVal > 0.999f)
+        return false;
+    auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_forward);
     cross.normalize();
     auto rot = QQuaternion(cos(angle), sin(angle) * cross);
@@ -118,4 +120,40 @@ void Camera::lookAtZero(const float rate)
     m_forward.normalize();
     m_right.normalize();
     m_up.normalize();
+    return true;
+}
+
+bool Camera::lookAt(const QVector3D point, const float rate)
+{
+    //auto direction = (point - m_pos).normalized();
+    auto direction = (m_pos - point).normalized();
+    auto cosVal = QVector3D::dotProduct(direction, m_forward);
+    if (cosVal > 0.999f)
+        return false;
+    auto angle = acos(cosVal) * rate * 0.5f;
+    auto cross = QVector3D::crossProduct(direction, m_forward);
+    cross.normalize();
+    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
+    rot.normalize();
+
+    m_rot *= rot;
+    V3RotByQua(m_forward, rot);
+    V3RotByQua(m_right, rot);
+    V3RotByQua(m_up, rot);
+
+    m_rot.normalize();
+    m_forward.normalize();
+    m_right.normalize();
+    m_up.normalize();
+    return true;
+}
+
+bool Camera::setPosition(const QVector3D pos, const float rate)
+{
+    QVector3D r = pos - m_pos;
+    float norm = m_pos.distanceToPoint(pos);
+    if (norm < 0.01f)
+        return false;
+    m_pos += rate * norm * r.normalized();
+    return true;
 }

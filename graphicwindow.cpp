@@ -4,14 +4,14 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     : m_frameNum(0)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
-    , m_camera(QVector3D(-0.6f, -0.3f, -6.0f))
+    , m_camera(CAMERA_INI_POS)
     , m_fpsPreFrame(0)
     , m_worldModels(new WorldModels)
     , m_particleModels(new Particles(updateUi))
     , m_isSimulating(false)
     , m_updateUi(updateUi)
 {
-    m_camera.lookAtZero();
+    m_camera.lookAtZero(1.0f);
 }
 
 GraphicWindow::~GraphicWindow()
@@ -77,6 +77,14 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
     if (ev->isAutoRepeat())
         return;
 
+    if (ev->key() == Qt::Key_Escape) {
+        m_camera.setPosition(CAMERA_INI_POS * 10.0f, 1.0f);
+        //m_camera.standXZ(false, 1.0f);
+        m_camera.lookAt(CAMERA_INI_POS, 1.0f);
+        m_camera.standXZ(false, 1.0f);
+        m_camera.lookAt(CAMERA_INI_POS, 1.0f);
+    }
+
     m_keyPressing.append(static_cast<Qt::Key>(ev->key()));
 }
 
@@ -84,6 +92,10 @@ void GraphicWindow::keyReleaseEvent(QKeyEvent *ev)
 {
     if (ev->isAutoRepeat())
         return;
+
+//    if (ev->key() == Qt::Key_Escape) {
+//        m_camera.lookAtZero(1.0f);
+//    }
 
     m_keyPressing.removeAll(static_cast<Qt::Key>(ev->key()));
 }
@@ -95,7 +107,7 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     setCursor(Qt::BlankCursor);
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton)) {
-        m_camera.lookAtZero(0.5f);
+        m_camera.lookAtZero(1.0f);
     }
 }
 
@@ -182,10 +194,19 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         if (m_keyPressing.indexOf(Qt::Key_Shift) >= 0) {
             m_camera.standXZ();
         }
-
         if (m_keyPressing.indexOf(Qt::Key_Tab) >= 0) {
             m_camera.lookAtZero();
         }
+        if (m_keyPressing.indexOf(Qt::Key_Escape) >= 0) {
+            m_camera.setPosition(CAMERA_INI_POS, 0.1f);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_Home) >= 0) {
+            m_camera.setPosition(QVector3D(), 0.1f);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_End) >= 0) {
+            m_camera.setPosition(QVector3D(), -0.1f);
+        }
+
         emit m_updateUi->showFrameNumber(m_frameNum);
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {

@@ -42,6 +42,7 @@ private:
     float m_lookAroundSpeed;
 
     Camera m_camera;
+    static constexpr QVector3D CAMERA_INI_POS= {-1.5f, -1.0f, -5.0f};
 
     void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;

@@ -19,8 +19,10 @@ public:
     void strafe(float amount);
     void jump(float amount);
 
-    void standXZ();
-    void lookAtZero(float rate = 0.3f);
+    bool standXZ(bool resetY = true, float rate = 0.6f);
+    bool lookAtZero(float rate = 0.6f);
+    bool lookAt(QVector3D point, float rate = 0.6f);
+    bool setPosition(QVector3D, float rate = 0.6f);
 
     QMatrix4x4 viewMatrix() const;
 
