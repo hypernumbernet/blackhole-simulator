@@ -27,8 +27,7 @@ private:
     int m_lineType;
 
     void appendLine(QVector3D, QVector3D, QVector3D color);
-    QVector<QVector3D> m_lines;
-    QVector<QVector3D> m_colors;
+    QVector<QVector3D> m_vertex;
 
     static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};
     static constexpr QVector3D GREEN = {0.0f, 1.0f, 0.0f};

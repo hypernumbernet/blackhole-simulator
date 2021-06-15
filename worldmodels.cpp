@@ -9,10 +9,10 @@ WorldModels::WorldModels()
 
 void WorldModels::appendLine(QVector3D start, QVector3D end, QVector3D color)
 {
-    m_lines.append(start);
-    m_lines.append(end);
-    m_colors.append(color);
-    m_colors.append(color);
+    m_vertex.append(start);
+    m_vertex.append(color);
+    m_vertex.append(end);
+    m_vertex.append(color);
 }
 
 WorldModels::~WorldModels()
@@ -51,16 +51,15 @@ void WorldModels::initGridLines()
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(m_lines.constData(), m_lines.length() * sizeof(QVector3D));
-    m_program.enableAttributeArray(0);
-    m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+    glBuf.allocate(m_vertex.constData(), m_vertex.length() * sizeof(QVector3D));
 
-    QOpenGLBuffer colorBuf;
-    colorBuf.create();
-    colorBuf.bind();
-    colorBuf.allocate(m_colors.constData(), m_lines.length() * sizeof(QVector3D));
+    quintptr offset = 0;
+    m_program.enableAttributeArray(0);
+    m_program.setAttributeBuffer(0, GL_FLOAT, offset, 3, sizeof(QVector3D) * 2);
+
+    offset += sizeof(QVector3D);
     m_program.enableAttributeArray(1);
-    m_program.setAttributeBuffer(1, GL_FLOAT, 0, 3);
+    m_program.setAttributeBuffer(1, GL_FLOAT, offset, 3, sizeof(QVector3D) * 2);
 
     m_vao.release();
 }
@@ -73,7 +72,7 @@ void WorldModels::paint(const QMatrix4x4& viewProjection)
         m_vao.bind();
 
         //glLineWidth(5.0f);
-        glDrawArrays(GL_LINES, 0, m_lines.length() * sizeof(QVector3D));
+        glDrawArrays(GL_LINES, 0, m_vertex.length() * sizeof(QVector3D));
 
         m_vao.release();
         m_program.release();
@@ -87,8 +86,7 @@ void WorldModels::enableGridLines(const bool enabled)
 
 void WorldModels::changeLineType()
 {
-    m_lines.clear();
-    m_colors.clear();
+    m_vertex.clear();
     ++m_lineType;
     if (m_lineType >= 3)
         m_lineType = 0;

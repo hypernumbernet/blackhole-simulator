@@ -150,10 +150,10 @@ bool Camera::lookAt(const QVector3D point, const float rate)
 
 bool Camera::setPosition(const QVector3D pos, const float rate)
 {
-    QVector3D r = pos - m_pos;
     float norm = m_pos.distanceToPoint(pos);
     if (norm < 0.01f)
         return false;
-    m_pos += rate * norm * r.normalized();
+    QVector3D r = (pos - m_pos).normalized();
+    m_pos += rate * norm * r;
     return true;
 }
