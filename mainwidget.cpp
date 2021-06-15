@@ -64,6 +64,15 @@ void MainWidget::initUi()
     QObject::connect(m_updateUi, &UpdateUi::setNumberOfParticles,
                      particleNumValue, &QLabel::setText);
 
+    auto scaleLabel = new QLabel;
+    scaleLabel->setText(tr("Scale (m):"));
+    vLayout->addWidget(scaleLabel);
+
+    auto scaleValue = newNumberQLabel();
+    vLayout->addWidget(scaleValue);
+    QObject::connect(m_updateUi, &UpdateUi::setModelScale,
+                     scaleValue, &QLabel::setText);
+
 }
 
 void MainWidget::counterUpdate(int num)

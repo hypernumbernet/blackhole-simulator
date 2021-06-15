@@ -33,7 +33,9 @@ private:
     QWidget* container;
     QHBoxLayout* hLayout;
     QVBoxLayout* vLayout;
+
     QLCDNumber* counterLcd;
     QLCDNumber* fpsLCD;
+
     UpdateUi* m_updateUi;
 };

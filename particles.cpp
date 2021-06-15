@@ -7,7 +7,6 @@ Particles::Particles(UpdateUi* updateUi, int screenHeight)
     , numberOfParticle(400)
     , m_updateUi(updateUi)
 {    
-    emit m_updateUi->setNumberOfParticles(QString::number(numberOfParticle));
 }
 
 Particles::~Particles()
@@ -42,7 +41,7 @@ bool Particles::initialize()
 
 void Particles::selectNBodyEngine()
 {
-    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(numberOfParticle);
+    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(m_updateUi, numberOfParticle);
 
     updateParticles();
 }

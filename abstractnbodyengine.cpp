@@ -1,8 +1,9 @@
 #include "abstractnbodyengine.h"
 
-AbstractNBodyEngine::AbstractNBodyEngine(quint64 numberOfParticles)
+AbstractNBodyEngine::AbstractNBodyEngine(UpdateUi* updateUi, quint64 numberOfParticles)
     : numberOfParticles(numberOfParticles)
-    , modelScale(1.0f)
+    , m_modelScale(1.0f)
+    , m_updateUi(updateUi)
 {
 }
 
@@ -10,4 +11,10 @@ AbstractNBodyEngine::~AbstractNBodyEngine()
 {
     delete[] coordinates;
     delete[] velocities;
+}
+
+void AbstractNBodyEngine::setModelScale(float scale)
+{
+    m_modelScale = scale;
+    emit m_updateUi->setModelScale(QString::number(scale));
 }

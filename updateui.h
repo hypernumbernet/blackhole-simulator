@@ -12,4 +12,5 @@ signals:
     void setNumberOfParticles(QString);
     void setFrameNumber(int);
     void setFps(int);
+    void setModelScale(QString);
 };

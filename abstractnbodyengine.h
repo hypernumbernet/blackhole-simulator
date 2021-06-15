@@ -1,5 +1,7 @@
 #pragma once
 
+#include "updateui.h"
+
 #include <math.h>
 
 #include <QtGlobal>
@@ -8,7 +10,7 @@
 class AbstractNBodyEngine
 {
 public:
-    AbstractNBodyEngine(quint64 numberOfParticles);
+    AbstractNBodyEngine(UpdateUi*, quint64 numberOfParticles);
     virtual ~AbstractNBodyEngine();
 
     virtual float getDistance(quint64, quint64) = 0;
@@ -26,11 +28,15 @@ protected:
     static float randf(){return (float)rand() / (float)RAND_MAX;}
 
     quint64 numberOfParticles;
-    float modelScale;
+
+    void setModelScale(float);
+    float m_modelScale;
 
     // 粒子の座標
     float* coordinates;
 
     // 粒子の速度
     float* velocities;
+
+    UpdateUi* m_updateUi;
 };

@@ -1,10 +1,11 @@
 #include "gravity3dmassdifferentialnbodyengine.h"
 
 Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
+        UpdateUi* updateUi,
         quint64 numberOfParticles,
         float timePerFrame,
         Preset presetNumber)
-    : AbstractNBodyEngine(numberOfParticles)
+    : AbstractNBodyEngine(updateUi, numberOfParticles)
     , timePerFrame(timePerFrame)
 {
     switch (presetNumber) {
@@ -15,6 +16,7 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         numberOfParticles = 2;
         break;
     }
+    emit m_updateUi->setNumberOfParticles(QString::number(numberOfParticles));
 
     //inversedDistances = new float[0];
 
@@ -147,7 +149,7 @@ quint64 Gravity3DMassDifferentialNBodyEngine::getNumberOfParticle()
 
 float Gravity3DMassDifferentialNBodyEngine::getModelScale()
 {
-    return modelScale;
+    return m_modelScale;
 }
 
 float* Gravity3DMassDifferentialNBodyEngine::getCoordinates()
@@ -157,7 +159,7 @@ float* Gravity3DMassDifferentialNBodyEngine::getCoordinates()
 
 void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 {
-    modelScale = 1.0e-3f;
+    setModelScale(1.0e-3f);
     for (quint64 i = 0; i < numberOfParticles; ++i)
     {
         mass[i] = randf() * 2.0e+2f - 1.0e+2f;
@@ -177,7 +179,7 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 
 void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 {
-    modelScale = 1.0e-11f;
+    setModelScale(1.0e-11f);
     mass[0] = 1.9891e+30f;
     coordinates[0] = coordinates[1] = coordinates[2] = 0.0f;
     velocities[0] = velocities[1] = velocities[2] = 0.0f;
@@ -193,7 +195,7 @@ void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 
 void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
 {
-    modelScale = 1.0e-11f;
+    setModelScale(1.0e-11f);
     mass[1] = 1.9891e+30f;
     coordinates[3] = coordinates[4] = coordinates[5] = 0.0f;
     velocities[3] = velocities[4] = velocities[5] = 0.0f;

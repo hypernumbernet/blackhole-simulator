@@ -14,6 +14,7 @@ public:
     };
 
     Gravity3DMassDifferentialNBodyEngine(
+            UpdateUi*,
             quint64 numberOfParticles,
             float timePerFrame = 3600.0f,
             Preset presetNumber = Preset::Random);
