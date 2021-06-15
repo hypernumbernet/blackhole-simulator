@@ -13,30 +13,31 @@ public:
     AbstractNBodyEngine(UpdateUi*, quint64 numberOfParticles);
     virtual ~AbstractNBodyEngine();
 
-    virtual float getDistance(quint64, quint64) = 0;
-    virtual void timeProgress() = 0;
-    virtual void calculateInteraction() = 0;
-    virtual void debug() = 0;
-    virtual quint64 getNumberOfParticle() = 0;
-    virtual float* getCoordinates() = 0;
-    virtual float getModelScale() = 0;
+    virtual float calculateDistance(quint64, quint64) const = 0;
+    virtual void timeProgress() const = 0;
+    virtual void calculateInteraction() const = 0;
+    virtual void debug() const = 0;
+
+    virtual quint64 numberOfParticle() const = 0;
+    virtual float modelScale() const = 0;
+    virtual float* coordinates() const = 0;
 
     static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
     static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
 
 protected:
-    static float randf(){return (float)rand() / (float)RAND_MAX;}
+    static float randf() {return (float)rand() / (float)RAND_MAX;}
 
-    quint64 numberOfParticles;
+    quint64 m_numberOfParticles;
 
     void setModelScale(float);
     float m_modelScale;
 
     // 粒子の座標
-    float* coordinates;
+    float* m_coordinates;
 
     // 粒子の速度
-    float* velocities;
+    float* m_velocities;
 
-    UpdateUi* m_updateUi;
+    UpdateUi* const m_updateUi;
 };

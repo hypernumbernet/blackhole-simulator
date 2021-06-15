@@ -12,8 +12,8 @@ public:
     ~WorldModels();
 
     bool initialize();
-    void paint(QMatrix4x4 viewProjection);
-    void enableGridLines(bool enabled);
+    void paint(const QMatrix4x4& viewProjection);
+    void enableGridLines(bool);
     void changeLineType();
 
 private:

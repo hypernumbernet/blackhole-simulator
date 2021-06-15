@@ -14,20 +14,20 @@ public:
     };
 
     Gravity3DMassDifferentialNBodyEngine(
-            UpdateUi*,
+            UpdateUi* const,
             quint64 numberOfParticles,
             float timePerFrame = 3600.0f,
-            Preset presetNumber = Preset::Random);
+            Preset presetNumber = Preset::SunEarth);
     ~Gravity3DMassDifferentialNBodyEngine();
 
     //void newParticles();
-    float getDistance(quint64, quint64);
-    void timeProgress();
-    void calculateInteraction();
-    void debug();
-    quint64 getNumberOfParticle();
-    float* getCoordinates();
-    float getModelScale();
+    float calculateDistance(quint64, quint64) const;
+    void timeProgress() const;
+    void calculateInteraction() const;
+    void debug() const;
+    quint64 numberOfParticle() const;
+    float* coordinates() const;
+    float modelScale() const;
 
 private:
     void initParticlesRandam();
@@ -37,10 +37,10 @@ private:
     //void calculateDistances();
 
     // 1フレームあたりの物理計算上の時間 (second)
-    float timePerFrame;
+    float m_timePerFrame;
 
     // 質量 (kg)
-    float* mass;
+    float* m_mass;
 
     // 前回フレームの距離の逆数
     //float* inversedDistances;

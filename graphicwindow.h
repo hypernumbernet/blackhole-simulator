@@ -24,7 +24,7 @@ public:
     ~GraphicWindow();
 
 public slots:
-    void enableGridLines(bool enabled);
+    void enableGridLines(bool);
     void changeLinePosition();
     void startSim();
 
@@ -36,35 +36,35 @@ protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private:
-    int frameNum;
-    float walkSpeed;
-    float lookAroundSpeed;
+    int m_frameNum;
+    float m_walkSpeed;
+    float m_lookAroundSpeed;
 
-    Camera m_cam;
+    Camera m_camera;
 
     void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;
-    QVector<Qt::Key> keyPressing;
+    QVector<Qt::Key> m_keyPressing;
 
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void wheelEvent(QWheelEvent*) override;
-    QPointF mouseLastPosition;
-    bool mousePressing = false;
-    QPoint mousePressPosition;
+    QPointF m_mouseLastPosition;
+    bool m_mousePressing = false;
+    QPoint m_mousePressPosition;
 
-    QMatrix4x4 projection;
-    QTime startTime;
-    QBasicTimer uiTimer;
-    QBasicTimer simulateTimer;
+    QMatrix4x4 m_projection;
+    QTime m_startTime;
+    QBasicTimer m_uiTimer;
+    QBasicTimer m_simulateTimer;
 
-    QBasicTimer fpsTimer;
-    int fpsPreFrame;
+    QBasicTimer m_fpsTimer;
+    int m_fpsPreFrame;
 
-    WorldModels* world;
-    Particles* particleModel;
+    WorldModels* const m_worldModels;
+    Particles* const m_particleModels;
 
-    bool isSimulating;
-    UpdateUi* m_updateUi;
+    bool m_isSimulating;
+    UpdateUi* const m_updateUi;
 };

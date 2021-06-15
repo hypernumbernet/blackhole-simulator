@@ -13,11 +13,11 @@
 class Particles : public QOpenGLFunctions_3_3_Core
 {
 public:
-    Particles(UpdateUi*, int screenHeight);
+    Particles(UpdateUi*);
     ~Particles();
 
-    bool initialize();
-    void paint(QMatrix4x4 viewProjection);
+    bool initialize(int screenHeight);
+    void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateParticles();
     void selectNBodyEngine();
@@ -37,5 +37,5 @@ private:
     int initHeight;
     int numberOfParticle;
 
-    UpdateUi* m_updateUi;
+    UpdateUi* const m_updateUi;
 };

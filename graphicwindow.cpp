@@ -1,32 +1,34 @@
 #include "graphicwindow.h"
 
 GraphicWindow::GraphicWindow(UpdateUi* updateUi)
-    : frameNum(0)
-    , walkSpeed(0.1f)
-    , lookAroundSpeed(1.0f)
-    , m_cam(QVector3D(-0.6f, -0.3f, -6.0f))
-    , fpsPreFrame(0)
-    , isSimulating(false)
+    : m_frameNum(0)
+    , m_walkSpeed(0.1f)
+    , m_lookAroundSpeed(1.0f)
+    , m_camera(QVector3D(-0.6f, -0.3f, -6.0f))
+    , m_fpsPreFrame(0)
+    , m_worldModels(new WorldModels)
+    , m_particleModels(new Particles(updateUi))
+    , m_isSimulating(false)
     , m_updateUi(updateUi)
 {
-    m_cam.lookAtZero();
+    m_camera.lookAtZero();
 }
 
 GraphicWindow::~GraphicWindow()
 {
-    simulateTimer.stop();
-    uiTimer.stop();
-    fpsTimer.stop();
+    m_simulateTimer.stop();
+    m_uiTimer.stop();
+    m_fpsTimer.stop();
 
     makeCurrent();
-    delete world;
-    delete particleModel;
+    delete m_worldModels;
+    delete m_particleModels;
     doneCurrent();
 }
 
 void GraphicWindow::initializeGL()
 {
-    startTime = QTime::currentTime();
+    m_startTime = QTime::currentTime();
 
     initializeOpenGLFunctions();
 
@@ -36,40 +38,38 @@ void GraphicWindow::initializeGL()
     glEnable(GL_CULL_FACE);
     //glDepthFunc(GL_LESS);
 
-    world = new WorldModels();
-    world->initialize();
+    m_worldModels->initialize();
 
-    particleModel = new Particles(m_updateUi, this->height());
-    if (!particleModel->initialize()) {
+    if (!m_particleModels->initialize(this->height())) {
         return; // TODO error message
     }
-    particleModel->selectNBodyEngine();
+    m_particleModels->selectNBodyEngine();
 
     paintGL();
 
-    uiTimer.start(30, this);
-    fpsTimer.start(1000, this);
-    simulateTimer.start(1, this);
+    m_uiTimer.start(30, this);
+    m_fpsTimer.start(1000, this);
+    m_simulateTimer.start(1, this);
 }
 
 void GraphicWindow::resizeGL(int w, int h)
 {
     qreal aspect = qreal(w) / qreal(h ? h : 1);
     const qreal zNear = 1.0, zFar = 100.0, fov = 30.0;
-    projection.setToIdentity();
-    projection.perspective(fov, aspect, zNear, zFar);
+    m_projection.setToIdentity();
+    m_projection.perspective(fov, aspect, zNear, zFar);
 
-    particleModel->resize(h);
+    m_particleModels->resize(h);
 }
 
 void GraphicWindow::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    auto viewMatrix = m_cam.viewMatrix();
+    auto viewMatrix = m_camera.viewMatrix();
 
-    world->paint(projection * viewMatrix);
-    particleModel->paint(projection * viewMatrix);
+    m_worldModels->paint(m_projection * viewMatrix);
+    m_particleModels->paint(m_projection * viewMatrix);
 }
 
 void GraphicWindow::keyPressEvent(QKeyEvent *ev)
@@ -77,7 +77,7 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
     if (ev->isAutoRepeat())
         return;
 
-    keyPressing.append(static_cast<Qt::Key>(ev->key()));
+    m_keyPressing.append(static_cast<Qt::Key>(ev->key()));
 }
 
 void GraphicWindow::keyReleaseEvent(QKeyEvent *ev)
@@ -85,132 +85,132 @@ void GraphicWindow::keyReleaseEvent(QKeyEvent *ev)
     if (ev->isAutoRepeat())
         return;
 
-    keyPressing.removeAll(static_cast<Qt::Key>(ev->key()));
+    m_keyPressing.removeAll(static_cast<Qt::Key>(ev->key()));
 }
 
 void GraphicWindow::mousePressEvent(QMouseEvent* ev)
 {
-    mouseLastPosition = ev->localPos();
-    mousePressing = true;
+    m_mouseLastPosition = ev->localPos();
+    m_mousePressing = true;
     setCursor(Qt::BlankCursor);
-    mousePressPosition = QPoint(mouseLastPosition.x(), mouseLastPosition.y());
+    m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton)) {
-        m_cam.lookAtZero(0.5f);
+        m_camera.lookAtZero(0.5f);
     }
 }
 
 void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
 {
-    if (mousePressing) {
+    if (m_mousePressing) {
         QPointF pos = ev->localPos();
-        QPointF diff = pos - mouseLastPosition;
+        QPointF diff = pos - m_mouseLastPosition;
         if (ev->buttons() == Qt::LeftButton) {
             diff *= 0.15f;
-            m_cam.yaw(diff.x());
-            m_cam.pitch(diff.y());
+            m_camera.yaw(diff.x());
+            m_camera.pitch(diff.y());
         } else if (ev->buttons() == Qt::RightButton) {
             diff *= 0.03f;
-            m_cam.strafe(-diff.x());
-            m_cam.jump(diff.y());
+            m_camera.strafe(-diff.x());
+            m_camera.jump(diff.y());
         } else if (ev->buttons() == (Qt::LeftButton | Qt::RightButton)) {
             diff *= 0.1f;
-            m_cam.roll(-diff.x());
+            m_camera.roll(-diff.x());
         }
-        mouseLastPosition = pos;
+        m_mouseLastPosition = pos;
     }
 }
 
 void GraphicWindow::mouseReleaseEvent(QMouseEvent*)
 {
-    mousePressing = false;
+    m_mousePressing = false;
     setCursor(Qt::ArrowCursor);
-    QCursor::setPos(mapToGlobal(mousePressPosition));
+    QCursor::setPos(mapToGlobal(m_mousePressPosition));
 }
 
 void GraphicWindow::wheelEvent(QWheelEvent* ev)
 {
     QPoint numDegrees = ev->angleDelta();
     if (!numDegrees.isNull()) {
-        m_cam.walk(-numDegrees.y() * 0.01f);
+        m_camera.walk(-numDegrees.y() * 0.01f);
     }
 }
 
 void GraphicWindow::timerEvent(QTimerEvent* ev)
 {
-    if (isSimulating && ev->timerId() == simulateTimer.timerId()) {
-        particleModel->updateParticles();
-        ++frameNum;
-    } else if (ev->timerId() == uiTimer.timerId()) {
-        if (keyPressing.indexOf(Qt::Key_W) >= 0) {
-            m_cam.walk(-walkSpeed);
+    if (m_isSimulating && ev->timerId() == m_simulateTimer.timerId()) {
+        m_particleModels->updateParticles();
+        ++m_frameNum;
+    } else if (ev->timerId() == m_uiTimer.timerId()) {
+        if (m_keyPressing.indexOf(Qt::Key_W) >= 0) {
+            m_camera.walk(-m_walkSpeed);
         }
-        if (keyPressing.indexOf(Qt::Key_S) >= 0) {
-            m_cam.walk(walkSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_S) >= 0) {
+            m_camera.walk(m_walkSpeed);
         }
-        if (keyPressing.indexOf(Qt::Key_D) >= 0) {
-            m_cam.strafe(-walkSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_D) >= 0) {
+            m_camera.strafe(-m_walkSpeed);
         }
-        if (keyPressing.indexOf(Qt::Key_A) >= 0) {
-            m_cam.strafe(walkSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_A) >= 0) {
+            m_camera.strafe(m_walkSpeed);
         }
-        if (keyPressing.indexOf(Qt::Key_Space) >= 0) {
-            m_cam.jump(-walkSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_Space) >= 0) {
+            m_camera.jump(-m_walkSpeed);
         }
-        if (keyPressing.indexOf(Qt::Key_Control) >= 0) {
-            m_cam.jump(walkSpeed);
-        }
-
-        if (keyPressing.indexOf(Qt::Key_Up) >= 0) {
-            m_cam.pitch(-lookAroundSpeed);
-        }
-        if (keyPressing.indexOf(Qt::Key_Down) >= 0) {
-            m_cam.pitch(lookAroundSpeed);
-        }
-        if (keyPressing.indexOf(Qt::Key_Left) >= 0) {
-            m_cam.yaw(-lookAroundSpeed);
-        }
-        if (keyPressing.indexOf(Qt::Key_Right) >= 0) {
-            m_cam.yaw(lookAroundSpeed);
-        }
-        if (keyPressing.indexOf(Qt::Key_E) >= 0) {
-            m_cam.roll(-lookAroundSpeed);
-        }
-        if (keyPressing.indexOf(Qt::Key_Q) >= 0) {
-            m_cam.roll(lookAroundSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_Control) >= 0) {
+            m_camera.jump(m_walkSpeed);
         }
 
-        if (keyPressing.indexOf(Qt::Key_Shift) >= 0) {
-            m_cam.standXZ();
+        if (m_keyPressing.indexOf(Qt::Key_Up) >= 0) {
+            m_camera.pitch(-m_lookAroundSpeed);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_Down) >= 0) {
+            m_camera.pitch(m_lookAroundSpeed);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_Left) >= 0) {
+            m_camera.yaw(-m_lookAroundSpeed);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_Right) >= 0) {
+            m_camera.yaw(m_lookAroundSpeed);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_E) >= 0) {
+            m_camera.roll(-m_lookAroundSpeed);
+        }
+        if (m_keyPressing.indexOf(Qt::Key_Q) >= 0) {
+            m_camera.roll(m_lookAroundSpeed);
         }
 
-        if (keyPressing.indexOf(Qt::Key_Tab) >= 0) {
-            m_cam.lookAtZero();
+        if (m_keyPressing.indexOf(Qt::Key_Shift) >= 0) {
+            m_camera.standXZ();
         }
-        emit m_updateUi->setFrameNumber(frameNum);
+
+        if (m_keyPressing.indexOf(Qt::Key_Tab) >= 0) {
+            m_camera.lookAtZero();
+        }
+        emit m_updateUi->setFrameNumber(m_frameNum);
         update();
-    } else if (ev->timerId() == fpsTimer.timerId()) {
-        emit m_updateUi->setFps(frameNum - fpsPreFrame);
-        fpsPreFrame = frameNum;
+    } else if (ev->timerId() == m_fpsTimer.timerId()) {
+        emit m_updateUi->setFps(m_frameNum - m_fpsPreFrame);
+        m_fpsPreFrame = m_frameNum;
     }
 }
 
 void GraphicWindow::focusOutEvent(QFocusEvent*)
 {
-    keyPressing.clear();
-    mousePressing = false;
+    m_keyPressing.clear();
+    m_mousePressing = false;
 }
 
-void GraphicWindow::enableGridLines(bool enabled)
+void GraphicWindow::enableGridLines(const bool enabled)
 {
-    world->enableGridLines(enabled);
+    m_worldModels->enableGridLines(enabled);
 }
 
 void GraphicWindow::startSim()
 {
-    isSimulating = !isSimulating;
+    m_isSimulating = !m_isSimulating;
 }
 
 void GraphicWindow::changeLinePosition()
 {
-    world->changeLineType();
+    m_worldModels->changeLineType();
 }

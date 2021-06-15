@@ -69,7 +69,7 @@ void WorldModels::initGridLines()
     m_vao.release();
 }
 
-void WorldModels::paint(QMatrix4x4 viewProjection)
+void WorldModels::paint(const QMatrix4x4& viewProjection)
 {
     m_program.bind();
     m_program.setUniformValue("mvp_matrix", viewProjection);
@@ -84,7 +84,7 @@ void WorldModels::paint(QMatrix4x4 viewProjection)
     m_program.release();
 }
 
-void WorldModels::enableGridLines(bool enabled)
+void WorldModels::enableGridLines(const bool enabled)
 {
     m_enableGridLines = enabled;
 }

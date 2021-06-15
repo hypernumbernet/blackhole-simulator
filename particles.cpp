@@ -1,12 +1,11 @@
 #include "particles.h"
 
-Particles::Particles(UpdateUi* updateUi, int screenHeight)
+Particles::Particles(UpdateUi* const updateUi)
     : pointSizeScale(1.0f)
     , pointSize(30.0f)
-    , initHeight(screenHeight)
     , numberOfParticle(400)
     , m_updateUi(updateUi)
-{    
+{
 }
 
 Particles::~Particles()
@@ -14,8 +13,9 @@ Particles::~Particles()
     m_vao.destroy();
 }
 
-bool Particles::initialize()
+bool Particles::initialize(const int screenHeight)
 {
+    initHeight = screenHeight;
     if (!initializeOpenGLFunctions()) {
         return false;
     }
@@ -48,7 +48,7 @@ void Particles::selectNBodyEngine()
 
 void Particles::updateParticles()
 {
-    if (m_NBodyEngine->getNumberOfParticle() == 0)
+    if (m_NBodyEngine->numberOfParticle() == 0)
         return;
 
     m_vao.bind();
@@ -56,7 +56,7 @@ void Particles::updateParticles()
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(m_NBodyEngine->getCoordinates(), m_NBodyEngine->getNumberOfParticle() * 12);
+    glBuf.allocate(m_NBodyEngine->coordinates(), m_NBodyEngine->numberOfParticle() * 12);
     m_program.enableAttributeArray(0);
     m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
@@ -73,20 +73,20 @@ void Particles::updateParticles()
     m_NBodyEngine->calculateInteraction();
 }
 
-void Particles::paint(QMatrix4x4 viewProjection)
+void Particles::paint(const QMatrix4x4& viewProjection)
 {
-    if (m_NBodyEngine->getNumberOfParticle() == 0)
+    if (m_NBodyEngine->numberOfParticle() == 0)
         return;
     m_program.bind();
 
     QMatrix4x4 modelMatrix;
-    modelMatrix.scale(m_NBodyEngine->getModelScale());
+    modelMatrix.scale(m_NBodyEngine->modelScale());
 
     m_program.setUniformValue("mvp_matrix", viewProjection * modelMatrix);
     m_program.setUniformValue("size", pointSize * pointSizeScale);
     m_vao.bind();
 
-    glDrawArrays(GL_POINTS, 0, m_NBodyEngine->getNumberOfParticle());
+    glDrawArrays(GL_POINTS, 0, m_NBodyEngine->numberOfParticle());
 
     m_vao.release();
     m_program.release();

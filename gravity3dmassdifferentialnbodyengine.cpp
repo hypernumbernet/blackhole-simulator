@@ -1,28 +1,28 @@
 #include "gravity3dmassdifferentialnbodyengine.h"
 
 Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
-        UpdateUi* updateUi,
-        quint64 numberOfParticles,
-        float timePerFrame,
-        Preset presetNumber)
+        UpdateUi* const updateUi,
+        const quint64 numberOfParticles,
+        const float timePerFrame,
+        const Preset presetNumber)
     : AbstractNBodyEngine(updateUi, numberOfParticles)
-    , timePerFrame(timePerFrame)
+    , m_timePerFrame(timePerFrame)
 {
     switch (presetNumber) {
     case Preset::Random:
         break;
     case Preset::SunEarth:
     case Preset::EarthSun:
-        numberOfParticles = 2;
+        m_numberOfParticles = 2;
         break;
     }
-    emit m_updateUi->setNumberOfParticles(QString::number(numberOfParticles));
+    emit m_updateUi->setNumberOfParticles(QString::number(m_numberOfParticles));
 
     //inversedDistances = new float[0];
 
-    mass = new float[numberOfParticles];
-    coordinates = new float[numberOfParticles * 3];
-    velocities = new float[numberOfParticles * 3];
+    m_mass = new float[m_numberOfParticles];
+    m_coordinates = new float[m_numberOfParticles * 3];
+    m_velocities = new float[m_numberOfParticles * 3];
 
     //numberOfInteractions = numberOfParticles * (numberOfParticles - 1) / 2;
     //inversedDistances = new float[numberOfInteractions];
@@ -42,17 +42,17 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
 
 Gravity3DMassDifferentialNBodyEngine::~Gravity3DMassDifferentialNBodyEngine()
 {
-    delete[] mass;
+    delete[] m_mass;
     //delete[] inversedDistances;
 }
 
-float Gravity3DMassDifferentialNBodyEngine::getDistance(quint64 a, quint64 b)
+float Gravity3DMassDifferentialNBodyEngine::calculateDistance(const quint64 a, const quint64 b) const
 {
     quint64 ai = a * 3;
     quint64 bi = b * 3;
-    float d1 = coordinates[ai] - coordinates[bi]; ++ai; ++bi;
-    float d2 = coordinates[ai] - coordinates[bi]; ++ai; ++bi;
-    float d3 = coordinates[ai] - coordinates[bi];
+    float d1 = m_coordinates[ai] - m_coordinates[bi]; ++ai; ++bi;
+    float d2 = m_coordinates[ai] - m_coordinates[bi]; ++ai; ++bi;
+    float d3 = m_coordinates[ai] - m_coordinates[bi];
     return sqrt(d1 * d1 + d2 * d2 + d3 * d3);
 }
 
@@ -69,25 +69,25 @@ float Gravity3DMassDifferentialNBodyEngine::getDistance(quint64 a, quint64 b)
 //}
 //}
 
-void Gravity3DMassDifferentialNBodyEngine::timeProgress()
+void Gravity3DMassDifferentialNBodyEngine::timeProgress() const
 {
     //debug();
-    for (quint64 i = 0; i < numberOfParticles; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
         quint64 j = i * 3;
-        coordinates[j] += velocities[j] * timePerFrame; ++j;
-        coordinates[j] += velocities[j] * timePerFrame; ++j;
-        coordinates[j] += velocities[j] * timePerFrame;
+        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+        m_coordinates[j] += m_velocities[j] * m_timePerFrame;
     }
 }
 
-void Gravity3DMassDifferentialNBodyEngine::calculateInteraction()
+void Gravity3DMassDifferentialNBodyEngine::calculateInteraction() const
 {
     float theta;
     quint64 k = 0;
-    for (quint64 i = 0; i < numberOfParticles - 1; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
-        for (quint64 j = i + 1; j < numberOfParticles; ++j)
+        for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
         {
             // 積分計算
             // 前回計算した距離データを使用するのでメモリコストが高い。
@@ -97,8 +97,8 @@ void Gravity3DMassDifferentialNBodyEngine::calculateInteraction()
             //theta -= inversedDistances[k];
 
             // 微分計算
-            theta = 1.0f / getDistance(i, j);
-            theta *= theta * timePerFrame;
+            theta = 1.0f / calculateDistance(i, j);
+            theta *= theta * m_timePerFrame;
 
             if (theta == theta)
             {
@@ -106,20 +106,20 @@ void Gravity3DMassDifferentialNBodyEngine::calculateInteraction()
 
                 quint64 a = i * 3;
                 quint64 b = j * 3;
-                float d1 = coordinates[a] - coordinates[b];
-                float d2 = coordinates[a + 1] - coordinates[b + 1];
-                float d3 = coordinates[a + 2] - coordinates[b + 2];
+                float d1 = m_coordinates[a] - m_coordinates[b];
+                float d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
+                float d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
                 float norm = 1.0f / sqrt(d1 * d1 + d2 * d2 + d3 * d3);
                 d1 *= theta * norm;
                 d2 *= theta * norm;
                 d3 *= theta * norm;
 
-                velocities[a] -= d1 * mass[j];
-                velocities[a + 1] -= d2 * mass[j];
-                velocities[a + 2] -= d3 * mass[j];
-                velocities[b] += d1 * mass[i];
-                velocities[b + 1] += d2 * mass[i];
-                velocities[b + 2] += d3 * mass[i];
+                m_velocities[a] -= d1 * m_mass[j];
+                m_velocities[a + 1] -= d2 * m_mass[j];
+                m_velocities[a + 2] -= d3 * m_mass[j];
+                m_velocities[b] += d1 * m_mass[i];
+                m_velocities[b + 1] += d2 * m_mass[i];
+                m_velocities[b + 2] += d3 * m_mass[i];
 
             } else {
                 qDebug() << "[warning] invalid number detected";
@@ -130,49 +130,49 @@ void Gravity3DMassDifferentialNBodyEngine::calculateInteraction()
     }
 }
 
-void Gravity3DMassDifferentialNBodyEngine::debug()
+void Gravity3DMassDifferentialNBodyEngine::debug() const
 {
-    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
-        qDebug() << "xyz:" << i << coordinates[i];
+        qDebug() << "xyz:" << i << m_coordinates[i];
     }
-    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
-        qDebug() << "v:" << i << velocities[i];
+        qDebug() << "v:" << i << m_velocities[i];
     }
 }
 
-quint64 Gravity3DMassDifferentialNBodyEngine::getNumberOfParticle()
+quint64 Gravity3DMassDifferentialNBodyEngine::numberOfParticle() const
 {
-    return numberOfParticles;
+    return m_numberOfParticles;
 }
 
-float Gravity3DMassDifferentialNBodyEngine::getModelScale()
+float Gravity3DMassDifferentialNBodyEngine::modelScale() const
 {
     return m_modelScale;
 }
 
-float* Gravity3DMassDifferentialNBodyEngine::getCoordinates()
+float* Gravity3DMassDifferentialNBodyEngine::coordinates() const
 {
-    return coordinates;
+    return m_coordinates;
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 {
     setModelScale(1.0e-3f);
-    for (quint64 i = 0; i < numberOfParticles; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
-        mass[i] = randf() * 2.0e+2f - 1.0e+2f;
+        m_mass[i] = randf() * 2.0e+2f - 1.0e+2f;
         //mass[i] = 2.0e+2f;
     }
-    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
-        coordinates[i] = randf() * 2.0e+3f - 1.0e+3f;
+        m_coordinates[i] = randf() * 2.0e+3f - 1.0e+3f;
     }
-    for (quint64 i = 0; i < numberOfParticles * 3; ++i)
+    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
         //velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
-        velocities[i] = 0.0f;
+        m_velocities[i] = 0.0f;
     }
     //calculateDistances();
 }
@@ -180,31 +180,31 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 {
     setModelScale(1.0e-11f);
-    mass[0] = 1.9891e+30f;
-    coordinates[0] = coordinates[1] = coordinates[2] = 0.0f;
-    velocities[0] = velocities[1] = velocities[2] = 0.0f;
+    m_mass[0] = 1.9891e+30f;
+    m_coordinates[0] = m_coordinates[1] = m_coordinates[2] = 0.0f;
+    m_velocities[0] = m_velocities[1] = m_velocities[2] = 0.0f;
 
-    mass[1] = 5.972e+24f;
-    coordinates[3] = 1.495978e+11f;
-    coordinates[4] = 0.0f;
-    coordinates[5] = 0.0f;
-    velocities[3] = 0.0f;
-    velocities[4] = 29780.0f;
-    velocities[5] = 0.0f;
+    m_mass[1] = 5.972e+24f;
+    m_coordinates[3] = 1.495978e+11f;
+    m_coordinates[4] = 0.0f;
+    m_coordinates[5] = 0.0f;
+    m_velocities[3] = 0.0f;
+    m_velocities[4] = 29780.0f;
+    m_velocities[5] = 0.0f;
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
 {
     setModelScale(1.0e-11f);
-    mass[1] = 1.9891e+30f;
-    coordinates[3] = coordinates[4] = coordinates[5] = 0.0f;
-    velocities[3] = velocities[4] = velocities[5] = 0.0f;
+    m_mass[1] = 1.9891e+30f;
+    m_coordinates[3] = m_coordinates[4] = m_coordinates[5] = 0.0f;
+    m_velocities[3] = m_velocities[4] = m_velocities[5] = 0.0f;
 
-    mass[0] = 5.972e+24f;
-    coordinates[0] = 1.495978e+11f;
-    coordinates[1] = 0.0f;
-    coordinates[2] = 0.0f;
-    velocities[0] = 0.0f;
-    velocities[1] = 29780.0f;
-    velocities[2] = 0.0f;
+    m_mass[0] = 5.972e+24f;
+    m_coordinates[0] = 1.495978e+11f;
+    m_coordinates[1] = 0.0f;
+    m_coordinates[2] = 0.0f;
+    m_velocities[0] = 0.0f;
+    m_velocities[1] = 29780.0f;
+    m_velocities[2] = 0.0f;
 }

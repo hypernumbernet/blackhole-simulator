@@ -1,25 +1,24 @@
 #include "mainwidget.h"
 
-MainWidget::MainWidget(QWidget *parent)
+MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
+    , m_updateUi(new UpdateUi(this))
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
-    m_updateUi = new UpdateUi(this);
-
-    graphicWindows = new GraphicWindow(m_updateUi);
-    container = QWidget::createWindowContainer(graphicWindows);
+    m_graphicWindows = new GraphicWindow(m_updateUi);
+    auto container = QWidget::createWindowContainer(m_graphicWindows);
     container->setFocusPolicy(Qt::StrongFocus);
     container->setFocus();
     container->setMinimumSize(QSize(200, 100));
-    QSize screenSize = graphicWindows->screen()->size();
+    QSize screenSize = m_graphicWindows->screen()->size();
     container->setMaximumSize(screenSize);
 
-    hLayout = new QHBoxLayout(this);
-    vLayout = new QVBoxLayout();
-    vLayout->setAlignment(Qt::AlignTop);
-    hLayout->addWidget(container, Qt::AlignLeft);
-    hLayout->addLayout(vLayout);
+    m_hLayout = new QHBoxLayout(this);
+    m_vLayout = new QVBoxLayout();
+    m_vLayout->setAlignment(Qt::AlignTop);
+    m_hLayout->addWidget(container, Qt::AlignLeft);
+    m_hLayout->addLayout(m_vLayout);
 
     initUi();
 }
@@ -30,46 +29,46 @@ void MainWidget::initUi()
     auto fpsLabel = new QLabel;
     fpsLabel->setText("FPS");
     fpsLayout->addWidget(fpsLabel);
-    fpsLCD = newCounterQLCDNumber(5);
+    m_fpsLCD = newCounterQLCDNumber(5);
     QObject::connect(m_updateUi, &UpdateUi::setFps, this, &MainWidget::fpsUpdate);
-    fpsLayout->addWidget(fpsLCD);
-    vLayout->addLayout(fpsLayout);
+    fpsLayout->addWidget(m_fpsLCD);
+    m_vLayout->addLayout(fpsLayout);
 
-    counterLcd = newCounterQLCDNumber(10);
-    vLayout->addWidget(counterLcd);
+    m_counterLcd = newCounterQLCDNumber(10);
+    m_vLayout->addWidget(m_counterLcd);
     QObject::connect(m_updateUi, &UpdateUi::setFrameNumber, this, &MainWidget::counterUpdate);
 
     auto startBtn = new QPushButton(tr("Start"));
     startBtn->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(startBtn);
-    QObject::connect(startBtn, &QPushButton::clicked, graphicWindows, &GraphicWindow::startSim);
+    m_vLayout->addWidget(startBtn);
+    QObject::connect(startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
 
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(gridLinesCB);
-    QObject::connect(gridLinesCB, &QCheckBox::stateChanged, graphicWindows, &GraphicWindow::enableGridLines);
+    m_vLayout->addWidget(gridLinesCB);
+    QObject::connect(gridLinesCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::enableGridLines);
 
     auto btnLineType = new QPushButton(tr("Line Type"));
     btnLineType->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(btnLineType);
-    QObject::connect(btnLineType, &QPushButton::clicked, graphicWindows, &GraphicWindow::changeLinePosition);
+    m_vLayout->addWidget(btnLineType);
+    QObject::connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
 
     auto particleNumLabel = new QLabel;
     particleNumLabel->setText(tr("Number of particles:"));
-    vLayout->addWidget(particleNumLabel);
+    m_vLayout->addWidget(particleNumLabel);
 
     auto particleNumValue = newNumberQLabel();
-    vLayout->addWidget(particleNumValue);
+    m_vLayout->addWidget(particleNumValue);
     QObject::connect(m_updateUi, &UpdateUi::setNumberOfParticles,
                      particleNumValue, &QLabel::setText);
 
     auto scaleLabel = new QLabel;
     scaleLabel->setText(tr("Scale (m):"));
-    vLayout->addWidget(scaleLabel);
+    m_vLayout->addWidget(scaleLabel);
 
     auto scaleValue = newNumberQLabel();
-    vLayout->addWidget(scaleValue);
+    m_vLayout->addWidget(scaleValue);
     QObject::connect(m_updateUi, &UpdateUi::setModelScale,
                      scaleValue, &QLabel::setText);
 
@@ -77,12 +76,12 @@ void MainWidget::initUi()
 
 void MainWidget::counterUpdate(int num)
 {
-    counterLcd->display(num);
+    m_counterLcd->display(num);
 }
 
 void MainWidget::fpsUpdate(int fps)
 {
-    fpsLCD->display(fps);
+    m_fpsLCD->display(fps);
 }
 
 QLCDNumber* MainWidget::newCounterQLCDNumber(int numDigits)

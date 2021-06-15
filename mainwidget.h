@@ -16,7 +16,7 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = nullptr);
+    explicit MainWidget(QWidget* parent = nullptr);
 
 public slots:
     void counterUpdate(int);
@@ -29,13 +29,12 @@ private:
     QLCDNumber* newCounterQLCDNumber(int);
     QLabel* newNumberQLabel();
 
-    GraphicWindow* graphicWindows;
-    QWidget* container;
-    QHBoxLayout* hLayout;
-    QVBoxLayout* vLayout;
+    GraphicWindow* m_graphicWindows;
+    QHBoxLayout* m_hLayout;
+    QVBoxLayout* m_vLayout;
 
-    QLCDNumber* counterLcd;
-    QLCDNumber* fpsLCD;
+    QLCDNumber* m_counterLcd;
+    QLCDNumber* m_fpsLCD;
 
-    UpdateUi* m_updateUi;
+    UpdateUi* const m_updateUi;
 };

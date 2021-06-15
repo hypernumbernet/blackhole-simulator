@@ -32,7 +32,7 @@ QMatrix4x4 Camera::viewMatrix() const
     return matrix;
 }
 
-void Camera::pitch(float degrees)
+void Camera::pitch(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_right, degrees);
     m_rot *= rot;
@@ -40,7 +40,7 @@ void Camera::pitch(float degrees)
     V3RotByQua(m_up, rot);
 }
 
-void Camera::yaw(float degrees)
+void Camera::yaw(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_up, degrees);
     m_rot *= rot;
@@ -48,7 +48,7 @@ void Camera::yaw(float degrees)
     V3RotByQua(m_right, rot);
 }
 
-void Camera::roll(float degrees)
+void Camera::roll(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_forward, degrees);
     m_rot *= rot;
@@ -56,17 +56,17 @@ void Camera::roll(float degrees)
     V3RotByQua(m_right, rot);
 }
 
-void Camera::walk(float amount)
+void Camera::walk(const float amount)
 {
     m_pos += amount * m_forward;
 }
 
-void Camera::strafe(float amount)
+void Camera::strafe(const float amount)
 {
     m_pos += amount * m_right;
 }
 
-void Camera::jump(float amount)
+void Camera::jump(const float amount)
 {
     m_pos += amount * m_up;
 }
@@ -97,7 +97,7 @@ void Camera::standXZ()
     m_up.normalize();
 }
 
-void Camera::lookAtZero(float rate)
+void Camera::lookAtZero(const float rate)
 {
     auto direction = m_pos.normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
