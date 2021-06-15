@@ -11,7 +11,7 @@ SOURCES += \
         main.cpp \
         mainwidget.cpp \
         particles.cpp \
-        updateui.cpp \
+#        updateui.h \
         worldmodels.cpp
 
 HEADERS += \

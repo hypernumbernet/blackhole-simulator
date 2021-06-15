@@ -27,6 +27,7 @@ public slots:
     void enableGridLines(bool);
     void changeLinePosition();
     void startSim();
+    void frameAdvance();
 
 protected:
     void initializeGL() override;

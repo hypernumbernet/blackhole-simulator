@@ -6,7 +6,7 @@ class UpdateUi : public QObject
 {
     Q_OBJECT
 public:
-    explicit UpdateUi(QObject* parent = nullptr);
+    explicit UpdateUi(QObject* = nullptr) {};
 
 signals:
     void showNumberOfParticles(QString);
@@ -14,4 +14,5 @@ signals:
     void showFps(int);
     void showModelScale(QString);
     void showTimePerFrame(QString);
+    void setStartButtonTest(bool);
 };

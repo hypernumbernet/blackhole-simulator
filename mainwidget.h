@@ -21,6 +21,7 @@ public:
 public slots:
     void counterUpdate(int);
     void fpsUpdate(int);
+    void startButtonText(bool);
 
 protected:
     void initUi();
@@ -35,6 +36,8 @@ private:
 
     QLCDNumber* m_counterLcd;
     QLCDNumber* m_fpsLCD;
+    QPushButton* m_startBtn;
+    QPushButton* m_frameAdvanceBtn;
 
     UpdateUi* const m_updateUi;
 };

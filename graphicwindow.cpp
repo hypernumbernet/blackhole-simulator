@@ -208,9 +208,18 @@ void GraphicWindow::enableGridLines(const bool enabled)
 void GraphicWindow::startSim()
 {
     m_isSimulating = !m_isSimulating;
+    emit m_updateUi->setStartButtonTest(m_isSimulating);
 }
 
 void GraphicWindow::changeLinePosition()
 {
     m_worldModels->changeLineType();
+}
+
+void GraphicWindow::frameAdvance()
+{
+    if (!m_isSimulating) {
+        m_particleModels->updateParticles();
+        ++m_frameNum;
+    }
 }

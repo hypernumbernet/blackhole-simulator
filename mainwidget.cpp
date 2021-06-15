@@ -38,10 +38,17 @@ void MainWidget::initUi()
     m_vLayout->addWidget(m_counterLcd);
     QObject::connect(m_updateUi, &UpdateUi::showFrameNumber, this, &MainWidget::counterUpdate);
 
-    auto startBtn = new QPushButton(tr("Start"));
-    startBtn->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(startBtn);
-    QObject::connect(startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    m_startBtn = new QPushButton;
+    m_startBtn->setFocusPolicy(Qt::NoFocus);
+    m_vLayout->addWidget(m_startBtn);
+    QObject::connect(m_startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    QObject::connect(m_updateUi, &UpdateUi::setStartButtonTest, this, &MainWidget::startButtonText);
+
+    m_frameAdvanceBtn = new QPushButton;
+    m_frameAdvanceBtn->setFocusPolicy(Qt::NoFocus);
+    m_frameAdvanceBtn->setText(tr("Frame Advance"));
+    m_vLayout->addWidget(m_frameAdvanceBtn);
+    QObject::connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
 
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
@@ -80,6 +87,8 @@ void MainWidget::initUi()
     m_vLayout->addWidget(timePerFrameValue);
     QObject::connect(m_updateUi, &UpdateUi::showTimePerFrame,
                      timePerFrameValue, &QLabel::setText);
+
+    startButtonText(false);
 }
 
 void MainWidget::counterUpdate(int num)
@@ -90,6 +99,16 @@ void MainWidget::counterUpdate(int num)
 void MainWidget::fpsUpdate(int fps)
 {
     m_fpsLCD->display(fps);
+}
+
+void MainWidget::startButtonText(const bool setStop)
+{
+    if (setStop) {
+        m_startBtn->setText(tr("Stop"));
+    } else {
+        m_startBtn->setText(tr("Start"));
+    }
+    m_frameAdvanceBtn->setDisabled(setStop);
 }
 
 QLCDNumber* MainWidget::newCounterQLCDNumber(int numDigits)
