@@ -164,7 +164,7 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
         m_mass[i] = randf() * 2.0e+2f - 1.0e+2f;
-        //mass[i] = 2.0e+2f;
+        //m_mass[i] = 2.0e+2f;
     }
     for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
@@ -172,10 +172,16 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
     }
     for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
-        //velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
-        m_velocities[i] = 0.0f;
+        m_velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
+        //m_velocities[i] = 0.0f;
     }
     //calculateDistances();
+
+    m_mass[0] = 2.0e+5f;
+//    m_coordinates[0] = 0.0f;
+//    m_coordinates[1] = 0.0f;
+//    m_coordinates[2] = 0.0f;
+
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initSunEarth()

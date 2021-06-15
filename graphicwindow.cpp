@@ -12,6 +12,8 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     , m_updateUi(updateUi)
 {
     m_camera.lookAtZero(1.0f);
+    m_camera.standXZ(false, 1.0f);
+    m_camera.lookAtZero(1.0f);
 }
 
 GraphicWindow::~GraphicWindow()
@@ -79,7 +81,6 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
 
     if (ev->key() == Qt::Key_Escape) {
         m_camera.setPosition(CAMERA_INI_POS * 10.0f, 1.0f);
-        //m_camera.standXZ(false, 1.0f);
         m_camera.lookAt(CAMERA_INI_POS, 1.0f);
         m_camera.standXZ(false, 1.0f);
         m_camera.lookAt(CAMERA_INI_POS, 1.0f);
