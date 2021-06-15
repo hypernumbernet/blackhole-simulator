@@ -15,7 +15,7 @@ MainWidget::MainWidget(QWidget* parent)
     container->setMaximumSize(screenSize);
 
     m_hLayout = new QHBoxLayout(this);
-    m_vLayout = new QVBoxLayout();
+    m_vLayout = new QVBoxLayout;
     m_vLayout->setAlignment(Qt::AlignTop);
     m_hLayout->addWidget(container, Qt::AlignLeft);
     m_hLayout->addLayout(m_vLayout);
@@ -30,13 +30,13 @@ void MainWidget::initUi()
     fpsLabel->setText("FPS");
     fpsLayout->addWidget(fpsLabel);
     m_fpsLCD = newCounterQLCDNumber(5);
-    QObject::connect(m_updateUi, &UpdateUi::setFps, this, &MainWidget::fpsUpdate);
+    QObject::connect(m_updateUi, &UpdateUi::showFps, this, &MainWidget::fpsUpdate);
     fpsLayout->addWidget(m_fpsLCD);
     m_vLayout->addLayout(fpsLayout);
 
     m_counterLcd = newCounterQLCDNumber(10);
     m_vLayout->addWidget(m_counterLcd);
-    QObject::connect(m_updateUi, &UpdateUi::setFrameNumber, this, &MainWidget::counterUpdate);
+    QObject::connect(m_updateUi, &UpdateUi::showFrameNumber, this, &MainWidget::counterUpdate);
 
     auto startBtn = new QPushButton(tr("Start"));
     startBtn->setFocusPolicy(Qt::NoFocus);
@@ -60,7 +60,7 @@ void MainWidget::initUi()
 
     auto particleNumValue = newNumberQLabel();
     m_vLayout->addWidget(particleNumValue);
-    QObject::connect(m_updateUi, &UpdateUi::setNumberOfParticles,
+    QObject::connect(m_updateUi, &UpdateUi::showNumberOfParticles,
                      particleNumValue, &QLabel::setText);
 
     auto scaleLabel = new QLabel;
@@ -69,9 +69,17 @@ void MainWidget::initUi()
 
     auto scaleValue = newNumberQLabel();
     m_vLayout->addWidget(scaleValue);
-    QObject::connect(m_updateUi, &UpdateUi::setModelScale,
+    QObject::connect(m_updateUi, &UpdateUi::showModelScale,
                      scaleValue, &QLabel::setText);
 
+    auto timePerFrameLabel = new QLabel;
+    timePerFrameLabel->setText(tr("Time/Frame (s):"));
+    m_vLayout->addWidget(timePerFrameLabel);
+
+    auto timePerFrameValue = newNumberQLabel();
+    m_vLayout->addWidget(timePerFrameValue);
+    QObject::connect(m_updateUi, &UpdateUi::showTimePerFrame,
+                     timePerFrameValue, &QLabel::setText);
 }
 
 void MainWidget::counterUpdate(int num)

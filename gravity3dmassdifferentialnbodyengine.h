@@ -29,6 +29,8 @@ public:
     float* coordinates() const;
     float modelScale() const;
 
+    void setTimePerFrame(float);
+
 private:
     void initParticlesRandam();
     void initSunEarth();

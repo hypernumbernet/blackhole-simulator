@@ -41,7 +41,11 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine()
 {
-    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(m_updateUi, numberOfParticle);
+    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(
+                m_updateUi,
+                numberOfParticle,
+                36000.0f,
+                Gravity3DMassDifferentialNBodyEngine::Preset::Random);
 
     updateParticles();
 }

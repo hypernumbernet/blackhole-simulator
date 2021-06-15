@@ -9,8 +9,9 @@ public:
     explicit UpdateUi(QObject* parent = nullptr);
 
 signals:
-    void setNumberOfParticles(QString);
-    void setFrameNumber(int);
-    void setFps(int);
-    void setModelScale(QString);
+    void showNumberOfParticles(QString);
+    void showFrameNumber(int);
+    void showFps(int);
+    void showModelScale(QString);
+    void showTimePerFrame(QString);
 };

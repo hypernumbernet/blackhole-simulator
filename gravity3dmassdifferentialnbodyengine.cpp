@@ -5,18 +5,17 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         const quint64 numberOfParticles,
         const float timePerFrame,
         const Preset presetNumber)
-    : AbstractNBodyEngine(updateUi, numberOfParticles)
-    , m_timePerFrame(timePerFrame)
+    : AbstractNBodyEngine(updateUi)
 {
     switch (presetNumber) {
     case Preset::Random:
+        setNumberOfParticles(numberOfParticles);
         break;
     case Preset::SunEarth:
     case Preset::EarthSun:
-        m_numberOfParticles = 2;
+        setNumberOfParticles(2);
         break;
     }
-    emit m_updateUi->setNumberOfParticles(QString::number(m_numberOfParticles));
 
     //inversedDistances = new float[0];
 
@@ -38,6 +37,8 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         initEarthSun();
         break;
     }
+
+    setTimePerFrame(timePerFrame);
 }
 
 Gravity3DMassDifferentialNBodyEngine::~Gravity3DMassDifferentialNBodyEngine()
@@ -207,4 +208,10 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
     m_velocities[0] = 0.0f;
     m_velocities[1] = 29780.0f;
     m_velocities[2] = 0.0f;
+}
+
+void Gravity3DMassDifferentialNBodyEngine::setTimePerFrame(const float time)
+{
+    m_timePerFrame = time;
+    emit m_updateUi->showTimePerFrame(QString::number(time));
 }

@@ -186,10 +186,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         if (m_keyPressing.indexOf(Qt::Key_Tab) >= 0) {
             m_camera.lookAtZero();
         }
-        emit m_updateUi->setFrameNumber(m_frameNum);
+        emit m_updateUi->showFrameNumber(m_frameNum);
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
-        emit m_updateUi->setFps(m_frameNum - m_fpsPreFrame);
+        emit m_updateUi->showFps(m_frameNum - m_fpsPreFrame);
         m_fpsPreFrame = m_frameNum;
     }
 }

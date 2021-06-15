@@ -10,7 +10,7 @@
 class AbstractNBodyEngine
 {
 public:
-    AbstractNBodyEngine(UpdateUi*, quint64 numberOfParticles);
+    AbstractNBodyEngine(UpdateUi*);
     virtual ~AbstractNBodyEngine();
 
     virtual float calculateDistance(quint64, quint64) const = 0;
@@ -28,6 +28,7 @@ public:
 protected:
     static float randf() {return (float)rand() / (float)RAND_MAX;}
 
+    void setNumberOfParticles(quint64);
     quint64 m_numberOfParticles;
 
     void setModelScale(float);
