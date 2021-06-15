@@ -16,5 +16,5 @@ AbstractNBodyEngine::~AbstractNBodyEngine()
 void AbstractNBodyEngine::setModelScale(float scale)
 {
     m_modelScale = scale;
-    emit m_updateUi->setModelScale(QString::number(scale));
+    emit m_updateUi->setModelScale(QString::number(1.0f / scale));
 }
