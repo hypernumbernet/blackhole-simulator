@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QScreen>
 #include <QLCDNumber>
+#include <QComboBox>
+#include <QLineEdit>
 
 class MainWidget : public QWidget
 {

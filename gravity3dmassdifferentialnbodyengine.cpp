@@ -15,6 +15,9 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
     case Preset::EarthSun:
         setNumberOfParticles(2);
         break;
+    case Preset::SunEarthMoon:
+        setNumberOfParticles(2);
+        break;
     }
 
     //inversedDistances = new float[0];
@@ -35,6 +38,9 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         break;
     case Preset::EarthSun:
         initEarthSun();
+        break;
+    case Preset::SunEarthMoon:
+        initSunEarthMoon();
         break;
     }
 
@@ -214,6 +220,27 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
     m_velocities[0] = 0.0f;
     m_velocities[1] = 29780.0f;
     m_velocities[2] = 0.0f;
+}
+
+void Gravity3DMassDifferentialNBodyEngine::initSunEarthMoon()
+{
+    setModelScale(0.25e-8f);
+
+    m_mass[0] = 5.972e+24f;
+    m_coordinates[0] = 0.0f;
+    m_coordinates[1] = 0.0f;
+    m_coordinates[2] = 0.0f;
+    m_velocities[0] = 0.0f;
+    m_velocities[1] = 0.0f;
+    m_velocities[2] = 0.0f;
+
+    m_mass[1] = 7.347673e+22f;
+    m_coordinates[3] = 3.844e+8f;
+    m_coordinates[4] = 0.0f;
+    m_coordinates[5] = 0.0f;
+    m_velocities[3] = 0.0f;
+    m_velocities[4] = 1022.0f;
+    m_velocities[5] = 0.0f;
 }
 
 void Gravity3DMassDifferentialNBodyEngine::setTimePerFrame(const float time)

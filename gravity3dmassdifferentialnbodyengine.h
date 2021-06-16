@@ -11,6 +11,7 @@ public:
         Random,
         SunEarth,
         EarthSun,
+        EarthMoon,
     };
 
     Gravity3DMassDifferentialNBodyEngine(
@@ -35,6 +36,7 @@ private:
     void initParticlesRandam();
     void initSunEarth();
     void initEarthSun();
+    void initEarthMoon();
 
     //void calculateDistances();
 

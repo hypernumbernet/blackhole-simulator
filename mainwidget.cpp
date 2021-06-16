@@ -50,6 +50,18 @@ void MainWidget::initUi()
     m_vLayout->addWidget(m_frameAdvanceBtn);
     QObject::connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
 
+    auto resetBtn = new QPushButton;
+    resetBtn->setFocusPolicy(Qt::NoFocus);
+    resetBtn->setText(tr("Reset"));
+    m_vLayout->addWidget(resetBtn);
+
+    auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
+    circleStrafingCB->setFocusPolicy(Qt::NoFocus);
+    circleStrafingCB->setChecked(false);
+    m_vLayout->addWidget(circleStrafingCB);
+    QObject::connect(circleStrafingCB, &QCheckBox::stateChanged,
+                     m_graphicWindows, &GraphicWindow::circleStrafing);
+
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
@@ -60,13 +72,6 @@ void MainWidget::initUi()
     btnLineType->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(btnLineType);
     QObject::connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
-
-    auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
-    circleStrafingCB->setFocusPolicy(Qt::NoFocus);
-    circleStrafingCB->setChecked(false);
-    m_vLayout->addWidget(circleStrafingCB);
-    QObject::connect(circleStrafingCB, &QCheckBox::stateChanged,
-                     m_graphicWindows, &GraphicWindow::circleStrafing);
 
     auto particleNumLabel = new QLabel;
     particleNumLabel->setText(tr("Number of particles:"));
@@ -94,6 +99,59 @@ void MainWidget::initUi()
     m_vLayout->addWidget(timePerFrameValue);
     QObject::connect(m_updateUi, &UpdateUi::showTimePerFrame,
                      timePerFrameValue, &QLabel::setText);
+
+    auto simTypeLabel = new QLabel;
+    simTypeLabel->setText(tr("Simulation Engine:"));
+    m_vLayout->addWidget(simTypeLabel);
+
+    auto simTypeCombo = new QComboBox;
+    simTypeCombo->setFocusPolicy(Qt::NoFocus);
+    simTypeCombo->setInsertPolicy(QComboBox::NoInsert);
+    simTypeCombo->insertItem(1, tr("Gravity3DMassDifferential"));
+    simTypeCombo->insertItem(2, tr("Gravity3DMassIntegral"));
+    simTypeCombo->insertItem(3, tr("Gravity3DDifferential"));
+    simTypeCombo->insertItem(4, tr("Gravity3DIntegral"));
+    simTypeCombo->insertItem(5, tr("Gravity2DMassDifferential"));
+    simTypeCombo->insertItem(6, tr("Gravity2DMassIntegral"));
+    simTypeCombo->insertItem(7, tr("Gravity2DDifferential"));
+    simTypeCombo->insertItem(8, tr("Gravity2DIntegral"));
+    m_vLayout->addWidget(simTypeCombo);
+
+    auto initialConditionLabel = new QLabel;
+    initialConditionLabel->setText(tr("Initial Conditions:"));
+    m_vLayout->addWidget(initialConditionLabel);
+
+    auto initialConditionCombo = new QComboBox;
+    initialConditionCombo->setFocusPolicy(Qt::NoFocus);
+    initialConditionCombo->setInsertPolicy(QComboBox::NoInsert);
+    initialConditionCombo->insertItem(1, tr("Random Cube"));
+    initialConditionCombo->insertItem(2, tr("Sun and Earth"));
+    initialConditionCombo->insertItem(3, tr("Earth and Sun"));
+    m_vLayout->addWidget(initialConditionCombo);
+
+    auto massLabel = new QLabel;
+    massLabel->setText(tr("Mass (Avg.) (kg):"));
+    m_vLayout->addWidget(massLabel);
+
+    auto massQuantity = new QLineEdit("5.972e+24f");
+    m_vLayout->addWidget(massQuantity);
+
+    auto massRandomCheck = new QCheckBox(tr("Random Mass"));
+    massRandomCheck->setChecked(true);
+    massRandomCheck->setFocusPolicy(Qt::NoFocus);
+    m_vLayout->addWidget(massRandomCheck);
+
+    auto massRangeLabel = new QLabel;
+    massRangeLabel->setText(tr("Mass Range (±kg)"));
+    m_vLayout->addWidget(massRangeLabel);
+
+    auto massRangeValue = new QLineEdit("1.0e+10");
+    m_vLayout->addWidget(massRangeValue);
+
+    auto newBtn = new QPushButton;
+    newBtn->setFocusPolicy(Qt::NoFocus);
+    newBtn->setText(tr("New"));
+    m_vLayout->addWidget(newBtn);
 
     startButtonText(false);
 }
