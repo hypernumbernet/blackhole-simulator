@@ -21,6 +21,7 @@ public:
     void resize(int height);
     void updateParticles();
     void selectNBodyEngine();
+    void reset();
 
 private:
     QOpenGLShaderProgram m_program;

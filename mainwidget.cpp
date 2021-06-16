@@ -54,6 +54,7 @@ void MainWidget::initUi()
     resetBtn->setFocusPolicy(Qt::NoFocus);
     resetBtn->setText(tr("Reset"));
     m_vLayout->addWidget(resetBtn);
+    QObject::connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
 
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);

@@ -30,6 +30,7 @@ public slots:
     void startSim();
     void frameAdvance();
     void circleStrafing(bool);
+    void reset();
 
 protected:
     void initializeGL() override;

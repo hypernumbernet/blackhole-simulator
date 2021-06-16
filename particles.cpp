@@ -100,3 +100,9 @@ void Particles::resize(int height)
 {
     pointSizeScale = (float)height / (float)initHeight;
 }
+
+void Particles::reset()
+{
+    delete m_NBodyEngine;
+    selectNBodyEngine();
+}

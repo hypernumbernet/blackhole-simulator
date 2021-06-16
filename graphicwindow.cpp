@@ -276,3 +276,11 @@ void GraphicWindow::circleStrafing(const bool on)
 
     m_camera.lookAtZero(1.0f);
 }
+
+void GraphicWindow::reset()
+{
+    m_isSimulating = false;
+    m_frameNum = 0;
+    m_fpsPreFrame = 0;
+    m_particleModels->reset();
+}
