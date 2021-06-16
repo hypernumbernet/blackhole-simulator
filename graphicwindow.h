@@ -8,7 +8,7 @@
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLFunctions_4_5_Core>
 #include <QKeyEvent>
 #include <QTime>
 #include <QVector>
@@ -16,7 +16,7 @@
 #include <QCursor>
 #include <QMutex>
 
-class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_3_3_Core
+class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core
 {
     Q_OBJECT
 

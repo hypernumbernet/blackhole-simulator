@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QVector>
 
-class WorldModels : public QOpenGLFunctions_3_3_Core
+class WorldModels : public QOpenGLFunctions_4_5_Core
 {
 public:
     WorldModels();

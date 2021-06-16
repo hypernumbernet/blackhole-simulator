@@ -5,12 +5,12 @@
 
 #include <math.h>
 
-#include <QOpenGLFunctions_3_3_Core>
+#include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
-class Particles : public QOpenGLFunctions_3_3_Core
+class Particles : public QOpenGLFunctions_4_5_Core
 {
 public:
     Particles(UpdateUi*);
