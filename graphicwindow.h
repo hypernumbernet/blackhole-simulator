@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QBasicTimer>
 #include <QCursor>
+#include <QMutex>
 
 class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_3_3_Core
 {
@@ -28,6 +29,7 @@ public slots:
     void changeLinePosition();
     void startSim();
     void frameAdvance();
+    void circleStrafing(bool);
 
 protected:
     void initializeGL() override;
@@ -69,4 +71,9 @@ private:
 
     bool m_isSimulating;
     UpdateUi* const m_updateUi;
+
+    bool m_isCircleStrafing;
+    float m_circleStrafingSpeed;
+
+    QMutex m_guiMutex;
 };

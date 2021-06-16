@@ -10,7 +10,12 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     , m_particleModels(new Particles(updateUi))
     , m_isSimulating(false)
     , m_updateUi(updateUi)
+    , m_isCircleStrafing(false)
+    , m_circleStrafingSpeed(1.0f)
 {
+    // Camera使用時にはロックする。ロックしないと同時操作で振動する。
+    QMutexLocker locker(&m_guiMutex);
+
     m_camera.lookAtZero(1.0f);
     m_camera.standXZ(false, 1.0f);
     m_camera.lookAtZero(1.0f);
@@ -80,7 +85,10 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
         return;
 
     if (ev->key() == Qt::Key_Escape) {
-        m_camera.setPosition(CAMERA_INI_POS * 10.0f, 1.0f);
+
+        QMutexLocker locker(&m_guiMutex);
+
+        m_camera.reset(CAMERA_INI_POS * 10.0f);
         m_camera.lookAt(CAMERA_INI_POS, 1.0f);
         m_camera.standXZ(false, 1.0f);
         m_camera.lookAt(CAMERA_INI_POS, 1.0f);
@@ -94,10 +102,6 @@ void GraphicWindow::keyReleaseEvent(QKeyEvent *ev)
     if (ev->isAutoRepeat())
         return;
 
-//    if (ev->key() == Qt::Key_Escape) {
-//        m_camera.lookAtZero(1.0f);
-//    }
-
     m_keyPressing.removeAll(static_cast<Qt::Key>(ev->key()));
 }
 
@@ -108,6 +112,9 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     setCursor(Qt::BlankCursor);
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton)) {
+
+        QMutexLocker locker(&m_guiMutex);
+
         m_camera.lookAtZero(1.0f);
     }
 }
@@ -117,6 +124,9 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
     if (m_mousePressing) {
         QPointF pos = ev->localPos();
         QPointF diff = pos - m_mouseLastPosition;
+
+        QMutexLocker locker(&m_guiMutex);
+
         if (ev->buttons() == Qt::LeftButton) {
             diff *= 0.15f;
             m_camera.yaw(diff.x());
@@ -135,15 +145,18 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
 
 void GraphicWindow::mouseReleaseEvent(QMouseEvent*)
 {
-    m_mousePressing = false;
     setCursor(Qt::ArrowCursor);
     QCursor::setPos(mapToGlobal(m_mousePressPosition));
+    m_mousePressing = false;
 }
 
 void GraphicWindow::wheelEvent(QWheelEvent* ev)
 {
     QPoint numDegrees = ev->angleDelta();
     if (!numDegrees.isNull()) {
+
+        QMutexLocker locker(&m_guiMutex);
+
         m_camera.walk(-numDegrees.y() * 0.01f);
     }
 }
@@ -154,6 +167,9 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         m_particleModels->updateParticles();
         ++m_frameNum;
     } else if (ev->timerId() == m_uiTimer.timerId()) {
+
+        QMutexLocker locker(&m_guiMutex);
+
         if (m_keyPressing.indexOf(Qt::Key_W) >= 0) {
             m_camera.walk(-m_walkSpeed);
         }
@@ -208,6 +224,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.setPosition(QVector3D(), -0.1f);
         }
 
+        if (m_isCircleStrafing) {
+            m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
+        }
+
         emit m_updateUi->showFrameNumber(m_frameNum);
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
@@ -244,4 +264,15 @@ void GraphicWindow::frameAdvance()
         m_particleModels->updateParticles();
         ++m_frameNum;
     }
+}
+
+void GraphicWindow::circleStrafing(const bool on)
+{
+    if (on)
+        m_circleStrafingSpeed = -m_circleStrafingSpeed;
+    m_isCircleStrafing = on;
+
+    QMutexLocker locker(&m_guiMutex);
+
+    m_camera.lookAtZero(1.0f);
 }

@@ -61,6 +61,13 @@ void MainWidget::initUi()
     m_vLayout->addWidget(btnLineType);
     QObject::connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
 
+    auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
+    circleStrafingCB->setFocusPolicy(Qt::NoFocus);
+    circleStrafingCB->setChecked(false);
+    m_vLayout->addWidget(circleStrafingCB);
+    QObject::connect(circleStrafingCB, &QCheckBox::stateChanged,
+                     m_graphicWindows, &GraphicWindow::circleStrafing);
+
     auto particleNumLabel = new QLabel;
     particleNumLabel->setText(tr("Number of particles:"));
     m_vLayout->addWidget(particleNumLabel);
