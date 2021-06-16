@@ -106,30 +106,30 @@ void WorldModels::changeLineType()
 
 void WorldModels::linesAxis()
 {
-    appendLine({0, 0, 0}, {1, 0, 0}, RED);
-    appendLine({0, 0, 0}, {0, 1, 0}, GREEN);
-    appendLine({0, 0, 0}, {0, 0, 1}, BLUE);
+    appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
+    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
+    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
 }
 
 void WorldModels::lines2Meshes()
 {
     for (int i = 0; i < 3; ++i) {
-        appendLine({-1, -1, i - 1.0f}, {1, -1, i - 1.0f}, RED);
-        appendLine({i - 1.0f, -1, -1}, {i - 1.0f, 1, -1}, GREEN);
-        appendLine({-1, i - 1.0f, -1}, {-1, i - 1.0f, 1}, BLUE);
+        appendLine({-1.0f, -1.0f, i - 1.0f}, {1.0f, -1.0f, i - 1.0f}, RED);
+        appendLine({i - 1.0f, -1.0f, -1.0f}, {i - 1.0f, 1.0f, -1.0f}, GREEN);
+        appendLine({-1.0f, i - 1.0f, -1.0f}, {-1.0f, i - 1.0f, 1.0f}, BLUE);
     }
     for (int i = 1; i < 3; ++i) {
-        appendLine({i - 1.0f, -1, -1}, {i - 1.0f, -1, 1}, RED);
-        appendLine({-1, i - 1.0f, -1}, {1, i - 1.0f, -1}, GREEN);
-        appendLine({-1, -1, i - 1.0f}, {-1, 1, i - 1.0f}, BLUE);
+        appendLine({i - 1.0f, -1.0f, -1.0f}, {i - 1.0f, -1.0f, 1.0f}, RED);
+        appendLine({-1.0f, i - 1.0f, -1.0f}, {1.0f, i - 1.0f, -1.0f}, GREEN);
+        appendLine({-1.0f, -1.0f, i - 1.0f}, {-1.0f, 1.0f, i - 1.0f}, BLUE);
     }
 }
 
 void WorldModels::linesXZMeshes()
 {
     for (int i = -10; i <= 10; ++i) {
-        appendLine({-10, 0, (float)i}, {10, 0, (float)i}, RED);
-        appendLine({(float)i, 0, -10}, {(float)i, 0, 10}, BLUE);
+        appendLine({-10, 0.0f, (float)i}, {10, 0.0f, (float)i}, RED);
+        appendLine({(float)i, 0.0f, -10}, {(float)i, 0.0f, 10}, BLUE);
     }
-    appendLine({0, 0, 0}, {0, 1, 0}, GREEN);
+    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1, 0.0f}, GREEN);
 }

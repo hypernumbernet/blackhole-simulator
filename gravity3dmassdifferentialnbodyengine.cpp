@@ -15,7 +15,7 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
     case Preset::EarthSun:
         setNumberOfParticles(2);
         break;
-    case Preset::SunEarthMoon:
+    case Preset::EarthMoon:
         setNumberOfParticles(2);
         break;
     }
@@ -39,8 +39,8 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
     case Preset::EarthSun:
         initEarthSun();
         break;
-    case Preset::SunEarthMoon:
-        initSunEarthMoon();
+    case Preset::EarthMoon:
+        initEarthMoon();
         break;
     }
 
@@ -222,7 +222,7 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
     m_velocities[2] = 0.0f;
 }
 
-void Gravity3DMassDifferentialNBodyEngine::initSunEarthMoon()
+void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
 {
     setModelScale(0.25e-8f);
 
