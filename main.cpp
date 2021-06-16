@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setVersion(3, 3);
     format.setProfile(QSurfaceFormat::CoreProfile);
-    format.setDepthBufferSize(32);
+    format.setDepthBufferSize(24);
     QSurfaceFormat::setDefaultFormat(format);
 
     MainWidget widget;
