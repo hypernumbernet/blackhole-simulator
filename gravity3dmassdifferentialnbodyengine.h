@@ -12,6 +12,7 @@ public:
         SunEarth,
         EarthSun,
         EarthMoon,
+        SunEarthVenus,
         TestSamePosition,
     };
 
@@ -38,6 +39,7 @@ private:
     void initSunEarth();
     void initEarthSun();
     void initEarthMoon();
+    void initSunEarthVenus();
     void initTestSamePosition();
 
     //void calculateDistances();

@@ -289,7 +289,7 @@ void GraphicWindow::setModelScale(const QString& text)
 {
     bool ok;
     auto val = text.toFloat(&ok);
-    if (ok)
+    if (ok && val > 0.0f)
     {
         m_particleModels->setModelScale(1.0f / val);
     }

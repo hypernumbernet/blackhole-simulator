@@ -45,7 +45,7 @@ void Particles::selectNBodyEngine()
                 m_updateUi,
                 numberOfParticle,
                 3600.0f,
-                Gravity3DMassDifferentialNBodyEngine::Preset::Random);
+                Gravity3DMassDifferentialNBodyEngine::Preset::SunEarthVenus);
 
     updateParticles();
 }

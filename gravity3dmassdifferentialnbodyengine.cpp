@@ -17,6 +17,9 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
     case Preset::TestSamePosition:
         setNumberOfParticles(2);
         break;
+    case Preset::SunEarthVenus:
+        setNumberOfParticles(3);
+        break;
     }
 
     //inversedDistances = new float[0];
@@ -43,6 +46,9 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         break;
     case Preset::TestSamePosition:
         initTestSamePosition();
+        break;
+    case Preset::SunEarthVenus:
+        initSunEarthVenus();
         break;
     }
 
@@ -244,6 +250,35 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
     m_velocities[3] = 0.0f;
     m_velocities[4] = 1022.0f;
     m_velocities[5] = 0.0f;
+}
+
+void Gravity3DMassDifferentialNBodyEngine::initSunEarthVenus()
+{
+    changeModelScale(1.0e-11f);
+
+    m_mass[0] = 1.9891e+30f;
+    m_coordinates[0] = 0.0f;
+    m_coordinates[1] = 0.0f;
+    m_coordinates[2] = 0.0f;
+    m_velocities[0] = 0.0f;
+    m_velocities[1] = 0.0f;
+    m_velocities[2] = 0.0f;
+
+    m_mass[1] = 5.972e+24f;
+    m_coordinates[3] = 1.495978e+11f;
+    m_coordinates[4] = 0.0f;
+    m_coordinates[5] = 0.0f;
+    m_velocities[3] = 0.0f;
+    m_velocities[4] = 0.0f;
+    m_velocities[5] = 29780.0f;
+
+    m_mass[2] = 4.869e+24f;
+    m_coordinates[6] = 1.0820893e+11;
+    m_coordinates[7] = 0.0f;
+    m_coordinates[8] = 0.0f;
+    m_velocities[6] = 0.0f;
+    m_velocities[7] = 0.0f;
+    m_velocities[8] = 35021.4f;
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initTestSamePosition()
