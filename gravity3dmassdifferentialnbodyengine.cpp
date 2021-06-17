@@ -13,9 +13,8 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         break;
     case Preset::SunEarth:
     case Preset::EarthSun:
-        setNumberOfParticles(2);
-        break;
     case Preset::EarthMoon:
+    case Preset::TestSamePosition:
         setNumberOfParticles(2);
         break;
     }
@@ -41,6 +40,9 @@ Gravity3DMassDifferentialNBodyEngine::Gravity3DMassDifferentialNBodyEngine(
         break;
     case Preset::EarthMoon:
         initEarthMoon();
+        break;
+    case Preset::TestSamePosition:
+        initTestSamePosition();
         break;
     }
 
@@ -90,8 +92,8 @@ void Gravity3DMassDifferentialNBodyEngine::timeProgress() const
 
 void Gravity3DMassDifferentialNBodyEngine::calculateInteraction() const
 {
-    float theta;
-    quint64 k = 0;
+    float d1, d2, d3, distance, inv, force;
+    quint64 k = 0, a, b;
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
@@ -104,33 +106,29 @@ void Gravity3DMassDifferentialNBodyEngine::calculateInteraction() const
             //theta -= inversedDistances[k];
 
             // 微分計算
-            theta = 1.0f / calculateDistance(i, j);
-            theta *= theta * m_timePerFrame;
-
-            if (theta == theta)
-            {
-                theta *= GRAVITATIONAL_CONSTANT;
-
-                quint64 a = i * 3;
-                quint64 b = j * 3;
-                float d1 = m_coordinates[a] - m_coordinates[b];
-                float d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
-                float d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
-                float norm = 1.0f / sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                d1 *= theta * norm;
-                d2 *= theta * norm;
-                d3 *= theta * norm;
-
-                m_velocities[a] -= d1 * m_mass[j];
-                m_velocities[a + 1] -= d2 * m_mass[j];
-                m_velocities[a + 2] -= d3 * m_mass[j];
-                m_velocities[b] += d1 * m_mass[i];
-                m_velocities[b + 1] += d2 * m_mass[i];
-                m_velocities[b + 2] += d3 * m_mass[i];
-
-            } else {
-                qDebug() << "[warning] invalid number detected";
+            //float distance = calculateDistance(i, j);
+            a = i * 3;
+            b = j * 3;
+            d1 = m_coordinates[a] - m_coordinates[b];
+            d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
+            d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
+            distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+            if (distance == 0.0f) {
+                continue;
             }
+            inv = 1.0f / distance;
+            force = inv * inv * m_timePerFrame * GRAVITATIONAL_CONSTANT;
+
+            d1 *= inv * force;
+            d2 *= inv * force;
+            d3 *= inv * force;
+
+            m_velocities[a] -= d1 * m_mass[j];
+            m_velocities[a + 1] -= d2 * m_mass[j];
+            m_velocities[a + 2] -= d3 * m_mass[j];
+            m_velocities[b] += d1 * m_mass[i];
+            m_velocities[b + 1] += d2 * m_mass[i];
+            m_velocities[b + 2] += d3 * m_mass[i];
 
             ++k;
         }
@@ -209,17 +207,22 @@ void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
 {
     changeModelScale(1.0e-11f);
-    m_mass[1] = 1.9891e+30f;
-    m_coordinates[3] = m_coordinates[4] = m_coordinates[5] = 0.0f;
-    m_velocities[3] = m_velocities[4] = m_velocities[5] = 0.0f;
 
     m_mass[0] = 5.972e+24f;
-    m_coordinates[0] = 1.495978e+11f;
+    m_coordinates[0] = 0.0f;
     m_coordinates[1] = 0.0f;
     m_coordinates[2] = 0.0f;
     m_velocities[0] = 0.0f;
     m_velocities[1] = 29780.0f;
     m_velocities[2] = 0.0f;
+
+    m_mass[1] = 1.9891e+30f;
+    m_coordinates[3] = 1.495978e+11f;
+    m_coordinates[4] = 0.0f;
+    m_coordinates[5] = 0.0f;
+    m_velocities[3] = 0.0f;
+    m_velocities[4] = 0.0f;
+    m_velocities[5] = 0.0f;
 }
 
 void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
@@ -240,6 +243,27 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
     m_coordinates[5] = 0.0f;
     m_velocities[3] = 0.0f;
     m_velocities[4] = 1022.0f;
+    m_velocities[5] = 0.0f;
+}
+
+void Gravity3DMassDifferentialNBodyEngine::initTestSamePosition()
+{
+    changeModelScale(0.25e-8f);
+
+    m_mass[0] = 1.0e+10f;
+    m_coordinates[0] = 1.0f;
+    m_coordinates[1] = 2.0f;
+    m_coordinates[2] = 3.0f;
+    m_velocities[0] = 0.0f;
+    m_velocities[1] = 0.0f;
+    m_velocities[2] = 0.0f;
+
+    m_mass[1] = 2.0e+10f;
+    m_coordinates[3] = 1.0f;
+    m_coordinates[4] = 2.0f;
+    m_coordinates[5] = 3.0f;
+    m_velocities[3] = 0.0f;
+    m_velocities[4] = 0.0f;
     m_velocities[5] = 0.0f;
 }
 

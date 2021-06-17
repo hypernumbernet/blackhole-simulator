@@ -12,13 +12,14 @@ public:
         SunEarth,
         EarthSun,
         EarthMoon,
+        TestSamePosition,
     };
 
     Gravity3DMassDifferentialNBodyEngine(
             UpdateUi* const,
             quint64 numberOfParticles,
-            float timePerFrame = 3600.0f,
-            Preset presetNumber = Preset::SunEarth);
+            float timePerFrame,
+            Preset presetNumber);
     ~Gravity3DMassDifferentialNBodyEngine();
 
     //void newParticles();
@@ -37,6 +38,7 @@ private:
     void initSunEarth();
     void initEarthSun();
     void initEarthMoon();
+    void initTestSamePosition();
 
     //void calculateDistances();
 

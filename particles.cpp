@@ -44,8 +44,8 @@ void Particles::selectNBodyEngine()
     m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(
                 m_updateUi,
                 numberOfParticle,
-                60.0f,
-                Gravity3DMassDifferentialNBodyEngine::Preset::EarthMoon);
+                3600.0f,
+                Gravity3DMassDifferentialNBodyEngine::Preset::TestSamePosition);
 
     updateParticles();
 }
