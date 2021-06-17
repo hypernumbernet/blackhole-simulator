@@ -23,8 +23,15 @@ void AbstractNBodyEngine::setModelScale(const float scale)
     m_modelScale = scale;
 }
 
+void AbstractNBodyEngine::setModelScaleRatio(const float ratio)
+{
+    m_modelScale = m_scaleCenterValue * ratio;
+    emit m_updateUi->showModelScale(m_modelScale);
+}
+
 void AbstractNBodyEngine::changeModelScale(const float scale)
 {
     m_modelScale = scale;
-    emit m_updateUi->showModelScale(QString::number(1.0f / scale));
+    m_scaleCenterValue = scale;
+    emit m_updateUi->showModelScale(scale);
 }

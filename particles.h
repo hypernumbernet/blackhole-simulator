@@ -23,6 +23,7 @@ public:
     void selectNBodyEngine();
     void reset();
     void setModelScale(float);
+    void setModelScaleRatio(float);
 
 private:
     QOpenGLShaderProgram m_program;

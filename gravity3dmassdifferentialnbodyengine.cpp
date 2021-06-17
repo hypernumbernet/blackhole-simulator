@@ -248,7 +248,7 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
 
 void Gravity3DMassDifferentialNBodyEngine::initTestSamePosition()
 {
-    changeModelScale(0.25e-8f);
+    changeModelScale(1.0f);
 
     m_mass[0] = 1.0e+10f;
     m_coordinates[0] = 1.0f;

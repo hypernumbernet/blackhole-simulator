@@ -45,7 +45,7 @@ void Particles::selectNBodyEngine()
                 m_updateUi,
                 numberOfParticle,
                 3600.0f,
-                Gravity3DMassDifferentialNBodyEngine::Preset::TestSamePosition);
+                Gravity3DMassDifferentialNBodyEngine::Preset::Random);
 
     updateParticles();
 }
@@ -110,4 +110,9 @@ void Particles::reset()
 void Particles::setModelScale(float val)
 {
     m_NBodyEngine->setModelScale(val);
+}
+
+void Particles::setModelScaleRatio(float val)
+{
+    m_NBodyEngine->setModelScaleRatio(val);
 }

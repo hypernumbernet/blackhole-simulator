@@ -20,6 +20,7 @@ public:
 
     virtual quint64 numberOfParticle() const = 0;
     void setModelScale(float);
+    void setModelScaleRatio(float);
     virtual float modelScale() const = 0;
     virtual float* coordinates() const = 0;
 
@@ -34,6 +35,7 @@ protected:
 
     void changeModelScale(float);
     float m_modelScale;
+    float m_scaleCenterValue;
 
     // 粒子の座標
     float* m_coordinates;

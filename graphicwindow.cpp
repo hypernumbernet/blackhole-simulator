@@ -294,3 +294,9 @@ void GraphicWindow::setModelScale(const QString& text)
         m_particleModels->setModelScale(1.0f / val);
     }
 }
+
+void GraphicWindow::setModelScaleInt(int val)
+{
+    float r1 = (float)val / (float)UpdateUi::SCALE_SLIDER_CENTER;
+    m_particleModels->setModelScaleRatio(pow(r1, 10.0f));
+}

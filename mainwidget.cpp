@@ -55,6 +55,7 @@ void MainWidget::initUi()
     resetBtn->setText(tr("Reset"));
     m_vLayout->addWidget(resetBtn);
     QObject::connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
+    QObject::connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
 
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
@@ -78,13 +79,23 @@ void MainWidget::initUi()
     scaleLabel->setText(tr("Model Scale (m):"));
     m_vLayout->addWidget(scaleLabel);
 
-    m_scaleValue = new  QLineEdit;
+    m_scaleValue = new QLineEdit;
     m_scaleValue->setAlignment(Qt::AlignRight);
     m_vLayout->addWidget(m_scaleValue);
     QObject::connect(m_updateUi, &UpdateUi::showModelScale,
                      this, &MainWidget::showModelScale);
     QObject::connect(m_scaleValue, &QLineEdit::textChanged,
                      m_graphicWindows, &GraphicWindow::setModelScale);
+
+    m_scaleSlider = new QSlider;
+    m_scaleSlider->setFocusPolicy(Qt::NoFocus);
+    m_scaleSlider->setOrientation(Qt::Horizontal);
+    m_scaleSlider->setMinimum(0);
+    m_scaleSlider->setMaximum(UpdateUi::SCALE_SLIDER_CENTER * 2);
+    m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
+    m_vLayout->addWidget(m_scaleSlider);
+    QObject::connect(m_scaleSlider, &QSlider::sliderMoved,
+                     m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
     auto timePerFrameLabel = new QLabel;
     timePerFrameLabel->setText(tr("Time/Frame (s):"));
@@ -196,9 +207,19 @@ QLabel* MainWidget::newNumberQLabel()
     return lbl;
 }
 
-void MainWidget::showModelScale(const QString& val)
+void MainWidget::showModelScale(const float val)
 {
+    if (val <= 0.0f) {
+        return;
+    }
     bool state = m_scaleValue->blockSignals(true);
-    m_scaleValue->setText(val);
+    m_scaleValue->setText(QString::number(1.0f / val));
     m_scaleValue->blockSignals(state);
+}
+
+void MainWidget::resetScaleSlider()
+{
+    bool state = m_scaleSlider->blockSignals(true);
+    m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
+    m_scaleSlider->blockSignals(state);
 }
