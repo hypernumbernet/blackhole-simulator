@@ -9,10 +9,10 @@ public:
     explicit UpdateUi(QObject* = nullptr) {};
 
 signals:
-    void showNumberOfParticles(QString);
+    void showNumberOfParticles(const QString&);
     void showFrameNumber(int);
     void showFps(int);
-    void showModelScale(QString);
-    void showTimePerFrame(QString);
+    void showModelScale(const QString&);
+    void showTimePerFrame(const QString&);
     void setStartButtonTest(bool);
 };

@@ -21,5 +21,10 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
 void AbstractNBodyEngine::setModelScale(const float scale)
 {
     m_modelScale = scale;
+}
+
+void AbstractNBodyEngine::changeModelScale(const float scale)
+{
+    m_modelScale = scale;
     emit m_updateUi->showModelScale(QString::number(1.0f / scale));
 }

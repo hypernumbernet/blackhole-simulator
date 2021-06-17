@@ -22,6 +22,7 @@ public:
     void updateParticles();
     void selectNBodyEngine();
     void reset();
+    void setModelScale(float);
 
 private:
     QOpenGLShaderProgram m_program;

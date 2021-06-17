@@ -31,6 +31,7 @@ public slots:
     void frameAdvance();
     void circleStrafing(bool);
     void reset();
+    void setModelScale(const QString&);
 
 protected:
     void initializeGL() override;

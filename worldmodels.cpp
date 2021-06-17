@@ -7,7 +7,7 @@ WorldModels::WorldModels()
     linesXZMeshes();
 }
 
-void WorldModels::appendLine(QVector3D start, QVector3D end, QVector3D color)
+void WorldModels::appendLine(const QVector3D& start, const QVector3D& end, const QVector3D& color)
 {
     m_vertex.append(start);
     m_vertex.append(color);

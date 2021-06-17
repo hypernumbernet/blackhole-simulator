@@ -19,6 +19,7 @@ public:
     virtual void debug() const = 0;
 
     virtual quint64 numberOfParticle() const = 0;
+    void setModelScale(float);
     virtual float modelScale() const = 0;
     virtual float* coordinates() const = 0;
 
@@ -31,7 +32,7 @@ protected:
     void setNumberOfParticles(quint64);
     quint64 m_numberOfParticles;
 
-    void setModelScale(float);
+    void changeModelScale(float);
     float m_modelScale;
 
     // 粒子の座標

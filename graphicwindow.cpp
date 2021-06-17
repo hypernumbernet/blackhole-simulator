@@ -284,3 +284,13 @@ void GraphicWindow::reset()
     m_fpsPreFrame = 0;
     m_particleModels->reset();
 }
+
+void GraphicWindow::setModelScale(const QString& text)
+{
+    bool ok;
+    auto val = text.toFloat(&ok);
+    if (ok)
+    {
+        m_particleModels->setModelScale(1.0f / val);
+    }
+}

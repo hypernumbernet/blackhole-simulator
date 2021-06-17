@@ -166,7 +166,7 @@ float* Gravity3DMassDifferentialNBodyEngine::coordinates() const
 
 void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 {
-    setModelScale(1.0e-3f);
+    changeModelScale(1.0e-3f);
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
         m_mass[i] = randf() * 2.0e+2f - 1.0e+2f;
@@ -192,7 +192,7 @@ void Gravity3DMassDifferentialNBodyEngine::initParticlesRandam()
 
 void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 {
-    setModelScale(1.0e-11f);
+    changeModelScale(1.0e-11f);
     m_mass[0] = 1.9891e+30f;
     m_coordinates[0] = m_coordinates[1] = m_coordinates[2] = 0.0f;
     m_velocities[0] = m_velocities[1] = m_velocities[2] = 0.0f;
@@ -208,7 +208,7 @@ void Gravity3DMassDifferentialNBodyEngine::initSunEarth()
 
 void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
 {
-    setModelScale(1.0e-11f);
+    changeModelScale(1.0e-11f);
     m_mass[1] = 1.9891e+30f;
     m_coordinates[3] = m_coordinates[4] = m_coordinates[5] = 0.0f;
     m_velocities[3] = m_velocities[4] = m_velocities[5] = 0.0f;
@@ -224,7 +224,7 @@ void Gravity3DMassDifferentialNBodyEngine::initEarthSun()
 
 void Gravity3DMassDifferentialNBodyEngine::initEarthMoon()
 {
-    setModelScale(0.25e-8f);
+    changeModelScale(0.25e-8f);
 
     m_mass[0] = 5.972e+24f;
     m_coordinates[0] = 0.0f;

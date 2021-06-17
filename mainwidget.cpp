@@ -74,23 +74,17 @@ void MainWidget::initUi()
     m_vLayout->addWidget(btnLineType);
     QObject::connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
 
-    auto particleNumLabel = new QLabel;
-    particleNumLabel->setText(tr("Number of particles:"));
-    m_vLayout->addWidget(particleNumLabel);
-
-    auto particleNumValue = newNumberQLabel();
-    m_vLayout->addWidget(particleNumValue);
-    QObject::connect(m_updateUi, &UpdateUi::showNumberOfParticles,
-                     particleNumValue, &QLabel::setText);
-
     auto scaleLabel = new QLabel;
-    scaleLabel->setText(tr("Scale (m):"));
+    scaleLabel->setText(tr("Model Scale (m):"));
     m_vLayout->addWidget(scaleLabel);
 
-    auto scaleValue = newNumberQLabel();
-    m_vLayout->addWidget(scaleValue);
+    m_scaleValue = new  QLineEdit;
+    m_scaleValue->setAlignment(Qt::AlignRight);
+    m_vLayout->addWidget(m_scaleValue);
     QObject::connect(m_updateUi, &UpdateUi::showModelScale,
-                     scaleValue, &QLabel::setText);
+                     this, &MainWidget::showModelScale);
+    QObject::connect(m_scaleValue, &QLineEdit::textChanged,
+                     m_graphicWindows, &GraphicWindow::setModelScale);
 
     auto timePerFrameLabel = new QLabel;
     timePerFrameLabel->setText(tr("Time/Frame (s):"));
@@ -100,6 +94,15 @@ void MainWidget::initUi()
     m_vLayout->addWidget(timePerFrameValue);
     QObject::connect(m_updateUi, &UpdateUi::showTimePerFrame,
                      timePerFrameValue, &QLabel::setText);
+
+    auto particleNumLabel = new QLabel;
+    particleNumLabel->setText(tr("Number of particles:"));
+    m_vLayout->addWidget(particleNumLabel);
+
+    auto particleNumValue = newNumberQLabel();
+    m_vLayout->addWidget(particleNumValue);
+    QObject::connect(m_updateUi, &UpdateUi::showNumberOfParticles,
+                     particleNumValue, &QLabel::setText);
 
     auto simTypeLabel = new QLabel;
     simTypeLabel->setText(tr("Simulation Engine:"));
@@ -191,4 +194,11 @@ QLabel* MainWidget::newNumberQLabel()
     lbl->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     lbl->setAlignment(Qt::AlignRight);
     return lbl;
+}
+
+void MainWidget::showModelScale(const QString& val)
+{
+    bool state = m_scaleValue->blockSignals(true);
+    m_scaleValue->setText(val);
+    m_scaleValue->blockSignals(state);
 }

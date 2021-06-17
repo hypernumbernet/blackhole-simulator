@@ -24,6 +24,7 @@ public slots:
     void counterUpdate(int);
     void fpsUpdate(int);
     void startButtonText(bool);
+    void showModelScale(const QString&);
 
 protected:
     void initUi();
@@ -40,6 +41,7 @@ private:
     QLCDNumber* m_fpsLCD;
     QPushButton* m_startBtn;
     QPushButton* m_frameAdvanceBtn;
+    QLineEdit* m_scaleValue;
 
     UpdateUi* const m_updateUi;
 };

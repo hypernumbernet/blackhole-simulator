@@ -26,7 +26,7 @@ private:
 
     int m_lineType;
 
-    void appendLine(QVector3D, QVector3D, QVector3D color);
+    void appendLine(const QVector3D&, const QVector3D&, const QVector3D& color);
     QVector<QVector3D> m_vertex;
 
     static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};

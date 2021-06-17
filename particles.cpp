@@ -106,3 +106,8 @@ void Particles::reset()
     delete m_NBodyEngine;
     selectNBodyEngine();
 }
+
+void Particles::setModelScale(float val)
+{
+    m_NBodyEngine->setModelScale(val);
+}
