@@ -21,11 +21,13 @@ public:
     explicit MainWidget(QWidget* parent = nullptr);
 
 public slots:
-    void counterUpdate(int);
-    void fpsUpdate(int);
-    void startButtonText(bool);
-    void showModelScale(float);
+    void displayFrameNumber(int);
+    void displayFps(int);
+    void updateStartButtonText(bool);
+    void displayModelScale(float);
     void resetScaleSlider();
+    void displayTimePerFrame(float);
+    //void displaySimulationTime(float);
 
 protected:
     void initUi();
@@ -44,6 +46,9 @@ private:
     QPushButton* m_frameAdvanceBtn;
     QLineEdit* m_scaleValue;
     QSlider* m_scaleSlider;
+    QLabel* m_simTimeValue;
+    float m_timePerFrame;
+    QLabel* m_timePerFrameValue;
 
     UpdateUi* const m_updateUi;
 };

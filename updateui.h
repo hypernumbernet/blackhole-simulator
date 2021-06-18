@@ -11,10 +11,11 @@ public:
     static constexpr int SCALE_SLIDER_CENTER = 5000;
 
 signals:
-    void showNumberOfParticles(const QString&);
-    void showFrameNumber(int);
-    void showFps(int);
-    void showModelScale(float);
-    void showTimePerFrame(const QString&);
-    void setStartButtonTest(bool);
+    void displayNumberOfParticles(const QString&);
+    void displayFrameNumber(int);
+    void displayFps(int);
+    void displayModelScale(float);
+    void displayTimePerFrame(float);
+    void updateStartButtonText(bool);
+    //void displaySimulationTime(bool);
 };

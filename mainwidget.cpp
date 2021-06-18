@@ -25,55 +25,79 @@ MainWidget::MainWidget(QWidget* parent)
 
 void MainWidget::initUi()
 {
-    auto fpsLayout = new QHBoxLayout();
-    auto fpsLabel = new QLabel;
-    fpsLabel->setText("FPS");
+    // FPS
+    auto fpsLayout = new QHBoxLayout;
+    auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
-    m_fpsLCD = newCounterQLCDNumber(5);
-    QObject::connect(m_updateUi, &UpdateUi::showFps, this, &MainWidget::fpsUpdate);
+    m_fpsLCD = newCounterQLCDNumber(12);
     fpsLayout->addWidget(m_fpsLCD);
     m_vLayout->addLayout(fpsLayout);
+    connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFps);
 
-    m_counterLcd = newCounterQLCDNumber(10);
-    m_vLayout->addWidget(m_counterLcd);
-    QObject::connect(m_updateUi, &UpdateUi::showFrameNumber, this, &MainWidget::counterUpdate);
+    // Frames
+    auto counterLayout = new QHBoxLayout;
+    auto counterLabel = new QLabel(tr("Frames"));
+    counterLayout->addWidget(counterLabel);
+    m_counterLcd = newCounterQLCDNumber(12);
+    counterLayout->addWidget(m_counterLcd);
+    m_vLayout->addLayout(counterLayout);
+    connect(m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
+    // Time/Frame
+    auto timePerFrameLayout = new QHBoxLayout;
+    auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
+    timePerFrameLayout->addWidget(timePerFrameLabel);
+    m_timePerFrameValue = newNumberQLabel();
+    timePerFrameLayout->addWidget(m_timePerFrameValue);
+    m_vLayout->addLayout(timePerFrameLayout);
+    connect(m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
+
+    // Simulation Time
+    auto simTimeLayout = new QHBoxLayout;
+    auto simTimeLabel = new QLabel(tr("Time"));
+    simTimeLayout->addWidget(simTimeLabel);
+    m_simTimeValue = newNumberQLabel();
+    simTimeLayout->addWidget(m_simTimeValue);
+    m_vLayout->addLayout(simTimeLayout);
+    //connect(m_updateUi, &UpdateUi::displaySimulationTime, this, &MainWidget::displaySimulationTime);
+
+    // Start Button
     m_startBtn = new QPushButton;
     m_startBtn->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_startBtn);
-    QObject::connect(m_startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
-    QObject::connect(m_updateUi, &UpdateUi::setStartButtonTest, this, &MainWidget::startButtonText);
+    connect(m_startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    connect(m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     m_frameAdvanceBtn = new QPushButton;
     m_frameAdvanceBtn->setFocusPolicy(Qt::NoFocus);
     m_frameAdvanceBtn->setText(tr("Frame Advance"));
     m_vLayout->addWidget(m_frameAdvanceBtn);
-    QObject::connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
+    connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
 
     auto resetBtn = new QPushButton;
     resetBtn->setFocusPolicy(Qt::NoFocus);
     resetBtn->setText(tr("Reset"));
     m_vLayout->addWidget(resetBtn);
-    QObject::connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
-    QObject::connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
+    connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
+    connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
 
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
     m_vLayout->addWidget(circleStrafingCB);
-    QObject::connect(circleStrafingCB, &QCheckBox::stateChanged,
+    connect(circleStrafingCB, &QCheckBox::stateChanged,
                      m_graphicWindows, &GraphicWindow::circleStrafing);
 
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(gridLinesCB);
-    QObject::connect(gridLinesCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::enableGridLines);
+    connect(gridLinesCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::enableGridLines);
 
     auto btnLineType = new QPushButton(tr("Line Type"));
     btnLineType->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(btnLineType);
-    QObject::connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
+    connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
 
     auto scaleLabel = new QLabel;
     scaleLabel->setText(tr("Model Scale (m):"));
@@ -82,10 +106,8 @@ void MainWidget::initUi()
     m_scaleValue = new QLineEdit;
     m_scaleValue->setAlignment(Qt::AlignRight);
     m_vLayout->addWidget(m_scaleValue);
-    QObject::connect(m_updateUi, &UpdateUi::showModelScale,
-                     this, &MainWidget::showModelScale);
-    QObject::connect(m_scaleValue, &QLineEdit::textChanged,
-                     m_graphicWindows, &GraphicWindow::setModelScale);
+    connect(m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
+    connect(m_scaleValue, &QLineEdit::textChanged, m_graphicWindows, &GraphicWindow::setModelScale);
 
     m_scaleSlider = new QSlider;
     m_scaleSlider->setFocusPolicy(Qt::NoFocus);
@@ -94,17 +116,7 @@ void MainWidget::initUi()
     m_scaleSlider->setMaximum(UpdateUi::SCALE_SLIDER_CENTER * 2);
     m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
     m_vLayout->addWidget(m_scaleSlider);
-    QObject::connect(m_scaleSlider, &QSlider::sliderMoved,
-                     m_graphicWindows, &GraphicWindow::setModelScaleInt);
-
-    auto timePerFrameLabel = new QLabel;
-    timePerFrameLabel->setText(tr("Time/Frame (s):"));
-    m_vLayout->addWidget(timePerFrameLabel);
-
-    auto timePerFrameValue = newNumberQLabel();
-    m_vLayout->addWidget(timePerFrameValue);
-    QObject::connect(m_updateUi, &UpdateUi::showTimePerFrame,
-                     timePerFrameValue, &QLabel::setText);
+    connect(m_scaleSlider, &QSlider::sliderMoved, m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
     auto particleNumLabel = new QLabel;
     particleNumLabel->setText(tr("Number of particles:"));
@@ -112,8 +124,7 @@ void MainWidget::initUi()
 
     auto particleNumValue = newNumberQLabel();
     m_vLayout->addWidget(particleNumValue);
-    QObject::connect(m_updateUi, &UpdateUi::showNumberOfParticles,
-                     particleNumValue, &QLabel::setText);
+    connect(m_updateUi, &UpdateUi::displayNumberOfParticles, particleNumValue, &QLabel::setText);
 
     auto simTypeLabel = new QLabel;
     simTypeLabel->setText(tr("Simulation Engine:"));
@@ -168,20 +179,35 @@ void MainWidget::initUi()
     newBtn->setText(tr("New"));
     m_vLayout->addWidget(newBtn);
 
-    startButtonText(false);
+    updateStartButtonText(false);
 }
 
-void MainWidget::counterUpdate(int num)
+void MainWidget::displayFrameNumber(const int num)
 {
     m_counterLcd->display(num);
+    int time = floor(m_timePerFrame * (float)num);
+    int seconds = time % 60;
+    int remain = time / 60;
+    int minutes = remain % 60;
+    remain /= 60;
+    int hours = remain % 24;
+    remain /= 24;
+    QString t = QString(tr("Day %1 %2:%3:%4"))
+            .arg(remain)
+            .arg(hours, 2, 10, QChar('0'))
+            .arg(minutes, 2, 10, QChar('0'))
+            .arg(seconds, 2, 10, QChar('0'));
+//    QString t;
+//    t.asprintf("%d D %2d:%2d:%2d", days, hours, minutes, seconds);
+    m_simTimeValue->setText(t);
 }
 
-void MainWidget::fpsUpdate(int fps)
+void MainWidget::displayFps(const int fps)
 {
     m_fpsLCD->display(fps);
 }
 
-void MainWidget::startButtonText(const bool setStop)
+void MainWidget::updateStartButtonText(const bool setStop)
 {
     if (setStop) {
         m_startBtn->setText(tr("Stop"));
@@ -191,12 +217,12 @@ void MainWidget::startButtonText(const bool setStop)
     m_frameAdvanceBtn->setDisabled(setStop);
 }
 
-QLCDNumber* MainWidget::newCounterQLCDNumber(int numDigits)
+QLCDNumber* MainWidget::newCounterQLCDNumber(const int numDigits)
 {
-    auto myLCD = new QLCDNumber(numDigits);
-    myLCD->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    myLCD->setSegmentStyle(QLCDNumber::Flat);
-    return myLCD;
+    auto lcd = new QLCDNumber(numDigits);
+    lcd->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    lcd->setSegmentStyle(QLCDNumber::Flat);
+    return lcd;
 }
 
 QLabel* MainWidget::newNumberQLabel()
@@ -207,7 +233,7 @@ QLabel* MainWidget::newNumberQLabel()
     return lbl;
 }
 
-void MainWidget::showModelScale(const float val)
+void MainWidget::displayModelScale(const float val)
 {
     if (val <= 0.0f) {
         return;
@@ -222,4 +248,10 @@ void MainWidget::resetScaleSlider()
     bool state = m_scaleSlider->blockSignals(true);
     m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
     m_scaleSlider->blockSignals(state);
+}
+
+void MainWidget::displayTimePerFrame(const float time)
+{
+    m_timePerFrame = time;
+    m_timePerFrameValue->setText(QString::number(time));
 }

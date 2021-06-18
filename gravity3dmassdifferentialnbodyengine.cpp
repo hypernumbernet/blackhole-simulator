@@ -305,5 +305,5 @@ void Gravity3DMassDifferentialNBodyEngine::initTestSamePosition()
 void Gravity3DMassDifferentialNBodyEngine::setTimePerFrame(const float time)
 {
     m_timePerFrame = time;
-    emit m_updateUi->showTimePerFrame(QString::number(time));
+    emit m_updateUi->displayTimePerFrame(time);
 }

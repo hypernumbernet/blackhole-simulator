@@ -228,10 +228,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
         }
 
-        emit m_updateUi->showFrameNumber(m_frameNum);
+        emit m_updateUi->displayFrameNumber(m_frameNum);
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
-        emit m_updateUi->showFps(m_frameNum - m_fpsPreFrame);
+        emit m_updateUi->displayFps(m_frameNum - m_fpsPreFrame);
         m_fpsPreFrame = m_frameNum;
     }
 }
@@ -250,7 +250,7 @@ void GraphicWindow::enableGridLines(const bool enabled)
 void GraphicWindow::startSim()
 {
     m_isSimulating = !m_isSimulating;
-    emit m_updateUi->setStartButtonTest(m_isSimulating);
+    emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
 void GraphicWindow::changeLinePosition()
