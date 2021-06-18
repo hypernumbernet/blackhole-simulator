@@ -2,6 +2,7 @@
 
 #include "graphicwindow.h"
 #include "updateui.h"
+#include "initializerdialog.h"
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -40,8 +41,8 @@ private:
     QHBoxLayout* m_hLayout;
     QVBoxLayout* m_vLayout;
 
-    QLCDNumber* m_counterLcd;
-    QLCDNumber* m_fpsLCD;
+    QLCDNumber* m_frameNumberLcd;
+    QLCDNumber* m_fpsLcd;
     QPushButton* m_startBtn;
     QPushButton* m_frameAdvanceBtn;
     QLineEdit* m_scaleValue;
@@ -49,6 +50,8 @@ private:
     QLabel* m_simTimeValue;
     float m_timePerFrame;
     QLabel* m_timePerFrameValue;
+
+    InitializerDialog* m_initializerDialog;
 
     UpdateUi* const m_updateUi;
 };

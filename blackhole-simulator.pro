@@ -8,6 +8,7 @@ SOURCES += \
         camera.cpp \
         graphicwindow.cpp \
         gravity3dmassdifferentialnbodyengine.cpp \
+    initializerdialog.cpp \
         main.cpp \
         mainwidget.cpp \
         particles.cpp \
@@ -19,6 +20,7 @@ HEADERS += \
     camera.h \
     graphicwindow.h \
     gravity3dmassdifferentialnbodyengine.h \
+    initializerdialog.h \
     mainwidget.h \
     particles.h \
     updateui.h \

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
@@ -36,4 +38,6 @@ private:
     void linesAxis();
     void lines2Meshes();
     void linesXZMeshes();
+    void linesCubeMeshes();
+    void drawCircle(int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color);
 };

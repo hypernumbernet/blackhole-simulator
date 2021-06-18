@@ -1,12 +1,12 @@
 #include "camera.h"
 
-static inline void V3RotByQua(QVector3D& axis, const QQuaternion& rot)
+static inline void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
 {
     // 以下は動かない。角度が倍？
     //axis = rot.rotatedVector(axis);
 
     auto conjugateRot = rot.conjugated();
-    auto quaAxis = QQuaternion(0.0f, axis);
+    QQuaternion quaAxis(0.0f, axis);
     auto result = conjugateRot * quaAxis * rot;
 //    if (!std::isfinite(result.x())) {
 //        qDebug() << "[warning] invalid number detected";
@@ -42,24 +42,24 @@ void Camera::pitch(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_right, degrees);
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_up, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_up, rot);
 }
 
 void Camera::yaw(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_up, degrees);
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_right, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
 }
 
 void Camera::roll(const float degrees)
 {
     auto rot = QQuaternion::fromAxisAndAngle(m_forward, degrees);
     multiplyRotation(rot);
-    V3RotByQua(m_up, rot);
-    V3RotByQua(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
+    rotateV3ByQuaternion(m_right, rot);
 }
 
 void Camera::walk(const float amount)
@@ -93,9 +93,9 @@ bool Camera::standXZ(const bool resetY, const float rate)
     rot.normalize();
 
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_right, rot);
-    V3RotByQua(m_up, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
 
     return true;
 }
@@ -113,9 +113,9 @@ bool Camera::lookAtZero(const float rate)
     rot.normalize();
 
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_right, rot);
-    V3RotByQua(m_up, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
 
     return true;
 }
@@ -134,9 +134,9 @@ bool Camera::lookAt(const QVector3D& point, const float rate)
     rot.normalize();
 
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_right, rot);
-    V3RotByQua(m_up, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
 
     return true;
 }
@@ -171,9 +171,9 @@ void Camera::circleStrafing(const float amount)
     rot.normalize();
 
     multiplyRotation(rot);
-    V3RotByQua(m_forward, rot);
-    V3RotByQua(m_right, rot);
-    V3RotByQua(m_up, rot);
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
 }
 
 void Camera::reset(const QVector3D& position)

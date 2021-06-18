@@ -29,18 +29,18 @@ void MainWidget::initUi()
     auto fpsLayout = new QHBoxLayout;
     auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
-    m_fpsLCD = newCounterQLCDNumber(12);
-    fpsLayout->addWidget(m_fpsLCD);
+    m_fpsLcd = newCounterQLCDNumber(12);
+    fpsLayout->addWidget(m_fpsLcd);
     m_vLayout->addLayout(fpsLayout);
     connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFps);
 
     // Frames
-    auto counterLayout = new QHBoxLayout;
-    auto counterLabel = new QLabel(tr("Frames"));
-    counterLayout->addWidget(counterLabel);
-    m_counterLcd = newCounterQLCDNumber(12);
-    counterLayout->addWidget(m_counterLcd);
-    m_vLayout->addLayout(counterLayout);
+    auto frameNumberLayout = new QHBoxLayout;
+    auto frameNumberLabel = new QLabel(tr("Frames"));
+    frameNumberLayout->addWidget(frameNumberLabel);
+    m_frameNumberLcd = newCounterQLCDNumber(12);
+    frameNumberLayout->addWidget(m_frameNumberLcd);
+    m_vLayout->addLayout(frameNumberLayout);
     connect(m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
     // Time/Frame
@@ -68,12 +68,14 @@ void MainWidget::initUi()
     connect(m_startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
     connect(m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
+    // Frame Advance
     m_frameAdvanceBtn = new QPushButton;
     m_frameAdvanceBtn->setFocusPolicy(Qt::NoFocus);
     m_frameAdvanceBtn->setText(tr("Frame Advance"));
     m_vLayout->addWidget(m_frameAdvanceBtn);
     connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
 
+    // Reset
     auto resetBtn = new QPushButton;
     resetBtn->setFocusPolicy(Qt::NoFocus);
     resetBtn->setText(tr("Reset"));
@@ -81,24 +83,27 @@ void MainWidget::initUi()
     connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
     connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
 
+    // Circle strafing
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
     m_vLayout->addWidget(circleStrafingCB);
-    connect(circleStrafingCB, &QCheckBox::stateChanged,
-                     m_graphicWindows, &GraphicWindow::circleStrafing);
+    connect(circleStrafingCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::circleStrafing);
 
+    // Grid Lines
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(gridLinesCB);
     connect(gridLinesCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::enableGridLines);
 
+    // Line Type
     auto btnLineType = new QPushButton(tr("Line Type"));
     btnLineType->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(btnLineType);
     connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
 
+    // Model Scale
     auto scaleLabel = new QLabel;
     scaleLabel->setText(tr("Model Scale (m):"));
     m_vLayout->addWidget(scaleLabel);
@@ -118,6 +123,7 @@ void MainWidget::initUi()
     m_vLayout->addWidget(m_scaleSlider);
     connect(m_scaleSlider, &QSlider::sliderMoved, m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
+    // Number of particles
     auto particleNumLabel = new QLabel;
     particleNumLabel->setText(tr("Number of particles:"));
     m_vLayout->addWidget(particleNumLabel);
@@ -126,6 +132,7 @@ void MainWidget::initUi()
     m_vLayout->addWidget(particleNumValue);
     connect(m_updateUi, &UpdateUi::displayNumberOfParticles, particleNumValue, &QLabel::setText);
 
+    // Simulation Engine
     auto simTypeLabel = new QLabel;
     simTypeLabel->setText(tr("Simulation Engine:"));
     m_vLayout->addWidget(simTypeLabel);
@@ -143,6 +150,7 @@ void MainWidget::initUi()
     simTypeCombo->insertItem(8, tr("Gravity2DIntegral"));
     m_vLayout->addWidget(simTypeCombo);
 
+    // Initial Conditions
     auto initialConditionLabel = new QLabel;
     initialConditionLabel->setText(tr("Initial Conditions:"));
     m_vLayout->addWidget(initialConditionLabel);
@@ -174,17 +182,19 @@ void MainWidget::initUi()
     auto massRangeValue = new QLineEdit("1.0e+10");
     m_vLayout->addWidget(massRangeValue);
 
+    // New
     auto newBtn = new QPushButton;
     newBtn->setFocusPolicy(Qt::NoFocus);
     newBtn->setText(tr("New"));
     m_vLayout->addWidget(newBtn);
+    connect(newBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
 
     updateStartButtonText(false);
 }
 
 void MainWidget::displayFrameNumber(const int num)
 {
-    m_counterLcd->display(num);
+    m_frameNumberLcd->display(num);
     int time = floor(m_timePerFrame * (float)num);
     int seconds = time % 60;
     int remain = time / 60;
@@ -204,7 +214,7 @@ void MainWidget::displayFrameNumber(const int num)
 
 void MainWidget::displayFps(const int fps)
 {
-    m_fpsLCD->display(fps);
+    m_fpsLcd->display(fps);
 }
 
 void MainWidget::updateStartButtonText(const bool setStop)
