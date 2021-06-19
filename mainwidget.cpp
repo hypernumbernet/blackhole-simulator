@@ -177,12 +177,12 @@ void MainWidget::initUi()
 void MainWidget::displayFrameNumber(const int num)
 {
     m_frameNumberLCD->display(num);
-    int time = floor(m_timePerFrame * (float)num);
-    int seconds = time % 60;
-    int remain = time / 60;
-    int minutes = remain % 60;
+    quint64 time = floor(m_timePerFrame * (float)num);
+    quint64 seconds = time % 60;
+    quint64 remain = time / 60;
+    quint64 minutes = remain % 60;
     remain /= 60;
-    int hours = remain % 24;
+    quint64 hours = remain % 24;
     remain /= 24;
     QString t = QString(tr("Day %1 %2:%3:%4"))
             .arg(remain)
