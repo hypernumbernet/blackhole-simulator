@@ -4,48 +4,34 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     : QDialog(parent)
     , m_updateUi(updateUi)
 {
-//    m_nBodyEngineList = {
-//        //config->NBODY_ENGINE_MAP[1],
-//        tr("Gravity3DMassDifferential"),
-//        tr("Gravity3DMassIntegral"),
-//        tr("Gravity3DDifferential"),
-//        tr("Gravity3DIntegral"),
-//        tr("Gravity2DMassDifferential"),
-//        tr("Gravity2DMassIntegral"),
-//        tr("Gravity2DDifferential"),
-//        tr("Gravity2DIntegral"),
-//    };
-
     auto vLayout = new QVBoxLayout;
     vLayout->setAlignment(Qt::AlignTop);
 
     // Simulation Engine
-    auto simTypeLabel = new QLabel;
-    simTypeLabel->setText(tr("Simulation Engine:"));
-    vLayout->addWidget(simTypeLabel);
+    auto engineLabel = new QLabel;
+    engineLabel->setText(tr("Simulation Engine"));
+    vLayout->addWidget(engineLabel);
 
     m_engineCombo = new QComboBox;
     m_engineCombo->setFocusPolicy(Qt::NoFocus);
     m_engineCombo->setInsertPolicy(QComboBox::NoInsert);
-    //m_engineCombo->addItems(m_nBodyEngineList);
     m_engineCombo->addItems(m_updateUi->NBODY_ENGINE_MAP->values());
     vLayout->addWidget(m_engineCombo);
 
-    // Initial Conditions
-    auto initialConditionLabel = new QLabel;
-    initialConditionLabel->setText(tr("Initial Conditions:"));
-    vLayout->addWidget(initialConditionLabel);
+    // Initial Conditions Preset
+    auto presetLabel = new QLabel;
+    presetLabel->setText(tr("Initial Condition Preset"));
+    vLayout->addWidget(presetLabel);
 
-    auto initialConditionCombo = new QComboBox;
-    initialConditionCombo->setFocusPolicy(Qt::NoFocus);
-    initialConditionCombo->setInsertPolicy(QComboBox::NoInsert);
-    initialConditionCombo->insertItem(1, tr("Random Cube"));
-    initialConditionCombo->insertItem(2, tr("Sun and Earth"));
-    initialConditionCombo->insertItem(3, tr("Earth and Sun"));
-    vLayout->addWidget(initialConditionCombo);
+    m_presetCombo = new QComboBox;
+    m_presetCombo->setFocusPolicy(Qt::NoFocus);
+    m_presetCombo->setInsertPolicy(QComboBox::NoInsert);
+    m_presetCombo->addItems(m_updateUi->INITIAL_CONDITION_MAP->values());
+    vLayout->addWidget(m_presetCombo);
 
+    // Mass
     auto massLabel = new QLabel;
-    massLabel->setText(tr("Mass (Avg.) (kg):"));
+    massLabel->setText(tr("Mass (Avg.) (kg)"));
     vLayout->addWidget(massLabel);
 
     auto massQuantity = new QLineEdit("5.972e+24f");
@@ -63,12 +49,14 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto massRangeValue = new QLineEdit("1.0e+10");
     vLayout->addWidget(massRangeValue);
 
+    // OK
     auto newButton = new QPushButton;
     newButton->setFocusPolicy(Qt::NoFocus);
     newButton->setText(tr("OK"));
     vLayout->addWidget(newButton);
     connect(newButton, &QPushButton::clicked, this, &InitializerDialog::newButtonClicked);
 
+    // Cancel
     auto cancelButton = new QPushButton;
     cancelButton->setFocusPolicy(Qt::NoFocus);
     cancelButton->setText(tr("Cancel"));
@@ -80,17 +68,17 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 
 void InitializerDialog::newButtonClicked()
 {
-    //m_engineName = m_engineCombo->currentText();
     m_engineIndex = m_engineCombo->currentIndex();
+    m_presetIndex = m_presetCombo->currentIndex();
     accept();
 }
-
-//QString InitializerDialog::engineName()
-//{
-//    return m_engineName;
-//}
 
 int InitializerDialog::engineIndex()
 {
     return m_engineIndex;
+}
+
+int InitializerDialog::presetIndex()
+{
+    return m_presetIndex;
 }

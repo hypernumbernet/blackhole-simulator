@@ -14,16 +14,6 @@ class G3DMassIntegralNBE : public AbstractNBodyEngine
     };
 
 public:
-    enum class Preset {
-        Random,
-        SunEarth,
-        EarthSun,
-        EarthMoon,
-        SunEarthVenus,
-        TestSamePosition,
-    };
-
-public:
     G3DMassIntegralNBE(
             UpdateUi* const,
             quint64 numberOfParticles,
@@ -34,7 +24,6 @@ public:
     void calculateTimeProgress() const override;
     void calculateInteraction() const override;
     void debug() const override;
-    //QString name() const override;
 
     void setTimePerFrame(float);
     bool calculateDistance(Distance&, quint64, quint64) const;

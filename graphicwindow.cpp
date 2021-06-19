@@ -50,7 +50,9 @@ void GraphicWindow::initializeGL()
     if (!m_particleModels->initialize(this->height())) {
         return; // TODO error message
     }
-    m_particleModels->selectNBodyEngine(-1);
+
+    UpdateUi::SimCondition sim;
+    m_particleModels->selectNBodyEngine(sim);
 
     paintGL();
 
@@ -97,7 +99,7 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
     m_keyPressing.append(static_cast<Qt::Key>(ev->key()));
 }
 
-void GraphicWindow::keyReleaseEvent(QKeyEvent *ev)
+void GraphicWindow::keyReleaseEvent(QKeyEvent* ev)
 {
     if (ev->isAutoRepeat())
         return;
@@ -279,12 +281,12 @@ void GraphicWindow::circleStrafing(const bool on)
     m_camera.lookAtZero(1.0f);
 }
 
-void GraphicWindow::reset(const int engineIndex)
+void GraphicWindow::reset(const UpdateUi::SimCondition& sim)
 {
     m_isSimulating = false;
     m_frameNum = 0;
     m_fpsPreFrame = 0;
-    m_particleModels->reset(engineIndex);
+    m_particleModels->reset(sim);
 }
 
 void GraphicWindow::setModelScale(const QString& text)

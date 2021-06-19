@@ -311,8 +311,3 @@ void G3DMassIntegralNBE::setTimePerFrame(const float time)
     m_timePerFrame = time;
     emit m_updateUi->displayTimePerFrame(time);
 }
-
-//QString G3DMassIntegralNBE::name() const
-//{
-//    return QString("Gravity3DMassIntegral");
-//}

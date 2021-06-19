@@ -47,7 +47,7 @@ void MainWidget::initUi()
     auto timePerFrameLayout = new QHBoxLayout;
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
     timePerFrameLayout->addWidget(timePerFrameLabel);
-    m_timePerFrameValue = newNumberQLabel();
+    m_timePerFrameValue = newValueQLabel();
     timePerFrameLayout->addWidget(m_timePerFrameValue);
     m_vLayout->addLayout(timePerFrameLayout);
     connect(m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
@@ -56,7 +56,7 @@ void MainWidget::initUi()
     auto simTimeLayout = new QHBoxLayout;
     auto simTimeLabel = new QLabel(tr("Time"));
     simTimeLayout->addWidget(simTimeLabel);
-    m_simTimeValue = newNumberQLabel();
+    m_simTimeValue = newValueQLabel();
     simTimeLayout->addWidget(m_simTimeValue);
     m_vLayout->addLayout(simTimeLayout);
 
@@ -79,8 +79,7 @@ void MainWidget::initUi()
     resetBtn->setFocusPolicy(Qt::NoFocus);
     resetBtn->setText(tr("Reset"));
     m_vLayout->addWidget(resetBtn);
-    connect(resetBtn, &QPushButton::clicked, this, &MainWidget::reset);
-    //connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
+    connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetInitial);
 
     // Circle strafing
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
@@ -124,37 +123,33 @@ void MainWidget::initUi()
 
     // Number of particles
     auto particleNumLabel = new QLabel;
-    particleNumLabel->setText(tr("Number of particles:"));
+    particleNumLabel->setText(tr("Number of particles"));
     m_vLayout->addWidget(particleNumLabel);
 
-    auto particleNumValue = newNumberQLabel();
+    auto particleNumValue = newValueQLabel();
     m_vLayout->addWidget(particleNumValue);
     connect(m_updateUi, &UpdateUi::displayNumberOfParticles, particleNumValue, &QLabel::setText);
 
     // Simulation Engine
-    auto simEngineLabel = new QLabel;
-    simEngineLabel->setText(tr("Simulation Engine:"));
-    m_vLayout->addWidget(simEngineLabel);
+    auto engineLabel = new QLabel;
+    engineLabel->setText(tr("Simulation Engine"));
+    m_vLayout->addWidget(engineLabel);
 
-    m_simEngineValue = newNumberQLabel();
-    m_vLayout->addWidget(m_simEngineValue);
+    m_engineValue = newValueQLabel();
+    m_vLayout->addWidget(m_engineValue);
     connect(m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
-    // Initial Conditions
-    auto initialConditionLabel = new QLabel;
-    initialConditionLabel->setText(tr("Initial Conditions:"));
-    m_vLayout->addWidget(initialConditionLabel);
+    // Initial Condition Preset
+    auto presetLabel = new QLabel;
+    presetLabel->setText(tr("Initial Conditions Preset"));
+    m_vLayout->addWidget(presetLabel);
 
-    auto initialConditionCombo = new QComboBox;
-    initialConditionCombo->setFocusPolicy(Qt::NoFocus);
-    initialConditionCombo->setInsertPolicy(QComboBox::NoInsert);
-    initialConditionCombo->insertItem(1, tr("Random Cube"));
-    initialConditionCombo->insertItem(2, tr("Sun and Earth"));
-    initialConditionCombo->insertItem(3, tr("Earth and Sun"));
-    m_vLayout->addWidget(initialConditionCombo);
+    m_presetValue = newValueQLabel();
+    m_vLayout->addWidget(m_presetValue);
+    connect(m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
     auto massLabel = new QLabel;
-    massLabel->setText(tr("Mass (Avg.) (kg):"));
+    massLabel->setText(tr("Mass (Avg.) (kg)"));
     m_vLayout->addWidget(massLabel);
 
     auto massQuantity = new QLineEdit("5.972e+24f");
@@ -230,7 +225,7 @@ QLCDNumber* MainWidget::newCounterQLCDNumber(const int numDigits)
     return lcd;
 }
 
-QLabel* MainWidget::newNumberQLabel()
+QLabel* MainWidget::newValueQLabel()
 {
     auto lbl = new QLabel();
     lbl->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
@@ -274,18 +269,35 @@ void MainWidget::showInitializerDialog()
 
 void MainWidget::acceptInitializerDialog()
 {
-    //m_simEngineValue->setText(m_initializerDialog->engineName());
-    reset(m_initializerDialog->engineIndex());
+    UpdateUi::SimCondition sim;
+    sim.engine = m_initializerDialog->engineIndex();
+    sim.preset = m_initializerDialog->presetIndex();
+    reset(sim);
 }
 
-void MainWidget::displayEngineName(QString name)
+void MainWidget::displayEngineName(const QString& name)
 {
-    m_simEngineValue->setText(name);
+    m_engineValue->setText(name);
 }
 
-void MainWidget::reset(const int engineIndex = -1)
+void MainWidget::reset(const UpdateUi::SimCondition& sim)
 {
-    m_graphicWindows->reset(engineIndex);
+    m_graphicWindows->reset(sim);
     resetScaleSlider();
     updateStartButtonText(false);
+}
+
+void MainWidget::displayPresetName(const QString& name)
+{
+    m_presetValue->setText(name);
+}
+
+void MainWidget::resetInitial()
+{
+    UpdateUi::SimCondition sim;
+    if (m_initializerDialog) {
+        sim.engine = m_initializerDialog->engineIndex();
+        sim.preset = m_initializerDialog->presetIndex();
+    }
+    reset(sim);
 }

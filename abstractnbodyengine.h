@@ -10,13 +10,21 @@
 class AbstractNBodyEngine
 {
 public:
+    enum class Preset {
+        Random,
+        SunEarth,
+        EarthSun,
+        EarthMoon,
+        SunEarthVenus,
+        TestSamePosition,
+    };
+
     AbstractNBodyEngine(UpdateUi*);
     virtual ~AbstractNBodyEngine();
 
     virtual void calculateTimeProgress() const = 0;
     virtual void calculateInteraction() const = 0;
     virtual void debug() const = 0;
-    //virtual QString name() const = 0;
 
     virtual float* coordinates() const;
     virtual quint64 numberOfParticle() const;

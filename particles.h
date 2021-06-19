@@ -20,8 +20,8 @@ public:
     void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateParticles();
-    void selectNBodyEngine(int engineIndex);
-    void reset(int engineIndex);
+    void selectNBodyEngine(const UpdateUi::SimCondition&);
+    void reset(const UpdateUi::SimCondition&);
     void setModelScale(float);
     void setModelScaleRatio(float);
 
@@ -32,13 +32,13 @@ private:
     AbstractNBodyEngine* m_NBodyEngine;
 
     // It varies depending on the size of the window.
-    float pointSizeScale;
+    float m_pointSizeScale;
 
     // Display size of particles
-    float pointSize;
+    float m_pointSize;
 
-    int initHeight;
-    int numberOfParticle;
+    int m_initHeight;
+    int m_numberOfParticle;
 
     UpdateUi* const m_updateUi;
 };

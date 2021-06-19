@@ -30,17 +30,16 @@ public slots:
     void displayTimePerFrame(float);
     void showInitializerDialog();
     void acceptInitializerDialog();
-    void displayEngineName(QString);
-    void reset(int engineIndex);
-
-//protected:
-//    void closeEvent(QCloseEvent*) override;
+    void displayEngineName(const QString&);
+    void resetInitial();
+    void displayPresetName(const QString&);
 
 private:
     void initUi();
+    void reset(const UpdateUi::SimCondition&);
 
     QLCDNumber* newCounterQLCDNumber(int);
-    QLabel* newNumberQLabel();
+    QLabel* newValueQLabel();
 
     GraphicWindow* m_graphicWindows;
     QHBoxLayout* m_hLayout;
@@ -55,7 +54,8 @@ private:
     QLabel* m_simTimeValue;
     float m_timePerFrame;
     QLabel* m_timePerFrameValue;
-    QLabel* m_simEngineValue;
+    QLabel* m_engineValue;
+    QLabel* m_presetValue;
 
     InitializerDialog* m_initializerDialog = nullptr;
 

@@ -1,9 +1,9 @@
 #include "particles.h"
 
 Particles::Particles(UpdateUi* const updateUi)
-    : pointSizeScale(1.0f)
-    , pointSize(30.0f)
-    , numberOfParticle(400)
+    : m_pointSizeScale(1.0f)
+    , m_pointSize(30.0f)
+    , m_numberOfParticle(400)
     , m_updateUi(updateUi)
 {
 }
@@ -15,7 +15,7 @@ Particles::~Particles()
 
 bool Particles::initialize(const int screenHeight)
 {
-    initHeight = screenHeight;
+    m_initHeight = screenHeight;
     if (!initializeOpenGLFunctions()) {
         return false;
     }
@@ -39,26 +39,33 @@ bool Particles::initialize(const int screenHeight)
     return true;
 }
 
-void Particles::selectNBodyEngine(const int engineIndex)
+void Particles::selectNBodyEngine(const UpdateUi::SimCondition& sim)
 {
-    switch (engineIndex) {
+    auto presetValue = static_cast<AbstractNBodyEngine::Preset>(sim.preset);
+
+    switch (sim.engine) {
     default:
         m_NBodyEngine = new G3DMassDiffNBE(
                     m_updateUi,
-                    numberOfParticle,
+                    m_numberOfParticle,
                     500.0f,
-                    G3DMassDiffNBE::Preset::SunEarth);
+                    presetValue);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE(
                     m_updateUi,
-                    numberOfParticle,
+                    m_numberOfParticle,
                     500.0f,
-                    G3DMassIntegralNBE::Preset::SunEarth);
+                    presetValue);
         break;
     }
-    QString name = m_updateUi->NBODY_ENGINE_MAP->value(engineIndex < 0 ? 0 : engineIndex);
+
+    QString name = m_updateUi->NBODY_ENGINE_MAP->value(sim.engine);
     emit m_updateUi->displayEngineName(name);
+
+    QString presetDisplay = m_updateUi->INITIAL_CONDITION_MAP->value(sim.preset);
+    emit m_updateUi->displayPresetName(presetDisplay);
+
     updateParticles();
 }
 
@@ -92,7 +99,7 @@ void Particles::paint(const QMatrix4x4& viewProjection)
     modelMatrix.scale(m_NBodyEngine->modelScale());
 
     m_program.setUniformValue("mvp_matrix", viewProjection * modelMatrix);
-    m_program.setUniformValue("size", pointSize * pointSizeScale);
+    m_program.setUniformValue("size", m_pointSize * m_pointSizeScale);
     m_vao.bind();
 
     glDrawArrays(GL_POINTS, 0, m_NBodyEngine->numberOfParticle());
@@ -103,13 +110,13 @@ void Particles::paint(const QMatrix4x4& viewProjection)
 
 void Particles::resize(int height)
 {
-    pointSizeScale = (float)height / (float)initHeight;
+    m_pointSizeScale = (float)height / (float)m_initHeight;
 }
 
-void Particles::reset(const int engineIndex)
+void Particles::reset(const UpdateUi::SimCondition& sim)
 {
     delete m_NBodyEngine;
-    selectNBodyEngine(engineIndex);
+    selectNBodyEngine(sim);
 }
 
 void Particles::setModelScale(float val)

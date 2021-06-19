@@ -17,16 +17,18 @@ class InitializerDialog : public QDialog
 public:
     InitializerDialog(UpdateUi*, QWidget* parent = nullptr);
 
-    //QString engineName();
     int engineIndex();
+    int presetIndex();
 
 public slots:
     void newButtonClicked();
 
 private:
-    //QString m_engineName;
     QComboBox* m_engineCombo;
+    QComboBox* m_presetCombo;
+
     int m_engineIndex;
-    //QList<QString> m_nBodyEngineList;
+    int m_presetIndex;
+
     UpdateUi* const m_updateUi;
 };

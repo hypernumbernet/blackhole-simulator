@@ -7,16 +7,6 @@
 class G3DMassDiffNBE : public AbstractNBodyEngine
 {
 public:
-
-    enum class Preset {
-        Random,
-        SunEarth,
-        EarthSun,
-        EarthMoon,
-        SunEarthVenus,
-        TestSamePosition,
-    };
-
     G3DMassDiffNBE(
             UpdateUi* const,
             quint64 numberOfParticles,
@@ -27,7 +17,6 @@ public:
     void calculateTimeProgress() const override;
     void calculateInteraction() const override;
     void debug() const override;
-    //QString name() const override;
 
     void setTimePerFrame(float);
 
