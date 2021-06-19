@@ -48,14 +48,14 @@ void Particles::selectNBodyEngine(const UpdateUi::SimCondition& sim)
         m_NBodyEngine = new G3DMassDiffNBE(
                     m_updateUi,
                     m_numberOfParticle,
-                    500.0f,
+                    sim.timePerFrame,
                     presetValue);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE(
                     m_updateUi,
                     m_numberOfParticle,
-                    500.0f,
+                    sim.timePerFrame,
                     presetValue);
         break;
     }

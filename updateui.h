@@ -13,6 +13,7 @@ public:
     {
         int engine = 0;
         int preset = 0;
+        float timePerFrame = 1000.0f;
     };
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
