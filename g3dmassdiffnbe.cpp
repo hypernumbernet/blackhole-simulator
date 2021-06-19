@@ -1,7 +1,6 @@
-#include "G3DMassIntegralNBodyEngine.h"
+#include "g3dmassdiffnbe.h"
 
-// Gravity 3D Mass Integral N-Body Engine
-G3DMassIntegralNBE::G3DMassIntegralNBE(
+G3DMassDiffNBE::G3DMassDiffNBE(
         UpdateUi* const updateUi,
         const quint64 numberOfParticles,
         const float timePerFrame,
@@ -22,13 +21,9 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
         setNumberOfParticles(3);
         break;
     }
-
     m_mass = new float[m_numberOfParticles];
     m_coordinates = new float[m_numberOfParticles * 3];
     m_velocities = new float[m_numberOfParticles * 3];
-
-    quint64 numberOfInteractions = numberOfParticles * (numberOfParticles - 1) / 2;
-    m_inversedDistances = new float[numberOfInteractions];
 
     switch (presetNumber) {
     case Preset::Random:
@@ -52,56 +47,14 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
     }
 
     setTimePerFrame(timePerFrame);
-    calculateDistances();
 }
 
-G3DMassIntegralNBE::~G3DMassIntegralNBE()
+G3DMassDiffNBE::~G3DMassDiffNBE()
 {
     delete[] m_mass;
-    delete[] m_inversedDistances;
 }
 
-bool G3DMassIntegralNBE::calculateDistance(Distance& result, const quint64 a, const quint64 b) const
-{
-    quint64 ai = a * 3;
-    quint64 bi = b * 3;
-    float dx = m_coordinates[ai] - m_coordinates[bi]; ++ai; ++bi;
-    float dy = m_coordinates[ai] - m_coordinates[bi]; ++ai; ++bi;
-    float dz = m_coordinates[ai] - m_coordinates[bi];
-    float r = sqrt(dx * dx + dy * dy + dz * dz);
-    if (r == 0.0f)
-    {
-        return false;
-    }
-    r = 1.0f / r;
-    result.invR = r;
-    result.unitX = dx * r;
-    result.unitY = dy * r;
-    result.unitZ = dz * r;
-    return true;
-}
-
-void G3DMassIntegralNBE::calculateDistances()
-{
-    quint64 k = 0;
-    Distance d;
-
-    for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
-    {
-        for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
-        {
-            if (!calculateDistance(d, i, j))
-            {
-                continue;
-            }
-            m_inversedDistances[k] = d.invR;
-
-            ++k;
-        }
-    }
-}
-
-void G3DMassIntegralNBE::calculateTimeProgress() const
+void G3DMassDiffNBE::calculateTimeProgress() const
 {
     //debug();
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
@@ -113,53 +66,44 @@ void G3DMassIntegralNBE::calculateTimeProgress() const
     }
 }
 
-void G3DMassIntegralNBE::calculateInteraction() const
+void G3DMassDiffNBE::calculateInteraction() const
 {
-    float inv, force;
-    Distance d;
+    float d1, d2, d3, distance, inv, force;
     quint64 k = 0, a, b;
-
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
         {
-            // 積分計算
-            // 前回計算した距離データを使用するのでメモリコストが高い。
-            // しかし、距離変動が大きい場合はこちらで計算した方が正確か？
-            // float解像度で天体スケールは厳しい？
-            if (!calculateDistance(d, i, j))
-                continue;
-
-            inv = m_inversedDistances[k];
-            m_inversedDistances[k] = d.invR;
-            inv -= d.invR;
-
-            if (inv == 0.0f)
-            {
-                continue;
-            }
-
-            force = inv * GRAVITATIONAL_CONSTANT; // 時間要素は入らない
-
-            d.unitX *= force;
-            d.unitY *= force;
-            d.unitZ *= force;
-
+            // 微分計算
             a = i * 3;
             b = j * 3;
-            m_velocities[a] -= d.unitX * m_mass[j];
-            m_velocities[a + 1] -= d.unitY * m_mass[j];
-            m_velocities[a + 2] -= d.unitZ * m_mass[j];
-            m_velocities[b] += d.unitX * m_mass[i];
-            m_velocities[b + 1] += d.unitY * m_mass[i];
-            m_velocities[b + 2] += d.unitZ * m_mass[i];
+            d1 = m_coordinates[a] - m_coordinates[b];
+            d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
+            d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
+            distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+            if (distance == 0.0f) {
+                continue;
+            }
+            inv = 1.0f / distance;
+            force = inv * inv * m_timePerFrame * GRAVITATIONAL_CONSTANT;
+
+            d1 *= inv * force;
+            d2 *= inv * force;
+            d3 *= inv * force;
+
+            m_velocities[a] -= d1 * m_mass[j];
+            m_velocities[a + 1] -= d2 * m_mass[j];
+            m_velocities[a + 2] -= d3 * m_mass[j];
+            m_velocities[b] += d1 * m_mass[i];
+            m_velocities[b + 1] += d2 * m_mass[i];
+            m_velocities[b + 2] += d3 * m_mass[i];
 
             ++k;
         }
     }
 }
 
-void G3DMassIntegralNBE::debug() const
+void G3DMassDiffNBE::debug() const
 {
     for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
@@ -171,7 +115,7 @@ void G3DMassIntegralNBE::debug() const
     }
 }
 
-void G3DMassIntegralNBE::initParticlesRandam()
+void G3DMassDiffNBE::initParticlesRandam()
 {
     changeModelScale(1.0e-3f);
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
@@ -197,7 +141,7 @@ void G3DMassIntegralNBE::initParticlesRandam()
 
 }
 
-void G3DMassIntegralNBE::initSunEarth()
+void G3DMassDiffNBE::initSunEarth()
 {
     changeModelScale(1.0e-11f);
     m_mass[0] = 1.9891e+30f;
@@ -213,7 +157,7 @@ void G3DMassIntegralNBE::initSunEarth()
     m_velocities[5] = 0.0f;
 }
 
-void G3DMassIntegralNBE::initEarthSun()
+void G3DMassDiffNBE::initEarthSun()
 {
     changeModelScale(1.0e-11f);
 
@@ -234,7 +178,7 @@ void G3DMassIntegralNBE::initEarthSun()
     m_velocities[5] = 0.0f;
 }
 
-void G3DMassIntegralNBE::initEarthMoon()
+void G3DMassDiffNBE::initEarthMoon()
 {
     changeModelScale(0.25e-8f);
 
@@ -255,7 +199,7 @@ void G3DMassIntegralNBE::initEarthMoon()
     m_velocities[5] = 0.0f;
 }
 
-void G3DMassIntegralNBE::initSunEarthVenus()
+void G3DMassDiffNBE::initSunEarthVenus()
 {
     changeModelScale(1.0e-11f);
 
@@ -284,7 +228,7 @@ void G3DMassIntegralNBE::initSunEarthVenus()
     m_velocities[8] = 35021.4f;
 }
 
-void G3DMassIntegralNBE::initTestSamePosition()
+void G3DMassDiffNBE::initTestSamePosition()
 {
     changeModelScale(1.0f);
 
@@ -305,13 +249,13 @@ void G3DMassIntegralNBE::initTestSamePosition()
     m_velocities[5] = 0.0f;
 }
 
-void G3DMassIntegralNBE::setTimePerFrame(const float time)
+void G3DMassDiffNBE::setTimePerFrame(const float time)
 {
     m_timePerFrame = time;
     emit m_updateUi->displayTimePerFrame(time);
 }
 
-QString G3DMassIntegralNBE::name() const
+QString G3DMassDiffNBE::name() const
 {
-    return QString("Gravity3DMassIntegral");
+    return QString("Gravity3DMassDifferential");
 }

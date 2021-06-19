@@ -4,11 +4,11 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
-    G3DMassIntegralNBodyEngine.cpp \
         abstractnbodyengine.cpp \
         camera.cpp \
+    g3dmassdiffnbe.cpp \
+    g3dmassintegralnbe.cpp \
         graphicwindow.cpp \
-        gravity3dmassdifferentialnbodyengine.cpp \
     initializerdialog.cpp \
         main.cpp \
         mainwidget.cpp \
@@ -17,11 +17,11 @@ SOURCES += \
         worldmodels.cpp
 
 HEADERS += \
-    G3DMassIntegralNBodyEngine.h \
     abstractnbodyengine.h \
     camera.h \
+    g3dmassdiffnbe.h \
+    g3dmassintegralnbe.h \
     graphicwindow.h \
-    gravity3dmassdifferentialnbodyengine.h \
     initializerdialog.h \
     mainwidget.h \
     particles.h \
