@@ -1,6 +1,5 @@
 #include "g3dmassintegralnbe.h"
 
-// Gravity 3D Mass Integral N-Body Engine
 G3DMassIntegralNBE::G3DMassIntegralNBE(
         UpdateUi* const updateUi,
         const quint64 numberOfParticles,
@@ -115,6 +114,11 @@ void G3DMassIntegralNBE::calculateTimeProgress() const
 
 void G3DMassIntegralNBE::calculateInteraction() const
 {
+    // Perform integral calculation of universal gravitation.
+    // The memory cost is high because the distance data calculated last time is saved and used.
+    // However, if the distance variation is large, it may be more accurate to calculate by this method.
+    // The celestial scale vibrates violently at float resolution.
+
     float inv, force;
     Distance d;
     quint64 k = 0, a, b;
@@ -123,10 +127,6 @@ void G3DMassIntegralNBE::calculateInteraction() const
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
         {
-            // 積分計算
-            // 前回計算した距離データを使用するのでメモリコストが高い。
-            // しかし、距離変動が大きい場合はこちらで計算した方が正確か？
-            // float解像度で天体スケールは厳しい？
             if (!calculateDistance(d, i, j))
                 continue;
 
@@ -139,7 +139,8 @@ void G3DMassIntegralNBE::calculateInteraction() const
                 continue;
             }
 
-            force = inv * GRAVITATIONAL_CONSTANT; // 時間要素は入らない
+            // Time is not taken into account.
+            force = inv * GRAVITATIONAL_CONSTANT;
 
             d.unitX *= force;
             d.unitY *= force;

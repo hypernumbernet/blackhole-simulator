@@ -72,7 +72,6 @@ InitializerDialog::InitializerDialog(QWidget*)
 
 void InitializerDialog::newButtonClicked()
 {
-    //m_engineName = m_engineCombo->itemText(m_engineCombo->currentIndex());
     m_engineName = m_engineCombo->currentText();
     accept();
 }

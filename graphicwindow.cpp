@@ -13,7 +13,7 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     , m_isCircleStrafing(false)
     , m_circleStrafingSpeed(1.0f)
 {
-    // Camera使用時にはロックする。ロックしないと同時操作で振動する。
+    // Lock when using the camera. If not locked, it will vibrate at the same time.
     QMutexLocker locker(&m_guiMutex);
 
     m_camera.lookAtZero(1.0f);

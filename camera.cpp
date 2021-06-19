@@ -2,7 +2,7 @@
 
 static inline void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
 {
-    // 以下は動かない。角度が倍？
+    // The following calculation does not work.
     //axis = rot.rotatedVector(axis);
 
     auto conjugateRot = rot.conjugated();

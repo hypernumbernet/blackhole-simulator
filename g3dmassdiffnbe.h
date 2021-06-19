@@ -39,11 +39,9 @@ private:
     void initSunEarthVenus();
     void initTestSamePosition();
 
-    //void calculateDistances();
-
-    // 1フレームあたりの物理計算上の時間 (second)
+    // Physically calculated time per frame (second)
     float m_timePerFrame;
 
-    // 質量 (kg)
+    // Stores the mass of each particle (kg)
     float* m_mass;
 };

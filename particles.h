@@ -31,10 +31,10 @@ private:
 
     AbstractNBodyEngine* m_NBodyEngine;
 
-    // Windowの大きさで変動する
+    // It varies depending on the size of the window.
     float pointSizeScale;
 
-    // 粒子の表示上の大きさ
+    // Display size of particles
     float pointSize;
 
     int initHeight;
