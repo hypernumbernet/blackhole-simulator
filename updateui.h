@@ -8,7 +8,7 @@ class UpdateUi : public QObject
     Q_OBJECT
 public:
     static constexpr int SCALE_SLIDER_CENTER = 5000;
-    const QMap<int, QString>* NBODY_ENGINE_MAP;
+    const QMap<int, QString>* const NBODY_ENGINE_MAP;
 
     explicit UpdateUi()
         : NBODY_ENGINE_MAP(new QMap<int, QString>{

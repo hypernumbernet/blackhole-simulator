@@ -1,10 +1,8 @@
 #include "initializerdialog.h"
-#include "updateui.h"
 
-Q_GLOBAL_STATIC(UpdateUi, config)
-
-InitializerDialog::InitializerDialog(QWidget* parent)
+InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     : QDialog(parent)
+    , m_updateUi(updateUi)
 {
 //    m_nBodyEngineList = {
 //        //config->NBODY_ENGINE_MAP[1],
@@ -30,7 +28,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     m_engineCombo->setFocusPolicy(Qt::NoFocus);
     m_engineCombo->setInsertPolicy(QComboBox::NoInsert);
     //m_engineCombo->addItems(m_nBodyEngineList);
-    m_engineCombo->addItems(config->NBODY_ENGINE_MAP->values());
+    m_engineCombo->addItems(m_updateUi->NBODY_ENGINE_MAP->values());
     vLayout->addWidget(m_engineCombo);
 
     // Initial Conditions

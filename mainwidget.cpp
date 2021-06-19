@@ -264,7 +264,7 @@ void MainWidget::displayTimePerFrame(const float time)
 void MainWidget::showInitializerDialog()
 {
     if (!m_initializerDialog) {
-        m_initializerDialog = new InitializerDialog(this);
+        m_initializerDialog = new InitializerDialog(m_updateUi, this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
     }
     m_initializerDialog->show();

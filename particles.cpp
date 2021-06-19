@@ -57,7 +57,8 @@ void Particles::selectNBodyEngine(const int engineIndex)
                     G3DMassIntegralNBE::Preset::SunEarth);
         break;
     }
-    emit m_updateUi->displayEngineName(m_NBodyEngine->name());
+    QString name = m_updateUi->NBODY_ENGINE_MAP->value(engineIndex < 0 ? 0 : engineIndex);
+    emit m_updateUi->displayEngineName(name);
     updateParticles();
 }
 

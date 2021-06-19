@@ -1,5 +1,7 @@
 #pragma once
 
+#include "updateui.h"
+
 #include <QDialog>
 #include <QLabel>
 #include <QComboBox>
@@ -13,7 +15,7 @@ class InitializerDialog : public QDialog
     Q_OBJECT
 
 public:
-    InitializerDialog(QWidget* parent = nullptr);
+    InitializerDialog(UpdateUi*, QWidget* parent = nullptr);
 
     //QString engineName();
     int engineIndex();
@@ -26,4 +28,5 @@ private:
     QComboBox* m_engineCombo;
     int m_engineIndex;
     //QList<QString> m_nBodyEngineList;
+    UpdateUi* const m_updateUi;
 };

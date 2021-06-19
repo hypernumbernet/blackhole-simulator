@@ -254,7 +254,7 @@ void G3DMassDiffNBE::setTimePerFrame(const float time)
     emit m_updateUi->displayTimePerFrame(time);
 }
 
-QString G3DMassDiffNBE::name() const
-{
-    return QString("Gravity3DMassDifferential");
-}
+//QString G3DMassDiffNBE::name() const
+//{
+//    return QString("Gravity3DMassDifferential");
+//}
