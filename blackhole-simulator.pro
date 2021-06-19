@@ -4,6 +4,7 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
+    G3DMassIntegralNBodyEngine.cpp \
         abstractnbodyengine.cpp \
         camera.cpp \
         graphicwindow.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
         worldmodels.cpp
 
 HEADERS += \
+    G3DMassIntegralNBodyEngine.h \
     abstractnbodyengine.h \
     camera.h \
     graphicwindow.h \

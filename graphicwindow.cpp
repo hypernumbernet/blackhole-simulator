@@ -56,7 +56,7 @@ void GraphicWindow::initializeGL()
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
-    m_simulateTimer.start(1, this);
+    m_simulateTimer.start(0, this);
 }
 
 void GraphicWindow::resizeGL(int w, int h)
@@ -145,9 +145,11 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
 
 void GraphicWindow::mouseReleaseEvent(QMouseEvent*)
 {
-    setCursor(Qt::ArrowCursor);
-    QCursor::setPos(mapToGlobal(m_mousePressPosition));
-    m_mousePressing = false;
+    if (m_mousePressing) {
+        setCursor(Qt::ArrowCursor);
+        QCursor::setPos(mapToGlobal(m_mousePressPosition));
+        m_mousePressing = false;
+    }
 }
 
 void GraphicWindow::wheelEvent(QWheelEvent* ev)

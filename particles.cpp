@@ -41,12 +41,12 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine()
 {
-    m_NBodyEngine = new Gravity3DMassDifferentialNBodyEngine(
+    m_NBodyEngine = new G3DMassDiffNBE(
                 m_updateUi,
                 numberOfParticle,
-                1000.0f,
-                Gravity3DMassDifferentialNBodyEngine::Preset::SunEarthVenus);
-
+                500.0f,
+                G3DMassDiffNBE::Preset::Random);
+    emit m_updateUi->displayEngineName(m_NBodyEngine->name());
     updateParticles();
 }
 
@@ -64,16 +64,9 @@ void Particles::updateParticles()
     m_program.enableAttributeArray(0);
     m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
-//    QOpenGLBuffer colorBuf;
-//    colorBuf.create();
-//    colorBuf.bind();
-//    colorBuf.allocate(particleColor, sizeof(particleColor));
-//    m_program.enableAttributeArray(1);
-//    m_program.setAttributeBuffer(1, GL_FLOAT, 0, 3);
-
     m_vao.release();
 
-    m_NBodyEngine->timeProgress();
+    m_NBodyEngine->calculateTimeProgress();
     m_NBodyEngine->calculateInteraction();
 }
 

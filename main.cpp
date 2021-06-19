@@ -10,10 +10,11 @@ int main(int argc, char **argv)
     app.setApplicationVersion("2.0 beta");
 
     QSurfaceFormat format;
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(0);
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setVersion(4, 5);
     format.setProfile(QSurfaceFormat::CoreProfile);
-    format.setDepthBufferSize(24);
     QSurfaceFormat::setDefaultFormat(format);
 
     MainWidget widget;

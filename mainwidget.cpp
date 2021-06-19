@@ -2,7 +2,7 @@
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
-    , m_updateUi(new UpdateUi(this))
+    , m_updateUi(new UpdateUi)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
@@ -29,17 +29,17 @@ void MainWidget::initUi()
     auto fpsLayout = new QHBoxLayout;
     auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
-    m_fpsLcd = newCounterQLCDNumber(12);
-    fpsLayout->addWidget(m_fpsLcd);
+    m_fpsLCD = newCounterQLCDNumber(12);
+    fpsLayout->addWidget(m_fpsLCD);
     m_vLayout->addLayout(fpsLayout);
-    connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFps);
+    connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
 
     // Frames
     auto frameNumberLayout = new QHBoxLayout;
     auto frameNumberLabel = new QLabel(tr("Frames"));
     frameNumberLayout->addWidget(frameNumberLabel);
-    m_frameNumberLcd = newCounterQLCDNumber(12);
-    frameNumberLayout->addWidget(m_frameNumberLcd);
+    m_frameNumberLCD = newCounterQLCDNumber(12);
+    frameNumberLayout->addWidget(m_frameNumberLCD);
     m_vLayout->addLayout(frameNumberLayout);
     connect(m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
@@ -59,29 +59,28 @@ void MainWidget::initUi()
     m_simTimeValue = newNumberQLabel();
     simTimeLayout->addWidget(m_simTimeValue);
     m_vLayout->addLayout(simTimeLayout);
-    //connect(m_updateUi, &UpdateUi::displaySimulationTime, this, &MainWidget::displaySimulationTime);
 
     // Start Button
-    m_startBtn = new QPushButton;
-    m_startBtn->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(m_startBtn);
-    connect(m_startBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    m_startButton = new QPushButton;
+    m_startButton->setFocusPolicy(Qt::NoFocus);
+    m_vLayout->addWidget(m_startButton);
+    connect(m_startButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
     connect(m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
-    m_frameAdvanceBtn = new QPushButton;
-    m_frameAdvanceBtn->setFocusPolicy(Qt::NoFocus);
-    m_frameAdvanceBtn->setText(tr("Frame Advance"));
-    m_vLayout->addWidget(m_frameAdvanceBtn);
-    connect(m_frameAdvanceBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
+    m_frameAdvanceButton = new QPushButton;
+    m_frameAdvanceButton->setFocusPolicy(Qt::NoFocus);
+    m_frameAdvanceButton->setText(tr("Frame Advance"));
+    m_vLayout->addWidget(m_frameAdvanceButton);
+    connect(m_frameAdvanceButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
 
     // Reset
     auto resetBtn = new QPushButton;
     resetBtn->setFocusPolicy(Qt::NoFocus);
     resetBtn->setText(tr("Reset"));
     m_vLayout->addWidget(resetBtn);
-    connect(resetBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::reset);
-    connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
+    connect(resetBtn, &QPushButton::clicked, this, &MainWidget::reset);
+    //connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetScaleSlider);
 
     // Circle strafing
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
@@ -133,22 +132,13 @@ void MainWidget::initUi()
     connect(m_updateUi, &UpdateUi::displayNumberOfParticles, particleNumValue, &QLabel::setText);
 
     // Simulation Engine
-    auto simTypeLabel = new QLabel;
-    simTypeLabel->setText(tr("Simulation Engine:"));
-    m_vLayout->addWidget(simTypeLabel);
+    auto simEngineLabel = new QLabel;
+    simEngineLabel->setText(tr("Simulation Engine:"));
+    m_vLayout->addWidget(simEngineLabel);
 
-    auto simTypeCombo = new QComboBox;
-    simTypeCombo->setFocusPolicy(Qt::NoFocus);
-    simTypeCombo->setInsertPolicy(QComboBox::NoInsert);
-    simTypeCombo->insertItem(1, tr("Gravity3DMassDifferential"));
-    simTypeCombo->insertItem(2, tr("Gravity3DMassIntegral"));
-    simTypeCombo->insertItem(3, tr("Gravity3DDifferential"));
-    simTypeCombo->insertItem(4, tr("Gravity3DIntegral"));
-    simTypeCombo->insertItem(5, tr("Gravity2DMassDifferential"));
-    simTypeCombo->insertItem(6, tr("Gravity2DMassIntegral"));
-    simTypeCombo->insertItem(7, tr("Gravity2DDifferential"));
-    simTypeCombo->insertItem(8, tr("Gravity2DIntegral"));
-    m_vLayout->addWidget(simTypeCombo);
+    m_simEngineValue = newNumberQLabel();
+    m_vLayout->addWidget(m_simEngineValue);
+    connect(m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Initial Conditions
     auto initialConditionLabel = new QLabel;
@@ -176,25 +166,32 @@ void MainWidget::initUi()
     m_vLayout->addWidget(massRandomCheck);
 
     auto massRangeLabel = new QLabel;
-    massRangeLabel->setText(tr("Mass Range (±kg)"));
+    massRangeLabel->setText(tr("Mass Range (kg)"));
     m_vLayout->addWidget(massRangeLabel);
 
     auto massRangeValue = new QLineEdit("1.0e+10");
     m_vLayout->addWidget(massRangeValue);
 
     // New
-    auto newBtn = new QPushButton;
-    newBtn->setFocusPolicy(Qt::NoFocus);
-    newBtn->setText(tr("New"));
-    m_vLayout->addWidget(newBtn);
-    connect(newBtn, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    auto newButton = new QPushButton;
+    newButton->setFocusPolicy(Qt::NoFocus);
+    newButton->setText(tr("New..."));
+    m_vLayout->addWidget(newButton);
+    connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
+
+    // Graph
+    auto graphButton = new QPushButton;
+    graphButton->setFocusPolicy(Qt::NoFocus);
+    graphButton->setText(tr("Graph..."));
+    m_vLayout->addWidget(graphButton);
+    //connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
 
     updateStartButtonText(false);
 }
 
 void MainWidget::displayFrameNumber(const int num)
 {
-    m_frameNumberLcd->display(num);
+    m_frameNumberLCD->display(num);
     int time = floor(m_timePerFrame * (float)num);
     int seconds = time % 60;
     int remain = time / 60;
@@ -207,24 +204,22 @@ void MainWidget::displayFrameNumber(const int num)
             .arg(hours, 2, 10, QChar('0'))
             .arg(minutes, 2, 10, QChar('0'))
             .arg(seconds, 2, 10, QChar('0'));
-//    QString t;
-//    t.asprintf("%d D %2d:%2d:%2d", days, hours, minutes, seconds);
     m_simTimeValue->setText(t);
 }
 
-void MainWidget::displayFps(const int fps)
+void MainWidget::displayFPS(const int fps)
 {
-    m_fpsLcd->display(fps);
+    m_fpsLCD->display(fps);
 }
 
 void MainWidget::updateStartButtonText(const bool setStop)
 {
     if (setStop) {
-        m_startBtn->setText(tr("Stop"));
+        m_startButton->setText(tr("Stop"));
     } else {
-        m_startBtn->setText(tr("Start"));
+        m_startButton->setText(tr("Start"));
     }
-    m_frameAdvanceBtn->setDisabled(setStop);
+    m_frameAdvanceButton->setDisabled(setStop);
 }
 
 QLCDNumber* MainWidget::newCounterQLCDNumber(const int numDigits)
@@ -264,4 +259,41 @@ void MainWidget::displayTimePerFrame(const float time)
 {
     m_timePerFrame = time;
     m_timePerFrameValue->setText(QString::number(time));
+}
+
+void MainWidget::showInitializerDialog()
+{
+    if (!m_initializerDialog) {
+        m_initializerDialog = new InitializerDialog(this);
+        connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
+    }
+    m_initializerDialog->show();
+    m_initializerDialog->raise();
+    m_initializerDialog->activateWindow();
+}
+
+void MainWidget::acceptInitializerDialog()
+{
+    reset();
+    m_simEngineValue->setText(m_initializerDialog->engineName());
+
+}
+
+void MainWidget::closeEvent(QCloseEvent *)
+{
+    if (m_initializerDialog)
+        m_initializerDialog->close();
+
+}
+
+void MainWidget::displayEngineName(QString name)
+{
+    m_simEngineValue->setText(name);
+}
+
+void MainWidget::reset()
+{
+    m_graphicWindows->reset();
+    resetScaleSlider();
+    updateStartButtonText(false);
 }

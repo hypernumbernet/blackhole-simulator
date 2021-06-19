@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gravity3dmassdifferentialnbodyengine.h"
-#include "updateui.h"
+#include "G3DMassIntegralNBodyEngine.h"
 
 #include <math.h>
 

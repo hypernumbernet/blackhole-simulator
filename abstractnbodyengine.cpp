@@ -35,3 +35,18 @@ void AbstractNBodyEngine::changeModelScale(const float scale)
     m_scaleCenterValue = scale;
     emit m_updateUi->displayModelScale(scale);
 }
+
+quint64 AbstractNBodyEngine::numberOfParticle() const
+{
+    return m_numberOfParticles;
+}
+
+float AbstractNBodyEngine::modelScale() const
+{
+    return m_modelScale;
+}
+
+float* AbstractNBodyEngine::coordinates() const
+{
+    return m_coordinates;
+}

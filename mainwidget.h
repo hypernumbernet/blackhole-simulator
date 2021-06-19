@@ -23,17 +23,22 @@ public:
 
 public slots:
     void displayFrameNumber(int);
-    void displayFps(int);
+    void displayFPS(int);
     void updateStartButtonText(bool);
     void displayModelScale(float);
     void resetScaleSlider();
     void displayTimePerFrame(float);
-    //void displaySimulationTime(float);
+    void showInitializerDialog();
+    void acceptInitializerDialog();
+    void displayEngineName(QString);
+    void reset();
 
 protected:
-    void initUi();
+    void closeEvent(QCloseEvent*) override;
 
 private:
+    void initUi();
+
     QLCDNumber* newCounterQLCDNumber(int);
     QLabel* newNumberQLabel();
 
@@ -41,17 +46,18 @@ private:
     QHBoxLayout* m_hLayout;
     QVBoxLayout* m_vLayout;
 
-    QLCDNumber* m_frameNumberLcd;
-    QLCDNumber* m_fpsLcd;
-    QPushButton* m_startBtn;
-    QPushButton* m_frameAdvanceBtn;
+    QLCDNumber* m_frameNumberLCD;
+    QLCDNumber* m_fpsLCD;
+    QPushButton* m_startButton;
+    QPushButton* m_frameAdvanceButton;
     QLineEdit* m_scaleValue;
     QSlider* m_scaleSlider;
     QLabel* m_simTimeValue;
     float m_timePerFrame;
     QLabel* m_timePerFrameValue;
+    QLabel* m_simEngineValue;
 
-    InitializerDialog* m_initializerDialog;
+    InitializerDialog* m_initializerDialog = nullptr;
 
     UpdateUi* const m_updateUi;
 };
