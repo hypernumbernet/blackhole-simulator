@@ -50,7 +50,7 @@ void GraphicWindow::initializeGL()
     if (!m_particleModels->initialize(this->height())) {
         return; // TODO error message
     }
-    m_particleModels->selectNBodyEngine();
+    m_particleModels->selectNBodyEngine(-1);
 
     paintGL();
 
@@ -279,12 +279,12 @@ void GraphicWindow::circleStrafing(const bool on)
     m_camera.lookAtZero(1.0f);
 }
 
-void GraphicWindow::reset()
+void GraphicWindow::reset(const int engineIndex)
 {
     m_isSimulating = false;
     m_frameNum = 0;
     m_fpsPreFrame = 0;
-    m_particleModels->reset();
+    m_particleModels->reset(engineIndex);
 }
 
 void GraphicWindow::setModelScale(const QString& text)

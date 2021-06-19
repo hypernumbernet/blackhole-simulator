@@ -1,7 +1,23 @@
 #include "initializerdialog.h"
+#include "updateui.h"
 
-InitializerDialog::InitializerDialog(QWidget*)
+Q_GLOBAL_STATIC(UpdateUi, config)
+
+InitializerDialog::InitializerDialog(QWidget* parent)
+    : QDialog(parent)
 {
+//    m_nBodyEngineList = {
+//        //config->NBODY_ENGINE_MAP[1],
+//        tr("Gravity3DMassDifferential"),
+//        tr("Gravity3DMassIntegral"),
+//        tr("Gravity3DDifferential"),
+//        tr("Gravity3DIntegral"),
+//        tr("Gravity2DMassDifferential"),
+//        tr("Gravity2DMassIntegral"),
+//        tr("Gravity2DDifferential"),
+//        tr("Gravity2DIntegral"),
+//    };
+
     auto vLayout = new QVBoxLayout;
     vLayout->setAlignment(Qt::AlignTop);
 
@@ -13,14 +29,8 @@ InitializerDialog::InitializerDialog(QWidget*)
     m_engineCombo = new QComboBox;
     m_engineCombo->setFocusPolicy(Qt::NoFocus);
     m_engineCombo->setInsertPolicy(QComboBox::NoInsert);
-    m_engineCombo->insertItem(1, tr("Gravity3DMassDifferential"));
-    m_engineCombo->insertItem(2, tr("Gravity3DMassIntegral"));
-    m_engineCombo->insertItem(3, tr("Gravity3DDifferential"));
-    m_engineCombo->insertItem(4, tr("Gravity3DIntegral"));
-    m_engineCombo->insertItem(5, tr("Gravity2DMassDifferential"));
-    m_engineCombo->insertItem(6, tr("Gravity2DMassIntegral"));
-    m_engineCombo->insertItem(7, tr("Gravity2DDifferential"));
-    m_engineCombo->insertItem(8, tr("Gravity2DIntegral"));
+    //m_engineCombo->addItems(m_nBodyEngineList);
+    m_engineCombo->addItems(config->NBODY_ENGINE_MAP->values());
     vLayout->addWidget(m_engineCombo);
 
     // Initial Conditions
@@ -72,11 +82,17 @@ InitializerDialog::InitializerDialog(QWidget*)
 
 void InitializerDialog::newButtonClicked()
 {
-    m_engineName = m_engineCombo->currentText();
+    //m_engineName = m_engineCombo->currentText();
+    m_engineIndex = m_engineCombo->currentIndex();
     accept();
 }
 
-QString InitializerDialog::engineName()
+//QString InitializerDialog::engineName()
+//{
+//    return m_engineName;
+//}
+
+int InitializerDialog::engineIndex()
 {
-    return m_engineName;
+    return m_engineIndex;
 }

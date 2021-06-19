@@ -20,8 +20,8 @@ public:
     void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateParticles();
-    void selectNBodyEngine();
-    void reset();
+    void selectNBodyEngine(int engineIndex);
+    void reset(int engineIndex);
     void setModelScale(float);
     void setModelScaleRatio(float);
 

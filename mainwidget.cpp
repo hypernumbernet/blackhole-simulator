@@ -274,16 +274,8 @@ void MainWidget::showInitializerDialog()
 
 void MainWidget::acceptInitializerDialog()
 {
-    reset();
-    m_simEngineValue->setText(m_initializerDialog->engineName());
-
-}
-
-void MainWidget::closeEvent(QCloseEvent *)
-{
-    if (m_initializerDialog)
-        m_initializerDialog->close();
-
+    //m_simEngineValue->setText(m_initializerDialog->engineName());
+    reset(m_initializerDialog->engineIndex());
 }
 
 void MainWidget::displayEngineName(QString name)
@@ -291,9 +283,9 @@ void MainWidget::displayEngineName(QString name)
     m_simEngineValue->setText(name);
 }
 
-void MainWidget::reset()
+void MainWidget::reset(const int engineIndex = -1)
 {
-    m_graphicWindows->reset();
+    m_graphicWindows->reset(engineIndex);
     resetScaleSlider();
     updateStartButtonText(false);
 }

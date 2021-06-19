@@ -161,7 +161,7 @@ void Camera::circleStrafing(const float amount)
     auto direction = m_position.normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
     if (cosVal > 1.0f) {
-        // 激しい操作をすると稀に起きる。内積利用は常に注意
+        // Occurs rarely with vigorous operation. Always be careful when using inner products.
         cosVal = 1.0f;
     }
     auto angle = acos(cosVal) * 0.5f;

@@ -31,10 +31,10 @@ public slots:
     void showInitializerDialog();
     void acceptInitializerDialog();
     void displayEngineName(QString);
-    void reset();
+    void reset(int engineIndex);
 
-protected:
-    void closeEvent(QCloseEvent*) override;
+//protected:
+//    void closeEvent(QCloseEvent*) override;
 
 private:
     void initUi();

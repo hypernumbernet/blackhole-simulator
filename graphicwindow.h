@@ -30,7 +30,7 @@ public slots:
     void startSim();
     void frameAdvance();
     void circleStrafing(bool);
-    void reset();
+    void reset(int engineIndex);
     void setModelScale(const QString&);
     void setModelScaleInt(int);
 

@@ -39,13 +39,24 @@ bool Particles::initialize(const int screenHeight)
     return true;
 }
 
-void Particles::selectNBodyEngine()
+void Particles::selectNBodyEngine(const int engineIndex)
 {
-    m_NBodyEngine = new G3DMassDiffNBE(
-                m_updateUi,
-                numberOfParticle,
-                500.0f,
-                G3DMassDiffNBE::Preset::Random);
+    switch (engineIndex) {
+    default:
+        m_NBodyEngine = new G3DMassDiffNBE(
+                    m_updateUi,
+                    numberOfParticle,
+                    500.0f,
+                    G3DMassDiffNBE::Preset::SunEarth);
+        break;
+    case 1:
+        m_NBodyEngine = new G3DMassIntegralNBE(
+                    m_updateUi,
+                    numberOfParticle,
+                    500.0f,
+                    G3DMassIntegralNBE::Preset::SunEarth);
+        break;
+    }
     emit m_updateUi->displayEngineName(m_NBodyEngine->name());
     updateParticles();
 }
@@ -94,10 +105,10 @@ void Particles::resize(int height)
     pointSizeScale = (float)height / (float)initHeight;
 }
 
-void Particles::reset()
+void Particles::reset(const int engineIndex)
 {
     delete m_NBodyEngine;
-    selectNBodyEngine();
+    selectNBodyEngine(engineIndex);
 }
 
 void Particles::setModelScale(float val)

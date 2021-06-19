@@ -74,7 +74,7 @@ void G3DMassDiffNBE::calculateInteraction() const
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
         {
-            // 微分計算
+            // Perform differential calculation of universal gravitation.
             a = i * 3;
             b = j * 3;
             d1 = m_coordinates[a] - m_coordinates[b];
@@ -132,7 +132,6 @@ void G3DMassDiffNBE::initParticlesRandam()
         m_velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
         //m_velocities[i] = 0.0f;
     }
-    //calculateDistances();
 
     m_mass[0] = 2.0e+5f;
 //    m_coordinates[0] = 0.0f;

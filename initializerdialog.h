@@ -15,13 +15,15 @@ class InitializerDialog : public QDialog
 public:
     InitializerDialog(QWidget* parent = nullptr);
 
-    QString engineName();
+    //QString engineName();
+    int engineIndex();
 
 public slots:
     void newButtonClicked();
 
 private:
-    QString m_engineName;
+    //QString m_engineName;
     QComboBox* m_engineCombo;
-
+    int m_engineIndex;
+    //QList<QString> m_nBodyEngineList;
 };
