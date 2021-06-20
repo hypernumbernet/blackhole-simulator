@@ -31,8 +31,6 @@ public:
     static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
 
 protected:
-    static float randf() {return (float)rand() / (float)RAND_MAX;}
-
     void setNumberOfParticles(quint64);
 
     UpdateUi* const m_updateUi;

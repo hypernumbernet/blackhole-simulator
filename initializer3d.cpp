@@ -11,7 +11,7 @@ void Initializer3D::initParticlesRandam()
 
     if (m_sim.massRandom) {
         for (quint64 i = 0; i < num; ++i) {
-            masses[i] = randf() * m_sim.massAvg * 2.0f;
+            masses[i] = bhs::randf() * m_sim.massAvg * 2.0f;
         }
     } else {
         for (quint64 i = 0; i < num; ++i) {
@@ -20,11 +20,11 @@ void Initializer3D::initParticlesRandam()
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = randf() * 2.0e+11f - 1.0e+11f;
+        coordinates[i] = bhs::randf() * 2.0e+11f - 1.0e+11f;
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = randf() * 3.0e+4f - 1.5e+4f;
+        velocities[i] = bhs::randf() * 3.0e+4f - 1.5e+4f;
     }
 
 //    masses[0] = 2.0e+30f;

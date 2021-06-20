@@ -26,6 +26,8 @@ struct SimCondition
     bool massRandom = true;
 };
 
+inline float randf() {return (float)rand() / (float)RAND_MAX;}
+
 }
 
 class UpdateUi : public QObject
@@ -41,12 +43,12 @@ public:
 
     explicit UpdateUi()
         : ENGINE(new QMap<int, QString>{
-    {0, tr("Gravity 3D Mass Differential")},
-    {1, tr("Gravity 3D Mass Integral")},
-//    {0, tr("Gravity3DDifferential")},
-//    {0, tr("Gravity3DIntegral")},
-//    {0, tr("Gravity2DDifferential")},
-//    {0, tr("Gravity2DIntegral")},
+            {0, tr("Gravity 3D Mass Differential")},
+            {1, tr("Gravity 3D Mass Integral")},
+            //{0, tr("Gravity3DDifferential")},
+            //{0, tr("Gravity3DIntegral")},
+            //{0, tr("Gravity2DDifferential")},
+            //{0, tr("Gravity2DIntegral")},
         })
         , PRESET(new QMap<bhs::Preset, QString>{
             {bhs::Preset::Random, tr("Random Cube")},

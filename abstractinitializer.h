@@ -9,7 +9,6 @@ public:
     AbstractInitializer(const bhs::SimCondition&, AbstractNBodyEngine* const);
 
 protected:
-    static float randf() {return (float)rand() / (float)RAND_MAX;} // TODO  to one place
     const bhs::SimCondition& m_sim;
     AbstractNBodyEngine* const m_engine;
 
