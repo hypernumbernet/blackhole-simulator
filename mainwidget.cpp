@@ -120,7 +120,7 @@ void MainWidget::initUi()
     m_vLayout.addWidget(particleNumLabel);
     displayStyle(m_particleNumValue);
     m_vLayout.addWidget(&m_particleNumValue);
-    connect(&m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displatNumberOfParticles);
+    connect(&m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
@@ -226,9 +226,7 @@ void MainWidget::showInitializerDialog()
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
         connect(&m_updateUi, &UpdateUi::applyInitialConditions, this, &MainWidget::acceptInitializerDialog);
     }
-    m_initializerDialog->setTimePerFrame(m_simCondition.timePerFrame);
-    m_initializerDialog->setNumberOfParticles(m_simCondition.numberOfParticles);
-    m_initializerDialog->setMassAvg(m_simCondition.mass);
+    m_initializerDialog->setValues(m_simCondition);
 
     m_initializerDialog->show();
     m_initializerDialog->raise();
@@ -263,7 +261,7 @@ void MainWidget::resetInitial()
     reset(m_simCondition);
 }
 
-void MainWidget::displatNumberOfParticles(const int num)
+void MainWidget::displayNumberOfParticles(const int num)
 {
     m_simCondition.numberOfParticles = num;
     m_particleNumValue.setText(QString::number(num));

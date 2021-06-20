@@ -11,7 +11,7 @@ public:
 
 protected:
     static float randf() {return (float)rand() / (float)RAND_MAX;} // TODO  to one place
-    float m_massAverage;
+    const bhs::SimCondition& m_sim;
 
 private:
     virtual void initParticlesRandam(AbstractNBodyEngine* const) = 0;

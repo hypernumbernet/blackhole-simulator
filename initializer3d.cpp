@@ -9,9 +9,14 @@ void Initializer3D::initParticlesRandam(AbstractNBodyEngine* const engine)
     float* coordinates = engine->coordinates();
     float* velocities = engine->velocities();
 
-    for (quint64 i = 0; i < num; ++i)
-    {
-        masses[i] = randf() * m_massAverage * 2.0f;
+    if (m_sim.massRandom) {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = randf() * m_sim.massAvg * 2.0f;
+        }
+    } else {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = m_sim.massAvg;
+        }
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {

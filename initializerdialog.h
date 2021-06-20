@@ -17,9 +17,7 @@ class InitializerDialog : public QDialog
 public:
     InitializerDialog(UpdateUi*, QWidget* parent = nullptr);
 
-    void setTimePerFrame(float);
-    void setNumberOfParticles(int);
-    void setMassAvg(float);
+    void setValues(const bhs::SimCondition&);
     bhs::SimCondition& simCondition();
 
 public slots:
@@ -38,6 +36,7 @@ private:
     QLineEdit m_timePerFrameValue;
     QLineEdit m_particleNumValue;
     QLineEdit m_massAvgValue;
+    QCheckBox m_massRandomCheck;
 
     bhs::SimCondition m_simCondition;
 };

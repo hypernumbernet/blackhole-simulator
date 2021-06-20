@@ -45,15 +45,15 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 
     vLayout->addWidget(&m_massAvgValue);
 
-    auto massRandomCheck = new QCheckBox(tr("Random Mass"));
-    massRandomCheck->setChecked(true);
-    massRandomCheck->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(massRandomCheck);
+    m_massRandomCheck.setText(tr("Random Mass"));
+    m_massRandomCheck.setChecked(true);
+    vLayout->addWidget(&m_massRandomCheck);
 
-    auto massRangeLabel = new QLabel(tr("Mass Range (kg)"));
+    auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
     vLayout->addWidget(massRangeLabel);
 
-    auto massRangeValue = new QLineEdit("1.0e+10");
+    auto massRangeValue = new QLineEdit("20");
+    massRangeValue->setEnabled(false);
     vLayout->addWidget(massRangeValue);
 
     // OK
@@ -110,11 +110,13 @@ bool InitializerDialog::validate()
     auto massAvg = m_massAvgValue.text().toFloat(&ok);
     if (ok) {
         m_massAvgValue.setPalette(normalPal);
-        m_simCondition.mass = massAvg;
+        m_simCondition.massAvg = massAvg;
     } else {
         allOk = false;
         m_massAvgValue.setPalette(NGPal);
     }
+
+    m_simCondition.massRandom = m_massRandomCheck.isChecked();
 
     return allOk;
 }
@@ -133,22 +135,15 @@ void InitializerDialog::applyButtonClicked()
     }
 }
 
-void InitializerDialog::setTimePerFrame(const float time)
-{
-    m_timePerFrameValue.setText(QString::number(time));
-}
-
-void InitializerDialog::setNumberOfParticles(const int num)
-{
-    m_particleNumValue.setText(QString::number(num));
-}
-
 bhs::SimCondition& InitializerDialog::simCondition()
 {
     return m_simCondition;
 }
 
-void InitializerDialog::setMassAvg(const float mass)
+void InitializerDialog::setValues(const bhs::SimCondition& sim)
 {
-    m_massAvgValue.setText(QString::number(mass));
+    m_timePerFrameValue.setText(QString::number(sim.timePerFrame));
+    m_particleNumValue.setText(QString::number(sim.numberOfParticles));
+    m_massAvgValue.setText(QString::number(sim.massAvg));
+    m_massRandomCheck.setChecked(sim.massRandom);
 }

@@ -33,7 +33,7 @@ public slots:
     void displayEngineName(const QString&);
     void resetInitial();
     void displayPresetName(const QString&);
-    void displatNumberOfParticles(int);
+    void displayNumberOfParticles(int);
 
 private:
     void initUi();
