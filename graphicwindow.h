@@ -16,7 +16,7 @@
 #include <QCursor>
 #include <QMutex>
 
-class GraphicWindow : public QOpenGLWindow, protected QOpenGLFunctions_4_5_Core
+class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {
     Q_OBJECT
 

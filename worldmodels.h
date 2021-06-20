@@ -8,7 +8,7 @@
 #include <QOpenGLBuffer>
 #include <QVector>
 
-class WorldModels : public QOpenGLFunctions_4_5_Core
+class WorldModels : private QOpenGLFunctions_4_5_Core
 {
 public:
     WorldModels();

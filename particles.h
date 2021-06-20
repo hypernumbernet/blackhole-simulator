@@ -10,7 +10,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
-class Particles : public QOpenGLFunctions_4_5_Core
+class Particles : private QOpenGLFunctions_4_5_Core
 {
 public:
     Particles(UpdateUi*);
