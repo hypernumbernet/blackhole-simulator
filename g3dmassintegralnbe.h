@@ -15,11 +15,7 @@ class G3DMassIntegralNBE : public AbstractNBodyEngine, Initializer3D
     };
 
 public:
-    G3DMassIntegralNBE(
-            UpdateUi* const,
-            quint64 numberOfParticles,
-            float timePerFrame,
-            bhs::Preset presetNumber);
+    G3DMassIntegralNBE(UpdateUi* const, const bhs::SimCondition&);
     ~G3DMassIntegralNBE();
 
     void calculateTimeProgress() const override;

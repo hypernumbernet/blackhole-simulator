@@ -6,22 +6,24 @@
 
 namespace bhs
 {
-    struct SimCondition
-    {
-        int engine = 0;
-        int preset = 0;
-        float timePerFrame = 1000.0f;
-        int numberOfParticles = 400;
-    };
 
-    enum class Preset {
-        Random,
-        SunEarth,
-        EarthSun,
-        EarthMoon,
-        SunEarthVenus,
-        TestSamePosition,
-    };
+enum class Preset {
+    Random,
+    SunEarth,
+    EarthSun,
+    EarthMoon,
+    SunEarthVenus,
+    TestSamePosition,
+};
+
+struct SimCondition
+{
+    int engine = 0;
+    Preset preset = Preset::Random;
+    float timePerFrame = 1000.0f;
+    int numberOfParticles = 400;
+};
+
 }
 
 class UpdateUi : public QObject
@@ -32,11 +34,11 @@ public:
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
 
-    const QMap<int, QString>* const NBODY_ENGINE_MAP;
-    const QMap<int, QString>* const INITIAL_CONDITION_MAP;
+    const QMap<int, QString>* const ENGINE;
+    const QMap<bhs::Preset, QString>* const PRESET;
 
     explicit UpdateUi()
-        : NBODY_ENGINE_MAP(new QMap<int, QString>{
+        : ENGINE(new QMap<int, QString>{
     {0, tr("Gravity 3D Mass Differential")},
     {1, tr("Gravity 3D Mass Integral")},
 //    {0, tr("Gravity3DDifferential")},
@@ -44,16 +46,15 @@ public:
 //    {0, tr("Gravity2DDifferential")},
 //    {0, tr("Gravity2DIntegral")},
         })
-        , INITIAL_CONDITION_MAP(new QMap<int, QString>{
-    {0, tr("Random Cube")},
-    {1, tr("Sun Earth")},
-    {2, tr("Earth Sun")},
-    {3, tr("Earth Moon")},
-    {4, tr("Sun Earth Venus")},
-    {5, tr("Test Same Position")},
+        , PRESET(new QMap<bhs::Preset, QString>{
+            {bhs::Preset::Random, tr("Random Cube")},
+            {bhs::Preset::SunEarth, tr("Sun Earth")},
+            {bhs::Preset::EarthSun, tr("Earth Sun")},
+            {bhs::Preset::EarthMoon, tr("Earth Moon")},
+            {bhs::Preset::SunEarthVenus, tr("Sun Earth Venus")},
+            {bhs::Preset::TestSamePosition, tr("Test Same Position")},
         })
     {
-
     };
 
 signals:

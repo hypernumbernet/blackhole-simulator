@@ -13,7 +13,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 
     m_engineCombo.setFocusPolicy(Qt::NoFocus);
     m_engineCombo.setInsertPolicy(QComboBox::NoInsert);
-    m_engineCombo.addItems(m_updateUi->NBODY_ENGINE_MAP->values());
+    m_engineCombo.addItems(m_updateUi->ENGINE->values());
     vLayout->addWidget(&m_engineCombo);
 
     // Initial Conditions Preset
@@ -22,7 +22,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 
     m_presetCombo.setFocusPolicy(Qt::NoFocus);
     m_presetCombo.setInsertPolicy(QComboBox::NoInsert);
-    m_presetCombo.addItems(m_updateUi->INITIAL_CONDITION_MAP->values());
+    m_presetCombo.addItems(m_updateUi->PRESET->values());
     vLayout->addWidget(&m_presetCombo);
 
     // Time/Frame
@@ -87,7 +87,7 @@ bool InitializerDialog::validate()
     ngPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
     m_simCondition.engine = m_engineCombo.currentIndex();
-    m_simCondition.preset = m_presetCombo.currentIndex();
+    m_simCondition.preset = static_cast<bhs::Preset>(m_presetCombo.currentIndex());
 
     bool ok;
     auto val = m_timePerFrameValue.text().toFloat(&ok);

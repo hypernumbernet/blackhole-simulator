@@ -8,11 +8,7 @@
 class G3DMassDiffNBE : public AbstractNBodyEngine, Initializer3D
 {
 public:
-    G3DMassDiffNBE(
-            UpdateUi* const,
-            quint64 numberOfParticles,
-            float timePerFrame,
-            bhs::Preset presetNumber);
+    G3DMassDiffNBE(UpdateUi* const, const bhs::SimCondition&);
     ~G3DMassDiffNBE();
 
     void calculateTimeProgress() const override;
@@ -25,4 +21,5 @@ private:
 
     // Physically calculated time per frame (second)
     float m_timePerFrame;
+
 };

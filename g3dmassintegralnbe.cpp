@@ -2,14 +2,12 @@
 
 G3DMassIntegralNBE::G3DMassIntegralNBE(
         UpdateUi* const updateUi,
-        const quint64 numberOfParticles,
-        const float timePerFrame,
-        const bhs::Preset presetNumber)
+        const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
 {
-    switch (presetNumber) {
+    switch (sim.preset) {
     case bhs::Preset::Random:
-        setNumberOfParticles(numberOfParticles);
+        setNumberOfParticles(sim.numberOfParticles);
         break;
     case bhs::Preset::SunEarth:
     case bhs::Preset::EarthSun:
@@ -26,10 +24,10 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
     m_coordinates = new float[m_numberOfParticles * 3];
     m_velocities = new float[m_numberOfParticles * 3];
 
-    quint64 numberOfInteractions = numberOfParticles * (numberOfParticles - 1) / 2;
+    quint64 numberOfInteractions = sim.numberOfParticles * (sim.numberOfParticles - 1) / 2;
     m_inversedDistances = new float[numberOfInteractions];
 
-    switch (presetNumber) {
+    switch (sim.preset) {
     case bhs::Preset::Random:
         initParticlesRandam(this);
         break;
@@ -50,7 +48,7 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
         break;
     }
 
-    setTimePerFrame(timePerFrame);
+    setTimePerFrame(sim.timePerFrame);
     calculateDistances();
 }
 

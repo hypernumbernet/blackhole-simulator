@@ -2,14 +2,12 @@
 
 G3DMassDiffNBE::G3DMassDiffNBE(
         UpdateUi* const updateUi,
-        const quint64 numberOfParticles,
-        const float timePerFrame,
-        const bhs::Preset presetNumber)
+        const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
 {
-    switch (presetNumber) {
+    switch (sim.preset) {
     case bhs::Preset::Random:
-        setNumberOfParticles(numberOfParticles);
+        setNumberOfParticles(sim.numberOfParticles);
         break;
     case bhs::Preset::SunEarth:
     case bhs::Preset::EarthSun:
@@ -25,7 +23,7 @@ G3DMassDiffNBE::G3DMassDiffNBE(
     m_coordinates = new float[m_numberOfParticles * 3];
     m_velocities = new float[m_numberOfParticles * 3];
 
-    switch (presetNumber) {
+    switch (sim.preset) {
     case bhs::Preset::Random:
         initParticlesRandam(this);
         break;
@@ -46,7 +44,7 @@ G3DMassDiffNBE::G3DMassDiffNBE(
         break;
     }
 
-    setTimePerFrame(timePerFrame);
+    setTimePerFrame(sim.timePerFrame);
 }
 
 G3DMassDiffNBE::~G3DMassDiffNBE()

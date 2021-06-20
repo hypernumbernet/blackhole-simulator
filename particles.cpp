@@ -40,30 +40,20 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
-    auto presetValue = static_cast<bhs::Preset>(sim.preset);
-
     switch (sim.engine) {
     default:
-        m_NBodyEngine = new G3DMassDiffNBE(
-                    m_updateUi,
-                    sim.numberOfParticles,
-                    sim.timePerFrame,
-                    presetValue);
+        m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
         break;
     case 1:
-        m_NBodyEngine = new G3DMassIntegralNBE(
-                    m_updateUi,
-                    sim.numberOfParticles,
-                    sim.timePerFrame,
-                    presetValue);
+        m_NBodyEngine = new G3DMassIntegralNBE(m_updateUi, sim);
         break;
     }
 
-    QString name = m_updateUi->NBODY_ENGINE_MAP->value(sim.engine);
-    emit m_updateUi->displayEngineName(name);
+    QString engine = m_updateUi->ENGINE->value(sim.engine);
+    emit m_updateUi->displayEngineName(engine);
 
-    QString presetDisplay = m_updateUi->INITIAL_CONDITION_MAP->value(sim.preset);
-    emit m_updateUi->displayPresetName(presetDisplay);
+    QString preset = m_updateUi->PRESET->value(sim.preset);
+    emit m_updateUi->displayPresetName(preset);
 
     updateParticles();
 }

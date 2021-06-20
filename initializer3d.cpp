@@ -149,17 +149,17 @@ void Initializer3D::initTestSamePosition(AbstractNBodyEngine* const engine)
     float* velocities = engine->velocities();
 
     masses[0] = 1.0e+10f;
-    coordinates[0] = 1.0f;
-    coordinates[1] = 2.0f;
-    coordinates[2] = 3.0f;
+    coordinates[0] = 0.1f;
+    coordinates[1] = 0.2f;
+    coordinates[2] = 0.3f;
     velocities[0] = 0.0f;
     velocities[1] = 0.0f;
     velocities[2] = 0.0f;
 
     masses[1] = 2.0e+10f;
-    coordinates[3] = 1.0f;
-    coordinates[4] = 2.0f;
-    coordinates[5] = 3.0f;
+    coordinates[3] = 0.1f;
+    coordinates[4] = 0.2f;
+    coordinates[5] = 0.3f;
     velocities[3] = 0.0f;
     velocities[4] = 0.0f;
     velocities[5] = 0.0f;
