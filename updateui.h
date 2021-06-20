@@ -53,4 +53,5 @@ signals:
     void updateStartButtonText(bool);
     void displayEngineName(const QString&);
     void displayPresetName(const QString&);
+    void applyInitialConditions();
 };

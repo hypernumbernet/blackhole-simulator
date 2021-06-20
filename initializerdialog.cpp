@@ -67,6 +67,12 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     vLayout->addWidget(okButton);
     connect(okButton, &QPushButton::clicked, this, &InitializerDialog::okButtonClicked);
 
+    // Apply
+    auto applyButton = new QPushButton(tr("Apply"));
+    applyButton->setFocusPolicy(Qt::NoFocus);
+    vLayout->addWidget(applyButton);
+    connect(applyButton, &QPushButton::clicked, this, &InitializerDialog::applyButtonClicked);
+
     // Cancel
     auto cancelButton = new QPushButton(tr("Cancel"));
     cancelButton->setFocusPolicy(Qt::NoFocus);
@@ -108,6 +114,40 @@ void InitializerDialog::okButtonClicked()
 
     if (allOk) {
         accept();
+    }
+}
+
+void InitializerDialog::applyButtonClicked()
+{
+    bool allOk = true;
+    QPalette normalPal(palette());
+    QPalette ngPal(palette());
+    ngPal.setColor(QPalette::Base, RE_ENTER_COLOR);
+
+    m_simCondition.engine = m_engineCombo->currentIndex();
+    m_simCondition.preset = m_presetCombo->currentIndex();
+
+    bool ok;
+    auto val = m_timePerFrameValue->text().toFloat(&ok);
+    if (ok) {
+        m_timePerFrameValue->setPalette(normalPal);
+        m_simCondition.timePerFrame = val;
+    } else {
+        allOk = false;
+        m_timePerFrameValue->setPalette(ngPal);
+    }
+
+    auto num = m_particleNumValue->text().toInt(&ok);
+    if (ok) {
+        m_particleNumValue->setPalette(normalPal);
+        m_simCondition.numberOfParticles = num;
+    } else {
+        allOk = false;
+        m_particleNumValue->setPalette(ngPal);
+    }
+
+    if (allOk) {
+        emit m_updateUi->applyInitialConditions();
     }
 }
 

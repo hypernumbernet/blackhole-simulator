@@ -23,6 +23,7 @@ public:
 
 public slots:
     void okButtonClicked();
+    void applyButtonClicked();
 
 private:
     static constexpr QColor RE_ENTER_COLOR = QColor(255, 200, 200);
