@@ -13,6 +13,15 @@ namespace bhs
         float timePerFrame = 1000.0f;
         int numberOfParticles = 400;
     };
+
+    enum class Preset {
+        Random,
+        SunEarth,
+        EarthSun,
+        EarthMoon,
+        SunEarthVenus,
+        TestSamePosition,
+    };
 }
 
 class UpdateUi : public QObject
@@ -43,7 +52,9 @@ public:
     {4, tr("Sun Earth Venus")},
     {5, tr("Test Same Position")},
         })
-    { };
+    {
+
+    };
 
 signals:
     void displayNumberOfParticles(int);

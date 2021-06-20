@@ -136,23 +136,6 @@ void MainWidget::initUi()
     m_vLayout.addWidget(&m_presetValue);
     connect(&m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
-    auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
-    m_vLayout.addWidget(massLabel);
-
-    auto massQuantity = new QLineEdit("5.972e+24f");
-    m_vLayout.addWidget(massQuantity);
-
-    auto massRandomCheck = new QCheckBox(tr("Random Mass"));
-    massRandomCheck->setChecked(true);
-    massRandomCheck->setFocusPolicy(Qt::NoFocus);
-    m_vLayout.addWidget(massRandomCheck);
-
-    auto massRangeLabel = new QLabel(tr("Mass Range (kg)"));
-    m_vLayout.addWidget(massRangeLabel);
-
-    auto massRangeValue = new QLineEdit("1.0e+10");
-    m_vLayout.addWidget(massRangeValue);
-
     // New
     auto newButton = new QPushButton(tr("New..."));
     newButton->setFocusPolicy(Qt::NoFocus);

@@ -5,14 +5,6 @@
 class AbstractInitializer
 {
 public:
-    enum class Preset {
-        Random,
-        SunEarth,
-        EarthSun,
-        EarthMoon,
-        SunEarthVenus,
-        TestSamePosition,
-    };
 
     AbstractInitializer();
 

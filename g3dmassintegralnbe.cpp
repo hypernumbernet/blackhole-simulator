@@ -4,20 +4,20 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
         UpdateUi* const updateUi,
         const quint64 numberOfParticles,
         const float timePerFrame,
-        const Preset presetNumber)
+        const bhs::Preset presetNumber)
     : AbstractNBodyEngine(updateUi)
 {
     switch (presetNumber) {
-    case Preset::Random:
+    case bhs::Preset::Random:
         setNumberOfParticles(numberOfParticles);
         break;
-    case Preset::SunEarth:
-    case Preset::EarthSun:
-    case Preset::EarthMoon:
-    case Preset::TestSamePosition:
+    case bhs::Preset::SunEarth:
+    case bhs::Preset::EarthSun:
+    case bhs::Preset::EarthMoon:
+    case bhs::Preset::TestSamePosition:
         setNumberOfParticles(2);
         break;
-    case Preset::SunEarthVenus:
+    case bhs::Preset::SunEarthVenus:
         setNumberOfParticles(3);
         break;
     }
@@ -30,22 +30,22 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
     m_inversedDistances = new float[numberOfInteractions];
 
     switch (presetNumber) {
-    case Preset::Random:
+    case bhs::Preset::Random:
         initParticlesRandam(this);
         break;
-    case Preset::SunEarth:
+    case bhs::Preset::SunEarth:
         initSunEarth(this);
         break;
-    case Preset::EarthSun:
+    case bhs::Preset::EarthSun:
         initEarthSun(this);
         break;
-    case Preset::EarthMoon:
+    case bhs::Preset::EarthMoon:
         initEarthMoon(this);
         break;
-    case Preset::TestSamePosition:
+    case bhs::Preset::TestSamePosition:
         initTestSamePosition(this);
         break;
-    case Preset::SunEarthVenus:
+    case bhs::Preset::SunEarthVenus:
         initSunEarthVenus(this);
         break;
     }

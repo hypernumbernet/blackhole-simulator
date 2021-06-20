@@ -12,7 +12,7 @@ public:
             UpdateUi* const,
             quint64 numberOfParticles,
             float timePerFrame,
-            Preset presetNumber);
+            bhs::Preset presetNumber);
     ~G3DMassDiffNBE();
 
     void calculateTimeProgress() const override;
