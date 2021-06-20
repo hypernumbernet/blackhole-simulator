@@ -1,8 +1,8 @@
 #include "abstractnbodyengine.h"
 
 AbstractNBodyEngine::AbstractNBodyEngine(UpdateUi* const updateUi)
-    : m_modelScale(1.0f)
-    , m_updateUi(updateUi)
+    : m_updateUi(updateUi)
+    , m_modelScale(1.0f)
 {
 }
 
