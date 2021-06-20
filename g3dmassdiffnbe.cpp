@@ -21,28 +21,28 @@ G3DMassDiffNBE::G3DMassDiffNBE(
         setNumberOfParticles(3);
         break;
     }
-    m_mass = new float[m_numberOfParticles];
+    m_masses = new float[m_numberOfParticles];
     m_coordinates = new float[m_numberOfParticles * 3];
     m_velocities = new float[m_numberOfParticles * 3];
 
     switch (presetNumber) {
     case Preset::Random:
-        initParticlesRandam();
+        initParticlesRandam(this);
         break;
     case Preset::SunEarth:
-        initSunEarth();
+        initSunEarth(this);
         break;
     case Preset::EarthSun:
-        initEarthSun();
+        initEarthSun(this);
         break;
     case Preset::EarthMoon:
-        initEarthMoon();
+        initEarthMoon(this);
         break;
     case Preset::TestSamePosition:
-        initTestSamePosition();
+        initTestSamePosition(this);
         break;
     case Preset::SunEarthVenus:
-        initSunEarthVenus();
+        initSunEarthVenus(this);
         break;
     }
 
@@ -51,7 +51,9 @@ G3DMassDiffNBE::G3DMassDiffNBE(
 
 G3DMassDiffNBE::~G3DMassDiffNBE()
 {
-    delete[] m_mass;
+    delete[] m_coordinates;
+    delete[] m_velocities;
+    delete[] m_masses;
 }
 
 void G3DMassDiffNBE::calculateTimeProgress() const
@@ -91,12 +93,12 @@ void G3DMassDiffNBE::calculateInteraction() const
             d2 *= inv * force;
             d3 *= inv * force;
 
-            m_velocities[a] -= d1 * m_mass[j];
-            m_velocities[a + 1] -= d2 * m_mass[j];
-            m_velocities[a + 2] -= d3 * m_mass[j];
-            m_velocities[b] += d1 * m_mass[i];
-            m_velocities[b + 1] += d2 * m_mass[i];
-            m_velocities[b + 2] += d3 * m_mass[i];
+            m_velocities[a] -= d1 * m_masses[j];
+            m_velocities[a + 1] -= d2 * m_masses[j];
+            m_velocities[a + 2] -= d3 * m_masses[j];
+            m_velocities[b] += d1 * m_masses[i];
+            m_velocities[b + 1] += d2 * m_masses[i];
+            m_velocities[b + 2] += d3 * m_masses[i];
 
             ++k;
         }
@@ -113,139 +115,6 @@ void G3DMassDiffNBE::debug() const
     {
         qDebug() << "v:" << i << m_velocities[i];
     }
-}
-
-void G3DMassDiffNBE::initParticlesRandam()
-{
-    changeModelScale(1.0e-3f);
-    for (quint64 i = 0; i < m_numberOfParticles; ++i)
-    {
-        m_mass[i] = randf() * 2.0e+2f - 1.0e+2f;
-        //m_mass[i] = 2.0e+2f;
-    }
-    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
-    {
-        m_coordinates[i] = randf() * 2.0e+3f - 1.0e+3f;
-    }
-    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
-    {
-        m_velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
-        //m_velocities[i] = 0.0f;
-    }
-
-    m_mass[0] = 2.0e+5f;
-//    m_coordinates[0] = 0.0f;
-//    m_coordinates[1] = 0.0f;
-//    m_coordinates[2] = 0.0f;
-
-}
-
-void G3DMassDiffNBE::initSunEarth()
-{
-    changeModelScale(1.0e-11f);
-    m_mass[0] = 1.9891e+30f;
-    m_coordinates[0] = m_coordinates[1] = m_coordinates[2] = 0.0f;
-    m_velocities[0] = m_velocities[1] = m_velocities[2] = 0.0f;
-
-    m_mass[1] = 5.972e+24f;
-    m_coordinates[3] = 1.495978e+11f;
-    m_coordinates[4] = 0.0f;
-    m_coordinates[5] = 0.0f;
-    m_velocities[3] = 0.0f;
-    m_velocities[4] = 29780.0f;
-    m_velocities[5] = 0.0f;
-}
-
-void G3DMassDiffNBE::initEarthSun()
-{
-    changeModelScale(1.0e-11f);
-
-    m_mass[0] = 5.972e+24f;
-    m_coordinates[0] = 0.0f;
-    m_coordinates[1] = 0.0f;
-    m_coordinates[2] = 0.0f;
-    m_velocities[0] = 0.0f;
-    m_velocities[1] = 29780.0f;
-    m_velocities[2] = 0.0f;
-
-    m_mass[1] = 1.9891e+30f;
-    m_coordinates[3] = 1.495978e+11f;
-    m_coordinates[4] = 0.0f;
-    m_coordinates[5] = 0.0f;
-    m_velocities[3] = 0.0f;
-    m_velocities[4] = 0.0f;
-    m_velocities[5] = 0.0f;
-}
-
-void G3DMassDiffNBE::initEarthMoon()
-{
-    changeModelScale(0.25e-8f);
-
-    m_mass[0] = 5.972e+24f;
-    m_coordinates[0] = 0.0f;
-    m_coordinates[1] = 0.0f;
-    m_coordinates[2] = 0.0f;
-    m_velocities[0] = 0.0f;
-    m_velocities[1] = 0.0f;
-    m_velocities[2] = 0.0f;
-
-    m_mass[1] = 7.347673e+22f;
-    m_coordinates[3] = 3.844e+8f;
-    m_coordinates[4] = 0.0f;
-    m_coordinates[5] = 0.0f;
-    m_velocities[3] = 0.0f;
-    m_velocities[4] = 1022.0f;
-    m_velocities[5] = 0.0f;
-}
-
-void G3DMassDiffNBE::initSunEarthVenus()
-{
-    changeModelScale(1.0e-11f);
-
-    m_mass[0] = 1.9891e+30f;
-    m_coordinates[0] = 0.0f;
-    m_coordinates[1] = 0.0f;
-    m_coordinates[2] = 0.0f;
-    m_velocities[0] = 0.0f;
-    m_velocities[1] = 0.0f;
-    m_velocities[2] = 0.0f;
-
-    m_mass[1] = 5.972e+24f;
-    m_coordinates[3] = 1.495978e+11f;
-    m_coordinates[4] = 0.0f;
-    m_coordinates[5] = 0.0f;
-    m_velocities[3] = 0.0f;
-    m_velocities[4] = 0.0f;
-    m_velocities[5] = 29780.0f;
-
-    m_mass[2] = 4.869e+24f;
-    m_coordinates[6] = 1.0820893e+11f;
-    m_coordinates[7] = 0.0f;
-    m_coordinates[8] = 0.0f;
-    m_velocities[6] = 0.0f;
-    m_velocities[7] = 0.0f;
-    m_velocities[8] = 35021.4f;
-}
-
-void G3DMassDiffNBE::initTestSamePosition()
-{
-    changeModelScale(1.0f);
-
-    m_mass[0] = 1.0e+10f;
-    m_coordinates[0] = 1.0f;
-    m_coordinates[1] = 2.0f;
-    m_coordinates[2] = 3.0f;
-    m_velocities[0] = 0.0f;
-    m_velocities[1] = 0.0f;
-    m_velocities[2] = 0.0f;
-
-    m_mass[1] = 2.0e+10f;
-    m_coordinates[3] = 1.0f;
-    m_coordinates[4] = 2.0f;
-    m_coordinates[5] = 3.0f;
-    m_velocities[3] = 0.0f;
-    m_velocities[4] = 0.0f;
-    m_velocities[5] = 0.0f;
 }
 
 void G3DMassDiffNBE::setTimePerFrame(const float time)

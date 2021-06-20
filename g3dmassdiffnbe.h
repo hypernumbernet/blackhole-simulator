@@ -2,9 +2,10 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
+#include "initializer3d.h"
 
 // Gravity 3D Mass Differential N-Body Engine
-class G3DMassDiffNBE : public AbstractNBodyEngine
+class G3DMassDiffNBE : public AbstractNBodyEngine, Initializer3D
 {
 public:
     G3DMassDiffNBE(
@@ -21,16 +22,7 @@ public:
     void setTimePerFrame(float);
 
 private:
-    void initParticlesRandam();
-    void initSunEarth();
-    void initEarthSun();
-    void initEarthMoon();
-    void initSunEarthVenus();
-    void initTestSamePosition();
 
     // Physically calculated time per frame (second)
     float m_timePerFrame;
-
-    // Stores the mass of each particle (kg)
-    float* m_mass;
 };

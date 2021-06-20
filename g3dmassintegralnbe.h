@@ -2,9 +2,10 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
+#include "initializer3d.h"
 
 // Gravity 3D Mass Integral N-Body Engine
-class G3DMassIntegralNBE : public AbstractNBodyEngine
+class G3DMassIntegralNBE : public AbstractNBodyEngine, Initializer3D
 {
     struct Distance {
         float invR;
@@ -29,20 +30,10 @@ public:
     bool calculateDistance(Distance&, quint64, quint64) const;
 
 private:
-
-    void initParticlesRandam();
-    void initSunEarth();
-    void initEarthSun();
-    void initEarthMoon();
-    void initSunEarthVenus();
-    void initTestSamePosition();
     void calculateDistances();
 
     // Physically calculated time per frame (second)
     float m_timePerFrame;
-
-    // Stores the mass of each particle (kg)
-    float* m_mass;
 
     // Stores the reciprocal of the previously calculated distance.
     float* m_inversedDistances;

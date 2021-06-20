@@ -40,7 +40,7 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
-    auto presetValue = static_cast<AbstractNBodyEngine::Preset>(sim.preset);
+    auto presetValue = static_cast<AbstractInitializer::Preset>(sim.preset);
 
     switch (sim.engine) {
     default:

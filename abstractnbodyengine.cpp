@@ -8,8 +8,6 @@ AbstractNBodyEngine::AbstractNBodyEngine(UpdateUi* const updateUi)
 
 AbstractNBodyEngine::~AbstractNBodyEngine()
 {
-    delete[] m_coordinates;
-    delete[] m_velocities;
 }
 
 void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
@@ -49,4 +47,14 @@ float AbstractNBodyEngine::modelScale() const
 float* AbstractNBodyEngine::coordinates() const
 {
     return m_coordinates;
+}
+
+float* AbstractNBodyEngine::masses() const
+{
+    return m_masses;
+}
+
+float* AbstractNBodyEngine::velocities() const
+{
+    return m_velocities;
 }
