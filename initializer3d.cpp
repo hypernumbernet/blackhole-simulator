@@ -1,13 +1,13 @@
 #include "initializer3d.h"
 
-void Initializer3D::initParticlesRandam(AbstractNBodyEngine* const engine)
+void Initializer3D::initParticlesRandam()
 {
-    engine->changeModelScale(1.0e-11f);
+    m_engine->changeModelScale(1.0e-11f);
 
-    quint64 num = engine->numberOfParticle();
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    quint64 num = m_engine->numberOfParticle();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     if (m_sim.massRandom) {
         for (quint64 i = 0; i < num; ++i) {
@@ -33,13 +33,13 @@ void Initializer3D::initParticlesRandam(AbstractNBodyEngine* const engine)
 //    coordinates[2] = 0.0f;
 }
 
-void Initializer3D::initSunEarth(AbstractNBodyEngine* const engine)
+void Initializer3D::initSunEarth()
 {
-    engine->changeModelScale(1.0e-11f);
+    m_engine->changeModelScale(1.0e-11f);
 
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     masses[0] = 1.9891e+30f;
     coordinates[0] = coordinates[1] = coordinates[2] = 0.0f;
@@ -54,13 +54,13 @@ void Initializer3D::initSunEarth(AbstractNBodyEngine* const engine)
     velocities[5] = 0.0f;
 }
 
-void Initializer3D::initEarthSun(AbstractNBodyEngine* const engine)
+void Initializer3D::initEarthSun()
 {
-    engine->changeModelScale(1.0e-11f);
+    m_engine->changeModelScale(1.0e-11f);
 
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     masses[0] = 5.972e+24f;
     coordinates[0] = 0.0f;
@@ -79,13 +79,13 @@ void Initializer3D::initEarthSun(AbstractNBodyEngine* const engine)
     velocities[5] = 0.0f;
 }
 
-void Initializer3D::initEarthMoon(AbstractNBodyEngine* const engine)
+void Initializer3D::initEarthMoon()
 {
-    engine->changeModelScale(0.25e-8f);
+    m_engine->changeModelScale(0.25e-8f);
 
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     masses[0] = 5.972e+24f;
     coordinates[0] = 0.0f;
@@ -104,13 +104,13 @@ void Initializer3D::initEarthMoon(AbstractNBodyEngine* const engine)
     velocities[5] = 0.0f;
 }
 
-void Initializer3D::initSunEarthVenus(AbstractNBodyEngine* const engine)
+void Initializer3D::initSunEarthVenus()
 {
-    engine->changeModelScale(1.0e-11f);
+    m_engine->changeModelScale(1.0e-11f);
 
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     masses[0] = 1.9891e+30f;
     coordinates[0] = 0.0f;
@@ -137,13 +137,13 @@ void Initializer3D::initSunEarthVenus(AbstractNBodyEngine* const engine)
     velocities[8] = 35021.4f;
 }
 
-void Initializer3D::initTestSamePosition(AbstractNBodyEngine* const engine)
+void Initializer3D::initTestSamePosition()
 {
-    engine->changeModelScale(1.0f);
+    m_engine->changeModelScale(1.0f);
 
-    float* masses = engine->masses();
-    float* coordinates = engine->coordinates();
-    float* velocities = engine->velocities();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
 
     masses[0] = 1.0e+10f;
     coordinates[0] = 0.1f;

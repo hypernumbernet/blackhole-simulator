@@ -6,18 +6,18 @@ class AbstractInitializer
 {
 public:
 
-    AbstractInitializer(const bhs::SimCondition&);
-    //virtual ~AbstractInitializer();
+    AbstractInitializer(const bhs::SimCondition&, AbstractNBodyEngine* const);
 
 protected:
     static float randf() {return (float)rand() / (float)RAND_MAX;} // TODO  to one place
     const bhs::SimCondition& m_sim;
+    AbstractNBodyEngine* const m_engine;
 
 private:
-    virtual void initParticlesRandam(AbstractNBodyEngine* const) = 0;
-    virtual void initSunEarth(AbstractNBodyEngine* const) = 0;
-    virtual void initEarthSun(AbstractNBodyEngine* const) = 0;
-    virtual void initEarthMoon(AbstractNBodyEngine* const) = 0;
-    virtual void initSunEarthVenus(AbstractNBodyEngine* const) = 0;
-    virtual void initTestSamePosition(AbstractNBodyEngine* const) = 0;
+    virtual void initParticlesRandam() = 0;
+    virtual void initSunEarth() = 0;
+    virtual void initEarthSun() = 0;
+    virtual void initEarthMoon() = 0;
+    virtual void initSunEarthVenus() = 0;
+    virtual void initTestSamePosition() = 0;
 };

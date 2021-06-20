@@ -1,12 +1,7 @@
 #include "abstractinitializer.h"
 
-AbstractInitializer::AbstractInitializer(const bhs::SimCondition& sim)
+AbstractInitializer::AbstractInitializer(const bhs::SimCondition& sim, AbstractNBodyEngine* const engine)
     : m_sim(sim)
+    , m_engine(engine)
 {
-    //m_massAverage = sim.massAvg;
-    //m_sim = sim;
 }
-
-//AbstractInitializer::~AbstractInitializer()
-//{
-//}

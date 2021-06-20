@@ -4,7 +4,7 @@ G3DMassDiffNBE::G3DMassDiffNBE(
         UpdateUi* const updateUi,
         const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
-    , Initializer3D(sim)
+    , Initializer3D(sim, this)
 {
     switch (sim.preset) {
     case bhs::Preset::Random:
@@ -26,22 +26,22 @@ G3DMassDiffNBE::G3DMassDiffNBE(
 
     switch (sim.preset) {
     case bhs::Preset::Random:
-        initParticlesRandam(this);
+        initParticlesRandam();
         break;
     case bhs::Preset::SunEarth:
-        initSunEarth(this);
+        initSunEarth();
         break;
     case bhs::Preset::EarthSun:
-        initEarthSun(this);
+        initEarthSun();
         break;
     case bhs::Preset::EarthMoon:
-        initEarthMoon(this);
+        initEarthMoon();
         break;
     case bhs::Preset::TestSamePosition:
-        initTestSamePosition(this);
+        initTestSamePosition();
         break;
     case bhs::Preset::SunEarthVenus:
-        initSunEarthVenus(this);
+        initSunEarthVenus();
         break;
     }
 

@@ -8,10 +8,10 @@ public:
     using AbstractInitializer::AbstractInitializer;
 
 protected:
-    void initParticlesRandam(AbstractNBodyEngine* const) override;
-    void initSunEarth(AbstractNBodyEngine* const) override;
-    void initEarthSun(AbstractNBodyEngine* const) override;
-    void initEarthMoon(AbstractNBodyEngine* const) override;
-    void initSunEarthVenus(AbstractNBodyEngine* const) override;
-    void initTestSamePosition(AbstractNBodyEngine* const) override;
+    void initParticlesRandam() override;
+    void initSunEarth() override;
+    void initEarthSun() override;
+    void initEarthMoon() override;
+    void initSunEarthVenus() override;
+    void initTestSamePosition() override;
 };
