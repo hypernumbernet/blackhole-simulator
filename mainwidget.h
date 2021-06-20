@@ -40,7 +40,7 @@ private:
     void reset(const bhs::SimCondition&);
 
     void displayStyle(QLCDNumber&);
-    void displayStyle(QLabel* const);
+    void displayStyle(QLabel&);
 
     UpdateUi m_updateUi;
     GraphicWindow m_graphicWindows;
@@ -49,15 +49,15 @@ private:
 
     QLCDNumber m_frameNumberLCD;
     QLCDNumber m_fpsLCD;
-    QPushButton* const m_startButton;
-    QPushButton* const m_frameAdvanceButton;
-    QLineEdit* const m_scaleValue;
-    QSlider* const m_scaleSlider;
-    QLabel* const m_simTimeValue;
-    QLabel* const m_timePerFrameValue;
-    QLabel* const m_engineValue;
-    QLabel* const m_presetValue;
-    QLabel* const m_particleNumValue;
+    QPushButton m_startButton;
+    QPushButton m_frameAdvanceButton;
+    QLineEdit m_scaleValue;
+    QSlider m_scaleSlider;
+    QLabel m_simTimeValue;
+    QLabel m_timePerFrameValue;
+    QLabel m_engineValue;
+    QLabel m_presetValue;
+    QLabel m_particleNumValue;
 
     bhs::SimCondition m_simCondition;
 
