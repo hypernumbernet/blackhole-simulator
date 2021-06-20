@@ -3,10 +3,6 @@
 InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     : QDialog(parent)
     , m_updateUi(updateUi)
-    //, m_engineCombo(new QComboBox)
-//    , m_presetCombo(new QComboBox)
-//    , m_timePerFrameValue(new QLineEdit)
-//    , m_particleNumValue(new QLineEdit)
 {
     auto vLayout = new QVBoxLayout;
     vLayout->setAlignment(Qt::AlignTop);

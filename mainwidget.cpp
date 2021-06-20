@@ -2,8 +2,7 @@
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
-    , m_updateUi(new UpdateUi)
-    , m_graphicWindows(new GraphicWindow(m_updateUi))
+    , m_graphicWindows(new GraphicWindow(&m_updateUi))
     , m_hLayout(new QHBoxLayout(this))
     , m_vLayout(new QVBoxLayout)
     , m_frameNumberLCD(new QLCDNumber(12))
@@ -43,7 +42,7 @@ void MainWidget::initUi()
     displayStyle(m_fpsLCD);
     fpsLayout->addWidget(m_fpsLCD);
     m_vLayout->addLayout(fpsLayout);
-    connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
+    connect(&m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
 
     // Frames
     auto frameNumberLayout = new QHBoxLayout;
@@ -52,7 +51,7 @@ void MainWidget::initUi()
     displayStyle(m_frameNumberLCD);
     frameNumberLayout->addWidget(m_frameNumberLCD);
     m_vLayout->addLayout(frameNumberLayout);
-    connect(m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
+    connect(&m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
     // Time/Frame
     auto timePerFrameLayout = new QHBoxLayout;
@@ -61,7 +60,7 @@ void MainWidget::initUi()
     displayStyle(m_timePerFrameValue);
     timePerFrameLayout->addWidget(m_timePerFrameValue);
     m_vLayout->addLayout(timePerFrameLayout);
-    connect(m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
+    connect(&m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
 
     // Simulation Time
     auto simTimeLayout = new QHBoxLayout;
@@ -75,7 +74,7 @@ void MainWidget::initUi()
     m_startButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_startButton);
     connect(m_startButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
-    connect(m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
+    connect(&m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
     m_frameAdvanceButton->setFocusPolicy(Qt::NoFocus);
@@ -114,7 +113,7 @@ void MainWidget::initUi()
 
     m_scaleValue->setAlignment(Qt::AlignRight);
     m_vLayout->addWidget(m_scaleValue);
-    connect(m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
+    connect(&m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
     connect(m_scaleValue, &QLineEdit::textChanged, m_graphicWindows, &GraphicWindow::setModelScale);
 
     //m_scaleSlider = new QSlider;
@@ -131,21 +130,21 @@ void MainWidget::initUi()
     m_vLayout->addWidget(particleNumLabel);
     displayStyle(m_particleNumValue);
     m_vLayout->addWidget(m_particleNumValue);
-    connect(m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displatNumberOfParticles);
+    connect(&m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displatNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     m_vLayout->addWidget(engineLabel);
     displayStyle(m_engineValue);
     m_vLayout->addWidget(m_engineValue);
-    connect(m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
+    connect(&m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     m_vLayout->addWidget(presetLabel);
     displayStyle(m_presetValue);
     m_vLayout->addWidget(m_presetValue);
-    connect(m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
+    connect(&m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
     m_vLayout->addWidget(massLabel);
@@ -250,9 +249,9 @@ void MainWidget::displayTimePerFrame(const float time)
 void MainWidget::showInitializerDialog()
 {
     if (!m_initializerDialog) {
-        m_initializerDialog = new InitializerDialog(m_updateUi, this);
+        m_initializerDialog = new InitializerDialog(&m_updateUi, this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
-        connect(m_updateUi, &UpdateUi::applyInitialConditions, this, &MainWidget::acceptInitializerDialog);
+        connect(&m_updateUi, &UpdateUi::applyInitialConditions, this, &MainWidget::acceptInitializerDialog);
     }
     m_initializerDialog->setTimePerFrame(m_simCondition.timePerFrame);
     m_initializerDialog->setNumberOfParticles(m_simCondition.numberOfParticles);
@@ -263,11 +262,6 @@ void MainWidget::showInitializerDialog()
 
 void MainWidget::acceptInitializerDialog()
 {
-//    bhs::SimCondition sim;
-//    sim.engine = m_initializerDialog->engineIndex();
-//    sim.preset = m_initializerDialog->presetIndex();
-//    sim.timePerFrame = m_initializerDialog->timePerFrame();
-//    sim.numberOfParticles = m_initializerDialog->numberOfParticles();
     m_simCondition = m_initializerDialog->simCondition();
     reset(m_simCondition);
 }

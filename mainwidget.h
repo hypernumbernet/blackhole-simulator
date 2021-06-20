@@ -42,7 +42,7 @@ private:
     void displayStyle(QLCDNumber* const);
     void displayStyle(QLabel* const);
 
-    UpdateUi* const m_updateUi;
+    UpdateUi m_updateUi;
     GraphicWindow* const m_graphicWindows;
     QHBoxLayout* const m_hLayout;
     QVBoxLayout* const m_vLayout;
@@ -59,8 +59,6 @@ private:
     QLabel* const m_presetValue;
     QLabel* const m_particleNumValue;
 
-//    float m_timePerFrame;
-//    int m_numberOfParticles;
     bhs::SimCondition m_simCondition;
 
     InitializerDialog* m_initializerDialog = nullptr;
