@@ -3,7 +3,7 @@
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
     , m_graphicWindows(&m_updateUi)
-    , m_hLayout(new QHBoxLayout(this))
+    , m_hLayout(this)
     , m_vLayout(new QVBoxLayout)
     , m_frameNumberLCD(new QLCDNumber(12))
     , m_fpsLCD(new QLCDNumber(12))
@@ -27,8 +27,8 @@ MainWidget::MainWidget(QWidget* parent)
     container->setMaximumSize(screenSize);
 
     m_vLayout->setAlignment(Qt::AlignTop);
-    m_hLayout->addWidget(container, Qt::AlignLeft);
-    m_hLayout->addLayout(m_vLayout);
+    m_hLayout.addWidget(container, Qt::AlignLeft);
+    m_hLayout.addLayout(m_vLayout);
 
     initUi();
 }
