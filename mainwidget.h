@@ -39,7 +39,7 @@ private:
     void initUi();
     void reset(const bhs::SimCondition&);
 
-    void displayStyle(QLCDNumber* const);
+    void displayStyle(QLCDNumber&);
     void displayStyle(QLabel* const);
 
     UpdateUi m_updateUi;
@@ -47,8 +47,8 @@ private:
     QHBoxLayout m_hLayout;
     QVBoxLayout m_vLayout;
 
-    QLCDNumber* const m_frameNumberLCD;
-    QLCDNumber* const m_fpsLCD;
+    QLCDNumber m_frameNumberLCD;
+    QLCDNumber m_fpsLCD;
     QPushButton* const m_startButton;
     QPushButton* const m_frameAdvanceButton;
     QLineEdit* const m_scaleValue;

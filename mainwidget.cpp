@@ -4,9 +4,8 @@ MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
     , m_graphicWindows(&m_updateUi)
     , m_hLayout(this)
-    //, m_vLayout(new QVBoxLayout)
-    , m_frameNumberLCD(new QLCDNumber(12))
-    , m_fpsLCD(new QLCDNumber(12))
+    , m_frameNumberLCD(12)
+    , m_fpsLCD(12)
     , m_startButton(new QPushButton)
     , m_frameAdvanceButton(new QPushButton(tr("Frame Advance")))
     , m_scaleValue(new QLineEdit)
@@ -40,7 +39,7 @@ void MainWidget::initUi()
     auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
     displayStyle(m_fpsLCD);
-    fpsLayout->addWidget(m_fpsLCD);
+    fpsLayout->addWidget(&m_fpsLCD);
     m_vLayout.addLayout(fpsLayout);
     connect(&m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
 
@@ -49,7 +48,7 @@ void MainWidget::initUi()
     auto frameNumberLabel = new QLabel(tr("Frames"));
     frameNumberLayout->addWidget(frameNumberLabel);
     displayStyle(m_frameNumberLCD);
-    frameNumberLayout->addWidget(m_frameNumberLCD);
+    frameNumberLayout->addWidget(&m_frameNumberLCD);
     m_vLayout.addLayout(frameNumberLayout);
     connect(&m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
@@ -180,7 +179,7 @@ void MainWidget::initUi()
 
 void MainWidget::displayFrameNumber(const int num)
 {
-    m_frameNumberLCD->display(num);
+    m_frameNumberLCD.display(num);
     quint64 time = floor(m_simCondition.timePerFrame * (float)num);
     quint64 seconds = time % 60;
     quint64 remain = time / 60;
@@ -198,7 +197,7 @@ void MainWidget::displayFrameNumber(const int num)
 
 void MainWidget::displayFPS(const int fps)
 {
-    m_fpsLCD->display(fps);
+    m_fpsLCD.display(fps);
 }
 
 void MainWidget::updateStartButtonText(const bool setStop)
@@ -211,10 +210,10 @@ void MainWidget::updateStartButtonText(const bool setStop)
     m_frameAdvanceButton->setDisabled(setStop);
 }
 
-void MainWidget::displayStyle(QLCDNumber* const lcd)
+void MainWidget::displayStyle(QLCDNumber& lcd)
 {
-    lcd->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    lcd->setSegmentStyle(QLCDNumber::Flat);
+    lcd.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    lcd.setSegmentStyle(QLCDNumber::Flat);
 }
 
 void MainWidget::displayStyle(QLabel* const lbl)
