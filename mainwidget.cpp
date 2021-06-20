@@ -4,7 +4,7 @@ MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
     , m_graphicWindows(&m_updateUi)
     , m_hLayout(this)
-    , m_vLayout(new QVBoxLayout)
+    //, m_vLayout(new QVBoxLayout)
     , m_frameNumberLCD(new QLCDNumber(12))
     , m_fpsLCD(new QLCDNumber(12))
     , m_startButton(new QPushButton)
@@ -26,9 +26,9 @@ MainWidget::MainWidget(QWidget* parent)
     QSize screenSize = m_graphicWindows.screen()->size();
     container->setMaximumSize(screenSize);
 
-    m_vLayout->setAlignment(Qt::AlignTop);
+    m_vLayout.setAlignment(Qt::AlignTop);
     m_hLayout.addWidget(container, Qt::AlignLeft);
-    m_hLayout.addLayout(m_vLayout);
+    m_hLayout.addLayout(&m_vLayout);
 
     initUi();
 }
@@ -41,7 +41,7 @@ void MainWidget::initUi()
     fpsLayout->addWidget(fpsLabel);
     displayStyle(m_fpsLCD);
     fpsLayout->addWidget(m_fpsLCD);
-    m_vLayout->addLayout(fpsLayout);
+    m_vLayout.addLayout(fpsLayout);
     connect(&m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
 
     // Frames
@@ -50,7 +50,7 @@ void MainWidget::initUi()
     frameNumberLayout->addWidget(frameNumberLabel);
     displayStyle(m_frameNumberLCD);
     frameNumberLayout->addWidget(m_frameNumberLCD);
-    m_vLayout->addLayout(frameNumberLayout);
+    m_vLayout.addLayout(frameNumberLayout);
     connect(&m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
     // Time/Frame
@@ -59,7 +59,7 @@ void MainWidget::initUi()
     timePerFrameLayout->addWidget(timePerFrameLabel);
     displayStyle(m_timePerFrameValue);
     timePerFrameLayout->addWidget(m_timePerFrameValue);
-    m_vLayout->addLayout(timePerFrameLayout);
+    m_vLayout.addLayout(timePerFrameLayout);
     connect(&m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
 
     // Simulation Time
@@ -68,51 +68,51 @@ void MainWidget::initUi()
     simTimeLayout->addWidget(simTimeLabel);
     displayStyle(m_simTimeValue);
     simTimeLayout->addWidget(m_simTimeValue);
-    m_vLayout->addLayout(simTimeLayout);
+    m_vLayout.addLayout(simTimeLayout);
 
     // Start Button
     m_startButton->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(m_startButton);
+    m_vLayout.addWidget(m_startButton);
     connect(m_startButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::startSim);
     connect(&m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
     m_frameAdvanceButton->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(m_frameAdvanceButton);
+    m_vLayout.addWidget(m_frameAdvanceButton);
     connect(m_frameAdvanceButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance);
 
     // Reset
     auto resetBtn = new QPushButton(tr("Reset"));
     resetBtn->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(resetBtn);
+    m_vLayout.addWidget(resetBtn);
     connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetInitial);
 
     // Circle strafing
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
-    m_vLayout->addWidget(circleStrafingCB);
+    m_vLayout.addWidget(circleStrafingCB);
     connect(circleStrafingCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::circleStrafing);
 
     // Grid Lines
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(gridLinesCB);
+    m_vLayout.addWidget(gridLinesCB);
     connect(gridLinesCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::enableGridLines);
 
     // Line Type
     auto btnLineType = new QPushButton(tr("Line Type"));
     btnLineType->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(btnLineType);
+    m_vLayout.addWidget(btnLineType);
     connect(btnLineType, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::changeLinePosition);
 
     // Model Scale
     auto scaleLabel = new QLabel(tr("Model Scale (m):"));
-    m_vLayout->addWidget(scaleLabel);
+    m_vLayout.addWidget(scaleLabel);
 
     m_scaleValue->setAlignment(Qt::AlignRight);
-    m_vLayout->addWidget(m_scaleValue);
+    m_vLayout.addWidget(m_scaleValue);
     connect(&m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
     connect(m_scaleValue, &QLineEdit::textChanged, &m_graphicWindows, &GraphicWindow::setModelScale);
 
@@ -122,57 +122,57 @@ void MainWidget::initUi()
     m_scaleSlider->setMinimum(0);
     m_scaleSlider->setMaximum(UpdateUi::SCALE_SLIDER_CENTER * 2);
     m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
-    m_vLayout->addWidget(m_scaleSlider);
+    m_vLayout.addWidget(m_scaleSlider);
     connect(m_scaleSlider, &QSlider::sliderMoved, &m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles"));
-    m_vLayout->addWidget(particleNumLabel);
+    m_vLayout.addWidget(particleNumLabel);
     displayStyle(m_particleNumValue);
-    m_vLayout->addWidget(m_particleNumValue);
+    m_vLayout.addWidget(m_particleNumValue);
     connect(&m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displatNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
-    m_vLayout->addWidget(engineLabel);
+    m_vLayout.addWidget(engineLabel);
     displayStyle(m_engineValue);
-    m_vLayout->addWidget(m_engineValue);
+    m_vLayout.addWidget(m_engineValue);
     connect(&m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
-    m_vLayout->addWidget(presetLabel);
+    m_vLayout.addWidget(presetLabel);
     displayStyle(m_presetValue);
-    m_vLayout->addWidget(m_presetValue);
+    m_vLayout.addWidget(m_presetValue);
     connect(&m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
-    m_vLayout->addWidget(massLabel);
+    m_vLayout.addWidget(massLabel);
 
     auto massQuantity = new QLineEdit("5.972e+24f");
-    m_vLayout->addWidget(massQuantity);
+    m_vLayout.addWidget(massQuantity);
 
     auto massRandomCheck = new QCheckBox(tr("Random Mass"));
     massRandomCheck->setChecked(true);
     massRandomCheck->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(massRandomCheck);
+    m_vLayout.addWidget(massRandomCheck);
 
     auto massRangeLabel = new QLabel(tr("Mass Range (kg)"));
-    m_vLayout->addWidget(massRangeLabel);
+    m_vLayout.addWidget(massRangeLabel);
 
     auto massRangeValue = new QLineEdit("1.0e+10");
-    m_vLayout->addWidget(massRangeValue);
+    m_vLayout.addWidget(massRangeValue);
 
     // New
     auto newButton = new QPushButton(tr("New..."));
     newButton->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(newButton);
+    m_vLayout.addWidget(newButton);
     connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
 
     // Graph
     auto graphButton = new QPushButton(tr("Graph..."));
     graphButton->setFocusPolicy(Qt::NoFocus);
-    m_vLayout->addWidget(graphButton);
+    m_vLayout.addWidget(graphButton);
     //connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
 
     updateStartButtonText(false);

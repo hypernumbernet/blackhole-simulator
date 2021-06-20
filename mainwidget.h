@@ -45,7 +45,7 @@ private:
     UpdateUi m_updateUi;
     GraphicWindow m_graphicWindows;
     QHBoxLayout m_hLayout;
-    QVBoxLayout* const m_vLayout;
+    QVBoxLayout m_vLayout;
 
     QLCDNumber* const m_frameNumberLCD;
     QLCDNumber* const m_fpsLCD;
