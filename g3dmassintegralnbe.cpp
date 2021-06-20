@@ -140,7 +140,7 @@ void G3DMassIntegralNBE::calculateInteraction() const
             }
 
             // Time is not taken into account.
-            force = inv * GRAVITATIONAL_CONSTANT;
+            force = abs(inv * GRAVITATIONAL_CONSTANT);
 
             d.unitX *= force;
             d.unitY *= force;
