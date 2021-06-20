@@ -32,10 +32,10 @@ private:
 
     UpdateUi* const m_updateUi;
 
-    QComboBox* const m_engineCombo;
-    QComboBox* const m_presetCombo;
-    QLineEdit* const m_timePerFrameValue;
-    QLineEdit* const m_particleNumValue;
+    QComboBox m_engineCombo;
+    QComboBox m_presetCombo;
+    QLineEdit m_timePerFrameValue;
+    QLineEdit m_particleNumValue;
 
     bhs::SimCondition m_simCondition;
 };
