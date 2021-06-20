@@ -83,7 +83,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     setLayout(vLayout);
 }
 
-void InitializerDialog::okButtonClicked()
+bool InitializerDialog::validate()
 {
     bool allOk = true;
     QPalette normalPal(palette());
@@ -111,42 +111,19 @@ void InitializerDialog::okButtonClicked()
         allOk = false;
         m_particleNumValue->setPalette(ngPal);
     }
+    return allOk;
+}
 
-    if (allOk) {
+void InitializerDialog::okButtonClicked()
+{
+    if (validate()) {
         accept();
     }
 }
 
 void InitializerDialog::applyButtonClicked()
 {
-    bool allOk = true;
-    QPalette normalPal(palette());
-    QPalette ngPal(palette());
-    ngPal.setColor(QPalette::Base, RE_ENTER_COLOR);
-
-    m_simCondition.engine = m_engineCombo->currentIndex();
-    m_simCondition.preset = m_presetCombo->currentIndex();
-
-    bool ok;
-    auto val = m_timePerFrameValue->text().toFloat(&ok);
-    if (ok) {
-        m_timePerFrameValue->setPalette(normalPal);
-        m_simCondition.timePerFrame = val;
-    } else {
-        allOk = false;
-        m_timePerFrameValue->setPalette(ngPal);
-    }
-
-    auto num = m_particleNumValue->text().toInt(&ok);
-    if (ok) {
-        m_particleNumValue->setPalette(normalPal);
-        m_simCondition.numberOfParticles = num;
-    } else {
-        allOk = false;
-        m_particleNumValue->setPalette(ngPal);
-    }
-
-    if (allOk) {
+    if (validate()) {
         emit m_updateUi->applyInitialConditions();
     }
 }

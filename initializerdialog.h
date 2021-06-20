@@ -28,6 +28,8 @@ public slots:
 private:
     static constexpr QColor RE_ENTER_COLOR = QColor(255, 200, 200);
 
+    bool validate();
+
     UpdateUi* const m_updateUi;
 
     QComboBox* const m_engineCombo;
