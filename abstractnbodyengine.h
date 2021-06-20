@@ -42,10 +42,10 @@ protected:
     void setNumberOfParticles(quint64);
     void changeModelScale(float);
 
+    UpdateUi* const m_updateUi;
     float* m_coordinates; // Particle coordinates
     float* m_velocities; // Particle velocity
     quint64 m_numberOfParticles;
     float m_modelScale;
     float m_scaleCenterValue;
-    UpdateUi* const m_updateUi;
 };

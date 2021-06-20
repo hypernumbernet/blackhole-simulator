@@ -30,7 +30,7 @@ public slots:
     void startSim();
     void frameAdvance();
     void circleStrafing(bool);
-    void reset(const UpdateUi::SimCondition&);
+    void reset(const bhs::SimCondition&);
     void setModelScale(const QString&);
     void setModelScaleInt(int);
 
@@ -42,41 +42,35 @@ protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private:
-    int m_frameNum;
-    float m_walkSpeed;
-    float m_lookAroundSpeed;
-
-    Camera m_camera;
     static constexpr QVector3D CAMERA_INI_POS= {-1.5f, -1.0f, -5.0f};
 
     void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;
-    QVector<Qt::Key> m_keyPressing;
-
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void wheelEvent(QWheelEvent*) override;
+
+    UpdateUi* const m_updateUi;
+    WorldModels* const m_worldModels;
+    Particles* const m_particleModels;
+
+    int m_frameNum;
+    float m_walkSpeed;
+    float m_lookAroundSpeed;
+    Camera m_camera;
+    QVector<Qt::Key> m_keyPressing;
     QPointF m_mouseLastPosition;
     bool m_mousePressing = false;
     QPoint m_mousePressPosition;
-
     QMatrix4x4 m_projection;
     QTime m_startTime;
     QBasicTimer m_uiTimer;
     QBasicTimer m_simulateTimer;
-
     QBasicTimer m_fpsTimer;
     int m_fpsPreFrame;
-
-    WorldModels* const m_worldModels;
-    Particles* const m_particleModels;
-
     bool m_isSimulating;
-    UpdateUi* const m_updateUi;
-
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
-
     QMutex m_guiMutex;
 };

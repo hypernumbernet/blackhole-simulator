@@ -3,6 +3,10 @@
 InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     : QDialog(parent)
     , m_updateUi(updateUi)
+    , m_engineCombo(new QComboBox)
+    , m_presetCombo(new QComboBox)
+    , m_timePerFrameValue(new QLineEdit)
+    , m_particleNumValue(new QLineEdit)
 {
     auto vLayout = new QVBoxLayout;
     vLayout->setAlignment(Qt::AlignTop);
@@ -11,7 +15,6 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     vLayout->addWidget(engineLabel);
 
-    m_engineCombo = new QComboBox;
     m_engineCombo->setFocusPolicy(Qt::NoFocus);
     m_engineCombo->setInsertPolicy(QComboBox::NoInsert);
     m_engineCombo->addItems(m_updateUi->NBODY_ENGINE_MAP->values());
@@ -21,7 +24,6 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     vLayout->addWidget(presetLabel);
 
-    m_presetCombo = new QComboBox;
     m_presetCombo->setFocusPolicy(Qt::NoFocus);
     m_presetCombo->setInsertPolicy(QComboBox::NoInsert);
     m_presetCombo->addItems(m_updateUi->INITIAL_CONDITION_MAP->values());
@@ -31,9 +33,15 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
     vLayout->addWidget(timePerFrameLabel);
 
-    m_timePerFrameValue = new QLineEdit;
     m_timePerFrameValue->setAlignment(Qt::AlignRight);
     vLayout->addWidget(m_timePerFrameValue);
+
+    // Number of particles
+    auto particleNumLabel = new QLabel(tr("Number of particles"));
+    vLayout->addWidget(particleNumLabel);
+
+    m_particleNumValue->setAlignment(Qt::AlignRight);
+    vLayout->addWidget(m_particleNumValue);
 
     // Mass
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
@@ -56,13 +64,13 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     // OK
     auto okButton = new QPushButton(tr("OK"));
     okButton->setFocusPolicy(Qt::NoFocus);
-    okButton->setDefault(true);
     vLayout->addWidget(okButton);
     connect(okButton, &QPushButton::clicked, this, &InitializerDialog::okButtonClicked);
 
     // Cancel
     auto cancelButton = new QPushButton(tr("Cancel"));
     cancelButton->setFocusPolicy(Qt::NoFocus);
+    cancelButton->setDefault(true);
     vLayout->addWidget(cancelButton);
     connect(cancelButton, &QPushButton::clicked, this, &InitializerDialog::close);
 
@@ -72,21 +80,30 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 void InitializerDialog::okButtonClicked()
 {
     bool allOk = true;
+    QPalette normalPal(palette());
+    QPalette ngPal(palette());
+    ngPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
-    m_engineIndex = m_engineCombo->currentIndex();
-    m_presetIndex = m_presetCombo->currentIndex();
+    m_simCondition.engine = m_engineCombo->currentIndex();
+    m_simCondition.preset = m_presetCombo->currentIndex();
 
     bool ok;
     auto val = m_timePerFrameValue->text().toFloat(&ok);
     if (ok) {
-        QPalette Pal(palette());
-        m_timePerFrameValue->setPalette(Pal);
-        m_timePerFrame = val;
+        m_timePerFrameValue->setPalette(normalPal);
+        m_simCondition.timePerFrame = val;
     } else {
         allOk = false;
-        QPalette Pal(palette());
-        Pal.setColor(QPalette::Base, QColor(255,200,200));
-        m_timePerFrameValue->setPalette(Pal);
+        m_timePerFrameValue->setPalette(ngPal);
+    }
+
+    auto num = m_particleNumValue->text().toInt(&ok);
+    if (ok) {
+        m_particleNumValue->setPalette(normalPal);
+        m_simCondition.numberOfParticles = num;
+    } else {
+        allOk = false;
+        m_particleNumValue->setPalette(ngPal);
     }
 
     if (allOk) {
@@ -94,22 +111,17 @@ void InitializerDialog::okButtonClicked()
     }
 }
 
-int InitializerDialog::engineIndex()
-{
-    return m_engineIndex;
-}
-
-int InitializerDialog::presetIndex()
-{
-    return m_presetIndex;
-}
-
 void InitializerDialog::setTimePerFrame(const float time)
 {
     m_timePerFrameValue->setText(QString::number(time));
 }
 
-float InitializerDialog::timePerFrame()
+void InitializerDialog::setNumberOfParticles(const int num)
 {
-    return m_timePerFrame;
+    m_particleNumValue->setText(QString::number(num));
+}
+
+bhs::SimCondition& InitializerDialog::simCondition()
+{
+    return m_simCondition;
 }

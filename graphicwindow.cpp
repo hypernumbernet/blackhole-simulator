@@ -1,15 +1,15 @@
 #include "graphicwindow.h"
 
 GraphicWindow::GraphicWindow(UpdateUi* updateUi)
-    : m_frameNum(0)
+    : m_updateUi(updateUi)
+    , m_worldModels(new WorldModels)
+    , m_particleModels(new Particles(updateUi))
+    , m_frameNum(0)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
     , m_fpsPreFrame(0)
-    , m_worldModels(new WorldModels)
-    , m_particleModels(new Particles(updateUi))
     , m_isSimulating(false)
-    , m_updateUi(updateUi)
     , m_isCircleStrafing(false)
     , m_circleStrafingSpeed(1.0f)
 {
@@ -51,7 +51,7 @@ void GraphicWindow::initializeGL()
         return; // TODO error message
     }
 
-    UpdateUi::SimCondition sim;
+    bhs::SimCondition sim;
     m_particleModels->selectNBodyEngine(sim);
 
     paintGL();
@@ -281,7 +281,7 @@ void GraphicWindow::circleStrafing(const bool on)
     m_camera.lookAtZero(1.0f);
 }
 
-void GraphicWindow::reset(const UpdateUi::SimCondition& sim)
+void GraphicWindow::reset(const bhs::SimCondition& sim)
 {
     m_isSimulating = false;
     m_frameNum = 0;

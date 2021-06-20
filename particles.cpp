@@ -1,10 +1,9 @@
 #include "particles.h"
 
 Particles::Particles(UpdateUi* const updateUi)
-    : m_pointSizeScale(1.0f)
+    : m_updateUi(updateUi)
+    , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
-    , m_numberOfParticle(400)
-    , m_updateUi(updateUi)
 {
 }
 
@@ -39,7 +38,7 @@ bool Particles::initialize(const int screenHeight)
     return true;
 }
 
-void Particles::selectNBodyEngine(const UpdateUi::SimCondition& sim)
+void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     auto presetValue = static_cast<AbstractNBodyEngine::Preset>(sim.preset);
 
@@ -47,14 +46,14 @@ void Particles::selectNBodyEngine(const UpdateUi::SimCondition& sim)
     default:
         m_NBodyEngine = new G3DMassDiffNBE(
                     m_updateUi,
-                    m_numberOfParticle,
+                    sim.numberOfParticles,
                     sim.timePerFrame,
                     presetValue);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE(
                     m_updateUi,
-                    m_numberOfParticle,
+                    sim.numberOfParticles,
                     sim.timePerFrame,
                     presetValue);
         break;
@@ -113,7 +112,7 @@ void Particles::resize(int height)
     m_pointSizeScale = (float)height / (float)m_initHeight;
 }
 
-void Particles::reset(const UpdateUi::SimCondition& sim)
+void Particles::reset(const bhs::SimCondition& sim)
 {
     delete m_NBodyEngine;
     selectNBodyEngine(sim);

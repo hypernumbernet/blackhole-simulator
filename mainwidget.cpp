@@ -3,10 +3,23 @@
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
     , m_updateUi(new UpdateUi)
+    , m_graphicWindows(new GraphicWindow(m_updateUi))
+    , m_hLayout(new QHBoxLayout(this))
+    , m_vLayout(new QVBoxLayout)
+    , m_frameNumberLCD(new QLCDNumber(12))
+    , m_fpsLCD(new QLCDNumber(12))
+    , m_startButton(new QPushButton)
+    , m_frameAdvanceButton(new QPushButton(tr("Frame Advance")))
+    , m_scaleValue(new QLineEdit)
+    , m_scaleSlider(new QSlider)
+    , m_simTimeValue(new QLabel)
+    , m_timePerFrameValue(new QLabel)
+    , m_engineValue(new QLabel)
+    , m_presetValue(new QLabel)
+    , m_particleNumValue(new QLabel)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
-    m_graphicWindows = new GraphicWindow(m_updateUi);
     auto container = QWidget::createWindowContainer(m_graphicWindows);
     container->setFocusPolicy(Qt::StrongFocus);
     container->setFocus();
@@ -14,8 +27,6 @@ MainWidget::MainWidget(QWidget* parent)
     QSize screenSize = m_graphicWindows->screen()->size();
     container->setMaximumSize(screenSize);
 
-    m_hLayout = new QHBoxLayout(this);
-    m_vLayout = new QVBoxLayout;
     m_vLayout->setAlignment(Qt::AlignTop);
     m_hLayout->addWidget(container, Qt::AlignLeft);
     m_hLayout->addLayout(m_vLayout);
@@ -29,7 +40,7 @@ void MainWidget::initUi()
     auto fpsLayout = new QHBoxLayout;
     auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
-    m_fpsLCD = newCounterQLCDNumber(12);
+    displayStyle(m_fpsLCD);
     fpsLayout->addWidget(m_fpsLCD);
     m_vLayout->addLayout(fpsLayout);
     connect(m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
@@ -38,7 +49,7 @@ void MainWidget::initUi()
     auto frameNumberLayout = new QHBoxLayout;
     auto frameNumberLabel = new QLabel(tr("Frames"));
     frameNumberLayout->addWidget(frameNumberLabel);
-    m_frameNumberLCD = newCounterQLCDNumber(12);
+    displayStyle(m_frameNumberLCD);
     frameNumberLayout->addWidget(m_frameNumberLCD);
     m_vLayout->addLayout(frameNumberLayout);
     connect(m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
@@ -47,7 +58,7 @@ void MainWidget::initUi()
     auto timePerFrameLayout = new QHBoxLayout;
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
     timePerFrameLayout->addWidget(timePerFrameLabel);
-    m_timePerFrameValue = newValueQLabel();
+    displayStyle(m_timePerFrameValue);
     timePerFrameLayout->addWidget(m_timePerFrameValue);
     m_vLayout->addLayout(timePerFrameLayout);
     connect(m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
@@ -56,19 +67,17 @@ void MainWidget::initUi()
     auto simTimeLayout = new QHBoxLayout;
     auto simTimeLabel = new QLabel(tr("Time"));
     simTimeLayout->addWidget(simTimeLabel);
-    m_simTimeValue = newValueQLabel();
+    displayStyle(m_simTimeValue);
     simTimeLayout->addWidget(m_simTimeValue);
     m_vLayout->addLayout(simTimeLayout);
 
     // Start Button
-    m_startButton = new QPushButton;
     m_startButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_startButton);
     connect(m_startButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
     connect(m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
-    m_frameAdvanceButton = new QPushButton(tr("Frame Advance"));
     m_frameAdvanceButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_frameAdvanceButton);
     connect(m_frameAdvanceButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
@@ -103,13 +112,12 @@ void MainWidget::initUi()
     auto scaleLabel = new QLabel(tr("Model Scale (m):"));
     m_vLayout->addWidget(scaleLabel);
 
-    m_scaleValue = new QLineEdit;
     m_scaleValue->setAlignment(Qt::AlignRight);
     m_vLayout->addWidget(m_scaleValue);
     connect(m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
     connect(m_scaleValue, &QLineEdit::textChanged, m_graphicWindows, &GraphicWindow::setModelScale);
 
-    m_scaleSlider = new QSlider;
+    //m_scaleSlider = new QSlider;
     m_scaleSlider->setFocusPolicy(Qt::NoFocus);
     m_scaleSlider->setOrientation(Qt::Horizontal);
     m_scaleSlider->setMinimum(0);
@@ -121,24 +129,21 @@ void MainWidget::initUi()
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles"));
     m_vLayout->addWidget(particleNumLabel);
-
-    auto particleNumValue = newValueQLabel();
-    m_vLayout->addWidget(particleNumValue);
-    connect(m_updateUi, &UpdateUi::displayNumberOfParticles, particleNumValue, &QLabel::setText);
+    displayStyle(m_particleNumValue);
+    m_vLayout->addWidget(m_particleNumValue);
+    connect(m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displatNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     m_vLayout->addWidget(engineLabel);
-
-    m_engineValue = newValueQLabel();
+    displayStyle(m_engineValue);
     m_vLayout->addWidget(m_engineValue);
     connect(m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     m_vLayout->addWidget(presetLabel);
-
-    m_presetValue = newValueQLabel();
+    displayStyle(m_presetValue);
     m_vLayout->addWidget(m_presetValue);
     connect(m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
@@ -177,7 +182,7 @@ void MainWidget::initUi()
 void MainWidget::displayFrameNumber(const int num)
 {
     m_frameNumberLCD->display(num);
-    quint64 time = floor(m_timePerFrame * (float)num);
+    quint64 time = floor(m_simCondition.timePerFrame * (float)num);
     quint64 seconds = time % 60;
     quint64 remain = time / 60;
     quint64 minutes = remain % 60;
@@ -207,20 +212,16 @@ void MainWidget::updateStartButtonText(const bool setStop)
     m_frameAdvanceButton->setDisabled(setStop);
 }
 
-QLCDNumber* MainWidget::newCounterQLCDNumber(const int numDigits)
+void MainWidget::displayStyle(QLCDNumber* const lcd)
 {
-    auto lcd = new QLCDNumber(numDigits);
     lcd->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     lcd->setSegmentStyle(QLCDNumber::Flat);
-    return lcd;
 }
 
-QLabel* MainWidget::newValueQLabel()
+void MainWidget::displayStyle(QLabel* const lbl)
 {
-    auto lbl = new QLabel();
     lbl->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     lbl->setAlignment(Qt::AlignRight);
-    return lbl;
 }
 
 void MainWidget::displayModelScale(const float val)
@@ -242,7 +243,7 @@ void MainWidget::resetScaleSlider()
 
 void MainWidget::displayTimePerFrame(const float time)
 {
-    m_timePerFrame = time;
+    m_simCondition.timePerFrame = time;
     m_timePerFrameValue->setText(QString::number(time));
 }
 
@@ -252,7 +253,8 @@ void MainWidget::showInitializerDialog()
         m_initializerDialog = new InitializerDialog(m_updateUi, this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
     }
-    m_initializerDialog->setTimePerFrame(m_timePerFrame);
+    m_initializerDialog->setTimePerFrame(m_simCondition.timePerFrame);
+    m_initializerDialog->setNumberOfParticles(m_simCondition.numberOfParticles);
     m_initializerDialog->show();
     m_initializerDialog->raise();
     m_initializerDialog->activateWindow();
@@ -260,11 +262,13 @@ void MainWidget::showInitializerDialog()
 
 void MainWidget::acceptInitializerDialog()
 {
-    UpdateUi::SimCondition sim;
-    sim.engine = m_initializerDialog->engineIndex();
-    sim.preset = m_initializerDialog->presetIndex();
-    sim.timePerFrame = m_initializerDialog->timePerFrame();
-    reset(sim);
+//    bhs::SimCondition sim;
+//    sim.engine = m_initializerDialog->engineIndex();
+//    sim.preset = m_initializerDialog->presetIndex();
+//    sim.timePerFrame = m_initializerDialog->timePerFrame();
+//    sim.numberOfParticles = m_initializerDialog->numberOfParticles();
+    m_simCondition = m_initializerDialog->simCondition();
+    reset(m_simCondition);
 }
 
 void MainWidget::displayEngineName(const QString& name)
@@ -272,7 +276,7 @@ void MainWidget::displayEngineName(const QString& name)
     m_engineValue->setText(name);
 }
 
-void MainWidget::reset(const UpdateUi::SimCondition& sim)
+void MainWidget::reset(const bhs::SimCondition& sim)
 {
     m_graphicWindows->reset(sim);
     resetScaleSlider();
@@ -286,11 +290,11 @@ void MainWidget::displayPresetName(const QString& name)
 
 void MainWidget::resetInitial()
 {
-    UpdateUi::SimCondition sim;
-    if (m_initializerDialog) {
-        sim.engine = m_initializerDialog->engineIndex();
-        sim.preset = m_initializerDialog->presetIndex();
-        sim.timePerFrame = m_initializerDialog->timePerFrame();
-    }
-    reset(sim);
+    reset(m_simCondition);
+}
+
+void MainWidget::displatNumberOfParticles(const int num)
+{
+    m_simCondition.numberOfParticles = num;
+    m_particleNumValue->setText(QString::number(num));
 }

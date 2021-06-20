@@ -3,18 +3,22 @@
 #include <QObject>
 #include <QMap>
 
-class UpdateUi : public QObject
+namespace bhs
 {
-    Q_OBJECT
-
-public:
-
     struct SimCondition
     {
         int engine = 0;
         int preset = 0;
         float timePerFrame = 1000.0f;
+        int numberOfParticles = 400;
     };
+}
+
+class UpdateUi : public QObject
+{
+    Q_OBJECT
+
+public:
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
 
@@ -41,7 +45,7 @@ public:
     { };
 
 signals:
-    void displayNumberOfParticles(const QString&);
+    void displayNumberOfParticles(int);
     void displayFrameNumber(int);
     void displayFps(int);
     void displayModelScale(float);

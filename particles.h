@@ -20,12 +20,14 @@ public:
     void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateParticles();
-    void selectNBodyEngine(const UpdateUi::SimCondition&);
-    void reset(const UpdateUi::SimCondition&);
+    void selectNBodyEngine(const bhs::SimCondition&);
+    void reset(const bhs::SimCondition&);
     void setModelScale(float);
     void setModelScaleRatio(float);
 
 private:
+    UpdateUi* const m_updateUi;
+
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
@@ -38,7 +40,4 @@ private:
     float m_pointSize;
 
     int m_initHeight;
-    int m_numberOfParticle;
-
-    UpdateUi* const m_updateUi;
 };

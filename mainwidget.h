@@ -33,31 +33,35 @@ public slots:
     void displayEngineName(const QString&);
     void resetInitial();
     void displayPresetName(const QString&);
+    void displatNumberOfParticles(int);
 
 private:
     void initUi();
-    void reset(const UpdateUi::SimCondition&);
+    void reset(const bhs::SimCondition&);
 
-    QLCDNumber* newCounterQLCDNumber(int);
-    QLabel* newValueQLabel();
-
-    GraphicWindow* m_graphicWindows;
-    QHBoxLayout* m_hLayout;
-    QVBoxLayout* m_vLayout;
-
-    QLCDNumber* m_frameNumberLCD;
-    QLCDNumber* m_fpsLCD;
-    QPushButton* m_startButton;
-    QPushButton* m_frameAdvanceButton;
-    QLineEdit* m_scaleValue;
-    QSlider* m_scaleSlider;
-    QLabel* m_simTimeValue;
-    float m_timePerFrame;
-    QLabel* m_timePerFrameValue;
-    QLabel* m_engineValue;
-    QLabel* m_presetValue;
-
-    InitializerDialog* m_initializerDialog = nullptr;
+    void displayStyle(QLCDNumber* const);
+    void displayStyle(QLabel* const);
 
     UpdateUi* const m_updateUi;
+    GraphicWindow* const m_graphicWindows;
+    QHBoxLayout* const m_hLayout;
+    QVBoxLayout* const m_vLayout;
+
+    QLCDNumber* const m_frameNumberLCD;
+    QLCDNumber* const m_fpsLCD;
+    QPushButton* const m_startButton;
+    QPushButton* const m_frameAdvanceButton;
+    QLineEdit* const m_scaleValue;
+    QSlider* const m_scaleSlider;
+    QLabel* const m_simTimeValue;
+    QLabel* const m_timePerFrameValue;
+    QLabel* const m_engineValue;
+    QLabel* const m_presetValue;
+    QLabel* const m_particleNumValue;
+
+//    float m_timePerFrame;
+//    int m_numberOfParticles;
+    bhs::SimCondition m_simCondition;
+
+    InitializerDialog* m_initializerDialog = nullptr;
 };

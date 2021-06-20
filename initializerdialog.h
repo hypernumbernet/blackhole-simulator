@@ -17,23 +17,22 @@ class InitializerDialog : public QDialog
 public:
     InitializerDialog(UpdateUi*, QWidget* parent = nullptr);
 
-    int engineIndex();
-    int presetIndex();
     void setTimePerFrame(float);
-    float timePerFrame();
+    void setNumberOfParticles(int);
+    bhs::SimCondition& simCondition();
 
 public slots:
     void okButtonClicked();
 
 private:
-    QComboBox* m_engineCombo;
-    QComboBox* m_presetCombo;
-    QLineEdit* m_timePerFrameValue;
-
-    // These values are used when you press the reset button.
-    int m_engineIndex;
-    int m_presetIndex;
-    float m_timePerFrame;
+    static constexpr QColor RE_ENTER_COLOR = QColor(255, 200, 200);
 
     UpdateUi* const m_updateUi;
+
+    QComboBox* const m_engineCombo;
+    QComboBox* const m_presetCombo;
+    QLineEdit* const m_timePerFrameValue;
+    QLineEdit* const m_particleNumValue;
+
+    bhs::SimCondition m_simCondition;
 };

@@ -15,7 +15,7 @@ AbstractNBodyEngine::~AbstractNBodyEngine()
 void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
 {
     m_numberOfParticles = num;
-    emit m_updateUi->displayNumberOfParticles(QString::number(num));
+    emit m_updateUi->displayNumberOfParticles(num);
 }
 
 void AbstractNBodyEngine::setModelScale(const float scale)
