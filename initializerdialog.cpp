@@ -33,7 +33,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     vLayout->addWidget(&m_timePerFrameValue);
 
     // Number of particles
-    auto particleNumLabel = new QLabel(tr("Number of particles"));
+    auto particleNumLabel = new QLabel(tr("Number of particles (hint)"));
     vLayout->addWidget(particleNumLabel);
 
     m_particleNumValue.setAlignment(Qt::AlignRight);
