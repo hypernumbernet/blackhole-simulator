@@ -2,7 +2,7 @@
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
-    , m_graphicWindows(new GraphicWindow(&m_updateUi))
+    , m_graphicWindows(&m_updateUi)
     , m_hLayout(new QHBoxLayout(this))
     , m_vLayout(new QVBoxLayout)
     , m_frameNumberLCD(new QLCDNumber(12))
@@ -19,11 +19,11 @@ MainWidget::MainWidget(QWidget* parent)
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
-    auto container = QWidget::createWindowContainer(m_graphicWindows);
+    auto container = QWidget::createWindowContainer(&m_graphicWindows);
     container->setFocusPolicy(Qt::StrongFocus);
     container->setFocus();
     container->setMinimumSize(QSize(200, 100));
-    QSize screenSize = m_graphicWindows->screen()->size();
+    QSize screenSize = m_graphicWindows.screen()->size();
     container->setMaximumSize(screenSize);
 
     m_vLayout->setAlignment(Qt::AlignTop);
@@ -73,13 +73,13 @@ void MainWidget::initUi()
     // Start Button
     m_startButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_startButton);
-    connect(m_startButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::startSim);
+    connect(m_startButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::startSim);
     connect(&m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
     m_frameAdvanceButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(m_frameAdvanceButton);
-    connect(m_frameAdvanceButton, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::frameAdvance);
+    connect(m_frameAdvanceButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance);
 
     // Reset
     auto resetBtn = new QPushButton(tr("Reset"));
@@ -92,20 +92,20 @@ void MainWidget::initUi()
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
     m_vLayout->addWidget(circleStrafingCB);
-    connect(circleStrafingCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::circleStrafing);
+    connect(circleStrafingCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::circleStrafing);
 
     // Grid Lines
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(gridLinesCB);
-    connect(gridLinesCB, &QCheckBox::stateChanged, m_graphicWindows, &GraphicWindow::enableGridLines);
+    connect(gridLinesCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::enableGridLines);
 
     // Line Type
     auto btnLineType = new QPushButton(tr("Line Type"));
     btnLineType->setFocusPolicy(Qt::NoFocus);
     m_vLayout->addWidget(btnLineType);
-    connect(btnLineType, &QPushButton::clicked, m_graphicWindows, &GraphicWindow::changeLinePosition);
+    connect(btnLineType, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::changeLinePosition);
 
     // Model Scale
     auto scaleLabel = new QLabel(tr("Model Scale (m):"));
@@ -114,7 +114,7 @@ void MainWidget::initUi()
     m_scaleValue->setAlignment(Qt::AlignRight);
     m_vLayout->addWidget(m_scaleValue);
     connect(&m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
-    connect(m_scaleValue, &QLineEdit::textChanged, m_graphicWindows, &GraphicWindow::setModelScale);
+    connect(m_scaleValue, &QLineEdit::textChanged, &m_graphicWindows, &GraphicWindow::setModelScale);
 
     //m_scaleSlider = new QSlider;
     m_scaleSlider->setFocusPolicy(Qt::NoFocus);
@@ -123,7 +123,7 @@ void MainWidget::initUi()
     m_scaleSlider->setMaximum(UpdateUi::SCALE_SLIDER_CENTER * 2);
     m_scaleSlider->setSliderPosition(UpdateUi::SCALE_SLIDER_CENTER);
     m_vLayout->addWidget(m_scaleSlider);
-    connect(m_scaleSlider, &QSlider::sliderMoved, m_graphicWindows, &GraphicWindow::setModelScaleInt);
+    connect(m_scaleSlider, &QSlider::sliderMoved, &m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles"));
@@ -273,7 +273,7 @@ void MainWidget::displayEngineName(const QString& name)
 
 void MainWidget::reset(const bhs::SimCondition& sim)
 {
-    m_graphicWindows->reset(sim);
+    m_graphicWindows.reset(sim);
     resetScaleSlider();
     updateStartButtonText(false);
 }

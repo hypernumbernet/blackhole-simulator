@@ -43,7 +43,7 @@ private:
     void displayStyle(QLabel* const);
 
     UpdateUi m_updateUi;
-    GraphicWindow* const m_graphicWindows;
+    GraphicWindow m_graphicWindows;
     QHBoxLayout* const m_hLayout;
     QVBoxLayout* const m_vLayout;
 
