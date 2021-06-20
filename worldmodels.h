@@ -1,5 +1,7 @@
 #pragma once
 
+#include "camera.h"
+
 #include <math.h>
 
 #include <QOpenGLFunctions_4_5_Core>

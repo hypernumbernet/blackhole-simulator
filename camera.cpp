@@ -1,6 +1,6 @@
 #include "camera.h"
 
-static inline void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
+void Camera::rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
 {
     // The following calculation does not work.
     //axis = rot.rotatedVector(axis);
@@ -8,18 +8,11 @@ static inline void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
     auto conjugateRot = rot.conjugated();
     QQuaternion quaAxis(0.0f, axis);
     auto result = conjugateRot * quaAxis * rot;
-//    if (!std::isfinite(result.x())) {
-//        qDebug() << "[warning] invalid number detected";
-//        return;
-//    }
     axis.setX(result.x());
     axis.setY(result.y());
     axis.setZ(result.z());
 
     axis.normalize();
-
-//    if (axis.x() != result.x() || axis.y() != result.y() || axis.z() != result.z())
-//        qDebug() << "[warning] invalid number detected";
 }
 
 Camera::Camera(const QVector3D &pos)
@@ -187,15 +180,6 @@ void Camera::reset(const QVector3D& position)
 
 void Camera::multiplyRotation(const QQuaternion& rot)
 {
-//    if (rot.scalar() != rot.scalar() ||
-//            rot.x() != rot.x() ||
-//            rot.y() != rot.y() ||
-//            rot.z() != rot.z()) {
-//        qDebug() << "[warning] invalid number detected"
-//            << m_rotation << m_position
-//            << m_forward << m_right << m_up;
-//        return;
-//    }
     m_rotation *= rot;
     m_rotation.normalize();
 }

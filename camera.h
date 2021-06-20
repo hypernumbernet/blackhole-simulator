@@ -11,6 +11,8 @@ class Camera
 public:
     Camera(const QVector3D& pos);
 
+    static void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot);
+
     void pitch(float degrees);
     void yaw(float degrees);
     void roll(float degrees);

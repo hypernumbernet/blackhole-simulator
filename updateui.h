@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QQuaternion>
 
 namespace bhs
 {

@@ -1,14 +1,5 @@
 #include "worldmodels.h"
 
-static inline QVector3D rotateV3ByQuaternion(const QVector3D& axis, const QQuaternion& rot)
-{
-    auto conjugateRot = rot.conjugated();
-    QQuaternion quaAxis(0.0f, axis);
-    auto result = conjugateRot * quaAxis * rot;
-    QVector3D ret(result.x(), result.y(), result.z());
-    return ret;
-}
-
 WorldModels::WorldModels()
     : m_enableGridLines(true)
     , m_lineType(0)
@@ -152,7 +143,8 @@ void WorldModels::drawCircle(const int resolution, const QVector3D& axis, const 
     QVector3D prev = startPoint;
     for (int i = 0; i <= resolution; ++i) {
         QQuaternion rot = QQuaternion::fromAxisAndAngle(axis, degree * (float)i);
-        QVector3D v = rotateV3ByQuaternion(startPoint, rot);
+        QVector3D v = startPoint;
+        Camera::rotateV3ByQuaternion(v, rot);
         if (i > 0)
             appendLine(prev, v, color);
         prev = v;
@@ -172,7 +164,7 @@ void WorldModels::linesCubeMeshes()
     QVector3D meridian_start = axis_x;
     drawCircle(resolution, meridian_start, axis_y, RED);
     for (int j = 0; j < jmax; ++j) {
-        meridian_start = rotateV3ByQuaternion(meridian_start, rot_y);
+        Camera::rotateV3ByQuaternion(meridian_start, rot_y);
         drawCircle(resolution, meridian_start, axis_y, RED);
     }
 
@@ -182,7 +174,8 @@ void WorldModels::linesCubeMeshes()
         QVector3D v = axis_z;
         if (j > 0) {
             QQuaternion rot_zy = QQuaternion::fromAxisAndAngle(axis_x, angle * (float)j);
-            v = rotateV3ByQuaternion(axis_z, rot_zy);
+            v = axis_z;
+            Camera::rotateV3ByQuaternion(v, rot_zy);
         }
         drawCircle(resolution, axis_y, v, BLUE);
         drawCircle(resolution, axis_y, {v.x(), -v.y(), v.z()}, BLUE);
@@ -191,5 +184,4 @@ void WorldModels::linesCubeMeshes()
     appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
-
 }
