@@ -5,7 +5,7 @@
 #include "initializer3d.h"
 
 // Gravity 3D Mass Integral N-Body Engine
-class G3DMassIntegralNBE : public AbstractNBodyEngine, Initializer3D
+class G3DMassIntegralNBE : public AbstractNBodyEngine, private Initializer3D
 {
     struct Distance {
         float invR;

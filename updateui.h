@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QQuaternion>
 
-namespace bhs
+namespace bhs // Black Hole Simulator
 {
 
 enum class Preset {
@@ -22,6 +22,7 @@ struct SimCondition
     Preset preset = Preset::Random;
     float timePerFrame = 1000.0f;
     int numberOfParticles = 400;
+    float mass = 6.0e+29f;
 };
 
 }

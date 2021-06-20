@@ -19,6 +19,7 @@ public:
 
     void setTimePerFrame(float);
     void setNumberOfParticles(int);
+    void setMassAvg(float);
     bhs::SimCondition& simCondition();
 
 public slots:
@@ -36,6 +37,7 @@ private:
     QComboBox m_presetCombo;
     QLineEdit m_timePerFrameValue;
     QLineEdit m_particleNumValue;
+    QLineEdit m_massAvgValue;
 
     bhs::SimCondition m_simCondition;
 };

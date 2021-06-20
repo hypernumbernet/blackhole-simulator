@@ -1,13 +1,8 @@
 #include "initializer3d.h"
 
-Initializer3D::Initializer3D()
-{
-
-}
-
 void Initializer3D::initParticlesRandam(AbstractNBodyEngine* const engine)
 {
-    engine->changeModelScale(1.0e-3f);
+    engine->changeModelScale(1.0e-11f);
 
     quint64 num = engine->numberOfParticle();
     float* masses = engine->masses();
@@ -16,24 +11,21 @@ void Initializer3D::initParticlesRandam(AbstractNBodyEngine* const engine)
 
     for (quint64 i = 0; i < num; ++i)
     {
-        masses[i] = randf() * 2.0e+2f - 1.0e+2f;
-        //masses[i] = 2.0e+2f;
+        masses[i] = randf() * m_massAverage * 2.0f;
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = randf() * 2.0e+3f - 1.0e+3f;
+        coordinates[i] = randf() * 2.0e+11f - 1.0e+11f;
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = randf() * 2.0e-7f - 1.0e-7f;
-        //velocities[i] = 0.0f;
+        velocities[i] = randf() * 3.0e+4f - 1.5e+4f;
     }
 
-    masses[0] = 2.0e+5f;
+//    masses[0] = 2.0e+30f;
 //    coordinates[0] = 0.0f;
 //    coordinates[1] = 0.0f;
 //    coordinates[2] = 0.0f;
-
 }
 
 void Initializer3D::initSunEarth(AbstractNBodyEngine* const engine)

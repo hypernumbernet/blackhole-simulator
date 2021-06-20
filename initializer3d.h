@@ -2,10 +2,10 @@
 
 #include "abstractinitializer.h"
 
-class Initializer3D : public AbstractInitializer
+class Initializer3D : private AbstractInitializer
 {
 public:
-    Initializer3D();
+    using AbstractInitializer::AbstractInitializer;
 
 protected:
     void initParticlesRandam(AbstractNBodyEngine* const) override;

@@ -43,8 +43,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
     vLayout->addWidget(massLabel);
 
-    auto massQuantity = new QLineEdit("5.972e+24f");
-    vLayout->addWidget(massQuantity);
+    vLayout->addWidget(&m_massAvgValue);
 
     auto massRandomCheck = new QCheckBox(tr("Random Mass"));
     massRandomCheck->setChecked(true);
@@ -83,8 +82,8 @@ bool InitializerDialog::validate()
 {
     bool allOk = true;
     QPalette normalPal(palette());
-    QPalette ngPal(palette());
-    ngPal.setColor(QPalette::Base, RE_ENTER_COLOR);
+    QPalette NGPal(palette());
+    NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
     m_simCondition.engine = m_engineCombo.currentIndex();
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetCombo.currentIndex());
@@ -96,7 +95,7 @@ bool InitializerDialog::validate()
         m_simCondition.timePerFrame = val;
     } else {
         allOk = false;
-        m_timePerFrameValue.setPalette(ngPal);
+        m_timePerFrameValue.setPalette(NGPal);
     }
 
     auto num = m_particleNumValue.text().toInt(&ok);
@@ -105,8 +104,18 @@ bool InitializerDialog::validate()
         m_simCondition.numberOfParticles = num;
     } else {
         allOk = false;
-        m_particleNumValue.setPalette(ngPal);
+        m_particleNumValue.setPalette(NGPal);
     }
+
+    auto massAvg = m_massAvgValue.text().toFloat(&ok);
+    if (ok) {
+        m_massAvgValue.setPalette(normalPal);
+        m_simCondition.mass = massAvg;
+    } else {
+        allOk = false;
+        m_massAvgValue.setPalette(NGPal);
+    }
+
     return allOk;
 }
 
@@ -137,4 +146,9 @@ void InitializerDialog::setNumberOfParticles(const int num)
 bhs::SimCondition& InitializerDialog::simCondition()
 {
     return m_simCondition;
+}
+
+void InitializerDialog::setMassAvg(const float mass)
+{
+    m_massAvgValue.setText(QString::number(mass));
 }

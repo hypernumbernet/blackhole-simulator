@@ -228,6 +228,8 @@ void MainWidget::showInitializerDialog()
     }
     m_initializerDialog->setTimePerFrame(m_simCondition.timePerFrame);
     m_initializerDialog->setNumberOfParticles(m_simCondition.numberOfParticles);
+    m_initializerDialog->setMassAvg(m_simCondition.mass);
+
     m_initializerDialog->show();
     m_initializerDialog->raise();
     m_initializerDialog->activateWindow();

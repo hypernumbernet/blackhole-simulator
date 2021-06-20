@@ -4,6 +4,7 @@ G3DMassDiffNBE::G3DMassDiffNBE(
         UpdateUi* const updateUi,
         const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
+    , Initializer3D(sim)
 {
     switch (sim.preset) {
     case bhs::Preset::Random:
@@ -81,7 +82,7 @@ void G3DMassDiffNBE::calculateInteraction() const
             d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
             d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
             distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-            if (distance == 0.0f) {
+            if (distance <= 0.0f) {
                 continue;
             }
             inv = 1.0f / distance;

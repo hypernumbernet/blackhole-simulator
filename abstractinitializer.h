@@ -6,10 +6,12 @@ class AbstractInitializer
 {
 public:
 
-    AbstractInitializer();
+    AbstractInitializer(const bhs::SimCondition&);
+    //virtual ~AbstractInitializer();
 
 protected:
     static float randf() {return (float)rand() / (float)RAND_MAX;} // TODO  to one place
+    float m_massAverage;
 
 private:
     virtual void initParticlesRandam(AbstractNBodyEngine* const) = 0;

@@ -5,7 +5,7 @@
 #include "initializer3d.h"
 
 // Gravity 3D Mass Differential N-Body Engine
-class G3DMassDiffNBE : public AbstractNBodyEngine, Initializer3D
+class G3DMassDiffNBE : public AbstractNBodyEngine, private Initializer3D
 {
 public:
     G3DMassDiffNBE(UpdateUi* const, const bhs::SimCondition&);

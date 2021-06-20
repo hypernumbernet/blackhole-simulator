@@ -4,6 +4,7 @@ G3DMassIntegralNBE::G3DMassIntegralNBE(
         UpdateUi* const updateUi,
         const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
+    , Initializer3D(sim)
 {
     switch (sim.preset) {
     case bhs::Preset::Random:
