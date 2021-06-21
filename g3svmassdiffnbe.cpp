@@ -69,13 +69,13 @@ void G3SVMassDiffNBE::calculateTimeProgress() const
 
 void G3SVMassDiffNBE::calculateInteraction() const
 {
-    double d1, d2, d3, distance, inv, theta;
+    float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
-    double cinv = (1.0 / SPEED_OF_LIGHT);
-    double velangle = 3.141592653589793f * cinv * 0.5;
-    double vangle_half = velangle * 0.5;
-    double vangle_inv = 1.0 / velangle;
-    double time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
+    float cinv = (1.0 / SPEED_OF_LIGHT);
+    float velangle = 3.141592653589793f * cinv * 0.5;
+    float vangle_half = velangle * 0.5;
+    float vangle_inv = 1.0 / velangle;
+    float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
@@ -99,16 +99,16 @@ void G3SVMassDiffNBE::calculateInteraction() const
             d2 *= inv;
             d3 *= inv;
 
-            auto rota = Quaternion(0.0, d1, d2, d3);
+            auto rota = Quaternion<float>(0.0, d1, d2, d3);
             rota.MakeRotation(-theta * m_masses[j] * vangle_half);
-            auto rotb = Quaternion(0.0, d1, d2, d3);
+            auto rotb = Quaternion<float>(0.0, d1, d2, d3);
             rotb.MakeRotation(theta * m_masses[i] * vangle_half);
 
-            auto va = Quaternion<double>::Exp(
+            auto va = Quaternion<float>::Exp(
                 m_velocities[a] * velangle,
                 m_velocities[a + 1] * velangle,
                 m_velocities[a + 2] * velangle);
-            auto vb = Quaternion<double>::Exp(
+            auto vb = Quaternion<float>::Exp(
                 m_velocities[b] * velangle,
                 m_velocities[b + 1] * velangle,
                 m_velocities[b + 2] * velangle);
