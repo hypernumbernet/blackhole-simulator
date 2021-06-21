@@ -25,7 +25,7 @@ public slots:
     void applyButtonClicked();
 
 private:
-    static constexpr QColor RE_ENTER_COLOR = QColor(255, 200, 200);
+    static constexpr QColor RE_ENTER_COLOR = {255, 200, 200};
 
     bool validate();
 
