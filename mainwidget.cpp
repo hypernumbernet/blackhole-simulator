@@ -144,6 +144,7 @@ void MainWidget::initUi()
 
     // Graph
     auto graphButton = new QPushButton(tr("Graph..."));
+    graphButton->setEnabled(false);
     graphButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(graphButton);
     //connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
