@@ -67,8 +67,8 @@ void Initializer3D::initEarthSun()
     coordinates[1] = 0.0f;
     coordinates[2] = 0.0f;
     velocities[0] = 0.0f;
-    velocities[1] = 29780.0f;
-    velocities[2] = 0.0f;
+    velocities[1] = 0.0f;
+    velocities[2] = 29780.0f;
 
     masses[1] = 1.9891e+30f;
     coordinates[3] = 1.495978e+11f;
