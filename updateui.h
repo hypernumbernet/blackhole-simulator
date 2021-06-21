@@ -45,7 +45,7 @@ public:
         : ENGINE(new QMap<int, QString>{
             {0, tr("Gravity 3D Mass Differential")},
             {1, tr("Gravity 3D Mass Integral")},
-            //{0, tr("Gravity3DDifferential")},
+            {2, tr("Gravity 3S-Velocity M. Diff.")},
             //{0, tr("Gravity3DIntegral")},
             //{0, tr("Gravity2DDifferential")},
             //{0, tr("Gravity2DIntegral")},

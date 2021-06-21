@@ -1,6 +1,6 @@
-#include "g3dmassdiffnbe.h"
+#include "g3svmassdiffnbe.h"
 
-G3DMassDiffNBE::G3DMassDiffNBE(
+G3SVMassDiffNBE::G3SVMassDiffNBE(
         UpdateUi* const updateUi,
         const bhs::SimCondition& sim)
     : AbstractNBodyEngine(updateUi)
@@ -48,16 +48,16 @@ G3DMassDiffNBE::G3DMassDiffNBE(
     setTimePerFrame(sim.timePerFrame);
 }
 
-G3DMassDiffNBE::~G3DMassDiffNBE()
+G3SVMassDiffNBE::~G3SVMassDiffNBE()
 {
     delete[] m_coordinates;
     delete[] m_velocities;
     delete[] m_masses;
 }
 
-void G3DMassDiffNBE::calculateTimeProgress() const
+void G3SVMassDiffNBE::calculateTimeProgress() const
 {
-    //debug();
+    debug();
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
         quint64 j = i * 3;
@@ -67,10 +67,13 @@ void G3DMassDiffNBE::calculateTimeProgress() const
     }
 }
 
-void G3DMassDiffNBE::calculateInteraction() const
+void G3SVMassDiffNBE::calculateInteraction() const
 {
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
+    float cinv = (1.0f / SPEED_OF_LIGHT);
+    float velangle = M_PI * cinv * 0.5f;
+
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
@@ -78,6 +81,7 @@ void G3DMassDiffNBE::calculateInteraction() const
             // Perform differential calculation of universal gravitation.
             a = i * 3;
             b = j * 3;
+
             d1 = m_coordinates[a] - m_coordinates[b];
             d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
             d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
@@ -88,23 +92,42 @@ void G3DMassDiffNBE::calculateInteraction() const
             inv = 1.0f / distance;
             theta = inv * inv * m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
-            d1 *= inv * theta;
-            d2 *= inv * theta;
-            d3 *= inv * theta;
+            d1 *= inv;
+            d2 *= inv;
+            d3 *= inv;
 
-            m_velocities[a] -= d1 * m_masses[j];
-            m_velocities[a + 1] -= d2 * m_masses[j];
-            m_velocities[a + 2] -= d3 * m_masses[j];
-            m_velocities[b] += d1 * m_masses[i];
-            m_velocities[b + 1] += d2 * m_masses[i];
-            m_velocities[b + 2] += d3 * m_masses[i];
+            auto rota = Quaternion(0.0f, d1, d2, d3);
+            rota.MakeRotation(-theta * m_masses[j] * velangle * 0.5f);
+            auto rotb = Quaternion(0.0f, d1, d2, d3);
+            rotb.MakeRotation(theta * m_masses[i] * velangle * 0.5f);
+
+            auto va = Quaternion<float>::Exp(
+                m_velocities[a] * velangle,
+                m_velocities[a + 1] * velangle,
+                m_velocities[a + 2] * velangle);
+            auto vb = Quaternion<float>::Exp(
+                m_velocities[b] * velangle,
+                m_velocities[b + 1] * velangle,
+                m_velocities[b + 2] * velangle);
+
+            auto rotatedA = va.Rot8(rota);
+            auto rotatedB = vb.Rot8(rotb);
+
+            auto v3a = rotatedA.LnV3();
+            auto v3b = rotatedB.LnV3();
+            m_velocities[a] = v3a.x / velangle;
+            m_velocities[a + 1] = v3a.y / velangle;
+            m_velocities[a + 2] = v3a.z / velangle;
+            m_velocities[b] = v3b.x / velangle;
+            m_velocities[b + 1] = v3b.y / velangle;
+            m_velocities[b + 2] = v3a.z / velangle;
 
             ++k;
         }
     }
 }
 
-void G3DMassDiffNBE::debug() const
+void G3SVMassDiffNBE::debug() const
 {
     for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
@@ -116,7 +139,7 @@ void G3DMassDiffNBE::debug() const
     }
 }
 
-void G3DMassDiffNBE::setTimePerFrame(const float time)
+void G3SVMassDiffNBE::setTimePerFrame(const float time)
 {
     m_timePerFrame = time;
     emit m_updateUi->displayTimePerFrame(time);

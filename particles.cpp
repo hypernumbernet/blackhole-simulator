@@ -47,6 +47,9 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE(m_updateUi, sim);
         break;
+    case 2:
+        m_NBodyEngine = new G3SVMassDiffNBE(m_updateUi, sim);
+        break;
     }
 
     QString engine = m_updateUi->ENGINE->value(sim.engine);

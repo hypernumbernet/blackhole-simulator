@@ -24,7 +24,7 @@ public:
 	};
 
     static const Quaternion<T> Zero;
-	static const Quaternion<T> Identity;
+    static const Quaternion<T> Identity;
 
     inline Quaternion(){}
 
