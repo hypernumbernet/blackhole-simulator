@@ -72,7 +72,7 @@ void G3SVMassDiffNBE::calculateInteraction() const
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
     float cinv = (1.0f / SPEED_OF_LIGHT);
-    float velangle = M_PI * cinv * 0.5f;
+    float velangle = 3.141592653589793f * cinv * 0.5f;
 
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
