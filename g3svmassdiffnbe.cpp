@@ -69,10 +69,13 @@ void G3SVMassDiffNBE::calculateTimeProgress() const
 
 void G3SVMassDiffNBE::calculateInteraction() const
 {
-    float d1, d2, d3, distance, inv, theta;
+    double d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
-    float cinv = (1.0f / SPEED_OF_LIGHT);
-    float velangle = 3.141592653589793f * cinv * 0.5f;
+    double cinv = (1.0 / SPEED_OF_LIGHT);
+    double velangle = 3.141592653589793f * cinv * 0.5;
+    double vangle_half = velangle * 0.5;
+    double vangle_inv = 1.0 / velangle;
+    double time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
@@ -90,22 +93,22 @@ void G3SVMassDiffNBE::calculateInteraction() const
                 continue;
             }
             inv = 1.0f / distance;
-            theta = inv * inv * m_timePerFrame * GRAVITATIONAL_CONSTANT;
+            theta = inv * inv * time_g;
 
             d1 *= inv;
             d2 *= inv;
             d3 *= inv;
 
-            auto rota = Quaternion(0.0f, d1, d2, d3);
-            rota.MakeRotation(-theta * m_masses[j] * velangle * 0.5f);
-            auto rotb = Quaternion(0.0f, d1, d2, d3);
-            rotb.MakeRotation(theta * m_masses[i] * velangle * 0.5f);
+            auto rota = Quaternion(0.0, d1, d2, d3);
+            rota.MakeRotation(-theta * m_masses[j] * vangle_half);
+            auto rotb = Quaternion(0.0, d1, d2, d3);
+            rotb.MakeRotation(theta * m_masses[i] * vangle_half);
 
-            auto va = Quaternion<float>::Exp(
+            auto va = Quaternion<double>::Exp(
                 m_velocities[a] * velangle,
                 m_velocities[a + 1] * velangle,
                 m_velocities[a + 2] * velangle);
-            auto vb = Quaternion<float>::Exp(
+            auto vb = Quaternion<double>::Exp(
                 m_velocities[b] * velangle,
                 m_velocities[b + 1] * velangle,
                 m_velocities[b + 2] * velangle);
@@ -115,12 +118,12 @@ void G3SVMassDiffNBE::calculateInteraction() const
 
             auto v3a = rotatedA.LnV3();
             auto v3b = rotatedB.LnV3();
-            m_velocities[a] = v3a.x / velangle;
-            m_velocities[a + 1] = v3a.y / velangle;
-            m_velocities[a + 2] = v3a.z / velangle;
-            m_velocities[b] = v3b.x / velangle;
-            m_velocities[b + 1] = v3b.y / velangle;
-            m_velocities[b + 2] = v3a.z / velangle;
+            m_velocities[a] = v3a.x * vangle_inv;
+            m_velocities[a + 1] = v3a.y * vangle_inv;
+            m_velocities[a + 2] = v3a.z * vangle_inv;
+            m_velocities[b] = v3b.x * vangle_inv;
+            m_velocities[b + 1] = v3b.y * vangle_inv;
+            m_velocities[b + 2] = v3a.z * vangle_inv;
 
             ++k;
         }

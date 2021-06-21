@@ -71,6 +71,8 @@ void G3DMassDiffNBE::calculateInteraction() const
 {
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
+    float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
+
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
@@ -86,7 +88,7 @@ void G3DMassDiffNBE::calculateInteraction() const
                 continue;
             }
             inv = 1.0f / distance;
-            theta = inv * inv * m_timePerFrame * GRAVITATIONAL_CONSTANT;
+            theta = inv * inv * time_g;
 
             d1 *= inv * theta;
             d2 *= inv * theta;
