@@ -17,11 +17,12 @@ public:
     virtual void calculateInteraction() const = 0;
     virtual void debug() const = 0;
 
-    float* coordinates() const;
     quint64 numberOfParticle() const;
     float modelScale() const;
-    float* masses() const;
+
+    float* coordinates() const;
     float* velocities() const;
+    float* masses() const;
 
     void setModelScale(float);
     void setModelScaleRatio(float);

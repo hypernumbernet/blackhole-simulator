@@ -42,7 +42,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     switch (sim.engine) {
     default:
-        m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
+        m_NBodyEngine = new G3DMassDiffNBE<float>(m_updateUi, sim);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE(m_updateUi, sim);
