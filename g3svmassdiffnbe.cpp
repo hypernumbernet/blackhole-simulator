@@ -57,7 +57,7 @@ G3SVMassDiffNBE::~G3SVMassDiffNBE()
 
 void G3SVMassDiffNBE::calculateTimeProgress() const
 {
-    debug();
+    //debug();
     for (quint64 i = 0; i < m_numberOfParticles; ++i)
     {
         quint64 j = i * 3;
