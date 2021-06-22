@@ -68,7 +68,7 @@ public:
         delete[] m_masses;
     }
 
-    void calculateTimeProgress() const
+    void calculateTimeProgress() const override
     {
         //debug();
         for (quint64 i = 0; i < m_numberOfParticles; ++i)
@@ -80,7 +80,7 @@ public:
         }
     }
 
-    void calculateInteraction() const
+    void calculateInteraction() const override
     {
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
@@ -143,7 +143,7 @@ public:
         }
     }
 
-    void debug() const
+    void debug() const override
     {
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
         {

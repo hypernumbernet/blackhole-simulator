@@ -138,7 +138,7 @@ public:
         }
     }
 
-    void debug() const
+    void debug() const override
     {
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
         {
