@@ -12,8 +12,9 @@ void main()
 
     vec3 n;
     n.xy = gl_PointCoord * 2.0 - 1.0;
-    n.z = 1.0 - dot(n.xy, n.xy);
+    n.z = 1.0 - pow(dot(n.xy, n.xy), 1.2);
     if (n.z < 0.0)
         discard;
+    //n.z = pow(n.z * 1.1, 3.0)+1.0;
     color = vec4(n.z, n.z, n.z, 1.0);
 }
