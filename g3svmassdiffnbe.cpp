@@ -71,13 +71,13 @@ void G3SVMassDiffNBE::calculateInteraction() const
 {
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
-    float cinv = 1.0 / SPEED_OF_LIGHT;
+    float cinv = 1.0f / SPEED_OF_LIGHT;
 
     // Half the circumference is assumed to be the speed of light.
-    float velangle = 3.141592653589793 * cinv;
+    float velangle = PI * cinv;
 
-    float vangle_half = velangle * 0.5;
-    float vangle_inv = 1.0 / velangle;
+    float vangle_half = velangle * 0.5f;
+    float vangle_inv = 1.0f / velangle;
     float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
     for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
