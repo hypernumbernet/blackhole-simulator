@@ -71,8 +71,11 @@ void G3SVMassDiffNBE::calculateInteraction() const
 {
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
-    float cinv = (1.0 / SPEED_OF_LIGHT);
-    float velangle = 3.141592653589793f * cinv * 0.5;
+    float cinv = 1.0 / SPEED_OF_LIGHT;
+
+    // Half the circumference is assumed to be the speed of light.
+    float velangle = 3.141592653589793 * cinv;
+
     float vangle_half = velangle * 0.5;
     float vangle_inv = 1.0 / velangle;
     float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
@@ -81,11 +84,12 @@ void G3SVMassDiffNBE::calculateInteraction() const
     {
         for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
         {
-            // Perform differential calculation of universal gravitation.
+            // Calculates velocity as an angle on a unit quaternion.
+
             a = i * 3;
             b = j * 3;
 
-            d1 = m_coordinates[a] - m_coordinates[b];
+            d1 = m_coordinates[a    ] - m_coordinates[b    ];
             d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
             d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
             distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
@@ -100,30 +104,26 @@ void G3SVMassDiffNBE::calculateInteraction() const
             d3 *= inv;
 
             auto rota = Quaternion<float>(0.0, d1, d2, d3);
-            rota.MakeRotation(-theta * m_masses[j] * vangle_half);
             auto rotb = Quaternion<float>(0.0, d1, d2, d3);
+            rota.MakeRotation(-theta * m_masses[j] * vangle_half);
             rotb.MakeRotation(theta * m_masses[i] * vangle_half);
 
-            auto va = Quaternion<float>::Exp(
-                m_velocities[a] * velangle,
-                m_velocities[a + 1] * velangle,
-                m_velocities[a + 2] * velangle);
-            auto vb = Quaternion<float>::Exp(
-                m_velocities[b] * velangle,
-                m_velocities[b + 1] * velangle,
-                m_velocities[b + 2] * velangle);
+            auto vva = Vector3<float>(m_velocities, a);
+            auto vvb = Vector3<float>(m_velocities, b);
+            auto va = Quaternion<float>::Exp(vva * velangle);
+            auto vb = Quaternion<float>::Exp(vvb * velangle);
 
             auto rotatedA = va.Rot8(rota);
             auto rotatedB = vb.Rot8(rotb);
 
             auto v3a = rotatedA.LnV3();
             auto v3b = rotatedB.LnV3();
-            m_velocities[a] = v3a.x * vangle_inv;
+            m_velocities[a    ] = v3a.x * vangle_inv;
             m_velocities[a + 1] = v3a.y * vangle_inv;
             m_velocities[a + 2] = v3a.z * vangle_inv;
-            m_velocities[b] = v3b.x * vangle_inv;
+            m_velocities[b    ] = v3b.x * vangle_inv;
             m_velocities[b + 1] = v3b.y * vangle_inv;
-            m_velocities[b + 2] = v3a.z * vangle_inv;
+            m_velocities[b + 2] = v3b.z * vangle_inv;
 
             ++k;
         }
