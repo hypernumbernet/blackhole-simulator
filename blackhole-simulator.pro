@@ -7,7 +7,6 @@ SOURCES += \
     abstractinitializer.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
-    g3svmassdiffnbe.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
     initializerdialog.cpp \
