@@ -71,4 +71,5 @@ signals:
     void displayEngineName(const QString&);
     void displayPresetName(const QString&);
     void applyInitialConditions();
+    void frameAdvance();
 };

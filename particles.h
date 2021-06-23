@@ -29,6 +29,8 @@ public:
     void setModelScaleRatio(float);
     int frameNum();
     void startSim();
+
+public slots:
     void frameAdvance();
 
 private:

@@ -17,6 +17,8 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     m_camera.lookAtZero(1.0f);
     m_camera.standXZ(false, 1.0f);
     m_camera.lookAtZero(1.0f);
+
+    connect(m_updateUi, &UpdateUi::frameAdvance, m_particleModels, &Particles::frameAdvance);
 }
 
 GraphicWindow::~GraphicWindow()
@@ -265,8 +267,9 @@ void GraphicWindow::changeLinePosition()
 
 void GraphicWindow::frameAdvance()
 {
-    m_particleModels->frameAdvance();
-    m_particleModels->updateGL();
+    //m_particleModels->frameAdvance();
+    //m_particleModels->updateGL();
+    emit m_updateUi->frameAdvance();
 }
 
 void GraphicWindow::circleStrafing(const bool on)
