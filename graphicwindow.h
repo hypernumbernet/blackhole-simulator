@@ -56,7 +56,6 @@ private:
     WorldModels* const m_worldModels;
     Particles* const m_particleModels;
 
-    //int m_frameNum;
     float m_walkSpeed;
     float m_lookAroundSpeed;
     Camera m_camera;
@@ -67,10 +66,8 @@ private:
     QMatrix4x4 m_projection;
     QTime m_startTime;
     QBasicTimer m_uiTimer;
-    //QBasicTimer m_simulateTimer;
     QBasicTimer m_fpsTimer;
     int m_fpsPreFrame;
-    //bool m_isSimulating;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     QMutex m_guiMutex;

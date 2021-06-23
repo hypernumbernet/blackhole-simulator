@@ -61,11 +61,11 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     QString preset = m_updateUi->PRESET->value(sim.preset);
     emit m_updateUi->displayPresetName(preset);
 
-    //updateGL();
     updateParticles();
     m_simulateTimer.start(0, this);
 }
 
+// This function must be called from the GUI thread.
 void Particles::updateGL()
 {
     if (m_NBodyEngine->numberOfParticle() == 0)

@@ -171,10 +171,6 @@ void GraphicWindow::wheelEvent(QWheelEvent* ev)
 
 void GraphicWindow::timerEvent(QTimerEvent* ev)
 {
-//    if (m_isSimulating && ev->timerId() == m_simulateTimer.timerId()) {
-//        m_particleModels->updateParticles();
-//        ++m_frameNum;
-//    } else
     if (ev->timerId() == m_uiTimer.timerId()) {
 
         QMutexLocker locker(&m_guiMutex);
@@ -260,8 +256,6 @@ void GraphicWindow::enableGridLines(const bool enabled)
 void GraphicWindow::startSim()
 {
     m_particleModels->startSim();
-//    m_isSimulating = !m_isSimulating;
-//    emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
 void GraphicWindow::changeLinePosition()
@@ -273,10 +267,6 @@ void GraphicWindow::frameAdvance()
 {
     m_particleModels->frameAdvance();
     m_particleModels->updateGL();
-//    if (!m_isSimulating) {
-//        m_particleModels->updateParticles();
-//        ++m_frameNum;
-//    }
 }
 
 void GraphicWindow::circleStrafing(const bool on)
