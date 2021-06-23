@@ -101,6 +101,9 @@ public:
         Distance d;
         quint64 k = 0, a, b;
 
+        if (m_numberOfParticles == 0)
+            return;
+
         for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
@@ -182,6 +185,9 @@ private:
     {
         quint64 k = 0;
         Distance d;
+
+        if (m_numberOfParticles == 0)
+            return;
 
         for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
         {

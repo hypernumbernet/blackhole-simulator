@@ -87,6 +87,9 @@ public:
         quint64 k = 0, a, b;
         float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
+        if (m_numberOfParticles == 0)
+            return;
+
         for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
