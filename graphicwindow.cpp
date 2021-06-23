@@ -4,12 +4,10 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     : m_updateUi(updateUi)
     , m_worldModels(new WorldModels)
     , m_particleModels(new Particles(updateUi))
-    , m_frameNum(0)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
     , m_fpsPreFrame(0)
-    , m_isSimulating(false)
     , m_isCircleStrafing(false)
     , m_circleStrafingSpeed(1.0f)
 {
@@ -23,9 +21,12 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
 
 GraphicWindow::~GraphicWindow()
 {
-    m_simulateTimer.stop();
+    //m_simulateTimer.stop();
     m_uiTimer.stop();
     m_fpsTimer.stop();
+
+    m_threadParticles.quit();
+    m_threadParticles.wait();
 
     makeCurrent();
     delete m_worldModels;
@@ -53,12 +54,15 @@ void GraphicWindow::initializeGL()
 
     bhs::SimCondition sim;
     m_particleModels->selectNBodyEngine(sim);
-
+    m_particleModels->updateGL();
     paintGL();
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
-    m_simulateTimer.start(0, this);
+    //m_simulateTimer.start(0, this);
+
+    m_particleModels->moveToThread(&m_threadParticles);
+    m_threadParticles.start();
 }
 
 void GraphicWindow::resizeGL(int w, int h)
@@ -167,10 +171,11 @@ void GraphicWindow::wheelEvent(QWheelEvent* ev)
 
 void GraphicWindow::timerEvent(QTimerEvent* ev)
 {
-    if (m_isSimulating && ev->timerId() == m_simulateTimer.timerId()) {
-        m_particleModels->updateParticles();
-        ++m_frameNum;
-    } else if (ev->timerId() == m_uiTimer.timerId()) {
+//    if (m_isSimulating && ev->timerId() == m_simulateTimer.timerId()) {
+//        m_particleModels->updateParticles();
+//        ++m_frameNum;
+//    } else
+    if (ev->timerId() == m_uiTimer.timerId()) {
 
         QMutexLocker locker(&m_guiMutex);
 
@@ -232,11 +237,12 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
         }
 
-        emit m_updateUi->displayFrameNumber(m_frameNum);
+        m_particleModels->updateGL();
+        emit m_updateUi->displayFrameNumber(m_particleModels->frameNum());
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
-        emit m_updateUi->displayFps(m_frameNum - m_fpsPreFrame);
-        m_fpsPreFrame = m_frameNum;
+        emit m_updateUi->displayFps(m_particleModels->frameNum() - m_fpsPreFrame);
+        m_fpsPreFrame = m_particleModels->frameNum();
     }
 }
 
@@ -253,8 +259,9 @@ void GraphicWindow::enableGridLines(const bool enabled)
 
 void GraphicWindow::startSim()
 {
-    m_isSimulating = !m_isSimulating;
-    emit m_updateUi->updateStartButtonText(m_isSimulating);
+    m_particleModels->startSim();
+//    m_isSimulating = !m_isSimulating;
+//    emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
 void GraphicWindow::changeLinePosition()
@@ -264,10 +271,12 @@ void GraphicWindow::changeLinePosition()
 
 void GraphicWindow::frameAdvance()
 {
-    if (!m_isSimulating) {
-        m_particleModels->updateParticles();
-        ++m_frameNum;
-    }
+    m_particleModels->frameAdvance();
+    m_particleModels->updateGL();
+//    if (!m_isSimulating) {
+//        m_particleModels->updateParticles();
+//        ++m_frameNum;
+//    }
 }
 
 void GraphicWindow::circleStrafing(const bool on)
@@ -283,8 +292,6 @@ void GraphicWindow::circleStrafing(const bool on)
 
 void GraphicWindow::reset(const bhs::SimCondition& sim)
 {
-    m_isSimulating = false;
-    m_frameNum = 0;
     m_fpsPreFrame = 0;
     m_particleModels->reset(sim);
 }

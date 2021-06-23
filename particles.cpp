@@ -4,11 +4,14 @@ Particles::Particles(UpdateUi* const updateUi)
     : m_updateUi(updateUi)
     , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
+    , m_frameNum(0)
+    , m_isSimulating(false)
 {
 }
 
 Particles::~Particles()
 {
+    m_simulateTimer.stop();
     m_vao.destroy();
 }
 
@@ -58,10 +61,12 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     QString preset = m_updateUi->PRESET->value(sim.preset);
     emit m_updateUi->displayPresetName(preset);
 
+    //updateGL();
     updateParticles();
+    m_simulateTimer.start(0, this);
 }
 
-void Particles::updateParticles()
+void Particles::updateGL()
 {
     if (m_NBodyEngine->numberOfParticle() == 0)
         return;
@@ -76,7 +81,10 @@ void Particles::updateParticles()
     m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
     m_vao.release();
+}
 
+void Particles::updateParticles()
+{
     m_NBodyEngine->calculateTimeProgress();
     m_NBodyEngine->calculateInteraction();
 }
@@ -107,6 +115,8 @@ void Particles::resize(int height)
 
 void Particles::reset(const bhs::SimCondition& sim)
 {
+    m_isSimulating = false;
+    m_frameNum = 0;
     delete m_NBodyEngine;
     selectNBodyEngine(sim);
 }
@@ -119,4 +129,31 @@ void Particles::setModelScale(float val)
 void Particles::setModelScaleRatio(float val)
 {
     m_NBodyEngine->setModelScaleRatio(val);
+}
+
+void Particles::timerEvent(QTimerEvent*)
+{
+    if (m_isSimulating) {
+        updateParticles();
+        ++m_frameNum;
+    }
+}
+
+int Particles::frameNum()
+{
+    return m_frameNum;
+}
+
+void Particles::startSim()
+{
+    m_isSimulating = !m_isSimulating;
+    emit m_updateUi->updateStartButtonText(m_isSimulating);
+}
+
+void Particles::frameAdvance()
+{
+    if (!m_isSimulating) {
+        updateParticles();
+        ++m_frameNum;
+    }
 }

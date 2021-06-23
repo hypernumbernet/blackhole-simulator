@@ -15,6 +15,7 @@
 #include <QBasicTimer>
 #include <QCursor>
 #include <QMutex>
+#include <QThread>
 
 class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {
@@ -55,7 +56,7 @@ private:
     WorldModels* const m_worldModels;
     Particles* const m_particleModels;
 
-    int m_frameNum;
+    //int m_frameNum;
     float m_walkSpeed;
     float m_lookAroundSpeed;
     Camera m_camera;
@@ -66,11 +67,12 @@ private:
     QMatrix4x4 m_projection;
     QTime m_startTime;
     QBasicTimer m_uiTimer;
-    QBasicTimer m_simulateTimer;
+    //QBasicTimer m_simulateTimer;
     QBasicTimer m_fpsTimer;
     int m_fpsPreFrame;
-    bool m_isSimulating;
+    //bool m_isSimulating;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     QMutex m_guiMutex;
+    QThread m_threadParticles;
 };
