@@ -3,12 +3,16 @@
 #include "abstractnbodyengine.h"
 #include "updateui.h"
 #include "initializer3d.h"
+#include "threadadmin.h"
+
+#include <QThread>
 
 // Gravity 3D Mass Differential N-Body Engine
 
-template <typename T>
 class G3DMassDiffNBE : public AbstractNBodyEngine, private Initializer3D
 {
+    Q_OBJECT
+
 public:
     G3DMassDiffNBE(
             UpdateUi* const updateUi,
@@ -56,10 +60,24 @@ public:
         }
 
         setTimePerFrame(sim.timePerFrame);
+
+//        for (int i = 0; i < m_timeProgressRanges.size(); ++i) {
+//            auto range = m_timeProgressRanges.at(i);
+//            range.coordinates = m_coordinates;
+//            range.velocities = m_velocities;
+//            range.masses = m_masses;
+//            range.timePerFrame = m_timePerFrame;
+//            auto ctrl = new Controller(range);
+//            m_timeProgressControllers.append(ctrl);
+//        }
     }
 
     ~G3DMassDiffNBE()
     {
+//        for (int i = 0; i < m_timeProgressRanges.size(); ++i) {
+//            delete m_timeProgressRanges.at(i);
+//        }
+
         delete[] m_coordinates;
         delete[] m_velocities;
         delete[] m_masses;
@@ -68,21 +86,32 @@ public:
     void calculateTimeProgress() const override
     {
         //debug();
+
+//        for (int i = 0; i < m_timeProgressControllers.size(); ++i) {
+//            //++Controller::waitForDone;
+//            m_timeProgressControllers.at(i)->calculate();
+//        }
+
         for (quint64 i = 0; i < m_numberOfParticles; ++i)
         {
             quint64 j = i * 3;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame;
-            if constexpr (std::is_same_v<T, double>) {
-                m_coordinates[j] += 0.0f;
-                // TODO
-            }
+//            if constexpr (std::is_same_v<T, double>) {
+//                m_coordinates[j] += 0.0f;
+//                // TODO
+//            }
         }
+        resultReady();
     }
 
     void calculateInteraction() const override
     {
+//        for (int i = 0; i < m_timeProgressControllers.size(); ++i) {
+//            m_timeProgressControllers.at(i)->calculateInteraction();
+//        }
+
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
         float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
@@ -106,6 +135,7 @@ public:
                 }
                 inv = 1.0f / distance;
                 theta = inv * inv * time_g;
+                Q_ASSERT(theta == theta);
 
                 d1 *= inv * theta;
                 d2 *= inv * theta;
@@ -135,14 +165,13 @@ public:
         }
     }
 
-    void setTimePerFrame(const T time)
+    void setTimePerFrame(const float time)
     {
         m_timePerFrame = time;
         emit m_updateUi->displayTimePerFrame(time);
     }
 
 private:
-
-    // Physically calculated time per frame (second)
-    T m_timePerFrame;
+    //ThreadAdmin m_threadAdmin;
+    //QVector<Controller*> m_timeProgressControllers;
 };

@@ -4,6 +4,7 @@
 #include "worldmodels.h"
 #include "particles.h"
 #include "updateui.h"
+#include "threadadmin.h"
 
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
@@ -53,8 +54,9 @@ private:
     void wheelEvent(QWheelEvent*) override;
 
     UpdateUi* const m_updateUi;
-    WorldModels* const m_worldModels;
-    Particles* const m_particleModels;
+    ThreadAdmin m_threadAdmin;
+    WorldModels* const m_worldModels; // TODO not pointer
+    Particles* const m_particleModels; // TODO not pointer
 
     float m_walkSpeed;
     float m_lookAroundSpeed;

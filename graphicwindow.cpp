@@ -2,8 +2,9 @@
 
 GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     : m_updateUi(updateUi)
+    , m_threadAdmin(updateUi)
     , m_worldModels(new WorldModels)
-    , m_particleModels(new Particles(updateUi))
+    , m_particleModels(new Particles(updateUi, &m_threadAdmin))
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -18,7 +19,11 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     m_camera.standXZ(false, 1.0f);
     m_camera.lookAtZero(1.0f);
 
-    connect(m_updateUi, &UpdateUi::frameAdvance, m_particleModels, &Particles::frameAdvance);
+    connect(m_updateUi, &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
+    connect(m_updateUi, &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
+
+    m_threadAdmin.moveToThread(&m_threadParticles);
+    m_threadParticles.start();
 }
 
 GraphicWindow::~GraphicWindow()
@@ -61,10 +66,9 @@ void GraphicWindow::initializeGL()
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
-    //m_simulateTimer.start(0, this);
 
-    m_particleModels->moveToThread(&m_threadParticles);
-    m_threadParticles.start();
+    //m_particleModels->moveToThread(&m_threadParticles);
+    //m_threadParticles.start();
 }
 
 void GraphicWindow::resizeGL(int w, int h)
@@ -236,11 +240,11 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         }
 
         m_particleModels->updateGL();
-        emit m_updateUi->displayFrameNumber(m_particleModels->frameNum());
+        emit m_updateUi->displayFrameNumber(m_threadAdmin.frameNum());
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
-        emit m_updateUi->displayFps(m_particleModels->frameNum() - m_fpsPreFrame);
-        m_fpsPreFrame = m_particleModels->frameNum();
+        emit m_updateUi->displayFps(m_threadAdmin.frameNum() - m_fpsPreFrame);
+        m_fpsPreFrame = m_threadAdmin.frameNum();
     }
 }
 
@@ -257,7 +261,7 @@ void GraphicWindow::enableGridLines(const bool enabled)
 
 void GraphicWindow::startSim()
 {
-    m_particleModels->startSim();
+    m_threadAdmin.startSim();
 }
 
 void GraphicWindow::changeLinePosition()
@@ -267,8 +271,6 @@ void GraphicWindow::changeLinePosition()
 
 void GraphicWindow::frameAdvance()
 {
-    //m_particleModels->frameAdvance();
-    //m_particleModels->updateGL();
     emit m_updateUi->frameAdvance();
 }
 
@@ -286,6 +288,10 @@ void GraphicWindow::circleStrafing(const bool on)
 void GraphicWindow::reset(const bhs::SimCondition& sim)
 {
     m_fpsPreFrame = 0;
+    m_threadAdmin.reset();
+
+    // TODO wait all stop
+
     m_particleModels->reset(sim);
 }
 

@@ -163,9 +163,4 @@ public:
         m_timePerFrame = time;
         emit m_updateUi->displayTimePerFrame(time);
     }
-
-private:
-
-    // Physically calculated time per frame (second)
-    float m_timePerFrame;
 };

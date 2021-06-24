@@ -9,7 +9,7 @@
 class Camera
 {
 public:
-    Camera(const QVector3D& pos);
+    explicit Camera(const QVector3D& pos);
 
     static void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot);
 

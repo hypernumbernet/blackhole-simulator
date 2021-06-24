@@ -36,7 +36,7 @@ public:
     inline explicit Quaternion(const T* const a)
         : i0(a[0]), i1(a[1]), i2(a[2]), i3(a[3]){}
 
-    inline Quaternion(Vector3<T> v)
+    inline explicit Quaternion(Vector3<T> v)
         : i0(0), i1(v.x), i2(v.y), i3(v.z){}
 
     static const Quaternion<T> Zero;

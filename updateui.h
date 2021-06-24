@@ -41,7 +41,7 @@ public:
     const QMap<int, QString>* const ENGINE;
     const QMap<bhs::Preset, QString>* const PRESET;
 
-    explicit UpdateUi()
+    UpdateUi()
         : ENGINE(new QMap<int, QString>{
             {0, tr("Gravity 3D Mass Differential")},
             {1, tr("Gravity 3D Mass Integral")},
@@ -72,4 +72,7 @@ signals:
     void displayPresetName(const QString&);
     void applyInitialConditions();
     void frameAdvance();
+    void resultReady();
+    //void allDone();
+
 };

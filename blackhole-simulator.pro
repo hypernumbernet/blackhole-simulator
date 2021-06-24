@@ -6,6 +6,7 @@ CONFIG += c++17
 SOURCES += \
     abstractinitializer.cpp \
     abstractnbodyengine.cpp \
+    calculatetimeprogress.cpp \
     camera.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
@@ -13,11 +14,14 @@ SOURCES += \
     main.cpp \
     mainwidget.cpp \
     particles.cpp \
+    threadadmin.cpp \
+    threadcontroller.cpp \
     worldmodels.cpp
 
 HEADERS += \
     abstractinitializer.h \
     abstractnbodyengine.h \
+    calculatetimeprogress.h \
     camera.h \
     g3dmassdiffnbe.h \
     g3dmassintegralnbe.h \
@@ -28,6 +32,8 @@ HEADERS += \
     mainwidget.h \
     particles.h \
     quaternion.h \
+    threadadmin.h \
+    threadcontroller.h \
     updateui.h \
     vector3.h \
     worldmodels.h

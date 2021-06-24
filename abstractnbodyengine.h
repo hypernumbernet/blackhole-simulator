@@ -7,42 +7,70 @@
 #include <QtGlobal>
 #include <QDebug>
 
-class AbstractNBodyEngine
+class AbstractNBodyEngine : public QObject
 {
+    Q_OBJECT
+
 public:
-    AbstractNBodyEngine(UpdateUi*);
+    static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
+    static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
+    static constexpr float PI = 3.141592653589793f;
+
+    struct IntRange
+    {
+        quint64 start;
+        quint64 end;
+        quint64 numberOfParticles;
+        float* coordinates;
+        float* velocities;
+        float* masses;
+        float timePerFrame;
+    };
+
+    AbstractNBodyEngine(UpdateUi*, QObject* parent = nullptr);
     virtual ~AbstractNBodyEngine();
 
-    virtual void calculateTimeProgress() const = 0;
-    virtual void calculateInteraction() const = 0;
     virtual void debug() const = 0;
-
-    quint64 numberOfParticle() const;
-    float modelScale() const;
 
     float* coordinates() const;
     float* velocities() const;
     float* masses() const;
 
+    quint64 numberOfParticle() const;
+    float modelScale() const;
+    float timePerFrame() const;
+    //const QVector<IntRange>& rangeTimeProgress() const;
+
     void setModelScale(float);
     void setModelScaleRatio(float);
     void changeModelScale(float);
+    int threadCount();
+    void resultReady() const;
 
-    static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
-    static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
-    static constexpr float PI = 3.141592653589793f;
+public slots:
+    virtual void calculateTimeProgress() const = 0;
+    virtual void calculateInteraction() const = 0;
 
 protected:
     void setNumberOfParticles(quint64);
 
     UpdateUi* const m_updateUi;
-    float* m_coordinates; // Particle coordinates
-    float* m_velocities; // Particle velocity
+
+    // Particle coordinates
+    float* m_coordinates;
+
+    // Particle velocity
+    float* m_velocities;
 
     // Stores the mass of each particle (kg)
     float* m_masses;
 
+    // Physically calculated time per frame (second)
+    float m_timePerFrame;
+
     quint64 m_numberOfParticles;
     float m_modelScale;
     float m_scaleCenterValue;
+    QVector<IntRange> m_timeProgressRanges;
+    QVector<IntRange> m_interactionRanges;
 };

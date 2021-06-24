@@ -204,9 +204,6 @@ private:
         }
     }
 
-    // Physically calculated time per frame (second)
-    float m_timePerFrame;
-
     // Stores the reciprocal of the previously calculated distance.
     float* m_inversedDistances;
 };

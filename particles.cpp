@@ -1,17 +1,15 @@
 #include "particles.h"
 
-Particles::Particles(UpdateUi* const updateUi)
+Particles::Particles(UpdateUi* const updateUi, ThreadAdmin* const threadAdmin)
     : m_updateUi(updateUi)
+    , m_threadAdmin(threadAdmin)
     , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
-    , m_frameNum(0)
-    , m_isSimulating(false)
 {
 }
 
 Particles::~Particles()
 {
-    m_simulateTimer.stop();
     m_vao.destroy();
 }
 
@@ -45,7 +43,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     switch (sim.engine) {
     default:
-        m_NBodyEngine = new G3DMassDiffNBE<float>(m_updateUi, sim);
+        m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE<float>(m_updateUi, sim);
@@ -55,14 +53,13 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         break;
     }
 
+    m_threadAdmin->setThreadParam(m_NBodyEngine);
+
     QString engine = m_updateUi->ENGINE->value(sim.engine);
     emit m_updateUi->displayEngineName(engine);
 
     QString preset = m_updateUi->PRESET->value(sim.preset);
     emit m_updateUi->displayPresetName(preset);
-
-    updateParticles();
-    m_simulateTimer.start(0, this);
 }
 
 // This function must be called from the GUI thread.
@@ -81,12 +78,6 @@ void Particles::updateGL()
     m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
 
     m_vao.release();
-}
-
-void Particles::updateParticles()
-{
-    m_NBodyEngine->calculateTimeProgress();
-    m_NBodyEngine->calculateInteraction();
 }
 
 void Particles::paint(const QMatrix4x4& viewProjection)
@@ -115,8 +106,6 @@ void Particles::resize(int height)
 
 void Particles::reset(const bhs::SimCondition& sim)
 {
-    m_isSimulating = false;
-    m_frameNum = 0;
     delete m_NBodyEngine;
     selectNBodyEngine(sim);
 }
@@ -131,29 +120,6 @@ void Particles::setModelScaleRatio(float val)
     m_NBodyEngine->setModelScaleRatio(val);
 }
 
-void Particles::timerEvent(QTimerEvent*)
-{
-    if (m_isSimulating) {
-        updateParticles();
-        ++m_frameNum;
-    }
-}
-
-int Particles::frameNum()
-{
-    return m_frameNum;
-}
-
-void Particles::startSim()
-{
-    m_isSimulating = !m_isSimulating;
-    emit m_updateUi->updateStartButtonText(m_isSimulating);
-}
-
-void Particles::frameAdvance()
-{
-    if (!m_isSimulating) {
-        updateParticles();
-        ++m_frameNum;
-    }
-}
+//void Particles::frameAdvance()
+//{
+//}
