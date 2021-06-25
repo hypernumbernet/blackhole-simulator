@@ -45,16 +45,26 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     switch (sim.engine) {
     default:
         m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
-        core = new G3DMassDiffCore(m_NBodyEngine);
+        //core = new G3DMassDiffCore(m_NBodyEngine);
+        for (int i = 0; i < m_threadAdmin->size(); ++i) {
+            m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
+        }
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE<float>(m_updateUi, sim);
+
+        for (int i = 0; i < m_threadAdmin->size(); ++i) {
+            m_threadAdmin->at(i)->initialize(core);
+        }
         break;
     case 2:
         m_NBodyEngine = new G3SVMassDiffNBE<float>(m_updateUi, sim);
+
+        for (int i = 0; i < m_threadAdmin->size(); ++i) {
+            m_threadAdmin->at(i)->initialize(core);
+        }
         break;
     }
-    m_threadAdmin->setThreadParam(core);
 
     QString engine = m_updateUi->ENGINE->value(sim.engine);
     emit m_updateUi->displayEngineName(engine);

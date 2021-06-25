@@ -9,10 +9,10 @@ ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
     , m_calculateNext(0)
     , m_frameNum(0)
 {
-    m_simulateTimer.start(0, this);
     for (int i = 0; i < m_threadCount; ++i) {
         m_controllers.append(new ThreadController);
     }
+    m_simulateTimer.start(0, this);
 }
 
 ThreadAdmin::~ThreadAdmin()
@@ -43,12 +43,12 @@ void ThreadAdmin::startSim()
     emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
-void ThreadAdmin::setThreadParam(AbstractEngineCore* const core)
-{
-    for (int i = 0; i < m_controllers.size(); ++i) {
-        m_controllers.at(i)->initialize(core);
-    }
-}
+//void ThreadAdmin::setThreadParam(AbstractEngineCore* const core)
+//{
+//    for (int i = 0; i < m_controllers.size(); ++i) {
+//        m_controllers.at(i)->initialize(core);
+//    }
+//}
 
 void ThreadAdmin::frameAdvance()
 {
@@ -86,4 +86,14 @@ void ThreadAdmin::timerEvent(QTimerEvent*)
     if (m_isSimulating && m_waitForDone == 0) {
         updateParticles();
     }
+}
+
+int ThreadAdmin::size() const
+{
+    return m_controllers.size();
+}
+
+ThreadController*  ThreadAdmin::at(int i) const
+{
+    return m_controllers.at(i);
 }

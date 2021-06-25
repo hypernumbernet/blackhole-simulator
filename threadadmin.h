@@ -19,7 +19,9 @@ public:
     void reset();
     int frameNum();
     void startSim();
-    void setThreadParam(AbstractEngineCore* const);
+    //void setThreadParam(AbstractEngineCore* const);
+    int size() const;
+    ThreadController*  at(int) const;
 
 public slots:
     void frameAdvance();

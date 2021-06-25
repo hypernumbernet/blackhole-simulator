@@ -43,10 +43,6 @@ public:
     QVector<IntRange> interactionRanges() const;
     UpdateUi* updateUi() const;
 
-//public slots:
-//    virtual void calculateTimeProgress(int threadNumber) const = 0;
-//    virtual void calculateInteraction(int threadNumber) const = 0;
-
 protected:
     void setNumberOfParticles(quint64);
 
