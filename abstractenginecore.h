@@ -16,18 +16,22 @@ public slots:
 
 protected:
     void resultReady() const;
+    void debug() const;
 
     AbstractNBodyEngine* const m_engine;
     quint64 m_numberOfParticles;
 
     // Particle coordinates
-    float* m_coordinates;
+    float* const m_coordinates;
 
     // Particle velocity
-    float* m_velocities;
+    float* const m_velocities;
 
     // Stores the mass of each particle (kg)
-    float* m_masses;
+    float* const m_masses;
+
+    // Stores the reciprocal of the previously calculated distance.
+    float* const m_inversedDistances;
 
     // Physically calculated time per frame (second)
     float m_timePerFrame;

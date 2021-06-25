@@ -8,7 +8,6 @@ G3DMassDiffCore::G3DMassDiffCore(AbstractNBodyEngine* const engine, QObject* par
 
 void G3DMassDiffCore::calculateTimeProgress(int threadNumber) const
 {
-    //debug();
     quint64 start = m_engine->timeProgressRanges().at(threadNumber).start;
     quint64 end = m_engine->timeProgressRanges().at(threadNumber).end;
 
@@ -87,4 +86,3 @@ void G3DMassDiffCore::calculateInteraction(int threadNumber) const
 
     resultReady();
 }
-

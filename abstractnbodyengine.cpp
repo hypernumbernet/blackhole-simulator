@@ -25,7 +25,6 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
     for (int i = 0; i < tcount; ++i)
     {
         m_timeProgressRanges[i].start = i * k;
-        //m_timeProgressRanges[i].numberOfParticles = num;
     }
     for (int i = 0; i < tcount - 1; ++i)
     {
@@ -92,6 +91,11 @@ float* AbstractNBodyEngine::masses() const
 float* AbstractNBodyEngine::velocities() const
 {
     return m_velocities;
+}
+
+float* AbstractNBodyEngine::inversedDistances() const
+{
+    return m_inversedDistances;
 }
 
 float AbstractNBodyEngine::timePerFrame() const

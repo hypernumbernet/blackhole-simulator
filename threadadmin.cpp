@@ -43,13 +43,6 @@ void ThreadAdmin::startSim()
     emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
-//void ThreadAdmin::setThreadParam(AbstractEngineCore* const core)
-//{
-//    for (int i = 0; i < m_controllers.size(); ++i) {
-//        m_controllers.at(i)->initialize(core);
-//    }
-//}
-
 void ThreadAdmin::frameAdvance()
 {
     if (!m_isSimulating) {

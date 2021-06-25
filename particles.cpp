@@ -41,11 +41,9 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
-    AbstractEngineCore* core = nullptr;
     switch (sim.engine) {
     default:
         m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
-        //core = new G3DMassDiffCore(m_NBodyEngine);
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
         }
@@ -54,14 +52,14 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         m_NBodyEngine = new G3DMassIntegralNBE<float>(m_updateUi, sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
-            m_threadAdmin->at(i)->initialize(core);
+            m_threadAdmin->at(i)->initialize(new G3DMassIntegralCore(m_NBodyEngine));
         }
         break;
     case 2:
         m_NBodyEngine = new G3SVMassDiffNBE<float>(m_updateUi, sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
-            m_threadAdmin->at(i)->initialize(core);
+            m_threadAdmin->at(i)->initialize(nullptr);
         }
         break;
     }

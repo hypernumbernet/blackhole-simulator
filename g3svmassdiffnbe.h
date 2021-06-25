@@ -146,18 +146,6 @@ public:
 //        }
 //    }
 
-    void debug() const override
-    {
-        for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
-        {
-            qDebug() << "xyz:" << i << m_coordinates[i];
-        }
-        for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
-        {
-            qDebug() << "v:" << i << m_velocities[i];
-        }
-    }
-
     void setTimePerFrame(const float time)
     {
         m_timePerFrame = time;

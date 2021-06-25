@@ -2,6 +2,7 @@
 
 #include "g3dmassdiffcore.h"
 #include "g3dmassdiffnbe.h"
+#include "g3dmassintegralcore.h"
 #include "g3dmassintegralnbe.h"
 #include "g3svmassdiffnbe.h"
 

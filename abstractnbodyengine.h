@@ -24,11 +24,10 @@ public:
     explicit AbstractNBodyEngine(UpdateUi*);
     virtual ~AbstractNBodyEngine();
 
-    virtual void debug() const = 0;
-
     float* coordinates() const;
     float* velocities() const;
     float* masses() const;
+    float* inversedDistances() const;
 
     quint64 numberOfParticle() const;
     float modelScale() const;
@@ -56,6 +55,9 @@ protected:
 
     // Stores the mass of each particle (kg)
     float* m_masses;
+
+    // Stores the reciprocal of the previously calculated distance.
+    float* m_inversedDistances;
 
     // Physically calculated time per frame (second)
     float m_timePerFrame;
