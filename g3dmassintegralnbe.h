@@ -78,7 +78,7 @@ public:
         delete[] m_inversedDistances;
     }
 
-    void calculateTimeProgress() const override
+    void calculateTimeProgress(int ) const override
     {
         //debug();
         for (quint64 i = 0; i < m_numberOfParticles; ++i)
@@ -90,7 +90,7 @@ public:
         }
     }
 
-    void calculateInteraction() const override
+    void calculateInteraction(int) const override
     {
         // Perform integral calculation of universal gravitation.
         // The memory cost is high because the distance data calculated last time is saved and used.

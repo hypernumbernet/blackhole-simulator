@@ -32,8 +32,8 @@ public:
 //    }
 
 signals:
-    void calculateTimeProgress();
-    void calculateInteraction();
+    void calculateTimeProgress(int);
+    void calculateInteraction(int);
 
 private:
     QThread workerThread;

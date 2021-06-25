@@ -83,7 +83,7 @@ public:
         delete[] m_masses;
     }
 
-    void calculateTimeProgress() const override
+    void calculateTimeProgress(int threadNumber) const override
     {
         //debug();
 
@@ -91,8 +91,10 @@ public:
 //            //++Controller::waitForDone;
 //            m_timeProgressControllers.at(i)->calculate();
 //        }
+        quint64 start = m_timeProgressRanges[threadNumber].start;
+        quint64 end = m_timeProgressRanges[threadNumber].end;
 
-        for (quint64 i = 0; i < m_numberOfParticles; ++i)
+        for (quint64 i = start; i < end; ++i)
         {
             quint64 j = i * 3;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
@@ -106,20 +108,22 @@ public:
         resultReady();
     }
 
-    void calculateInteraction() const override
+    void calculateInteraction(int threadNumber) const override
     {
 //        for (int i = 0; i < m_timeProgressControllers.size(); ++i) {
 //            m_timeProgressControllers.at(i)->calculateInteraction();
 //        }
+        quint64 start = m_interactionRanges[threadNumber].start;
+        quint64 end = m_interactionRanges[threadNumber].end;
 
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
         float time_g = m_timePerFrame * GRAVITATIONAL_CONSTANT;
 
-        if (m_numberOfParticles == 0)
-            return;
+//        if (m_numberOfParticles == 0)
+//            return;
 
-        for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
+        for (quint64 i = start; i < end; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {
@@ -151,6 +155,7 @@ public:
                 ++k;
             }
         }
+        resultReady();
     }
 
     void debug() const override

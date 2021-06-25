@@ -21,7 +21,7 @@ struct SimCondition
     int engine = 0;
     Preset preset = Preset::Random;
     float timePerFrame = 1000.0f;
-    int numberOfParticles = 400;
+    int numberOfParticles = 4000;
     float massAvg = 6.0e+29f;
     bool massRandom = true;
 };

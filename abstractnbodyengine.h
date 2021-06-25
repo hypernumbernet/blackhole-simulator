@@ -48,8 +48,8 @@ public:
     void resultReady() const;
 
 public slots:
-    virtual void calculateTimeProgress() const = 0;
-    virtual void calculateInteraction() const = 0;
+    virtual void calculateTimeProgress(int threadNumber) const = 0;
+    virtual void calculateInteraction(int threadNumber) const = 0;
 
 protected:
     void setNumberOfParticles(quint64);
