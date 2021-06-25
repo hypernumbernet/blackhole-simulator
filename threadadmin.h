@@ -37,5 +37,5 @@ private:
     int m_frameNum;
 
     QBasicTimer m_simulateTimer;
-    QVector<ThreadController*> m_controllers;
+    QList<ThreadController*> m_controllers;
 };

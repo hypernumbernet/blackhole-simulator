@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
+#include "abstractenginecore.h"
 
 #include <QObject>
 #include <QThread>
@@ -11,14 +11,16 @@ class ThreadController : public QObject
     Q_OBJECT
 
 public:
-    ThreadController(QObject* = nullptr);
+    explicit ThreadController(QObject* = nullptr);
 
-    void initialize(AbstractNBodyEngine* const);
+    void initialize(AbstractEngineCore* const);
+    void reset();
 
 signals:
     void calculateTimeProgress(int);
     void calculateInteraction(int);
 
 private:
+    AbstractEngineCore* m_core;
     QThread workerThread;
 };

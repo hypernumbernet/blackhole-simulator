@@ -27,7 +27,7 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
     for (int i = 0; i < tcount; ++i)
     {
         m_timeProgressRanges[i].start = i * k;
-        m_timeProgressRanges[i].numberOfParticles = num;
+        //m_timeProgressRanges[i].numberOfParticles = num;
     }
     for (int i = 0; i < tcount - 1; ++i)
     {
@@ -109,4 +109,19 @@ int AbstractNBodyEngine::threadCount()
 void AbstractNBodyEngine::resultReady() const
 {
     emit m_updateUi->resultReady();
+}
+
+QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::timeProgressRanges() const
+{
+    return m_timeProgressRanges;
+}
+
+QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::interactionRanges() const
+{
+    return m_interactionRanges;
+}
+
+UpdateUi* AbstractNBodyEngine::updateUi() const
+{
+    return m_updateUi;
 }

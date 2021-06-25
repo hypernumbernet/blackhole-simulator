@@ -21,11 +21,11 @@ public:
     {
         quint64 start;
         quint64 end;
-        quint64 numberOfParticles;
-        float* coordinates;
-        float* velocities;
-        float* masses;
-        float timePerFrame;
+//        quint64 numberOfParticles;
+//        float* coordinates;
+//        float* velocities;
+//        float* masses;
+//        float timePerFrame;
     };
 
     AbstractNBodyEngine(UpdateUi*, QObject* parent = nullptr);
@@ -46,6 +46,9 @@ public:
     void changeModelScale(float);
     int threadCount();
     void resultReady() const;
+    QVector<IntRange> timeProgressRanges() const;
+    QVector<IntRange> interactionRanges() const;
+    UpdateUi* updateUi() const;
 
 public slots:
     virtual void calculateTimeProgress(int threadNumber) const = 0;

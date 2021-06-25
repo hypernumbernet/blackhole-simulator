@@ -28,7 +28,7 @@ struct SimCondition
 
 inline float randf() {return (float)rand() / (float)RAND_MAX;}
 
-inline QMutex interactionMutex;
+inline QRecursiveMutex interactionMutex;
 
 }
 

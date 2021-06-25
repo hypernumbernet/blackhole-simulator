@@ -3,6 +3,7 @@
 #include "g3dmassdiffnbe.h"
 #include "g3dmassintegralnbe.h"
 #include "g3svmassdiffnbe.h"
+#include "abstractenginecore.h"
 
 #include <math.h>
 

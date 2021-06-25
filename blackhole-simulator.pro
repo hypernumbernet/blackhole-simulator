@@ -4,6 +4,7 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
+    abstractenginecore.cpp \
     abstractinitializer.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     worldmodels.cpp
 
 HEADERS += \
+    abstractenginecore.h \
     abstractinitializer.h \
     abstractnbodyengine.h \
     camera.h \

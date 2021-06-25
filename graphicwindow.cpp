@@ -285,9 +285,6 @@ void GraphicWindow::reset(const bhs::SimCondition& sim)
 {
     m_fpsPreFrame = 0;
     m_threadAdmin.reset();
-
-    // TODO wait all stop
-
     m_particleModels->reset(sim);
 }
 

@@ -27,6 +27,9 @@ void ThreadAdmin::reset()
     while (m_waitForDone > 0) {
         QThread::msleep(100);
     }
+    for (int i = 0; i < m_controllers.size(); ++i) {
+        m_controllers.at(i)->reset();
+    }
 }
 
 int ThreadAdmin::frameNum()
@@ -43,7 +46,7 @@ void ThreadAdmin::startSim()
 void ThreadAdmin::setThreadParam(AbstractNBodyEngine* const engine)
 {
     for (int i = 0; i < m_controllers.size(); ++i) {
-        m_controllers.at(i)->initialize(engine);
+        m_controllers.at(i)->initialize(new AbstractEngineCore(engine));
     }
 }
 

@@ -106,7 +106,7 @@ void Particles::resize(int height)
 
 void Particles::reset(const bhs::SimCondition& sim)
 {
-    delete m_NBodyEngine;
+    delete m_NBodyEngine;    
     selectNBodyEngine(sim);
 }
 
@@ -119,7 +119,3 @@ void Particles::setModelScaleRatio(float val)
 {
     m_NBodyEngine->setModelScaleRatio(val);
 }
-
-//void Particles::frameAdvance()
-//{
-//}
