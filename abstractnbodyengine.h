@@ -8,10 +8,8 @@
 #include <QDebug>
 #include <QMutex>
 
-class AbstractNBodyEngine : public QObject
+class AbstractNBodyEngine
 {
-    Q_OBJECT
-
 public:
     static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
     static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
@@ -21,14 +19,9 @@ public:
     {
         quint64 start;
         quint64 end;
-//        quint64 numberOfParticles;
-//        float* coordinates;
-//        float* velocities;
-//        float* masses;
-//        float timePerFrame;
     };
 
-    AbstractNBodyEngine(UpdateUi*, QObject* parent = nullptr);
+    explicit AbstractNBodyEngine(UpdateUi*);
     virtual ~AbstractNBodyEngine();
 
     virtual void debug() const = 0;
@@ -50,9 +43,9 @@ public:
     QVector<IntRange> interactionRanges() const;
     UpdateUi* updateUi() const;
 
-public slots:
-    virtual void calculateTimeProgress(int threadNumber) const = 0;
-    virtual void calculateInteraction(int threadNumber) const = 0;
+//public slots:
+//    virtual void calculateTimeProgress(int threadNumber) const = 0;
+//    virtual void calculateInteraction(int threadNumber) const = 0;
 
 protected:
     void setNumberOfParticles(quint64);

@@ -78,68 +78,68 @@ public:
         delete[] m_inversedDistances;
     }
 
-    void calculateTimeProgress(int ) const override
-    {
-        //debug();
-        for (quint64 i = 0; i < m_numberOfParticles; ++i)
-        {
-            quint64 j = i * 3;
-            m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-            m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-            m_coordinates[j] += m_velocities[j] * m_timePerFrame;
-        }
-    }
+//    void calculateTimeProgress(int ) const override
+//    {
+//        //debug();
+//        for (quint64 i = 0; i < m_numberOfParticles; ++i)
+//        {
+//            quint64 j = i * 3;
+//            m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+//            m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+//            m_coordinates[j] += m_velocities[j] * m_timePerFrame;
+//        }
+//    }
 
-    void calculateInteraction(int) const override
-    {
-        // Perform integral calculation of universal gravitation.
-        // The memory cost is high because the distance data calculated last time is saved and used.
-        // However, if the distance variation is large, it may be more accurate to calculate by this method.
-        // The celestial scale vibrates violently at float resolution.
+//    void calculateInteraction(int) const override
+//    {
+//        // Perform integral calculation of universal gravitation.
+//        // The memory cost is high because the distance data calculated last time is saved and used.
+//        // However, if the distance variation is large, it may be more accurate to calculate by this method.
+//        // The celestial scale vibrates violently at float resolution.
 
-        float inv, force;
-        Distance d;
-        quint64 k = 0, a, b;
+//        float inv, force;
+//        Distance d;
+//        quint64 k = 0, a, b;
 
-        if (m_numberOfParticles == 0)
-            return;
+//        if (m_numberOfParticles == 0)
+//            return;
 
-        for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
-        {
-            for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
-            {
-                if (!calculateDistance(d, i, j))
-                    continue;
+//        for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
+//        {
+//            for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
+//            {
+//                if (!calculateDistance(d, i, j))
+//                    continue;
 
-                inv = m_inversedDistances[k];
-                m_inversedDistances[k] = d.invR;
-                inv -= d.invR;
+//                inv = m_inversedDistances[k];
+//                m_inversedDistances[k] = d.invR;
+//                inv -= d.invR;
 
-                if (inv == 0.0f)
-                {
-                    continue;
-                }
+//                if (inv == 0.0f)
+//                {
+//                    continue;
+//                }
 
-                // Time is not taken into account.
-                force = abs(inv * GRAVITATIONAL_CONSTANT);
+//                // Time is not taken into account.
+//                force = abs(inv * GRAVITATIONAL_CONSTANT);
 
-                d.unitX *= force;
-                d.unitY *= force;
-                d.unitZ *= force;
+//                d.unitX *= force;
+//                d.unitY *= force;
+//                d.unitZ *= force;
 
-                a = i * 3;
-                b = j * 3;
-                m_velocities[a] -= d.unitX * m_masses[j];
-                m_velocities[a + 1] -= d.unitY * m_masses[j];
-                m_velocities[a + 2] -= d.unitZ * m_masses[j];
-                m_velocities[b] += d.unitX * m_masses[i];
-                m_velocities[b + 1] += d.unitY * m_masses[i];
-                m_velocities[b + 2] += d.unitZ * m_masses[i];
+//                a = i * 3;
+//                b = j * 3;
+//                m_velocities[a] -= d.unitX * m_masses[j];
+//                m_velocities[a + 1] -= d.unitY * m_masses[j];
+//                m_velocities[a + 2] -= d.unitZ * m_masses[j];
+//                m_velocities[b] += d.unitX * m_masses[i];
+//                m_velocities[b + 1] += d.unitY * m_masses[i];
+//                m_velocities[b + 2] += d.unitZ * m_masses[i];
 
-                ++k;
-            }
-        }
-    }
+//                ++k;
+//            }
+//        }
+//    }
 
     void debug() const override
     {

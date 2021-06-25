@@ -3,10 +3,8 @@
 #include <QThread>
 
 AbstractNBodyEngine::AbstractNBodyEngine(
-        UpdateUi* const updateUi,
-        QObject* parent)
-    : QObject(parent)
-    , m_updateUi(updateUi)
+        UpdateUi* const updateUi)
+    : m_updateUi(updateUi)
     , m_modelScale(1.0f)
 {
 }

@@ -41,9 +41,11 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
+    AbstractEngineCore* core = nullptr;
     switch (sim.engine) {
     default:
         m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
+        core = new G3DMassDiffCore(m_NBodyEngine);
         break;
     case 1:
         m_NBodyEngine = new G3DMassIntegralNBE<float>(m_updateUi, sim);
@@ -52,8 +54,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         m_NBodyEngine = new G3SVMassDiffNBE<float>(m_updateUi, sim);
         break;
     }
-
-    m_threadAdmin->setThreadParam(m_NBodyEngine);
+    m_threadAdmin->setThreadParam(core);
 
     QString engine = m_updateUi->ENGINE->value(sim.engine);
     emit m_updateUi->displayEngineName(engine);

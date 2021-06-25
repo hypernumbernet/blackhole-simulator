@@ -8,6 +8,7 @@ SOURCES += \
     abstractinitializer.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
+    g3dmassdiffcore.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
     initializerdialog.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     abstractinitializer.h \
     abstractnbodyengine.h \
     camera.h \
+    g3dmassdiffcore.h \
     g3dmassdiffnbe.h \
     g3dmassintegralnbe.h \
     g3svmassdiffnbe.h \

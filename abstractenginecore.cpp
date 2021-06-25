@@ -11,3 +11,8 @@ AbstractEngineCore::AbstractEngineCore(AbstractNBodyEngine* const engine, QObjec
 {
 
 }
+
+void AbstractEngineCore::resultReady() const
+{
+    emit m_engine->updateUi()->resultReady();
+}
