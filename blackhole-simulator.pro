@@ -6,7 +6,6 @@ CONFIG += c++17
 SOURCES += \
     abstractinitializer.cpp \
     abstractnbodyengine.cpp \
-    calculatetimeprogress.cpp \
     camera.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
@@ -21,7 +20,6 @@ SOURCES += \
 HEADERS += \
     abstractinitializer.h \
     abstractnbodyengine.h \
-    calculatetimeprogress.h \
     camera.h \
     g3dmassdiffnbe.h \
     g3dmassintegralnbe.h \

@@ -39,7 +39,6 @@ public:
     quint64 numberOfParticle() const;
     float modelScale() const;
     float timePerFrame() const;
-    //const QVector<IntRange>& rangeTimeProgress() const;
 
     void setModelScale(float);
     void setModelScaleRatio(float);
