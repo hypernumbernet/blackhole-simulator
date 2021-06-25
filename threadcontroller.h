@@ -4,32 +4,16 @@
 
 #include <QObject>
 #include <QThread>
+#include <QMutex>
 
 class ThreadController : public QObject
 {
     Q_OBJECT
 
 public:
-    ThreadController(QObject* parent = nullptr)
-        : QObject(parent)
-    {
-    }
+    ThreadController(QObject* = nullptr);
 
-    void initialize(AbstractNBodyEngine* const engine)
-    {
-        engine->moveToThread(&workerThread);
-        connect(&workerThread, &QThread::finished, engine, &QObject::deleteLater);
-        connect(this, &ThreadController::calculateTimeProgress, engine, &AbstractNBodyEngine::calculateTimeProgress);
-        connect(this, &ThreadController::calculateInteraction, engine, &AbstractNBodyEngine::calculateInteraction);
-        //connect(engine, &AbstractNBodyEngine::resultReady, this, &ThreadController::handleResults);
-        workerThread.start();
-    }
-
-//public slots:
-//    void handleResults()
-//    {
-//        //--waitForDone;
-//    }
+    void initialize(AbstractNBodyEngine* const);
 
 signals:
     void calculateTimeProgress(int);
@@ -37,5 +21,4 @@ signals:
 
 private:
     QThread workerThread;
-
 };

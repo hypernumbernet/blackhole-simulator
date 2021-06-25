@@ -28,7 +28,6 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
 
 GraphicWindow::~GraphicWindow()
 {
-    //m_simulateTimer.stop();
     m_uiTimer.stop();
     m_fpsTimer.stop();
 
@@ -66,9 +65,6 @@ void GraphicWindow::initializeGL()
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
-
-    //m_particleModels->moveToThread(&m_threadParticles);
-    //m_threadParticles.start();
 }
 
 void GraphicWindow::resizeGL(int w, int h)

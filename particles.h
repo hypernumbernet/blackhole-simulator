@@ -21,16 +21,10 @@ public:
     void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateGL();
-    //void updateParticles();
     void selectNBodyEngine(const bhs::SimCondition&);
     void reset(const bhs::SimCondition&);
     void setModelScale(float);
     void setModelScaleRatio(float);
-    //int frameNum();
-    //void startSim();
-
-//public slots:
-//    void frameAdvance();
 
 private:
 

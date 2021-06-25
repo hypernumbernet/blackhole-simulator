@@ -101,11 +101,6 @@ float AbstractNBodyEngine::timePerFrame() const
     return m_timePerFrame;
 }
 
-//const QVector<AbstractNBodyEngine::IntRange>& AbstractNBodyEngine::rangeTimeProgress() const
-//{
-//    return m_timeProgressRanges;
-//}
-
 int AbstractNBodyEngine::threadCount()
 {
     return m_timeProgressRanges.size();

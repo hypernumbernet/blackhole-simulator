@@ -45,9 +45,6 @@ void WorldModels::initGridLines()
 {
     m_vao.bind();
 
-//    auto len = m_lines.length();
-//    auto sizev3d = sizeof(QVector3D);
-
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();

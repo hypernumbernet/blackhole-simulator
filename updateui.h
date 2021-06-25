@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QMap>
-#include <QQuaternion>
+#include <QMutex>
 
 namespace bhs // Black Hole Simulator
 {
@@ -21,12 +21,14 @@ struct SimCondition
     int engine = 0;
     Preset preset = Preset::Random;
     float timePerFrame = 1000.0f;
-    int numberOfParticles = 4000;
+    int numberOfParticles = 800;
     float massAvg = 6.0e+29f;
     bool massRandom = true;
 };
 
 inline float randf() {return (float)rand() / (float)RAND_MAX;}
+
+inline QMutex interactionMutex;
 
 }
 
@@ -73,6 +75,4 @@ signals:
     void applyInitialConditions();
     void frameAdvance();
     void resultReady();
-    //void allDone();
-
 };

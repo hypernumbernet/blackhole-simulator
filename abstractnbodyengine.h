@@ -6,6 +6,7 @@
 
 #include <QtGlobal>
 #include <QDebug>
+#include <QMutex>
 
 class AbstractNBodyEngine : public QObject
 {
