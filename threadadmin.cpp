@@ -56,9 +56,7 @@ void ThreadAdmin::frameAdvance()
 
 void ThreadAdmin::handleResults()
 {
-    bhs::waitMutex.lock();
     --m_waitForDone;
-    bhs::waitMutex.unlock();
 }
 
 void ThreadAdmin::updateParticles()
@@ -67,17 +65,13 @@ void ThreadAdmin::updateParticles()
     {
         m_calculateNext = 1;
         for (int i = 0; i < m_controllers.size(); ++i) {
-            bhs::waitMutex.lock();
             ++m_waitForDone;
-            bhs::waitMutex.unlock();
             emit m_controllers.at(i)->calculateTimeProgress(i);
         }
     } else {
         m_calculateNext = 0;
         for (int i = 0; i < m_controllers.size(); ++i) {
-            bhs::waitMutex.lock();
             ++m_waitForDone;
-            bhs::waitMutex.unlock();
             emit m_controllers.at(i)->calculateInteraction(i);
         }
         ++m_frameNum;

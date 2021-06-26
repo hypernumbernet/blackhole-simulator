@@ -30,8 +30,6 @@ inline float randf() {return (float)rand() / (float)RAND_MAX;}
 
 inline QRecursiveMutex interactionMutex;
 
-inline QRecursiveMutex waitMutex;
-
 }
 
 class UpdateUi : public QObject
