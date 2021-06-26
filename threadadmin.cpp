@@ -47,10 +47,11 @@ void ThreadAdmin::startSim()
     emit m_updateUi->updateStartButtonText(m_isSimulating);
 }
 
-void ThreadAdmin::frameAdvance()
+void ThreadAdmin::frameAdvance(int count)
 {
     if (!m_isSimulating) {
-        updateParticles();
+        m_endOfFrameAdvance = m_frameNum + count;
+        m_frameAdvanceTimer.start(0, this);
     }
 }
 
@@ -87,6 +88,10 @@ void ThreadAdmin::timerEvent(QTimerEvent* ev)
     } else if (ev->timerId() == m_resetTimer.timerId()) {
         m_resetTimer.stop();
         reset(m_sim);
+    } else if (ev->timerId() == m_frameAdvanceTimer.timerId()) {
+        updateParticles();
+        if (m_frameNum == m_endOfFrameAdvance)
+            m_frameAdvanceTimer.stop();
     }
 }
 

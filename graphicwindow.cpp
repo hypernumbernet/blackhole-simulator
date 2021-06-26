@@ -267,7 +267,7 @@ void GraphicWindow::changeLinePosition()
 
 void GraphicWindow::frameAdvance()
 {
-    emit m_updateUi->frameAdvance();
+    emit m_updateUi->frameAdvance(1);
 }
 
 void GraphicWindow::circleStrafing(const bool on)

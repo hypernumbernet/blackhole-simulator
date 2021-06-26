@@ -24,7 +24,7 @@ public:
     void reset(const bhs::SimCondition& sim);
 
 public slots:
-    void frameAdvance();
+    void frameAdvance(int = 1);
     void handleResults();
 
 private:
@@ -37,9 +37,11 @@ private:
     int m_waitForDone;
     int m_calculateNext;
     int m_frameNum;
+    int m_endOfFrameAdvance;
 
     QBasicTimer m_simulateTimer;
     QBasicTimer m_resetTimer;
+    QBasicTimer m_frameAdvanceTimer;
     QList<ThreadController*> m_controllers;
     bhs::SimCondition m_sim;
 };

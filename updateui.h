@@ -73,7 +73,7 @@ signals:
     void displayEngineName(const QString&);
     void displayPresetName(const QString&);
     void applyInitialConditions();
-    void frameAdvance();
+    void frameAdvance(int);
     void resultReady();
     void resetParticles(const bhs::SimCondition& sim);
 };
