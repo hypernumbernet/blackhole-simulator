@@ -57,15 +57,6 @@ void G3DMassDiffCore::calculateInteraction(int threadNumber) const
             d2 *= inv * theta;
             d3 *= inv * theta;
 
-//                bhs::interactionMutex.lock();
-//                m_velocities[a] -= d1 * m_masses[j];
-//                m_velocities[a + 1] -= d2 * m_masses[j];
-//                m_velocities[a + 2] -= d3 * m_masses[j];
-//                m_velocities[b] += d1 * m_masses[i];
-//                m_velocities[b + 1] += d2 * m_masses[i];
-//                m_velocities[b + 2] += d3 * m_masses[i];
-//                bhs::interactionMutex.unlock();
-
             vels[a] -= d1 * m_masses[j];
             vels[a + 1] -= d2 * m_masses[j];
             vels[a + 2] -= d3 * m_masses[j];

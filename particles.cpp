@@ -44,6 +44,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     switch (sim.engine) {
     default:
         m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
+
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
         }
@@ -59,7 +60,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         m_NBodyEngine = new G3SVMassDiffNBE<float>(m_updateUi, sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
-            m_threadAdmin->at(i)->initialize(nullptr);
+            m_threadAdmin->at(i)->initialize(new G3SVMassDiffCore(m_NBodyEngine));
         }
         break;
     }

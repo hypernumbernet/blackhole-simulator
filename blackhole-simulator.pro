@@ -10,6 +10,7 @@ SOURCES += \
     camera.cpp \
     g3dmassdiffcore.cpp \
     g3dmassintegralcore.cpp \
+    g3svmassdiffcore.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
     initializerdialog.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     g3dmassdiffnbe.h \
     g3dmassintegralcore.h \
     g3dmassintegralnbe.h \
+    g3svmassdiffcore.h \
     g3svmassdiffnbe.h \
     graphicwindow.h \
     initializer3d.h \

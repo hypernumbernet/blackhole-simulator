@@ -65,10 +65,10 @@ void G3DMassIntegralCore::calculateInteraction(int threadNumber) const
 
             a = i * 3;
             b = j * 3;
-            vels[a] -= d.unitX * m_masses[j];
+            vels[a    ] -= d.unitX * m_masses[j];
             vels[a + 1] -= d.unitY * m_masses[j];
             vels[a + 2] -= d.unitZ * m_masses[j];
-            vels[b] += d.unitX * m_masses[i];
+            vels[b    ] += d.unitX * m_masses[i];
             vels[b + 1] += d.unitY * m_masses[i];
             vels[b + 2] += d.unitZ * m_masses[i];
 

@@ -4,6 +4,7 @@
 #include "g3dmassdiffnbe.h"
 #include "g3dmassintegralcore.h"
 #include "g3dmassintegralnbe.h"
+#include "g3svmassdiffcore.h"
 #include "g3svmassdiffnbe.h"
 
 #include <math.h>

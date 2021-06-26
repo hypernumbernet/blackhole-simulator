@@ -70,8 +70,8 @@ void ThreadAdmin::updateParticles()
             ++m_waitForDone;
             emit m_controllers.at(i)->calculateInteraction(i);
         }
+        ++m_frameNum;
     }
-    ++m_frameNum;
 }
 
 void ThreadAdmin::timerEvent(QTimerEvent*)
