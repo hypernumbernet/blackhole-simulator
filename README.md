@@ -2,6 +2,8 @@
 
 N-Body gravity simulation Qt GUI Edition
 
+**Version 2.0 _beta_**
+
 OpenGL 4.5 with Qt Framework
 
 *However, this program only draws lines and dots, so it doesn't use any OpenGL 4.5 features.*
