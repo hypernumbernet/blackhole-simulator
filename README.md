@@ -25,6 +25,7 @@ And also simulate anomalous gravitational fields by simulating distorted virtual
   - Mouse Center Click : Look at the origin
   - W-S-A-D Keys : Translate
   - Q-E Keys : Rolling
+  - Allow Keys : Look around
   - Space-Ctrl Keys : Moving up and down
   - Tab Key : Look at the origin
   - Shift Key : Stand XZ plane
