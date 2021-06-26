@@ -32,7 +32,6 @@ private:
     void timerEvent(QTimerEvent*) override;
 
     UpdateUi* const m_updateUi;
-    bool m_isSimulating;
     const int m_threadCount;
     int m_waitForDone;
     int m_calculateNext;

@@ -3,7 +3,7 @@
 ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
     : QThread(parent)
     , m_updateUi(updateUi)
-    , m_isSimulating(false)
+    //, m_isSimulating(false)
     , m_threadCount(QThread::idealThreadCount())
     , m_waitForDone(0)
     , m_calculateNext(0)
@@ -12,7 +12,6 @@ ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
     for (int i = 0; i < m_threadCount; ++i) {
         m_controllers.append(new ThreadController);
     }
-    m_simulateTimer.start(0, this);
 }
 
 ThreadAdmin::~ThreadAdmin()
@@ -25,7 +24,7 @@ ThreadAdmin::~ThreadAdmin()
 void ThreadAdmin::reset(const bhs::SimCondition& sim)
 {
     m_frameAdvanceTimer.stop();
-    m_isSimulating = false;
+    m_simulateTimer.stop();
     m_frameNum = 0;
 
     if (m_waitForDone > 0) {
@@ -47,13 +46,18 @@ int ThreadAdmin::frameNum()
 void ThreadAdmin::startSim()
 {
     m_frameAdvanceTimer.stop();
-    m_isSimulating = !m_isSimulating;
-    emit m_updateUi->updateStartButtonText(m_isSimulating);
+    if (m_simulateTimer.isActive()) {
+        m_simulateTimer.stop();
+    } else {
+        m_simulateTimer.start(0, this);
+    }
+
+    emit m_updateUi->updateStartButtonText(m_simulateTimer.isActive());
 }
 
 void ThreadAdmin::frameAdvance(int count)
 {
-    if (!m_isSimulating) {
+    if (!m_simulateTimer.isActive()) {
         m_endOfFrameAdvance = m_frameNum + count;
         m_frameAdvanceTimer.start(0, this);
     }
@@ -91,7 +95,7 @@ void ThreadAdmin::timerEvent(QTimerEvent* ev)
     if (ev->timerId() == m_resetTimer.timerId()) {
         m_resetTimer.stop();
         reset(m_sim);
-    } else if (ev->timerId() == m_simulateTimer.timerId() && m_isSimulating) {
+    } else if (ev->timerId() == m_simulateTimer.timerId() && m_simulateTimer.isActive()) {
         updateParticles();
     } else if (ev->timerId() == m_frameAdvanceTimer.timerId()) {
         updateParticles();
