@@ -13,6 +13,7 @@ SOURCES += \
     g3svmassdiffcore.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
+    initializer3d3s.cpp \
     initializerdialog.cpp \
     main.cpp \
     mainwidget.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     g3svmassdiffnbe.h \
     graphicwindow.h \
     initializer3d.h \
+    initializer3d3s.h \
     initializerdialog.h \
     mainwidget.h \
     particles.h \

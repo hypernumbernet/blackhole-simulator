@@ -39,6 +39,10 @@ public:
     inline explicit Quaternion(Vector3<T> v)
         : i0(0), i1(v.x), i2(v.y), i3(v.z){}
 
+    template <class E>
+    inline Quaternion(const T* const a, const E index)
+        : i0(a[index]), i1(a[index + 1]), i2(a[index + 2]), i3(a[index + 3]){}
+
     static const Quaternion<T> Zero;
     static const Quaternion<T> Identity;
 

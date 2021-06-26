@@ -6,8 +6,13 @@ using namespace bhs;
 
 G3SVMassDiffCore::G3SVMassDiffCore(AbstractNBodyEngine* const engine, QObject* parent)
     : AbstractEngineCore(engine, parent)
-{
+    , m_cinv(1.0f / AbstractNBodyEngine::SPEED_OF_LIGHT)
 
+    // Half the circumference is assumed to be the speed of light.
+    , m_vangle(AbstractNBodyEngine::PI * m_cinv)
+
+    , m_vangle_inv(1.0f / m_vangle)
+{
 }
 
 void G3SVMassDiffCore::calculateTimeProgress(int threadNumber) const
@@ -17,35 +22,38 @@ void G3SVMassDiffCore::calculateTimeProgress(int threadNumber) const
 
     for (quint64 i = start; i < end; ++i)
     {
+        auto vq = Quaternion<float>(m_velocities, i * 4);
+
+        auto vv3 = vq.LnV3();
+
+        auto to_add = vv3 * m_vangle_inv * m_timePerFrame;
+
         quint64 j = i * 3;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame;
+        m_coordinates[j] += to_add.x; ++j;
+        m_coordinates[j] += to_add.y; ++j;
+        m_coordinates[j] += to_add.z;
     }
     resultReady();
 }
 
 void G3SVMassDiffCore::calculateInteraction(int threadNumber) const
 {
-    quint64 start = m_engine->interactionRanges().at(threadNumber).start;
-    quint64 end = m_engine->interactionRanges().at(threadNumber).end;
+    const quint64 start = m_engine->interactionRanges().at(threadNumber).start;
+    const quint64 end = m_engine->interactionRanges().at(threadNumber).end;
+    const float vangle_half = m_vangle * 0.5f;
+    const float time_g = m_timePerFrame * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT;
 
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;
-    float cinv = 1.0f / AbstractNBodyEngine::SPEED_OF_LIGHT;
 
-    // Half the circumference is assumed to be the speed of light.
-    float velangle = AbstractNBodyEngine::PI * cinv;
-
-    float vangle_half = velangle * 0.5f;
-    float vangle_inv = 1.0f / velangle;
-    float time_g = m_timePerFrame * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT;
-
-    bhs::interactionMutex.lock();
-//    float* vels = new float[m_numberOfParticles * 3];
-//    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
-//        vels[i] = m_velocities[i];
-//    }
+    float* vels = new float[m_numberOfParticles * 4];
+    for (quint64 i = 0; i < m_numberOfParticles; ++i) {
+        auto i4 = i * 4;
+        vels[i4    ] = 1.0f;
+        vels[i4 + 1] = 0.0f;
+        vels[i4 + 2] = 0.0f;
+        vels[i4 + 3] = 0.0f;
+    }
 
     for (quint64 i = start; i < end; ++i)
     {
@@ -73,34 +81,46 @@ void G3SVMassDiffCore::calculateInteraction(int threadNumber) const
             rota.MakeRotation(-theta * m_masses[j] * vangle_half);
             rotb.MakeRotation(theta * m_masses[i] * vangle_half);
 
-            auto vva = Vector3<float>(m_velocities, a);
-            auto vvb = Vector3<float>(m_velocities, b);
-            auto va = Quaternion<float>::Exp(vva * velangle);
-            auto vb = Quaternion<float>::Exp(vvb * velangle);
+            a = i * 4;
+            b = j * 4;
+            auto va = Quaternion<float>(vels, a);
+            auto vb = Quaternion<float>(vels, b);
+
+            va.Normalize();
+            vb.Normalize();
 
             auto rotatedA = va.Rot8(rota);
             auto rotatedB = vb.Rot8(rotb);
 
-            auto v3a = rotatedA.LnV3();
-            auto v3b = rotatedB.LnV3();
-            m_velocities[a    ] = v3a.x * vangle_inv;
-            m_velocities[a + 1] = v3a.y * vangle_inv;
-            m_velocities[a + 2] = v3a.z * vangle_inv;
-            m_velocities[b    ] = v3b.x * vangle_inv;
-            m_velocities[b + 1] = v3b.y * vangle_inv;
-            m_velocities[b + 2] = v3b.z * vangle_inv;
+            vels[a    ] = rotatedA.i0;
+            vels[a + 1] = rotatedA.i1;
+            vels[a + 2] = rotatedA.i2;
+            vels[a + 3] = rotatedA.i3;
+
+            vels[b    ] = rotatedB.i0;
+            vels[b + 1] = rotatedB.i1;
+            vels[b + 2] = rotatedB.i2;
+            vels[b + 3] = rotatedB.i3;
 
             ++k;
         }
     }
 
-//    bhs::interactionMutex.lock();
-//    for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
-//        m_velocities[i] = vels[i];
-//    }
+    bhs::interactionMutex.lock();
+    for (quint64 i = 0; i < m_numberOfParticles; ++i) {
+        auto i4 = i * 4;
+        auto vq = Quaternion<float>(m_velocities, i4);
+        auto vp = Quaternion<float>(vels, i4);
+        vq *= vp;
+
+        m_velocities[i4    ] = vq.i0;
+        m_velocities[i4 + 1] = vq.i1;
+        m_velocities[i4 + 2] = vq.i2;
+        m_velocities[i4 + 3] = vq.i3;
+    }
     bhs::interactionMutex.unlock();
 
-//    delete[] vels;
+    delete[] vels;
 
     resultReady();
 }
