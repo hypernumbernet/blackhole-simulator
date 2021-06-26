@@ -10,7 +10,7 @@ ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
     , m_frameNum(0)
 {
     for (int i = 0; i < m_threadCount; ++i) {
-        m_controllers.append(new ThreadController);
+        m_controllers.append(new ThreadController(this));
     }
 }
 
@@ -76,14 +76,18 @@ void ThreadAdmin::updateParticles()
         {
             m_calculateNext = 1;
             for (int i = 0; i < m_controllers.size(); ++i) {
-                ++m_waitForDone;
-                emit m_controllers.at(i)->calculateTimeProgress(i);
+                if (m_controllers.at(i)->hasRangeTimeProgress(i)) {
+                    ++m_waitForDone;
+                    emit m_controllers.at(i)->calculateTimeProgress(i);
+                }
             }
         } else {
             m_calculateNext = 0;
             for (int i = 0; i < m_controllers.size(); ++i) {
-                ++m_waitForDone;
-                emit m_controllers.at(i)->calculateInteraction(i);
+                if (m_controllers.at(i)->hasRangeInteraction(i)) {
+                    ++m_waitForDone;
+                    emit m_controllers.at(i)->calculateInteraction(i);
+                }
             }
             ++m_frameNum;
         }

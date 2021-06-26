@@ -29,3 +29,15 @@ void AbstractEngineCore::debug() const
         qDebug() << "V: " << i << m_velocities[i];
     }
 }
+
+bool AbstractEngineCore::hasRangeTimeProgress(int threadNum) const
+{
+    auto range = m_engine->timeProgressRanges().at(threadNum);
+    return range.end - range.start > 0;
+}
+
+bool AbstractEngineCore::hasRangeInteraction(int threadNum) const
+{
+    auto range = m_engine->interactionRanges().at(threadNum);
+    return range.end - range.start > 0;
+}

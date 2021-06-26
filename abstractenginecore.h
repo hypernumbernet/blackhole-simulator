@@ -10,6 +10,9 @@ class AbstractEngineCore : public QObject
 public:
     explicit AbstractEngineCore(AbstractNBodyEngine* const, QObject* = nullptr);
 
+    bool hasRangeTimeProgress(int) const;
+    bool hasRangeInteraction(int) const;
+
 public slots:
     virtual void calculateTimeProgress(int threadNumber) const = 0;
     virtual void calculateInteraction(int threadNumber) const = 0;

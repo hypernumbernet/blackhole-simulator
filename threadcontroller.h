@@ -12,9 +12,12 @@ class ThreadController : public QObject
 
 public:
     explicit ThreadController(QObject* = nullptr);
+    ~ThreadController();
 
     void initialize(AbstractEngineCore* const);
     void reset();
+    bool hasRangeTimeProgress(int) const;
+    bool hasRangeInteraction(int) const;
 
 signals:
     void calculateTimeProgress(int);
