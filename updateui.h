@@ -30,6 +30,8 @@ inline float randf() {return (float)rand() / (float)RAND_MAX;}
 
 inline QRecursiveMutex interactionMutex;
 
+inline QRecursiveMutex waitMutex;
+
 }
 
 class UpdateUi : public QObject
@@ -75,4 +77,5 @@ signals:
     void applyInitialConditions();
     void frameAdvance();
     void resultReady();
+    void resetParticles(const bhs::SimCondition& sim);
 };

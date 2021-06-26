@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QBasicTimer>
 #include <QThread>
+#include <QTimerEvent>
 
 class ThreadAdmin : public QThread
 {
@@ -16,11 +17,11 @@ public:
     ThreadAdmin(UpdateUi* const, QObject* = nullptr);
     ~ThreadAdmin();
 
-    void reset();
     int frameNum();
     void startSim();
     int size() const;
     ThreadController*  at(int) const;
+    void reset(const bhs::SimCondition& sim);
 
 public slots:
     void frameAdvance();
@@ -38,5 +39,7 @@ private:
     int m_frameNum;
 
     QBasicTimer m_simulateTimer;
+    QBasicTimer m_resetTimer;
     QList<ThreadController*> m_controllers;
+    bhs::SimCondition m_sim;
 };

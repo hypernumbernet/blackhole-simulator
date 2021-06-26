@@ -21,6 +21,7 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
 
     connect(m_updateUi, &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
     connect(m_updateUi, &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
+    connect(m_updateUi, &UpdateUi::resetParticles, this, &GraphicWindow::resetParticles);
 
     m_threadAdmin.start();
 }
@@ -280,10 +281,14 @@ void GraphicWindow::circleStrafing(const bool on)
     m_camera.lookAtZero(1.0f);
 }
 
-void GraphicWindow::reset(const bhs::SimCondition& sim)
+void GraphicWindow::resetWaitForDone(const bhs::SimCondition& sim)
 {
     m_fpsPreFrame = 0;
-    m_threadAdmin.reset();
+    m_threadAdmin.reset(sim);
+}
+
+void GraphicWindow::resetParticles(const bhs::SimCondition& sim)
+{
     m_particleModels->reset(sim);
 }
 

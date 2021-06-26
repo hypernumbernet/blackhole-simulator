@@ -31,7 +31,8 @@ public slots:
     void startSim();
     void frameAdvance();
     void circleStrafing(bool);
-    void reset(const bhs::SimCondition&);
+    void resetWaitForDone(const bhs::SimCondition&);
+    void resetParticles(const bhs::SimCondition&);
     void setModelScale(const QString&);
     void setModelScaleInt(int);
 

@@ -247,7 +247,7 @@ void MainWidget::displayEngineName(const QString& name)
 
 void MainWidget::reset(const bhs::SimCondition& sim)
 {
-    m_graphicWindows.reset(sim);
+    m_graphicWindows.resetWaitForDone(sim);
     resetScaleSlider();
     updateStartButtonText(false);
 }

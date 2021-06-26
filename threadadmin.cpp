@@ -20,16 +20,20 @@ ThreadAdmin::~ThreadAdmin()
     m_simulateTimer.stop();
 }
 
-void ThreadAdmin::reset()
+void ThreadAdmin::reset(const bhs::SimCondition& sim)
 {
     m_isSimulating = false;
     m_frameNum = 0;
-    while (m_waitForDone > 0) {
-        QThread::msleep(100);
+
+    if (m_waitForDone > 0) {
+        m_sim = sim;
+        m_resetTimer.start(100, this);
+        return;
     }
     for (int i = 0; i < m_controllers.size(); ++i) {
         m_controllers.at(i)->reset();
     }
+    emit m_updateUi->resetParticles(sim);
 }
 
 int ThreadAdmin::frameNum()
@@ -52,7 +56,9 @@ void ThreadAdmin::frameAdvance()
 
 void ThreadAdmin::handleResults()
 {
+    bhs::waitMutex.lock();
     --m_waitForDone;
+    bhs::waitMutex.unlock();
 }
 
 void ThreadAdmin::updateParticles()
@@ -61,23 +67,32 @@ void ThreadAdmin::updateParticles()
     {
         m_calculateNext = 1;
         for (int i = 0; i < m_controllers.size(); ++i) {
+            bhs::waitMutex.lock();
             ++m_waitForDone;
+            bhs::waitMutex.unlock();
             emit m_controllers.at(i)->calculateTimeProgress(i);
         }
     } else {
         m_calculateNext = 0;
         for (int i = 0; i < m_controllers.size(); ++i) {
+            bhs::waitMutex.lock();
             ++m_waitForDone;
+            bhs::waitMutex.unlock();
             emit m_controllers.at(i)->calculateInteraction(i);
         }
         ++m_frameNum;
     }
 }
 
-void ThreadAdmin::timerEvent(QTimerEvent*)
+void ThreadAdmin::timerEvent(QTimerEvent* ev)
 {
-    if (m_isSimulating && m_waitForDone == 0) {
+    if (ev->timerId() == m_simulateTimer.timerId() &&
+            m_isSimulating &&
+            m_waitForDone == 0) {
         updateParticles();
+    } else if (ev->timerId() == m_resetTimer.timerId()) {
+        m_resetTimer.stop();
+        reset(m_sim);
     }
 }
 
