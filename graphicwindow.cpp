@@ -13,7 +13,6 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     , m_circleStrafingSpeed(1.0f)
 {
     // Lock when using the camera. If not locked, it will vibrate at the same time.
-    QMutexLocker locker(&m_guiMutex);
 
     m_camera.lookAtZero(1.0f);
     m_camera.standXZ(false, 1.0f);
@@ -93,9 +92,6 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
         return;
 
     if (ev->key() == Qt::Key_Escape) {
-
-        QMutexLocker locker(&m_guiMutex);
-
         m_camera.reset(CAMERA_INI_POS * 10.0f);
         m_camera.lookAt(CAMERA_INI_POS, 1.0f);
         m_camera.standXZ(false, 1.0f);
@@ -120,9 +116,6 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     setCursor(Qt::BlankCursor);
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton)) {
-
-        QMutexLocker locker(&m_guiMutex);
-
         m_camera.lookAtZero(1.0f);
     }
 }
@@ -132,9 +125,6 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
     if (m_mousePressing) {
         QPointF pos = ev->localPos();
         QPointF diff = pos - m_mouseLastPosition;
-
-        QMutexLocker locker(&m_guiMutex);
-
         if (ev->buttons() == Qt::LeftButton) {
             diff *= 0.15f;
             m_camera.yaw(diff.x());
@@ -164,9 +154,6 @@ void GraphicWindow::wheelEvent(QWheelEvent* ev)
 {
     QPoint numDegrees = ev->angleDelta();
     if (!numDegrees.isNull()) {
-
-        QMutexLocker locker(&m_guiMutex);
-
         m_camera.walk(-numDegrees.y() * 0.01f);
     }
 }
@@ -174,8 +161,6 @@ void GraphicWindow::wheelEvent(QWheelEvent* ev)
 void GraphicWindow::timerEvent(QTimerEvent* ev)
 {
     if (ev->timerId() == m_uiTimer.timerId()) {
-
-        QMutexLocker locker(&m_guiMutex);
 
         if (m_keyPressing.indexOf(Qt::Key_W) >= 0) {
             m_camera.walk(-m_walkSpeed);
@@ -275,9 +260,6 @@ void GraphicWindow::circleStrafing(const bool on)
     if (on)
         m_circleStrafingSpeed = -m_circleStrafingSpeed;
     m_isCircleStrafing = on;
-
-    QMutexLocker locker(&m_guiMutex);
-
     m_camera.lookAtZero(1.0f);
 }
 

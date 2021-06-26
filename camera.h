@@ -5,6 +5,7 @@
 #include <QVector3D>
 #include <QQuaternion>
 #include <QMatrix4x4>
+#include <QMutex>
 
 class Camera
 {
@@ -27,14 +28,16 @@ public:
     bool setPosition(const QVector3D&, float rate = 0.6f);
     void circleStrafing(float amount);
     void reset(const QVector3D& position);
-    void multiplyRotation(const QQuaternion&);
 
     QMatrix4x4 viewMatrix() const;
 
 private:
+    void multiplyRotation(const QQuaternion&);
+
     QVector3D m_position;
     QVector3D m_forward;
     QVector3D m_right;
     QVector3D m_up;
     QQuaternion m_rotation;
+    QMutex m_mutex;
 };

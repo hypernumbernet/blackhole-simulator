@@ -15,7 +15,6 @@
 #include <QVector>
 #include <QBasicTimer>
 #include <QCursor>
-#include <QMutex>
 
 class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {
@@ -72,5 +71,4 @@ private:
     int m_fpsPreFrame;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
-    QMutex m_guiMutex;
 };
