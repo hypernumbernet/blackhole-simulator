@@ -23,7 +23,7 @@ void G3SVMassDiffCore::calculateTimeProgress(int threadNumber) const
     for (quint64 i = start; i < end; ++i)
     {
         auto vq = Quaternion<float>(m_velocities, i * 4);
-
+        vq.Normalize();
         auto vv3 = vq.LnV3();
 
         auto to_add = vv3 * m_vangle_inv * m_timePerFrame;
@@ -85,9 +85,6 @@ void G3SVMassDiffCore::calculateInteraction(int threadNumber) const
             b = j * 4;
             auto va = Quaternion<float>(vels, a);
             auto vb = Quaternion<float>(vels, b);
-
-            va.Normalize();
-            vb.Normalize();
 
             auto rotatedA = va.Rot8(rota);
             auto rotatedB = vb.Rot8(rotb);
