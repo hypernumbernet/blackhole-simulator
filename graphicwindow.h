@@ -16,7 +16,6 @@
 #include <QBasicTimer>
 #include <QCursor>
 #include <QMutex>
-#include <QThread>
 
 class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {
@@ -54,7 +53,7 @@ private:
     void wheelEvent(QWheelEvent*) override;
 
     UpdateUi* const m_updateUi;
-    ThreadAdmin m_threadAdmin;
+    ThreadAdmin  m_threadAdmin;
     WorldModels* const m_worldModels; // TODO not pointer
     Particles* const m_particleModels; // TODO not pointer
 
@@ -73,5 +72,4 @@ private:
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     QMutex m_guiMutex;
-    QThread m_threadParticles;
 };

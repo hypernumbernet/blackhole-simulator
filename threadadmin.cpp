@@ -1,7 +1,7 @@
 #include "threadadmin.h"
 
 ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
-    : QObject(parent)
+    : QThread(parent)
     , m_updateUi(updateUi)
     , m_isSimulating(false)
     , m_threadCount(QThread::idealThreadCount())

@@ -2,7 +2,7 @@
 
 GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     : m_updateUi(updateUi)
-    , m_threadAdmin(updateUi)
+    , m_threadAdmin(updateUi, this)
     , m_worldModels(new WorldModels)
     , m_particleModels(new Particles(updateUi, &m_threadAdmin))
     , m_walkSpeed(0.1f)
@@ -22,8 +22,7 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     connect(m_updateUi, &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
     connect(m_updateUi, &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
 
-    m_threadAdmin.moveToThread(&m_threadParticles);
-    m_threadParticles.start();
+    m_threadAdmin.start();
 }
 
 GraphicWindow::~GraphicWindow()
@@ -31,8 +30,8 @@ GraphicWindow::~GraphicWindow()
     m_uiTimer.stop();
     m_fpsTimer.stop();
 
-    m_threadParticles.quit();
-    m_threadParticles.wait();
+    m_threadAdmin.quit();
+    m_threadAdmin.wait();
 
     makeCurrent();
     delete m_worldModels;

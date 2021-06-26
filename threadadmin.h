@@ -6,9 +6,9 @@
 
 #include <QObject>
 #include <QBasicTimer>
-#include <QMutex>
+#include <QThread>
 
-class ThreadAdmin : public QObject
+class ThreadAdmin : public QThread
 {
     Q_OBJECT
 
