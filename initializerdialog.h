@@ -12,6 +12,7 @@
 #include <QListWidget>
 #include <QGroupBox>
 #include <QButtonGroup>
+//#include <QMapIterator>
 
 class InitializerDialog : public QDialog
 {
@@ -34,13 +35,14 @@ private:
 
     UpdateUi* const m_updateUi;
 
-    QComboBox m_presetCombo;
+    //QComboBox m_presetCombo;
     QLineEdit m_timePerFrameValue;
     QLineEdit m_particleNumValue;
     QLineEdit m_massAvgValue;
     QCheckBox m_massRandomCheck;
     QListWidget m_presetList;
     QButtonGroup m_engineButtonGroup;
+    QButtonGroup m_presetButtonGroup;
 
     bhs::SimCondition m_simCondition;
 };

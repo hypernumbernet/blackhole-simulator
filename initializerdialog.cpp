@@ -9,32 +9,35 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
 
     // Simulation Engine
 
-    auto engine0Radio = new QRadioButton(m_updateUi->ENGINE->value(0));
-    auto engine1Radio = new QRadioButton(m_updateUi->ENGINE->value(1));
-    auto engine2Radio = new QRadioButton(m_updateUi->ENGINE->value(2));
-    m_engineButtonGroup.addButton(engine0Radio, 0);
-    m_engineButtonGroup.addButton(engine1Radio, 1);
-    m_engineButtonGroup.addButton(engine2Radio, 2);
-    engine0Radio->setChecked(true);
-
     auto engineGroup = new QGroupBox(tr("Simulation Engine"));
-    auto vbox = new QVBoxLayout;
-    vbox->addWidget(engine0Radio);
-    vbox->addWidget(engine1Radio);
-    vbox->addWidget(engine2Radio);
-    engineGroup->setLayout(vbox);
+    auto engineVbox = new QVBoxLayout;
+
+    for (const auto& e : m_updateUi->ENGINE->toStdMap()) {
+        auto radio = new QRadioButton(e.second);
+        m_engineButtonGroup.addButton(radio, e.first);
+        engineVbox->addWidget(radio);
+        if (e.first == 0)
+            radio->setChecked(true);
+    }
+
+    engineGroup->setLayout(engineVbox);
     vLayout->addWidget(engineGroup);
 
     // Initial Conditions Preset
 
-    auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
-    vLayout->addWidget(presetLabel);
+    auto presetGroup = new QGroupBox(tr("Initial Conditions Preset"));
+    auto presetVbox = new QVBoxLayout;
 
-    m_presetCombo.setFocusPolicy(Qt::NoFocus);
-    m_presetCombo.setInsertPolicy(QComboBox::NoInsert);
-    m_presetCombo.addItems(m_updateUi->PRESET->values());
-    vLayout->addWidget(&m_presetCombo);
+    for (const auto& e : m_updateUi->PRESET->toStdMap()) {
+        auto radio = new QRadioButton(e.second);
+        m_presetButtonGroup.addButton(radio, static_cast<int>(e.first));
+        presetVbox->addWidget(radio);
+        if (e.first == bhs::Preset::Random)
+            radio->setChecked(true);
+    }
 
+    presetGroup->setLayout(presetVbox);
+    vLayout->addWidget(presetGroup);
 
     // Time/Frame
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
@@ -98,7 +101,7 @@ bool InitializerDialog::validate()
     NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
     m_simCondition.engine = m_engineButtonGroup.checkedId();
-    m_simCondition.preset = static_cast<bhs::Preset>(m_presetCombo.currentIndex());
+    m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
 
     bool ok;
     auto val = m_timePerFrameValue.text().toFloat(&ok);
