@@ -250,7 +250,17 @@ void GraphicWindow::changeLinePosition()
     m_worldModels->changeLineType();
 }
 
-void GraphicWindow::frameAdvance()
+void GraphicWindow::frameAdvance1()
+{
+    emit m_updateUi->frameAdvance(1);
+}
+
+void GraphicWindow::frameAdvance10()
+{
+    emit m_updateUi->frameAdvance(10);
+}
+
+void GraphicWindow::frameAdvance100()
 {
     emit m_updateUi->frameAdvance(100);
 }

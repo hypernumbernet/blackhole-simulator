@@ -6,7 +6,6 @@ MainWidget::MainWidget(QWidget* parent)
     , m_hLayout(this)
     , m_frameNumberLCD(12)
     , m_fpsLCD(12)
-    , m_frameAdvanceButton(tr("Frame Advance"))
 {
     this->setWindowTitle(tr("Blackhole Simulator 2.0 beta"));
 
@@ -68,9 +67,27 @@ void MainWidget::initUi()
     connect(&m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
-    m_frameAdvanceButton.setFocusPolicy(Qt::NoFocus);
-    m_vLayout.addWidget(&m_frameAdvanceButton);
-    connect(&m_frameAdvanceButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance);
+    auto frameAdvanseHbox = new QHBoxLayout;
+
+    m_frameAdvance1.setText(tr("||> 1"));
+    m_frameAdvance1.setFocusPolicy(Qt::NoFocus);
+    m_frameAdvance1.setMaximumSize(50, 100);
+    connect(&m_frameAdvance1, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance1);
+    frameAdvanseHbox->addWidget(&m_frameAdvance1);
+
+    m_frameAdvance10.setText(tr("||> 10"));
+    m_frameAdvance10.setFocusPolicy(Qt::NoFocus);
+    m_frameAdvance10.setMaximumSize(50, 100);
+    connect(&m_frameAdvance10, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance10);
+    frameAdvanseHbox->addWidget(&m_frameAdvance10);
+
+    m_frameAdvance100.setText(tr("||> 100"));
+    m_frameAdvance100.setFocusPolicy(Qt::NoFocus);
+    m_frameAdvance100.setMaximumSize(50, 100);
+    connect(&m_frameAdvance100, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::frameAdvance100);
+    frameAdvanseHbox->addWidget(&m_frameAdvance100);
+
+    m_vLayout.addLayout(frameAdvanseHbox);
 
     // Reset
     auto resetBtn = new QPushButton(tr("Reset"));
@@ -182,7 +199,9 @@ void MainWidget::updateStartButtonText(const bool setStop)
     } else {
         m_startButton.setText(tr("Start"));
     }
-    m_frameAdvanceButton.setDisabled(setStop);
+    m_frameAdvance1.setDisabled(setStop);
+    m_frameAdvance10.setDisabled(setStop);
+    m_frameAdvance100.setDisabled(setStop);
 }
 
 void MainWidget::displayStyle(QLCDNumber& lcd)

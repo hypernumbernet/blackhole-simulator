@@ -50,7 +50,9 @@ private:
     QLCDNumber m_frameNumberLCD;
     QLCDNumber m_fpsLCD;
     QPushButton m_startButton;
-    QPushButton m_frameAdvanceButton;
+    QPushButton m_frameAdvance1;
+    QPushButton m_frameAdvance10;
+    QPushButton m_frameAdvance100;
     QLineEdit m_scaleValue;
     QSlider m_scaleSlider;
     QLabel m_simTimeValue;

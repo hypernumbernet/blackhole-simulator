@@ -12,7 +12,6 @@
 #include <QListWidget>
 #include <QGroupBox>
 #include <QButtonGroup>
-//#include <QMapIterator>
 
 class InitializerDialog : public QDialog
 {
@@ -35,7 +34,6 @@ private:
 
     UpdateUi* const m_updateUi;
 
-    //QComboBox m_presetCombo;
     QLineEdit m_timePerFrameValue;
     QLineEdit m_particleNumValue;
     QLineEdit m_massAvgValue;

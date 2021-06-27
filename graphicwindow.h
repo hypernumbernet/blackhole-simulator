@@ -28,7 +28,9 @@ public slots:
     void enableGridLines(bool);
     void changeLinePosition();
     void startSim();
-    void frameAdvance();
+    void frameAdvance1();
+    void frameAdvance10();
+    void frameAdvance100();
     void circleStrafing(bool);
     void resetWaitForDone(const bhs::SimCondition&);
     void resetParticles(const bhs::SimCondition&);
