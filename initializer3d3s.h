@@ -9,7 +9,8 @@ public:
     using AbstractInitializer::AbstractInitializer;
 
 protected:
-    void initParticlesRandam() override;
+    void initRandamCube() override;
+    void initRandamSphere() override;
     void initSunEarth() override;
     void initEarthSun() override;
     void initEarthMoon() override;
@@ -24,8 +25,7 @@ private:
     {
         bhs::Vector3<float> dr(x, y, z);
         dr.Normalize();
-        const float vangle = AbstractNBodyEngine::PI / AbstractNBodyEngine::SPEED_OF_LIGHT;
-        const auto angle = speed * vangle;
+        const auto angle = speed * AbstractNBodyEngine::VANGLE;
         return bhs::Quaternion<float>::Exp(dr * angle);
     }
 

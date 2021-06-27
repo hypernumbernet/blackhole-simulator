@@ -1,6 +1,6 @@
 #include "initializer3d.h"
 
-void Initializer3D::initParticlesRandam()
+void Initializer3D::initRandamCube()
 {
     m_engine->changeModelScale(1.0e-11f);
 
@@ -20,17 +20,62 @@ void Initializer3D::initParticlesRandam()
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = bhs::randf() * 2.0e+11f - 1.0e+11f;
+        coordinates[i] = bhs::rand0center1maxf() * 1.0e+11f;
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = bhs::randf() * 3.0e+4f - 1.5e+4f;
+        velocities[i] = bhs::rand0center1maxf() * 1.5e+4f;
     }
 
 //    masses[0] = 2.0e+30f;
 //    coordinates[0] = 0.0f;
 //    coordinates[1] = 0.0f;
 //    coordinates[2] = 0.0f;
+}
+
+void Initializer3D::initRandamSphere()
+{
+    m_engine->changeModelScale(1.0e-11f);
+
+    quint64 num = m_engine->numberOfParticle();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
+
+    if (m_sim.massRandom) {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = bhs::randf() * m_sim.massAvg * 2.0f;
+        }
+    } else {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = m_sim.massAvg;
+        }
+    }
+
+    quint64 i3;
+    bhs::Vector3<float> cood;
+    for (quint64 i = 0; i < num; ++i)
+    {
+        i3 = i * 3;
+
+        do {
+            cood.set(
+                bhs::rand0center1maxf(),
+                bhs::rand0center1maxf(),
+                bhs::rand0center1maxf());
+        }
+        while (cood.Norm() > 1.0f);
+
+        cood *= 1.0e+11f;
+        coordinates[i3    ] = cood.x;
+        coordinates[i3 + 1] = cood.y;
+        coordinates[i3 + 2] = cood.z;
+    }
+
+    for (quint64 i = 0; i < num * 3; ++i)
+    {
+        velocities[i] = bhs::randf() * 3.0e+4f - 1.5e+4f;
+    }
 }
 
 void Initializer3D::initSunEarth()

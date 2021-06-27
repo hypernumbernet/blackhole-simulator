@@ -14,6 +14,7 @@ public:
     static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
     static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
     static constexpr float PI = 3.141592653589793f;
+    static constexpr float VANGLE = PI / SPEED_OF_LIGHT;
 
     struct IntRange
     {

@@ -25,7 +25,8 @@ public:
         , Initializer3D(sim, this)
     {
         switch (sim.preset) {
-        case bhs::Preset::Random:
+        case bhs::Preset::RandomCube:
+        case bhs::Preset::RandomSphere:
             setNumberOfParticles(sim.numberOfParticles);
             break;
         case bhs::Preset::SunEarth:
@@ -47,8 +48,11 @@ public:
         m_inversedDistances = new float[numberOfInteractions];
 
         switch (sim.preset) {
-        case bhs::Preset::Random:
-            initParticlesRandam();
+        case bhs::Preset::RandomCube:
+            initRandamCube();
+            break;
+        case bhs::Preset::RandomSphere:
+            initRandamSphere();
             break;
         case bhs::Preset::SunEarth:
             initSunEarth();

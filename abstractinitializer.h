@@ -13,7 +13,8 @@ protected:
     AbstractNBodyEngine* const m_engine;
 
 private:
-    virtual void initParticlesRandam() = 0;
+    virtual void initRandamCube() = 0;
+    virtual void initRandamSphere() = 0;
     virtual void initSunEarth() = 0;
     virtual void initEarthSun() = 0;
     virtual void initEarthMoon() = 0;

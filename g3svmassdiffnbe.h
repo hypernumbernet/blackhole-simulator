@@ -20,7 +20,8 @@ public:
         , Initializer3D3S(sim, this)
     {
         switch (sim.preset) {
-        case bhs::Preset::Random:
+        case bhs::Preset::RandomCube:
+        case bhs::Preset::RandomSphere:
             setNumberOfParticles(sim.numberOfParticles);
             break;
         case bhs::Preset::SunEarth:
@@ -38,8 +39,11 @@ public:
         m_velocities = new float[m_numberOfParticles * 4];
 
         switch (sim.preset) {
-        case bhs::Preset::Random:
-            initParticlesRandam();
+        case bhs::Preset::RandomCube:
+            initRandamCube();
+            break;
+        case bhs::Preset::RandomSphere:
+            initRandamSphere();
             break;
         case bhs::Preset::SunEarth:
             initSunEarth();

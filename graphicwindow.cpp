@@ -12,8 +12,6 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     , m_isCircleStrafing(false)
     , m_circleStrafingSpeed(1.0f)
 {
-    // Lock when using the camera. If not locked, it will vibrate at the same time.
-
     m_camera.lookAtZero(1.0f);
     m_camera.standXZ(false, 1.0f);
     m_camera.lookAtZero(1.0f);

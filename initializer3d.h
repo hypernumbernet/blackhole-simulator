@@ -1,6 +1,7 @@
 #pragma once
 
 #include "abstractinitializer.h"
+#include "quaternion.h"
 
 class Initializer3D : private AbstractInitializer
 {
@@ -8,7 +9,8 @@ public:
     using AbstractInitializer::AbstractInitializer;
 
 protected:
-    void initParticlesRandam() override;
+    void initRandamCube() override;
+    void initRandamSphere() override;
     void initSunEarth() override;
     void initEarthSun() override;
     void initEarthMoon() override;

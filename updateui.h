@@ -12,7 +12,8 @@ namespace bhs // Black Hole Simulator
 {
 
 enum class Preset {
-    Random,
+    RandomCube,
+    RandomSphere,
     SunEarth,
     EarthSun,
     EarthMoon,
@@ -23,7 +24,7 @@ enum class Preset {
 struct SimCondition
 {
     int engine = 0;
-    Preset preset = Preset::Random;
+    Preset preset = Preset::RandomCube;
     float timePerFrame = 1000.0f;
     int numberOfParticles = 800;
     float massAvg = 6.0e+29f;
@@ -31,6 +32,25 @@ struct SimCondition
 };
 
 inline float randf() {return (float)rand() / (float)RAND_MAX;}
+
+// Random numbers in the range of equality between plus and minus areas
+inline float rand0centerf()
+{
+    if (rand() % 2 == 0) {
+        return (float)rand();
+    } else {
+        return -(float)rand();
+    }
+}
+
+inline float rand0center1maxf()
+{
+    if (rand() % 2 == 0) {
+        return (float)rand() / (float)RAND_MAX;
+    } else {
+        return -(float)rand() / (float)RAND_MAX;
+    }
+}
 
 inline QRecursiveMutex interactionMutex;
 
@@ -57,11 +77,12 @@ public:
             //{0, tr("Gravity2DIntegral")},
         })
         , PRESET(new QMap<bhs::Preset, QString>{
-            {bhs::Preset::Random, tr("Random Cube")},
+            {bhs::Preset::RandomCube, tr("Random Cube")},
+            {bhs::Preset::RandomSphere, tr("Random Sphere")},
             {bhs::Preset::SunEarth, tr("Sun Earth")},
-            {bhs::Preset::EarthSun, tr("Earth Sun")},
             {bhs::Preset::EarthMoon, tr("Earth Moon")},
             {bhs::Preset::SunEarthVenus, tr("Sun Earth Venus")},
+            {bhs::Preset::EarthSun, tr("Test Earth Sun swap")},
             {bhs::Preset::TestSamePosition, tr("Test Same Position")},
         })
     {

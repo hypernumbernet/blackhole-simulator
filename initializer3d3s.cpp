@@ -1,20 +1,14 @@
 #include "initializer3d3s.h"
 
-void Initializer3D3S::initParticlesRandam()
+void Initializer3D3S::initRandamCube()
 {
     m_engine->changeModelScale(1.0e-11f);
 
     const quint64 num = m_engine->numberOfParticle();
-    float* const masses = m_engine->masses();
     float* const coordinates = m_engine->coordinates();
     float* const velocities = m_engine->velocities();
 
-    auto axis = bhs::Vector3<float>();
-    float angle;
-    quint64 i4;
-
-    const float vangle = AbstractNBodyEngine::PI / AbstractNBodyEngine::SPEED_OF_LIGHT;
-
+    float* const masses = m_engine->masses();
     if (m_sim.massRandom) {
         for (quint64 i = 0; i < num; ++i) {
             masses[i] = bhs::randf() * m_sim.massAvg * 2.0f;
@@ -26,17 +20,74 @@ void Initializer3D3S::initParticlesRandam()
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = bhs::randf() * 2.0e+11f - 1.0e+11f;
+        coordinates[i] = bhs::rand0center1maxf() * 1.0e+11f;
     }
+
+    bhs::Vector3<float> axis;
+    float angle;
+    quint64 i4;
     for (quint64 i = 0; i < num; ++i)
     {
         axis.set(bhs::randf(), bhs::randf(), bhs::randf());
         axis.Normalize();
-
-        angle = (bhs::randf() * 3.0e+4f - 1.5e+4f) * vangle;
-
+        angle = bhs::rand0center1maxf() * 1.5e+4f * AbstractNBodyEngine::VANGLE;
         auto vq = bhs::Quaternion<float>::Exp(axis * angle);
+        i4 = i * 4;
+        velocities[i4    ] = vq.i0;
+        velocities[i4 + 1] = vq.i1;
+        velocities[i4 + 2] = vq.i2;
+        velocities[i4 + 3] = vq.i3;
+    }
+}
 
+void Initializer3D3S::initRandamSphere()
+{
+    m_engine->changeModelScale(1.0e-11f);
+
+    quint64 num = m_engine->numberOfParticle();
+    float* masses = m_engine->masses();
+    float* coordinates = m_engine->coordinates();
+    float* velocities = m_engine->velocities();
+
+    if (m_sim.massRandom) {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = bhs::randf() * m_sim.massAvg * 2.0f;
+        }
+    } else {
+        for (quint64 i = 0; i < num; ++i) {
+            masses[i] = m_sim.massAvg;
+        }
+    }
+
+    quint64 i3;
+    bhs::Vector3<float> cood;
+    for (quint64 i = 0; i < num; ++i)
+    {
+        i3 = i * 3;
+
+        do {
+            cood.set(
+                bhs::rand0center1maxf(),
+                bhs::rand0center1maxf(),
+                bhs::rand0center1maxf());
+        }
+        while (cood.Norm() > 1.0f);
+
+        cood *= 1.0e+11f;
+        coordinates[i3    ] = cood.x;
+        coordinates[i3 + 1] = cood.y;
+        coordinates[i3 + 2] = cood.z;
+    }
+
+    bhs::Vector3<float> axis;
+    float angle;
+    quint64 i4;
+    for (quint64 i = 0; i < num; ++i)
+    {
+        axis.set(bhs::randf(), bhs::randf(), bhs::randf());
+        axis.Normalize();
+        angle = bhs::rand0center1maxf() * 1.5e+4f * AbstractNBodyEngine::VANGLE;
+        auto vq = bhs::Quaternion<float>::Exp(axis * angle);
         i4 = i * 4;
         velocities[i4    ] = vq.i0;
         velocities[i4 + 1] = vq.i1;
