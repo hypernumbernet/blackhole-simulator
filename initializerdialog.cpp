@@ -4,8 +4,8 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     : QDialog(parent)
     , m_updateUi(updateUi)
 {
-    auto vLayout = new QVBoxLayout;
-    vLayout->setAlignment(Qt::AlignTop);
+    auto firstLayout = new QVBoxLayout;
+    firstLayout->setAlignment(Qt::AlignTop);
 
     // Simulation Engine
 
@@ -21,7 +21,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     }
 
     engineGroup->setLayout(engineVbox);
-    vLayout->addWidget(engineGroup);
+    firstLayout->addWidget(engineGroup);
 
     // Initial Conditions Preset
 
@@ -37,60 +37,82 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     }
 
     presetGroup->setLayout(presetVbox);
-    vLayout->addWidget(presetGroup);
+    firstLayout->addWidget(presetGroup);
+
+    //########################################################################
+    auto secondLayout = new QVBoxLayout;
+    secondLayout->setAlignment(Qt::AlignTop);
 
     // Time/Frame
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
-    vLayout->addWidget(timePerFrameLabel);
+    secondLayout->addWidget(timePerFrameLabel);
 
     m_timePerFrameValue.setAlignment(Qt::AlignRight);
-    vLayout->addWidget(&m_timePerFrameValue);
+    secondLayout->addWidget(&m_timePerFrameValue);
 
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles (hint)"));
-    vLayout->addWidget(particleNumLabel);
+    secondLayout->addWidget(particleNumLabel);
 
     m_particleNumValue.setAlignment(Qt::AlignRight);
-    vLayout->addWidget(&m_particleNumValue);
+    secondLayout->addWidget(&m_particleNumValue);
 
     // Mass
+
+    auto massGroup = new QGroupBox(tr("Mass"));
+    auto massVbox = new QVBoxLayout;
+
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
-    vLayout->addWidget(massLabel);
+    massVbox->addWidget(massLabel);
 
     m_massAvgValue.setAlignment(Qt::AlignRight);
-    vLayout->addWidget(&m_massAvgValue);
+    massVbox->addWidget(&m_massAvgValue);
 
     m_massRandomCheck.setText(tr("Random Mass"));
     m_massRandomCheck.setChecked(true);
-    vLayout->addWidget(&m_massRandomCheck);
+    massVbox->addWidget(&m_massRandomCheck);
 
     auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
-    vLayout->addWidget(massRangeLabel);
+    massVbox->addWidget(massRangeLabel);
 
     auto massRangeValue = new QLineEdit("20");
     massRangeValue->setEnabled(false);
-    vLayout->addWidget(massRangeValue);
+    massVbox->addWidget(massRangeValue);
+
+    massGroup->setLayout(massVbox);
+    secondLayout->addWidget(massGroup);
+
+    //########################################################################
+    auto thirdLayout = new QHBoxLayout;
+    thirdLayout->setAlignment(Qt::AlignRight);
 
     // OK
     auto okButton = new QPushButton(tr("OK"));
     okButton->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(okButton);
+    thirdLayout->addWidget(okButton);
     connect(okButton, &QPushButton::clicked, this, &InitializerDialog::okButtonClicked);
 
     // Apply
     auto applyButton = new QPushButton(tr("Apply"));
     applyButton->setFocusPolicy(Qt::NoFocus);
-    vLayout->addWidget(applyButton);
+    thirdLayout->addWidget(applyButton);
     connect(applyButton, &QPushButton::clicked, this, &InitializerDialog::applyButtonClicked);
 
     // Cancel
     auto cancelButton = new QPushButton(tr("Cancel"));
     cancelButton->setFocusPolicy(Qt::NoFocus);
     cancelButton->setDefault(true);
-    vLayout->addWidget(cancelButton);
+    thirdLayout->addWidget(cancelButton);
     connect(cancelButton, &QPushButton::clicked, this, &InitializerDialog::close);
 
-    setLayout(vLayout);
+    //########################################################################
+    auto topLayout = new QVBoxLayout;
+    auto mainLayout = new QHBoxLayout;
+    mainLayout->addLayout(firstLayout);
+    mainLayout->addLayout(secondLayout);
+    topLayout->addLayout(mainLayout);
+    topLayout->addLayout(thirdLayout);
+    setLayout(topLayout);
 }
 
 bool InitializerDialog::validate()
