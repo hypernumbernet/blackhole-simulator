@@ -41,7 +41,12 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
     int j = num - 1;
     for (int i = 0; i < tcount; ++i)
     {
-        m_interactionRanges[i].start = j - (int)floor(sqrt((double)(j * j - 2 * k * i)));
+        int s = j * j - 2 * k * i;
+        if (s < 0) {
+            m_interactionRanges[i].start = num;
+        } else {
+            m_interactionRanges[i].start = j - (int)floor(sqrt((double)s));
+        }
     }
     for (int i = 0; i < tcount - 1; ++i)
     {
