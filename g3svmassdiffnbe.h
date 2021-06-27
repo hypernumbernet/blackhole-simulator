@@ -22,6 +22,7 @@ public:
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
         case bhs::Preset::RandomSphere:
+        case bhs::Preset::RandomBall:
             setNumberOfParticles(sim.numberOfParticles);
             break;
         case bhs::Preset::SunEarth:
@@ -43,7 +44,10 @@ public:
             initRandamCube();
             break;
         case bhs::Preset::RandomSphere:
-            initRandamSphere();
+            initRandamSphere(0.9f);
+            break;
+        case bhs::Preset::RandomBall:
+            initRandamSphere(0.0f);
             break;
         case bhs::Preset::SunEarth:
             initSunEarth();

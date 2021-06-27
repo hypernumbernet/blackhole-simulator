@@ -40,9 +40,9 @@ void Initializer3D3S::initRandamCube()
     }
 }
 
-void Initializer3D3S::initRandamSphere()
+void Initializer3D3S::initRandamSphere(const float rate)
 {
-    m_engine->changeModelScale(1.0e-11f);
+    m_engine->changeModelScale(1.0e-13f);
 
     quint64 num = m_engine->numberOfParticle();
     float* masses = m_engine->masses();
@@ -71,9 +71,9 @@ void Initializer3D3S::initRandamSphere()
                 bhs::rand0center1maxf(),
                 bhs::rand0center1maxf());
         }
-        while (cood.Norm() > 1.0f);
+        while (cood.Norm() > 1.0f || cood.Norm() < rate);
 
-        cood *= 1.0e+11f;
+        cood *= 1.0e+13f;
         coordinates[i3    ] = cood.x;
         coordinates[i3 + 1] = cood.y;
         coordinates[i3 + 2] = cood.z;

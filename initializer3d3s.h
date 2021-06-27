@@ -10,7 +10,7 @@ public:
 
 protected:
     void initRandamCube() override;
-    void initRandamSphere() override;
+    void initRandamSphere(float) override;
     void initSunEarth() override;
     void initEarthSun() override;
     void initEarthMoon() override;

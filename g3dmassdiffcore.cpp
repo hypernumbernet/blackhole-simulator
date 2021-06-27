@@ -51,7 +51,7 @@ void G3DMassDiffCore::calculateInteraction(int threadNumber) const
             }
             inv = 1.0f / distance;
             theta = inv * inv * time_g;
-            Q_ASSERT(theta == theta);
+            //Q_ASSERT(theta == theta);
 
             d1 *= inv * theta;
             d2 *= inv * theta;

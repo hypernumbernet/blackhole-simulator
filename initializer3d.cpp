@@ -33,7 +33,7 @@ void Initializer3D::initRandamCube()
 //    coordinates[2] = 0.0f;
 }
 
-void Initializer3D::initRandamSphere()
+void Initializer3D::initRandamSphere(const float rate)
 {
     m_engine->changeModelScale(1.0e-11f);
 
@@ -64,7 +64,7 @@ void Initializer3D::initRandamSphere()
                 bhs::rand0center1maxf(),
                 bhs::rand0center1maxf());
         }
-        while (cood.Norm() > 1.0f);
+        while (cood.Norm() > 1.0f || cood.Norm() < rate);
 
         cood *= 1.0e+11f;
         coordinates[i3    ] = cood.x;

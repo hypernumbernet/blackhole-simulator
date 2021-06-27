@@ -14,6 +14,7 @@ namespace bhs // Black Hole Simulator
 enum class Preset {
     RandomCube,
     RandomSphere,
+    RandomBall,
     SunEarth,
     EarthSun,
     EarthMoon,
@@ -79,6 +80,7 @@ public:
         , PRESET(new QMap<bhs::Preset, QString>{
             {bhs::Preset::RandomCube, tr("Random Cube")},
             {bhs::Preset::RandomSphere, tr("Random Sphere")},
+            {bhs::Preset::RandomBall, tr("Random Ball")},
             {bhs::Preset::SunEarth, tr("Sun Earth")},
             {bhs::Preset::EarthMoon, tr("Earth Moon")},
             {bhs::Preset::SunEarthVenus, tr("Sun Earth Venus")},

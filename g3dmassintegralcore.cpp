@@ -57,7 +57,7 @@ void G3DMassIntegralCore::calculateInteraction(int threadNumber) const
             }
 
             // Time is not taken into account.
-            force = abs(inv * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT);
+            force = inv * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT;
 
             d.unitX *= force;
             d.unitY *= force;
