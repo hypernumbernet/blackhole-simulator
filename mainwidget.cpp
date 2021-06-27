@@ -225,7 +225,6 @@ void MainWidget::showInitializerDialog()
     if (!m_initializerDialog) {
         m_initializerDialog = new InitializerDialog(&m_updateUi, this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
-        connect(&m_updateUi, &UpdateUi::applyInitialConditions, this, &MainWidget::acceptInitializerDialog);
     }
     m_initializerDialog->setValues(m_simCondition);
 

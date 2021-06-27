@@ -9,6 +9,9 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QListWidget>
+#include <QGroupBox>
+#include <QButtonGroup>
 
 class InitializerDialog : public QDialog
 {
@@ -31,12 +34,13 @@ private:
 
     UpdateUi* const m_updateUi;
 
-    QComboBox m_engineCombo;
     QComboBox m_presetCombo;
     QLineEdit m_timePerFrameValue;
     QLineEdit m_particleNumValue;
     QLineEdit m_massAvgValue;
     QCheckBox m_massRandomCheck;
+    QListWidget m_presetList;
+    QButtonGroup m_engineButtonGroup;
 
     bhs::SimCondition m_simCondition;
 };

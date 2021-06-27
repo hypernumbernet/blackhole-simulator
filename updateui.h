@@ -3,6 +3,10 @@
 #include <QObject>
 #include <QMap>
 #include <QMutex>
+#include <QListWidget>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QRadioButton>
 
 namespace bhs // Black Hole Simulator
 {
@@ -46,7 +50,7 @@ public:
     UpdateUi()
         : ENGINE(new QMap<int, QString>{
             {0, tr("Gravity 3D Mass Differential")},
-            {1, tr("Gravity 3D Mass Integral")},
+            {1, tr("Gravity 3D Mass Integral (Exp.)")},
             {2, tr("Gravity 3S-Velocity M. Diff.")},
             //{0, tr("Gravity3DIntegral")},
             //{0, tr("Gravity2DDifferential")},
@@ -72,7 +76,6 @@ signals:
     void updateStartButtonText(bool);
     void displayEngineName(const QString&);
     void displayPresetName(const QString&);
-    void applyInitialConditions();
     void frameAdvance(int);
     void resultReady();
     void resetParticles(const bhs::SimCondition& sim);

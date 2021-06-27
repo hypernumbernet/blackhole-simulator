@@ -8,15 +8,25 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     vLayout->setAlignment(Qt::AlignTop);
 
     // Simulation Engine
-    auto engineLabel = new QLabel(tr("Simulation Engine"));
-    vLayout->addWidget(engineLabel);
 
-    m_engineCombo.setFocusPolicy(Qt::NoFocus);
-    m_engineCombo.setInsertPolicy(QComboBox::NoInsert);
-    m_engineCombo.addItems(m_updateUi->ENGINE->values());
-    vLayout->addWidget(&m_engineCombo);
+    auto engine0Radio = new QRadioButton(m_updateUi->ENGINE->value(0));
+    auto engine1Radio = new QRadioButton(m_updateUi->ENGINE->value(1));
+    auto engine2Radio = new QRadioButton(m_updateUi->ENGINE->value(2));
+    m_engineButtonGroup.addButton(engine0Radio, 0);
+    m_engineButtonGroup.addButton(engine1Radio, 1);
+    m_engineButtonGroup.addButton(engine2Radio, 2);
+    engine0Radio->setChecked(true);
+
+    auto engineGroup = new QGroupBox(tr("Simulation Engine"));
+    auto vbox = new QVBoxLayout;
+    vbox->addWidget(engine0Radio);
+    vbox->addWidget(engine1Radio);
+    vbox->addWidget(engine2Radio);
+    engineGroup->setLayout(vbox);
+    vLayout->addWidget(engineGroup);
 
     // Initial Conditions Preset
+
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     vLayout->addWidget(presetLabel);
 
@@ -24,6 +34,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     m_presetCombo.setInsertPolicy(QComboBox::NoInsert);
     m_presetCombo.addItems(m_updateUi->PRESET->values());
     vLayout->addWidget(&m_presetCombo);
+
 
     // Time/Frame
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
@@ -43,6 +54,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
     vLayout->addWidget(massLabel);
 
+    m_massAvgValue.setAlignment(Qt::AlignRight);
     vLayout->addWidget(&m_massAvgValue);
 
     m_massRandomCheck.setText(tr("Random Mass"));
@@ -85,7 +97,7 @@ bool InitializerDialog::validate()
     QPalette NGPal(palette());
     NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
-    m_simCondition.engine = m_engineCombo.currentIndex();
+    m_simCondition.engine = m_engineButtonGroup.checkedId();
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetCombo.currentIndex());
 
     bool ok;
@@ -131,7 +143,7 @@ void InitializerDialog::okButtonClicked()
 void InitializerDialog::applyButtonClicked()
 {
     if (validate()) {
-        emit m_updateUi->applyInitialConditions();
+        emit accepted();
     }
 }
 
