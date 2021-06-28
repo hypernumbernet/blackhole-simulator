@@ -15,6 +15,7 @@ int main(int argc, char **argv)
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setVersion(4, 5);
     format.setProfile(QSurfaceFormat::CoreProfile);
+    format.setSwapInterval(0);
     QSurfaceFormat::setDefaultFormat(format);
 
     MainWidget widget;
