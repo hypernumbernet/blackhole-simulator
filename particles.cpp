@@ -1,8 +1,7 @@
 #include "particles.h"
 
-Particles::Particles(UpdateUi* const updateUi, ThreadAdmin* const threadAdmin)
-    : m_updateUi(updateUi)
-    , m_threadAdmin(threadAdmin)
+Particles::Particles(ThreadAdmin* const threadAdmin)
+    : m_threadAdmin(threadAdmin)
     , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
 {
@@ -43,21 +42,21 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     switch (sim.engine) {
     default:
-        m_NBodyEngine = new G3DMassDiffNBE(m_updateUi, sim);
+        m_NBodyEngine = new G3DMassDiffNBE(sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
         }
         break;
     case 1:
-        m_NBodyEngine = new G3DMassIntegralNBE<float>(m_updateUi, sim);
+        m_NBodyEngine = new G3DMassIntegralNBE<float>(sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3DMassIntegralCore(m_NBodyEngine));
         }
         break;
     case 2:
-        m_NBodyEngine = new G3SVMassDiffNBE<float>(m_updateUi, sim);
+        m_NBodyEngine = new G3SVMassDiffNBE<float>(sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3SVMassDiffCore(m_NBodyEngine));
@@ -65,14 +64,13 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         break;
     }
 
-    QString engine = m_updateUi->ENGINE->value(sim.engine);
-    emit m_updateUi->displayEngineName(engine);
+    QString engine = UpdateUi::it().ENGINE->value(sim.engine);
+    emit UpdateUi::it().displayEngineName(engine);
 
-    //QString precision = m_updateUi->PRECISION->value(sim.precision);
-    emit m_updateUi->displayPrecision(sim.precision);
+    emit UpdateUi::it().displayPrecision(sim.precision);
 
-    QString preset = m_updateUi->PRESET->value(sim.preset);
-    emit m_updateUi->displayPresetName(preset);
+    QString preset = UpdateUi::it().PRESET->value(sim.preset);
+    emit UpdateUi::it().displayPresetName(preset);
 }
 
 // This function must be called from the GUI thread.

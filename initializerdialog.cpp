@@ -1,8 +1,7 @@
 #include "initializerdialog.h"
 
-InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
+InitializerDialog::InitializerDialog(QWidget* parent)
     : QDialog(parent)
-    , m_updateUi(updateUi)
 {
     auto firstLayout = new QVBoxLayout;
     firstLayout->setAlignment(Qt::AlignTop);
@@ -12,7 +11,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto engineGroup = new QGroupBox(tr("Simulation Engine"));
     auto engineVbox = new QVBoxLayout;
 
-    for (const auto& e : m_updateUi->ENGINE->toStdMap()) {
+    for (const auto& e : UpdateUi::it().ENGINE->toStdMap()) {
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, e.first);
         engineVbox->addWidget(radio);
@@ -45,7 +44,7 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto presetGroup = new QGroupBox(tr("Initial Conditions Preset"));
     auto presetVbox = new QVBoxLayout;
 
-    for (const auto& e : m_updateUi->PRESET->toStdMap()) {
+    for (const auto& e : UpdateUi::it().PRESET->toStdMap()) {
         auto radio = new QRadioButton(e.second);
         m_presetButtonGroup.addButton(radio, static_cast<int>(e.first));
         presetVbox->addWidget(radio);

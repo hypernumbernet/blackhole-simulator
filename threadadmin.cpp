@@ -1,9 +1,7 @@
 #include "threadadmin.h"
 
-ThreadAdmin::ThreadAdmin(UpdateUi* const updateUi, QObject* parent)
+ThreadAdmin::ThreadAdmin(QObject* parent)
     : QThread(parent)
-    , m_updateUi(updateUi)
-    //, m_isSimulating(false)
     , m_threadCount(QThread::idealThreadCount())
     , m_waitForDone(0)
     , m_calculateNext(0)
@@ -34,7 +32,7 @@ void ThreadAdmin::reset()
     for (int i = 0; i < m_controllers.size(); ++i) {
         m_controllers.at(i)->reset();
     }
-    emit m_updateUi->resetParticles();
+    emit UpdateUi::it().resetParticles();
 }
 
 int ThreadAdmin::frameNum()
@@ -51,7 +49,7 @@ void ThreadAdmin::startSim()
         m_simulateTimer.start(0, this);
     }
 
-    emit m_updateUi->updateStartButtonText(m_simulateTimer.isActive());
+    emit UpdateUi::it().updateStartButtonText(m_simulateTimer.isActive());
 }
 
 void ThreadAdmin::frameAdvance(int count)

@@ -1,10 +1,9 @@
 #include "graphicwindow.h"
 
-GraphicWindow::GraphicWindow(UpdateUi* updateUi)
-    : m_updateUi(updateUi)
-    , m_threadAdmin(updateUi, this)
+GraphicWindow::GraphicWindow()
+    : m_threadAdmin(this)
     , m_worldModels(new WorldModels)
-    , m_particleModels(new Particles(updateUi, &m_threadAdmin))
+    , m_particleModels(new Particles(&m_threadAdmin))
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -16,9 +15,9 @@ GraphicWindow::GraphicWindow(UpdateUi* updateUi)
     m_camera.standXZ(false, 1.0f);
     m_camera.lookAtZero(1.0f);
 
-    connect(m_updateUi, &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
-    connect(m_updateUi, &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
-    connect(m_updateUi, &UpdateUi::resetParticles, this, &GraphicWindow::resetParticles);
+    connect(&UpdateUi::it(), &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
+    connect(&UpdateUi::it(), &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
+    connect(&UpdateUi::it(), &UpdateUi::resetParticles, this, &GraphicWindow::resetParticles);
 
     m_threadAdmin.start();
 }
@@ -219,10 +218,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
         }
 
         m_particleModels->updateGL();
-        emit m_updateUi->displayFrameNumber(m_threadAdmin.frameNum());
+        emit UpdateUi::it().displayFrameNumber(m_threadAdmin.frameNum());
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
-        emit m_updateUi->displayFps(m_threadAdmin.frameNum() - m_fpsPreFrame);
+        emit UpdateUi::it().displayFps(m_threadAdmin.frameNum() - m_fpsPreFrame);
         m_fpsPreFrame = m_threadAdmin.frameNum();
     }
 }
@@ -250,17 +249,17 @@ void GraphicWindow::changeLinePosition()
 
 void GraphicWindow::frameAdvance1()
 {
-    emit m_updateUi->frameAdvance(1);
+    emit UpdateUi::it().frameAdvance(1);
 }
 
 void GraphicWindow::frameAdvance10()
 {
-    emit m_updateUi->frameAdvance(10);
+    emit UpdateUi::it().frameAdvance(10);
 }
 
 void GraphicWindow::frameAdvance100()
 {
-    emit m_updateUi->frameAdvance(100);
+    emit UpdateUi::it().frameAdvance(100);
 }
 
 void GraphicWindow::circleStrafing(const bool on)

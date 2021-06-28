@@ -13,10 +13,8 @@ template <typename T>
 class G3SVMassDiffNBE : public AbstractNBodyEngine, private Initializer3D3S
 {
 public:
-    G3SVMassDiffNBE(
-            UpdateUi* const updateUi,
-            const bhs::SimCondition& sim)
-        : AbstractNBodyEngine(updateUi)
+    G3SVMassDiffNBE(const bhs::SimCondition& sim)
+        : AbstractNBodyEngine()
         , Initializer3D3S(sim, this)
     {
         switch (sim.preset) {
@@ -79,6 +77,6 @@ public:
     void setTimePerFrame(const float time)
     {
         m_timePerFrame = time;
-        emit m_updateUi->displayTimePerFrame(time);
+        emit UpdateUi::it().displayTimePerFrame(time);
     }
 };

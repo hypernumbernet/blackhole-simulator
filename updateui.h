@@ -69,7 +69,6 @@ inline QRecursiveMutex interactionMutex;
 class UpdateUi : public QObject
 {
     Q_OBJECT
-
 public:
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
@@ -78,6 +77,13 @@ public:
     const QMap<bhs::Precision, QString>* const PRECISION;
     const QMap<bhs::Preset, QString>* const PRESET;
 
+    static UpdateUi& it()
+    {
+        static UpdateUi instance;
+        return instance;
+    }
+
+private:
     UpdateUi()
         : ENGINE(new QMap<int, QString>{
             {0, tr("Gravity 3D Mass Differential")},
@@ -103,6 +109,7 @@ public:
         })
     {
     };
+    UpdateUi(const UpdateUi&);
 
 signals:
     void displayNumberOfParticles(int);

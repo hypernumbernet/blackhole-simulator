@@ -2,10 +2,8 @@
 
 #include <QThread>
 
-AbstractNBodyEngine::AbstractNBodyEngine(
-        UpdateUi* const updateUi)
-    : m_updateUi(updateUi)
-    , m_modelScale(1.0f)
+AbstractNBodyEngine::AbstractNBodyEngine()
+    : m_modelScale(1.0f)
 {
 }
 
@@ -16,7 +14,7 @@ AbstractNBodyEngine::~AbstractNBodyEngine()
 void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
 {
     m_numberOfParticles = num;
-    emit m_updateUi->displayNumberOfParticles(num);
+    emit UpdateUi::it().displayNumberOfParticles(num);
 
     int tcount = QThread::idealThreadCount();
 
@@ -63,14 +61,14 @@ void AbstractNBodyEngine::setModelScale(const float scale)
 void AbstractNBodyEngine::setModelScaleRatio(const double ratio)
 {
     m_modelScale = m_scaleCenterValue * ratio;
-    emit m_updateUi->displayModelScale(m_modelScale);
+    emit UpdateUi::it().displayModelScale(m_modelScale);
 }
 
 void AbstractNBodyEngine::changeModelScale(const float scale)
 {
     m_modelScale = scale;
     m_scaleCenterValue = scale;
-    emit m_updateUi->displayModelScale(scale);
+    emit UpdateUi::it().displayModelScale(scale);
 }
 
 quint64 AbstractNBodyEngine::numberOfParticle() const
@@ -115,7 +113,7 @@ int AbstractNBodyEngine::threadCount()
 
 void AbstractNBodyEngine::resultReady() const
 {
-    emit m_updateUi->resultReady();
+    emit UpdateUi::it().resultReady();
 }
 
 QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::timeProgressRanges() const
@@ -126,9 +124,4 @@ QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::timeProgressRanges()
 QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::interactionRanges() const
 {
     return m_interactionRanges;
-}
-
-UpdateUi* AbstractNBodyEngine::updateUi() const
-{
-    return m_updateUi;
 }

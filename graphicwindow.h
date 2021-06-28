@@ -21,7 +21,7 @@ class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
     Q_OBJECT
 
 public:
-    explicit GraphicWindow(UpdateUi*);
+    explicit GraphicWindow();
     ~GraphicWindow();
 
 public slots:
@@ -54,7 +54,6 @@ private:
     void mouseReleaseEvent(QMouseEvent*) override;
     void wheelEvent(QWheelEvent*) override;
 
-    UpdateUi* const m_updateUi;
     ThreadAdmin  m_threadAdmin;
     WorldModels* const m_worldModels; // TODO not pointer
     Particles* const m_particleModels; // TODO not pointer

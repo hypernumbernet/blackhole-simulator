@@ -17,7 +17,7 @@
 class Particles : private QOpenGLFunctions_4_5_Core
 {
 public:
-    Particles(UpdateUi*, ThreadAdmin*);
+    explicit Particles(ThreadAdmin*);
     ~Particles();
 
     bool initialize(int screenHeight);
@@ -31,7 +31,7 @@ public:
 
 private:
 
-    UpdateUi* const m_updateUi;
+    //UpdateUi* const m_updateUi;
     ThreadAdmin* const m_threadAdmin;
 
     QOpenGLShaderProgram m_program;

@@ -2,7 +2,7 @@
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
-    , m_graphicWindows(&m_updateUi)
+    , m_graphicWindows()
     , m_hLayout(this)
     , m_frameNumberLCD(12)
     , m_fpsLCD(12)
@@ -32,7 +32,7 @@ void MainWidget::initUi()
     displayStyle(m_fpsLCD);
     fpsLayout->addWidget(&m_fpsLCD);
     m_vLayout.addLayout(fpsLayout);
-    connect(&m_updateUi, &UpdateUi::displayFps, this, &MainWidget::displayFPS);
+    connect(&UpdateUi::it(), &UpdateUi::displayFps, this, &MainWidget::displayFPS);
 
     // Frames
     auto frameNumberLayout = new QHBoxLayout;
@@ -41,7 +41,7 @@ void MainWidget::initUi()
     displayStyle(m_frameNumberLCD);
     frameNumberLayout->addWidget(&m_frameNumberLCD);
     m_vLayout.addLayout(frameNumberLayout);
-    connect(&m_updateUi, &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
+    connect(&UpdateUi::it(), &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
     // Time/Frame
     auto timePerFrameLayout = new QHBoxLayout;
@@ -50,7 +50,7 @@ void MainWidget::initUi()
     displayStyle(m_timePerFrameValue);
     timePerFrameLayout->addWidget(&m_timePerFrameValue);
     m_vLayout.addLayout(timePerFrameLayout);
-    connect(&m_updateUi, &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
+    connect(&UpdateUi::it(), &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
 
     // Simulation Time
     auto simTimeLayout = new QHBoxLayout;
@@ -64,7 +64,7 @@ void MainWidget::initUi()
     m_startButton.setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(&m_startButton);
     connect(&m_startButton, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::startSim);
-    connect(&m_updateUi, &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
+    connect(&UpdateUi::it(), &UpdateUi::updateStartButtonText, this, &MainWidget::updateStartButtonText);
 
     // Frame Advance
     auto frameAdvanseHbox = new QHBoxLayout;
@@ -127,7 +127,7 @@ void MainWidget::initUi()
 
     m_scaleValue.setAlignment(Qt::AlignRight);
     m_vLayout.addWidget(&m_scaleValue);
-    connect(&m_updateUi, &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
+    connect(&UpdateUi::it(), &UpdateUi::displayModelScale, this, &MainWidget::displayModelScale);
     connect(&m_scaleValue, &QLineEdit::textChanged, &m_graphicWindows, &GraphicWindow::setModelScale);
 
     m_scaleSlider.setFocusPolicy(Qt::NoFocus);
@@ -143,28 +143,28 @@ void MainWidget::initUi()
     m_vLayout.addWidget(particleNumLabel);
     displayStyle(m_particleNumValue);
     m_vLayout.addWidget(&m_particleNumValue);
-    connect(&m_updateUi, &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
+    connect(&UpdateUi::it(), &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     m_vLayout.addWidget(engineLabel);
     displayStyle(m_engineValue);
     m_vLayout.addWidget(&m_engineValue);
-    connect(&m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
+    connect(&UpdateUi::it(), &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Precision
     auto precisionLabel = new QLabel(tr("Precision"));
     m_vLayout.addWidget(precisionLabel);
     displayStyle(m_precisionValue);
     m_vLayout.addWidget(&m_precisionValue);
-    connect(&m_updateUi, &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
+    connect(&UpdateUi::it(), &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
 
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     m_vLayout.addWidget(presetLabel);
     displayStyle(m_presetValue);
     m_vLayout.addWidget(&m_presetValue);
-    connect(&m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
+    connect(&UpdateUi::it(), &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
     // Graph
     auto graphButton = new QPushButton(tr("Graph..."));
@@ -249,7 +249,7 @@ void MainWidget::displayTimePerFrame(const float time)
 void MainWidget::showInitializerDialog()
 {
     if (!m_initializerDialog) {
-        m_initializerDialog = new InitializerDialog(&m_updateUi, this);
+        m_initializerDialog = new InitializerDialog(this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
     }
     m_initializerDialog->setValues(m_simCondition);
@@ -295,6 +295,6 @@ void MainWidget::displayNumberOfParticles(const int num)
 
 void MainWidget::displayPrecision(bhs::Precision precision)
 {
-    QString s = m_updateUi.PRECISION->value(precision);
+    QString s = UpdateUi::it().PRECISION->value(precision);
     m_precisionValue.setText(s);
 }

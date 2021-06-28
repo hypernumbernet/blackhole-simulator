@@ -43,7 +43,7 @@ private:
     void displayStyle(QLCDNumber&);
     void displayStyle(QLabel&);
 
-    UpdateUi m_updateUi;
+    //UpdateUi m_updateUi;
     GraphicWindow m_graphicWindows;
     QHBoxLayout m_hLayout;
     QVBoxLayout m_vLayout;

@@ -22,7 +22,7 @@ public:
         quint64 end;
     };
 
-    explicit AbstractNBodyEngine(UpdateUi*);
+    explicit AbstractNBodyEngine();
     virtual ~AbstractNBodyEngine();
 
     double* coordinates() const;
@@ -41,12 +41,9 @@ public:
     void resultReady() const;
     QVector<IntRange> timeProgressRanges() const;
     QVector<IntRange> interactionRanges() const;
-    UpdateUi* updateUi() const;
 
 protected:
     void setNumberOfParticles(quint64);
-
-    UpdateUi* const m_updateUi;
 
     // Particle coordinates
     double* m_coordinates;

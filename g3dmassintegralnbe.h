@@ -18,10 +18,8 @@ public:
         T unitZ;
     };
 
-    G3DMassIntegralNBE(
-            UpdateUi* const updateUi,
-            const bhs::SimCondition& sim)
-        : AbstractNBodyEngine(updateUi)
+    G3DMassIntegralNBE(const bhs::SimCondition& sim)
+        : AbstractNBodyEngine()
         , Initializer3D(sim, this)
     {
         switch (sim.preset) {
@@ -90,7 +88,7 @@ public:
     void setTimePerFrame(const float time)
     {
         m_timePerFrame = time;
-        emit m_updateUi->displayTimePerFrame(time);
+        emit UpdateUi::it().displayTimePerFrame(time);
     }
 
     static inline bool calculateDistance(

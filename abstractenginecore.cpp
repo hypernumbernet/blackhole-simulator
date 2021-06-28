@@ -15,7 +15,7 @@ AbstractEngineCore::AbstractEngineCore(AbstractNBodyEngine* const engine, QObjec
 
 void AbstractEngineCore::resultReady() const
 {
-    emit m_engine->updateUi()->resultReady();
+    emit UpdateUi::it().resultReady();
 }
 
 void AbstractEngineCore::debug() const

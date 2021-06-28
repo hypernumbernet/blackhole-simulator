@@ -17,7 +17,7 @@ class InitializerDialog : public QDialog
     Q_OBJECT
 
 public:
-    InitializerDialog(UpdateUi*, QWidget* parent);
+    explicit InitializerDialog(QWidget* parent);
 
     void setValues(const bhs::SimCondition&);
     const bhs::SimCondition& simCondition() const;
@@ -30,8 +30,6 @@ private:
     static constexpr QColor RE_ENTER_COLOR = {255, 200, 200};
 
     bool validate();
-
-    UpdateUi* const m_updateUi;
 
     QLineEdit m_timePerFrameEdit;
     QLineEdit m_particleNumEdit;

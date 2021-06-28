@@ -14,7 +14,7 @@ class ThreadAdmin : public QThread
     Q_OBJECT
 
 public:
-    ThreadAdmin(UpdateUi* const, QObject* = nullptr);
+    explicit ThreadAdmin(QObject* = nullptr);
     ~ThreadAdmin();
 
     int frameNum();
@@ -31,7 +31,7 @@ private:
     void updateParticles();
     void timerEvent(QTimerEvent*) override;
 
-    UpdateUi* const m_updateUi;
+    //UpdateUi* const m_updateUi;
     const int m_threadCount;
     int m_waitForDone;
     int m_calculateNext;
