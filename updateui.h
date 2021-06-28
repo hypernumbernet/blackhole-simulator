@@ -11,7 +11,8 @@
 namespace bhs // Black Hole Simulator
 {
 
-enum class Preset {
+enum class Preset
+{
     RandomCube,
     RandomSphere,
     RandomBall,
@@ -22,13 +23,20 @@ enum class Preset {
     TestSamePosition,
 };
 
+enum class Precision
+{
+    Single,
+    Double,
+};
+
 struct SimCondition
 {
+    Precision precision= Precision::Single;
     int engine = 0;
     Preset preset = Preset::RandomCube;
-    float timePerFrame = 1000.0f; // TODO double
+    double timePerFrame = 1000.0;
     int numberOfParticles = 800;
-    float massAvg = 6.0e+29f;
+    double massAvg = 6.0e+29;
     bool massRandom = true;
     double scale = 1.0e+11;
 };
@@ -67,6 +75,7 @@ public:
     static constexpr int SCALE_SLIDER_CENTER = 5000;
 
     const QMap<int, QString>* const ENGINE;
+    const QMap<bhs::Precision, QString>* const PRECISION;
     const QMap<bhs::Preset, QString>* const PRESET;
 
     UpdateUi()
@@ -77,6 +86,10 @@ public:
             //{0, tr("Gravity3DIntegral")},
             //{0, tr("Gravity2DDifferential")},
             //{0, tr("Gravity2DIntegral")},
+        })
+        , PRECISION(new QMap<bhs::Precision, QString>{
+            {bhs::Precision::Single, tr("Single")},
+            {bhs::Precision::Double, tr("Double")},
         })
         , PRESET(new QMap<bhs::Preset, QString>{
             {bhs::Preset::RandomCube, tr("Random Cube")},
@@ -103,4 +116,5 @@ signals:
     void frameAdvance(int);
     void resultReady();
     void resetParticles();
+    void displayPrecision(bhs::Precision);
 };

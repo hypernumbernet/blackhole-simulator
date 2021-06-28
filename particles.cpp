@@ -68,6 +68,9 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
     QString engine = m_updateUi->ENGINE->value(sim.engine);
     emit m_updateUi->displayEngineName(engine);
 
+    //QString precision = m_updateUi->PRECISION->value(sim.precision);
+    emit m_updateUi->displayPrecision(sim.precision);
+
     QString preset = m_updateUi->PRESET->value(sim.preset);
     emit m_updateUi->displayPresetName(preset);
 }
@@ -80,12 +83,14 @@ void Particles::updateGL()
 
     m_vao.bind();
 
+    const int VECTOR_SIZE = 3;
+
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(m_NBodyEngine->coordinates(), m_NBodyEngine->numberOfParticle() * 12);
+    glBuf.allocate(m_NBodyEngine->coordinates(), m_NBodyEngine->numberOfParticle() * VECTOR_SIZE * sizeof(double));
     m_program.enableAttributeArray(0);
-    m_program.setAttributeBuffer(0, GL_FLOAT, 0, 3);
+    m_program.setAttributeBuffer(0, GL_DOUBLE, 0, VECTOR_SIZE);
 
     m_vao.release();
 }

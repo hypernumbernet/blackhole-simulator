@@ -25,7 +25,7 @@ public:
     explicit AbstractNBodyEngine(UpdateUi*);
     virtual ~AbstractNBodyEngine();
 
-    float* coordinates() const;
+    double* coordinates() const;
     float* velocities() const;
     float* masses() const;
     float* inversedDistances() const;
@@ -49,7 +49,7 @@ protected:
     UpdateUi* const m_updateUi;
 
     // Particle coordinates
-    float* m_coordinates;
+    double* m_coordinates;
 
     // Particle velocity
     float* m_velocities;

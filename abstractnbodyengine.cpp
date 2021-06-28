@@ -83,7 +83,7 @@ float AbstractNBodyEngine::modelScale() const
     return m_modelScale;
 }
 
-float* AbstractNBodyEngine::coordinates() const
+double* AbstractNBodyEngine::coordinates() const
 {
     return m_coordinates;
 }

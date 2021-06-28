@@ -25,7 +25,7 @@ protected:
     quint64 m_numberOfParticles;
 
     // Particle coordinates
-    float* const m_coordinates;
+    double* const m_coordinates;
 
     // Particle velocity
     float* const m_velocities;

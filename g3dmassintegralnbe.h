@@ -42,7 +42,7 @@ public:
         }
 
         m_masses = new float[m_numberOfParticles];
-        m_coordinates = new float[m_numberOfParticles * 3];
+        m_coordinates = new double[m_numberOfParticles * 3];
         m_velocities = new float[m_numberOfParticles * 3];
 
         quint64 numberOfInteractions = sim.numberOfParticles * (sim.numberOfParticles - 1) / 2;
@@ -95,7 +95,7 @@ public:
 
     static inline bool calculateDistance(
             Distance& result,
-            const T* const coord,
+            const double* const coord,
             const quint64 a,
             const quint64 b)
     {

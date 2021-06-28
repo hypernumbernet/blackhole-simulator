@@ -34,6 +34,7 @@ public slots:
     void resetInitial();
     void displayPresetName(const QString&);
     void displayNumberOfParticles(int);
+    void displayPrecision(bhs::Precision);
 
 private:
     void initUi();
@@ -60,6 +61,7 @@ private:
     QLabel m_engineValue;
     QLabel m_presetValue;
     QLabel m_particleNumValue;
+    QLabel m_precisionValue;
 
     bhs::SimCondition m_simCondition;
 

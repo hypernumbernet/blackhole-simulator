@@ -40,6 +40,7 @@ private:
     QButtonGroup m_engineButtonGroup;
     QButtonGroup m_presetButtonGroup;
     QLineEdit m_scaleEdit;
+    QButtonGroup m_precisionButtonGroup;
 
     bhs::SimCondition m_simCondition;
 };

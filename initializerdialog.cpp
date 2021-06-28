@@ -23,6 +23,23 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     engineGroup->setLayout(engineVbox);
     firstLayout->addWidget(engineGroup);
 
+    // Precision
+
+    auto precisionGroup = new QGroupBox(tr("Precision"));
+    auto precisionHbox = new QHBoxLayout;
+
+    auto precisionSingleRadio = new QRadioButton(tr("Single"));
+    m_precisionButtonGroup.addButton(precisionSingleRadio, 0);
+    precisionHbox->addWidget(precisionSingleRadio);
+
+    auto precisionDoubleRadio = new QRadioButton(tr("Double"));
+    m_precisionButtonGroup.addButton(precisionDoubleRadio, 1);
+    precisionHbox->addWidget(precisionDoubleRadio);
+    precisionDoubleRadio->setChecked(true);
+
+    precisionGroup->setLayout(precisionHbox);
+    firstLayout->addWidget(precisionGroup);
+
     // Initial Conditions Preset
 
     auto presetGroup = new QGroupBox(tr("Initial Conditions Preset"));
@@ -139,6 +156,7 @@ bool InitializerDialog::validate()
     m_simCondition.engine = m_engineButtonGroup.checkedId();
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
     m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
+    m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
 
     bool ok;
     auto val = m_timePerFrameEdit.text().toFloat(&ok);

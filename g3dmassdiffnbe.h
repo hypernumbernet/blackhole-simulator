@@ -35,7 +35,7 @@ public:
             break;
         }
         m_masses = new float[m_numberOfParticles];
-        m_coordinates = new float[m_numberOfParticles * 3];
+        m_coordinates = new double[m_numberOfParticles * 3];
         m_velocities = new float[m_numberOfParticles * 3];
 
         switch (sim.preset) {

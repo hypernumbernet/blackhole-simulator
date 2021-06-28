@@ -152,6 +152,13 @@ void MainWidget::initUi()
     m_vLayout.addWidget(&m_engineValue);
     connect(&m_updateUi, &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
+    // Precision
+    auto precisionLabel = new QLabel(tr("Precision"));
+    m_vLayout.addWidget(precisionLabel);
+    displayStyle(m_precisionValue);
+    m_vLayout.addWidget(&m_precisionValue);
+    connect(&m_updateUi, &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
+
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     m_vLayout.addWidget(presetLabel);
@@ -284,4 +291,10 @@ void MainWidget::displayNumberOfParticles(const int num)
 {
     m_simCondition.numberOfParticles = num;
     m_particleNumValue.setText(QString::number(num));
+}
+
+void MainWidget::displayPrecision(bhs::Precision precision)
+{
+    QString s = m_updateUi.PRECISION->value(precision);
+    m_precisionValue.setText(s);
 }

@@ -5,7 +5,7 @@ void Initializer3D3S::initRandamCube()
     m_engine->changeModelScale(1.0 / m_sim.scale);
 
     const quint64 num = m_engine->numberOfParticle();
-    float* const coordinates = m_engine->coordinates();
+    double* const coordinates = m_engine->coordinates();
     float* const velocities = m_engine->velocities();
 
     float* const masses = m_engine->masses();
@@ -46,7 +46,7 @@ void Initializer3D3S::initRandamSphere(const float rate)
 
     quint64 num = m_engine->numberOfParticle();
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     if (m_sim.massRandom) {
@@ -101,7 +101,7 @@ void Initializer3D3S::initSunEarth()
     m_engine->changeModelScale(1.0e-11f);
 
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     masses[0] = 1.9891e+30f;
@@ -124,7 +124,7 @@ void Initializer3D3S::initEarthSun()
     m_engine->changeModelScale(1.0e-11f);
 
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     masses[0] = 5.972e+24f;
@@ -149,7 +149,7 @@ void Initializer3D3S::initEarthMoon()
     m_engine->changeModelScale(0.25e-8f);
 
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     masses[0] = 5.972e+24f;
@@ -174,7 +174,7 @@ void Initializer3D3S::initSunEarthVenus()
     m_engine->changeModelScale(1.0e-11f);
 
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     masses[0] = 1.9891e+30f;
@@ -206,7 +206,7 @@ void Initializer3D3S::initTestSamePosition()
     m_engine->changeModelScale(1.0f);
 
     float* masses = m_engine->masses();
-    float* coordinates = m_engine->coordinates();
+    double* coordinates = m_engine->coordinates();
     float* velocities = m_engine->velocities();
 
     masses[0] = 1.0e+10f;
