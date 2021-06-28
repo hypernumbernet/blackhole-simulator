@@ -35,7 +35,7 @@ public:
     float timePerFrame() const;
 
     void setModelScale(float);
-    void setModelScaleRatio(float);
+    void setModelScaleRatio(double);
     void changeModelScale(float);
     int threadCount();
     void resultReady() const;
@@ -64,8 +64,8 @@ protected:
     float m_timePerFrame;
 
     quint64 m_numberOfParticles;
-    float m_modelScale;
-    float m_scaleCenterValue;
+    double m_modelScale;
+    double m_scaleCenterValue;
     QVector<IntRange> m_timeProgressRanges;
     QVector<IntRange> m_interactionRanges;
 };

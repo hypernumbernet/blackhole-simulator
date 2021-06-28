@@ -274,12 +274,13 @@ void GraphicWindow::circleStrafing(const bool on)
 void GraphicWindow::resetWaitForDone(const bhs::SimCondition& sim)
 {
     m_fpsPreFrame = 0;
-    m_threadAdmin.reset(sim);
+    m_simCondition = &sim;
+    m_threadAdmin.reset();
 }
 
-void GraphicWindow::resetParticles(const bhs::SimCondition& sim)
+void GraphicWindow::resetParticles()
 {
-    m_particleModels->reset(sim);
+    m_particleModels->reset(*m_simCondition);
 }
 
 void GraphicWindow::setModelScale(const QString& text)
@@ -294,6 +295,6 @@ void GraphicWindow::setModelScale(const QString& text)
 
 void GraphicWindow::setModelScaleInt(int val)
 {
-    float r1 = (float)val / (float)UpdateUi::SCALE_SLIDER_CENTER;
-    m_particleModels->setModelScaleRatio(pow(r1, 10.0f));
+    double r1 = 2.0 - (double)val / (double)UpdateUi::SCALE_SLIDER_CENTER;
+    m_particleModels->setModelScaleRatio(pow(r1, 10.0));
 }

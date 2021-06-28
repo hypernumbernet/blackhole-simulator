@@ -21,21 +21,20 @@ ThreadAdmin::~ThreadAdmin()
     m_simulateTimer.stop();
 }
 
-void ThreadAdmin::reset(const bhs::SimCondition& sim)
+void ThreadAdmin::reset()
 {
     m_frameAdvanceTimer.stop();
     m_simulateTimer.stop();
     m_frameNum = 0;
 
     if (m_waitForDone > 0) {
-        m_sim = sim;
         m_resetTimer.start(100, this);
         return;
     }
     for (int i = 0; i < m_controllers.size(); ++i) {
         m_controllers.at(i)->reset();
     }
-    emit m_updateUi->resetParticles(sim);
+    emit m_updateUi->resetParticles();
 }
 
 int ThreadAdmin::frameNum()
@@ -98,7 +97,7 @@ void ThreadAdmin::timerEvent(QTimerEvent* ev)
 {
     if (ev->timerId() == m_resetTimer.timerId()) {
         m_resetTimer.stop();
-        reset(m_sim);
+        reset();
     } else if (ev->timerId() == m_simulateTimer.timerId() && m_simulateTimer.isActive()) {
         updateParticles();
     } else if (ev->timerId() == m_frameAdvanceTimer.timerId()) {

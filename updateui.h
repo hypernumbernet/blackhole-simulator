@@ -26,10 +26,11 @@ struct SimCondition
 {
     int engine = 0;
     Preset preset = Preset::RandomCube;
-    float timePerFrame = 1000.0f;
+    float timePerFrame = 1000.0f; // TODO double
     int numberOfParticles = 800;
     float massAvg = 6.0e+29f;
     bool massRandom = true;
+    double scale = 1.0e+11;
 };
 
 inline float randf() {return (float)rand() / (float)RAND_MAX;}
@@ -101,5 +102,5 @@ signals:
     void displayPresetName(const QString&);
     void frameAdvance(int);
     void resultReady();
-    void resetParticles(const bhs::SimCondition& sim);
+    void resetParticles();
 };

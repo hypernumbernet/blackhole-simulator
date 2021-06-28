@@ -47,40 +47,54 @@ InitializerDialog::InitializerDialog(UpdateUi* updateUi, QWidget* parent)
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
     secondLayout->addWidget(timePerFrameLabel);
 
-    m_timePerFrameValue.setAlignment(Qt::AlignRight);
-    secondLayout->addWidget(&m_timePerFrameValue);
+    m_timePerFrameEdit.setAlignment(Qt::AlignRight);
+    secondLayout->addWidget(&m_timePerFrameEdit);
 
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles (hint)"));
     secondLayout->addWidget(particleNumLabel);
 
-    m_particleNumValue.setAlignment(Qt::AlignRight);
-    secondLayout->addWidget(&m_particleNumValue);
+    m_particleNumEdit.setAlignment(Qt::AlignRight);
+    secondLayout->addWidget(&m_particleNumEdit);
 
     // Mass
 
-    auto massGroup = new QGroupBox(tr("Mass"));
+    auto massGroup = new QGroupBox(tr("Mass (for random preset)"));
     auto massVbox = new QVBoxLayout;
 
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
     massVbox->addWidget(massLabel);
 
-    m_massAvgValue.setAlignment(Qt::AlignRight);
-    massVbox->addWidget(&m_massAvgValue);
+    m_massAvgEdit.setAlignment(Qt::AlignRight);
+    massVbox->addWidget(&m_massAvgEdit);
 
-    m_massRandomCheck.setText(tr("Random Mass"));
-    m_massRandomCheck.setChecked(true);
-    massVbox->addWidget(&m_massRandomCheck);
+    m_massRandomCheckBox.setText(tr("Random Mass"));
+    m_massRandomCheckBox.setChecked(true);
+    massVbox->addWidget(&m_massRandomCheckBox);
 
-    auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
-    massVbox->addWidget(massRangeLabel);
+//    auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
+//    massVbox->addWidget(massRangeLabel);
 
-    auto massRangeValue = new QLineEdit("20");
-    massRangeValue->setEnabled(false);
-    massVbox->addWidget(massRangeValue);
+//    auto massRangeValue = new QLineEdit("20");
+//    massRangeValue->setEnabled(false);
+//    massVbox->addWidget(massRangeValue);
 
     massGroup->setLayout(massVbox);
     secondLayout->addWidget(massGroup);
+
+    // Scale
+
+    auto scaleGroup = new QGroupBox(tr("Scale"));
+    auto scaleVbox = new QVBoxLayout;
+
+    auto scaleLabel = new QLabel(tr("Scale (m)"));
+    scaleVbox->addWidget(scaleLabel);
+
+    m_scaleEdit.setAlignment(Qt::AlignRight);
+    scaleVbox->addWidget(&m_scaleEdit);
+
+    scaleGroup->setLayout(scaleVbox);
+    secondLayout->addWidget(scaleGroup);
 
     //########################################################################
     auto thirdLayout = new QHBoxLayout;
@@ -124,36 +138,44 @@ bool InitializerDialog::validate()
 
     m_simCondition.engine = m_engineButtonGroup.checkedId();
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
+    m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
 
     bool ok;
-    auto val = m_timePerFrameValue.text().toFloat(&ok);
+    auto val = m_timePerFrameEdit.text().toFloat(&ok);
     if (ok) {
-        m_timePerFrameValue.setPalette(normalPal);
+        m_timePerFrameEdit.setPalette(normalPal);
         m_simCondition.timePerFrame = val;
     } else {
         allOk = false;
-        m_timePerFrameValue.setPalette(NGPal);
+        m_timePerFrameEdit.setPalette(NGPal);
     }
 
-    auto num = m_particleNumValue.text().toInt(&ok);
+    auto num = m_particleNumEdit.text().toInt(&ok);
     if (ok) {
-        m_particleNumValue.setPalette(normalPal);
+        m_particleNumEdit.setPalette(normalPal);
         m_simCondition.numberOfParticles = num;
     } else {
         allOk = false;
-        m_particleNumValue.setPalette(NGPal);
+        m_particleNumEdit.setPalette(NGPal);
     }
 
-    auto massAvg = m_massAvgValue.text().toFloat(&ok);
+    auto massAvg = m_massAvgEdit.text().toFloat(&ok);
     if (ok) {
-        m_massAvgValue.setPalette(normalPal);
+        m_massAvgEdit.setPalette(normalPal);
         m_simCondition.massAvg = massAvg;
     } else {
         allOk = false;
-        m_massAvgValue.setPalette(NGPal);
+        m_massAvgEdit.setPalette(NGPal);
     }
 
-    m_simCondition.massRandom = m_massRandomCheck.isChecked();
+    auto scale = m_scaleEdit.text().toFloat(&ok);
+    if (ok) {
+        m_scaleEdit.setPalette(normalPal);
+        m_simCondition.scale = scale;
+    } else {
+        allOk = false;
+        m_scaleEdit.setPalette(NGPal);
+    }
 
     return allOk;
 }
@@ -172,15 +194,16 @@ void InitializerDialog::applyButtonClicked()
     }
 }
 
-bhs::SimCondition& InitializerDialog::simCondition()
+const bhs::SimCondition& InitializerDialog::simCondition() const
 {
     return m_simCondition;
 }
 
 void InitializerDialog::setValues(const bhs::SimCondition& sim)
 {
-    m_timePerFrameValue.setText(QString::number(sim.timePerFrame));
-    m_particleNumValue.setText(QString::number(sim.numberOfParticles));
-    m_massAvgValue.setText(QString::number(sim.massAvg));
-    m_massRandomCheck.setChecked(sim.massRandom);
+    m_timePerFrameEdit.setText(QString::number(sim.timePerFrame));
+    m_particleNumEdit.setText(QString::number(sim.numberOfParticles));
+    m_massAvgEdit.setText(QString::number(sim.massAvg));
+    m_massRandomCheckBox.setChecked(sim.massRandom);
+    m_scaleEdit.setText(QString::number(sim.scale));
 }

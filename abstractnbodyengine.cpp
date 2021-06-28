@@ -60,7 +60,7 @@ void AbstractNBodyEngine::setModelScale(const float scale)
     m_modelScale = scale;
 }
 
-void AbstractNBodyEngine::setModelScaleRatio(const float ratio)
+void AbstractNBodyEngine::setModelScaleRatio(const double ratio)
 {
     m_modelScale = m_scaleCenterValue * ratio;
     emit m_updateUi->displayModelScale(m_modelScale);

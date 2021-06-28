@@ -33,7 +33,7 @@ public slots:
     void frameAdvance100();
     void circleStrafing(bool);
     void resetWaitForDone(const bhs::SimCondition&);
-    void resetParticles(const bhs::SimCondition&);
+    void resetParticles();
     void setModelScale(const QString&);
     void setModelScaleInt(int);
 
@@ -73,4 +73,5 @@ private:
     int m_fpsPreFrame;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
+    const bhs::SimCondition* m_simCondition = nullptr;
 };

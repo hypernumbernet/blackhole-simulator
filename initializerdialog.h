@@ -9,7 +9,6 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
-#include <QListWidget>
 #include <QGroupBox>
 #include <QButtonGroup>
 
@@ -18,10 +17,10 @@ class InitializerDialog : public QDialog
     Q_OBJECT
 
 public:
-    InitializerDialog(UpdateUi*, QWidget* parent = nullptr);
+    InitializerDialog(UpdateUi*, QWidget* parent);
 
     void setValues(const bhs::SimCondition&);
-    bhs::SimCondition& simCondition();
+    const bhs::SimCondition& simCondition() const;
 
 public slots:
     void okButtonClicked();
@@ -34,13 +33,13 @@ private:
 
     UpdateUi* const m_updateUi;
 
-    QLineEdit m_timePerFrameValue;
-    QLineEdit m_particleNumValue;
-    QLineEdit m_massAvgValue;
-    QCheckBox m_massRandomCheck;
-    QListWidget m_presetList;
+    QLineEdit m_timePerFrameEdit;
+    QLineEdit m_particleNumEdit;
+    QLineEdit m_massAvgEdit;
+    QCheckBox m_massRandomCheckBox;
     QButtonGroup m_engineButtonGroup;
     QButtonGroup m_presetButtonGroup;
+    QLineEdit m_scaleEdit;
 
     bhs::SimCondition m_simCondition;
 };

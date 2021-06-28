@@ -95,6 +95,12 @@ void MainWidget::initUi()
     m_vLayout.addWidget(resetBtn);
     connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetInitial);
 
+    // New
+    auto newButton = new QPushButton(tr("New..."));
+    newButton->setFocusPolicy(Qt::NoFocus);
+    m_vLayout.addWidget(newButton);
+    connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
+
     // Circle strafing
     auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
@@ -152,12 +158,6 @@ void MainWidget::initUi()
     displayStyle(m_presetValue);
     m_vLayout.addWidget(&m_presetValue);
     connect(&m_updateUi, &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
-
-    // New
-    auto newButton = new QPushButton(tr("New..."));
-    newButton->setFocusPolicy(Qt::NoFocus);
-    m_vLayout.addWidget(newButton);
-    connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
 
     // Graph
     auto graphButton = new QPushButton(tr("Graph..."));

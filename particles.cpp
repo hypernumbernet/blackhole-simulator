@@ -125,7 +125,7 @@ void Particles::setModelScale(float val)
     m_NBodyEngine->setModelScale(val);
 }
 
-void Particles::setModelScaleRatio(float val)
+void Particles::setModelScaleRatio(double val)
 {
     m_NBodyEngine->setModelScaleRatio(val);
 }

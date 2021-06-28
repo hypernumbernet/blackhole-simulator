@@ -26,7 +26,7 @@ public:
     void updateGL();
     void selectNBodyEngine(const bhs::SimCondition&);
     void setModelScale(float);
-    void setModelScaleRatio(float);
+    void setModelScaleRatio(double);
     void reset(const bhs::SimCondition&);
 
 private:
