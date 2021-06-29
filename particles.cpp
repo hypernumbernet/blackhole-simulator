@@ -40,12 +40,13 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
+    auto g3dengine = new G3DMassDiffNBE<float>(sim);
     switch (sim.engine) {
+    case 0:
     default:
-        m_NBodyEngine = new G3DMassDiffNBE<float>(sim);
-
+        m_NBodyEngine = g3dengine;
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
-            m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
+            m_threadAdmin->at(i)->initialize(new G3DMassDiffCoreSingle(g3dengine));
         }
         break;
     case 1:

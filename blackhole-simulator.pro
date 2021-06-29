@@ -6,10 +6,10 @@ CONFIG += c++17
 SOURCES += \
     abstractenginecoredouble.cpp \
     abstractenginecoresingle.cpp \
-    abstractinitializer.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
     g3dmassdiffcore.cpp \
+    g3dmassdiffcoredouble.cpp \
     g3dmassintegralcore.cpp \
     g3svmassdiffcore.cpp \
     graphicwindow.cpp \
@@ -30,6 +30,7 @@ HEADERS += \
     abstractnbodyengine.h \
     camera.h \
     g3dmassdiffcore.h \
+    g3dmassdiffcoredouble.h \
     g3dmassdiffnbe.h \
     g3dmassintegralcore.h \
     g3dmassintegralnbe.h \

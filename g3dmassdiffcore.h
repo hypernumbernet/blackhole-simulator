@@ -1,14 +1,17 @@
 #pragma once
 
-#include "abstractenginecoresingle.h"
+#include "g3dmassdiffnbe.h"
 
-class G3DMassDiffCore : public AbstractEngineCoreSingle
+class G3DMassDiffCoreSingle : public AbstractEngineCoreSingle
 {
     Q_OBJECT
 public:
-    explicit G3DMassDiffCore(AbstractNBodyEngine<float>* const, QObject* = nullptr);
+    explicit G3DMassDiffCoreSingle(G3DMassDiffNBE<float>* const, QObject* = nullptr);
 
 public slots:
     void calculateTimeProgress(int threadNumber) const;
     void calculateInteraction(int threadNumber) const;
+
+private:
+    G3DMassDiffNBE<float>* const m_e;
 };

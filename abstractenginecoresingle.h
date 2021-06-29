@@ -21,7 +21,7 @@ protected:
     void resultReady() const;
     void debug() const;
 
-    AbstractNBodyEngine<float>* const m_engine;
+    AbstractNBodyEngine<float>* m_engine;
     quint64 m_numberOfParticles;
 
     // Particle coordinates

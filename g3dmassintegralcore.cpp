@@ -8,17 +8,17 @@ G3DMassIntegralCore::G3DMassIntegralCore(AbstractNBodyEngine<float>* const engin
 
 void G3DMassIntegralCore::calculateTimeProgress(int threadNumber) const
 {
-    quint64 start = m_engine->timeProgressRanges().at(threadNumber).start;
-    quint64 end = m_engine->timeProgressRanges().at(threadNumber).end;
+//    quint64 start = m_engine->timeProgressRanges().at(threadNumber).start;
+//    quint64 end = m_engine->timeProgressRanges().at(threadNumber).end;
 
-    for (quint64 i = start; i < end; ++i)
-    {
-        quint64 j = i * 3;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
-        m_coordinates[j] += m_velocities[j] * m_timePerFrame;
-    }
-    resultReady();
+//    for (quint64 i = start; i < end; ++i)
+//    {
+//        quint64 j = i * 3;
+//        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+//        m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
+//        m_coordinates[j] += m_velocities[j] * m_timePerFrame;
+//    }
+//    resultReady();
 }
 
 void G3DMassIntegralCore::calculateInteraction(int threadNumber) const
