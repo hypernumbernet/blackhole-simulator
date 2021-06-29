@@ -2,7 +2,7 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer3d3s.h"
+#include "initializer3d4d.h"
 #include "quaternion.h"
 
 using namespace bhs;
@@ -10,12 +10,12 @@ using namespace bhs;
 // Gravity 3D-Coordinate 3S-Velocity Mass Differential N-Body Engine
 
 template <typename T>
-class G3SVMassDiffNBE : public AbstractNBodyEngine<T>, private Initializer3D3S<T>
+class G3D4DMassDiffNBE : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
 {
 public:
-    G3SVMassDiffNBE(const bhs::SimCondition& sim)
+    G3D4DMassDiffNBE(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>()
-        , Initializer3D3S<T>(sim, this)
+        , Initializer3D4D<T>(sim, this)
     {
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
@@ -67,7 +67,7 @@ public:
         setTimePerFrame(sim.timePerFrame);
     }
 
-    ~G3SVMassDiffNBE()
+    ~G3D4DMassDiffNBE()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

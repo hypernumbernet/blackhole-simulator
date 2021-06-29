@@ -31,7 +31,6 @@ private:
     void updateParticles();
     void timerEvent(QTimerEvent*) override;
 
-    //UpdateUi* const m_updateUi;
     const int m_threadCount;
     int m_waitForDone;
     int m_calculateNext;

@@ -7,14 +7,15 @@
 #include <QtGlobal>
 #include <QDebug>
 #include <QMutex>
+#include <QThread>
 
 template <typename T>
 class AbstractNBodyEngine
 {
 public:
-    static constexpr T GRAVITATIONAL_CONSTANT = 6.6743e-11; // 2018 CODATA
-    static constexpr T SPEED_OF_LIGHT = 2.99792458e+8;
-    static constexpr T PI = 3.141592653589793;
+    static constexpr T GRAVITATIONAL_CONSTANT = (T)6.6743e-11; // 2018 CODATA
+    static constexpr T SPEED_OF_LIGHT = (T)2.99792458e+8;
+    static constexpr T PI = (T)3.141592653589793;
     static constexpr T VANGLE = PI / SPEED_OF_LIGHT;
 
     explicit AbstractNBodyEngine();
@@ -33,7 +34,6 @@ public:
     void setModelScaleRatio(T);
     void changeModelScale(T);
     int threadCount();
-    void resultReady() const;
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
 

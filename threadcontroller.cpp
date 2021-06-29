@@ -11,18 +11,20 @@ ThreadController::~ThreadController()
     workerThread.wait();
 }
 
-void ThreadController::initialize(AbstractEngineCoreSingle* const core)
+void ThreadController::initialize(AbstractEngineCore* const core)
 {
     m_core = core;
     core->moveToThread(&workerThread);
-    connect(this, &ThreadController::calculateTimeProgress, core, &AbstractEngineCoreSingle::calculateTimeProgress);
-    connect(this, &ThreadController::calculateInteraction, core, &AbstractEngineCoreSingle::calculateInteraction);
+    connect(this, &ThreadController::calculateTimeProgress, core, &AbstractEngineCore::calculateTimeProgress);
+    connect(this, &ThreadController::calculateInteraction, core, &AbstractEngineCore::calculateInteraction);
     workerThread.start();
 }
 
 void ThreadController::reset()
 {
-    m_core->deleteLater();
+    if (m_core)
+        m_core->deleteLater();
+    m_core = nullptr;
 }
 
 bool ThreadController::hasRangeTimeProgress(int threadNum) const

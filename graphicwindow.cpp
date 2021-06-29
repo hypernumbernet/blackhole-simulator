@@ -285,10 +285,10 @@ void GraphicWindow::resetParticles()
 void GraphicWindow::setModelScale(const QString& text)
 {
     bool ok;
-    auto val = text.toFloat(&ok);
-    if (ok && val > 0.0f)
+    auto val = text.toDouble(&ok);
+    if (ok && val > 0.0)
     {
-        m_particleModels->setModelScale(1.0f / val);
+        m_particleModels->setModelScale(1.0 / val);
     }
 }
 

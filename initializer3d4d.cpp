@@ -1,10 +1,10 @@
-#include "initializer3d3s.h"
+#include "initializer3d4d.h"
 
-template class Initializer3D3S<float>;
-template class Initializer3D3S<double>;
+template class Initializer3D4D<float>;
+template class Initializer3D4D<double>;
 
 template <typename T>
-void Initializer3D3S<T>::initRandamCube()
+void Initializer3D4D<T>::initRandamCube()
 {
     this->m_engine->changeModelScale(1.0 / this->m_sim.scale);
 
@@ -15,7 +15,7 @@ void Initializer3D3S<T>::initRandamCube()
     T* const masses = this->m_engine->masses();
     if (this->m_sim.massRandom) {
         for (quint64 i = 0; i < num; ++i) {
-            masses[i] = bhs::randf() * this->m_sim.massAvg * 2.0;
+            masses[i] = randf<T>() * this->m_sim.massAvg * 2.0;
         }
     } else {
         for (quint64 i = 0; i < num; ++i) {
@@ -32,7 +32,7 @@ void Initializer3D3S<T>::initRandamCube()
     quint64 i4;
     for (quint64 i = 0; i < num; ++i)
     {
-        axis.set(bhs::randf(), bhs::randf(), bhs::randf());
+        axis.set(randf<T>(), randf<T>(), randf<T>());
         axis.Normalize();
         angle = bhs::rand0center1maxf() * 1.5e+4 * AbstractNBodyEngine<T>::VANGLE;
         auto vq = bhs::Quaternion<T>::Exp(axis * angle);
@@ -45,7 +45,7 @@ void Initializer3D3S<T>::initRandamCube()
 }
 
 template <typename T>
-void Initializer3D3S<T>::initRandamSphere(const T rate)
+void Initializer3D4D<T>::initRandamSphere(const T rate)
 {
     this->m_engine->changeModelScale(1.0 / this->m_sim.scale);
 
@@ -56,7 +56,7 @@ void Initializer3D3S<T>::initRandamSphere(const T rate)
 
     if (this->m_sim.massRandom) {
         for (quint64 i = 0; i < num; ++i) {
-            masses[i] = bhs::randf() * this->m_sim.massAvg * 2.0;
+            masses[i] = randf<T>() * this->m_sim.massAvg * 2.0;
         }
     } else {
         for (quint64 i = 0; i < num; ++i) {
@@ -89,7 +89,7 @@ void Initializer3D3S<T>::initRandamSphere(const T rate)
     quint64 i4;
     for (quint64 i = 0; i < num; ++i)
     {
-        axis.set(bhs::randf(), bhs::randf(), bhs::randf());
+        axis.set(randf<T>(), randf<T>(), randf<T>());
         axis.Normalize();
         angle = bhs::rand0center1maxf() * 1.5e+4 * AbstractNBodyEngine<T>::VANGLE;
         auto vq = bhs::Quaternion<T>::Exp(axis * angle);
@@ -102,23 +102,23 @@ void Initializer3D3S<T>::initRandamSphere(const T rate)
 }
 
 template <typename T>
-void Initializer3D3S<T>::initSunEarth()
+void Initializer3D4D<T>::initSunEarth()
 {
-    this->m_engine->changeModelScale(1.0e-11);
+    this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
     T* coordinates = this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    masses[0] = 1.9891e+30;
+    masses[0] = (T)1.9891e+30;
     coordinates[0] = coordinates[1] = coordinates[2] = 0.0;
     velocities[0] = 1.0;
     velocities[1] = 0.0;
     velocities[2] = 0.0;
     velocities[3] = 0.0;
 
-    masses[1] = 5.972e+24;
-    coordinates[3] = 1.495978e+11;
+    masses[1] = (T)5.972e+24;
+    coordinates[3] = (T)1.495978e+11;
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     auto q = fromDirectionAndSpeed(0.0, 1.0, 0.0, 29780.0);
@@ -126,23 +126,23 @@ void Initializer3D3S<T>::initSunEarth()
 }
 
 template <typename T>
-void Initializer3D3S<T>::initEarthSun()
+void Initializer3D4D<T>::initEarthSun()
 {
-    this->m_engine->changeModelScale(1.0e-11);
+    this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
     T* coordinates = this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    masses[0] = 5.972e+24;
+    masses[0] = (T)5.972e+24;
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
     auto q = fromDirectionAndSpeed(0.0, 1.0, 0.0, 29780.0);
     embedQuaternionToArray(q, velocities, 0);
 
-    masses[1] = 1.9891e+30;
-    coordinates[3] = 1.495978e+11;
+    masses[1] = (T)1.9891e+30;
+    coordinates[3] = (T)1.495978e+11;
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     velocities[4] = 1.0;
@@ -152,15 +152,15 @@ void Initializer3D3S<T>::initEarthSun()
 }
 
 template <typename T>
-void Initializer3D3S<T>::initEarthMoon()
+void Initializer3D4D<T>::initEarthMoon()
 {
-    this->m_engine->changeModelScale(0.25e-8);
+    this->m_engine->changeModelScale((T)0.25e-8);
 
     T* masses = this->m_engine->masses();
     T* coordinates = this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    masses[0] = 5.972e+24;
+    masses[0] = (T)5.972e+24;
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
@@ -169,8 +169,8 @@ void Initializer3D3S<T>::initEarthMoon()
     velocities[2] = 0.0;
     velocities[3] = 0.0;
 
-    masses[1] = 7.347673e+22;
-    coordinates[3] = 3.844e+8;
+    masses[1] = (T)7.347673e+22;
+    coordinates[3] = (T)3.844e+8;
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     auto q = fromDirectionAndSpeed(0.0, 1.0, 0.0, 1022.0);
@@ -178,15 +178,15 @@ void Initializer3D3S<T>::initEarthMoon()
 }
 
 template <typename T>
-void Initializer3D3S<T>::initSunEarthVenus()
+void Initializer3D4D<T>::initSunEarthVenus()
 {
-    this->m_engine->changeModelScale(1.0e-11);
+    this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
     T* coordinates = this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    masses[0] = 1.9891e+30;
+    masses[0] = (T)1.9891e+30;
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
@@ -195,23 +195,23 @@ void Initializer3D3S<T>::initSunEarthVenus()
     velocities[2] = 0.0;
     velocities[3] = 0.0;
 
-    masses[1] = 5.972e+24;
-    coordinates[3] = 1.495978e+11;
+    masses[1] = (T)5.972e+24;
+    coordinates[3] = (T)1.495978e+11;
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
-    auto earth = fromDirectionAndSpeed(0.0, 0.0, 1.0, 29780.0);
+    auto earth = fromDirectionAndSpeed(0.0, 0.0, 1.0, (T)29780.0);
     embedQuaternionToArray(earth, velocities, 4);
 
-    masses[2] = 4.869e+24;
-    coordinates[6] = 1.0820893e+11;
+    masses[2] = (T)4.869e+24;
+    coordinates[6] = (T)1.0820893e+11;
     coordinates[7] = 0.0;
     coordinates[8] = 0.0;
-    auto venus = fromDirectionAndSpeed(0.0, 0.0, 1.0, 35021.4);
+    auto venus = fromDirectionAndSpeed(0.0, 0.0, 1.0, (T)35021.4);
     embedQuaternionToArray(venus, velocities, 8);
 }
 
 template <typename T>
-void Initializer3D3S<T>::initTestSamePosition()
+void Initializer3D4D<T>::initTestSamePosition()
 {
     this->m_engine->changeModelScale(1.0);
 
@@ -220,18 +220,18 @@ void Initializer3D3S<T>::initTestSamePosition()
     T* velocities = this->m_engine->velocities();
 
     masses[0] = 1.0e+10;
-    coordinates[0] = 0.1;
-    coordinates[1] = 0.2;
-    coordinates[2] = 0.3;
+    coordinates[0] = (T)0.1;
+    coordinates[1] = (T)0.2;
+    coordinates[2] = (T)0.3;
     velocities[0] = 1.0;
     velocities[1] = 0.0;
     velocities[2] = 0.0;
     velocities[3] = 0.0;
 
     masses[1] = 2.0e+10;
-    coordinates[3] = 0.1;
-    coordinates[4] = 0.2;
-    coordinates[5] = 0.3;
+    coordinates[3] = (T)0.1;
+    coordinates[4] = (T)0.2;
+    coordinates[5] = (T)0.3;
     velocities[4] = 1.0;
     velocities[5] = 0.0;
     velocities[6] = 0.0;

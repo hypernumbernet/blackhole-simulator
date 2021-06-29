@@ -1,16 +1,16 @@
 #pragma once
 
-#include "abstractenginecoredouble.h"
+#include "abstractenginecoresingle.h"
 
-class G3DMassDiffCoreDouble : public AbstractEngineCoreDouble
+class G3DMassDiffCoreSingle : public AbstractEngineCoreSingle
 {
     Q_OBJECT
 public:
-    explicit G3DMassDiffCoreDouble(AbstractNBodyEngine<double>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreDouble(engine, parent)
+    explicit G3DMassDiffCoreSingle(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
+        : AbstractEngineCoreSingle(engine, parent)
     {
-    }
 
+    }
 public slots:
     void calculateTimeProgress(int threadNumber) const
     {
@@ -32,11 +32,11 @@ public slots:
         quint64 start = m_engine->interactionRanges().at(threadNumber).start;
         quint64 end = m_engine->interactionRanges().at(threadNumber).end;
 
-        double d1, d2, d3, distance, inv, theta;
+        float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
-        double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
+        float time_g = m_timePerFrame * AbstractNBodyEngine<float>::GRAVITATIONAL_CONSTANT;
 
-        double* vels = new double[m_numberOfParticles * 3];
+        float* vels = new float[m_numberOfParticles * 3];
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
             vels[i] = 0.0f;
         }

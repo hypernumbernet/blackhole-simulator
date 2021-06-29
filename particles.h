@@ -1,11 +1,14 @@
 #pragma once
 
-#include "g3dmassdiffcore.h"
 #include "g3dmassdiffnbe.h"
-#include "g3dmassintegralcore.h"
+#include "g3dmassdiffcoresingle.h"
+#include "g3dmassdiffcoredouble.h"
 #include "g3dmassintegralnbe.h"
-#include "g3svmassdiffcore.h"
-#include "g3svmassdiffnbe.h"
+#include "g3dmassintegralcoresingle.h"
+#include "g3dmassintegralcoredouble.h"
+#include "g3d4dmassdiffnbe.h"
+#include "g3d4dmassdiffcoresingle.h"
+#include "g3d4dmassdiffcoredouble.h"
 
 #include <math.h>
 
@@ -25,17 +28,22 @@ public:
     void resize(int height);
     void updateGL();
     void selectNBodyEngine(const bhs::SimCondition&);
-    void setModelScale(float);
+    void setModelScale(double);
     void setModelScaleRatio(double);
     void reset(const bhs::SimCondition&);
 
 private:
+    quint64 numberOfParticle() const;
+    const void* coordinates() const;
+    double modelScale() const;
+
     ThreadAdmin* const m_threadAdmin;
 
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
-    AbstractNBodyEngine<float>* m_NBodyEngine;
+    AbstractNBodyEngine<float>* m_NBodyEngineSingle = nullptr;
+    AbstractNBodyEngine<double>* m_NBodyEngineDouble = nullptr;
 
     // It varies depending on the size of the window.
     float m_pointSizeScale;
@@ -44,4 +52,5 @@ private:
     float m_pointSize;
 
     int m_initHeight;
+    bhs::Precision m_precision;
 };

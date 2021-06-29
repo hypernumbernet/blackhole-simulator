@@ -1,12 +1,14 @@
 #pragma once
 
 #include "abstractenginecoredouble.h"
+#include "g3dmassintegralnbe.h"
 
-class G3DMassDiffCoreDouble : public AbstractEngineCoreDouble
+class G3DMassIntegralCoreDouble : public AbstractEngineCoreDouble
 {
     Q_OBJECT
+
 public:
-    explicit G3DMassDiffCoreDouble(AbstractNBodyEngine<double>* const engine, QObject* parent = nullptr)
+    explicit G3DMassIntegralCoreDouble(AbstractNBodyEngine<double>* const engine, QObject* parent = nullptr)
         : AbstractEngineCoreDouble(engine, parent)
     {
     }
@@ -29,12 +31,17 @@ public slots:
 
     void calculateInteraction(int threadNumber) const
     {
+        // Perform integral calculation of universal gravitation.
+        // The memory cost is high because the distance data calculated last time is saved and used.
+        // However, if the distance variation is large, it may be more accurate to calculate by this method.
+        // The celestial scale vibrates violently at float resolution?
+
         quint64 start = m_engine->interactionRanges().at(threadNumber).start;
         quint64 end = m_engine->interactionRanges().at(threadNumber).end;
 
-        double d1, d2, d3, distance, inv, theta;
+        double inv, force;
+        G3DMassIntegralNBE<double>::Distance d;
         quint64 k = 0, a, b;
-        double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
 
         double* vels = new double[m_numberOfParticles * 3];
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
@@ -45,34 +52,36 @@ public slots:
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {
-                // Perform differential calculation of universal gravitation.
+                if (!G3DMassIntegralNBE<double>::calculateDistance(d, m_coordinates, i, j))
+                    continue;
+
+                inv = m_inversedDistances[k];
+                m_inversedDistances[k] = d.invR;
+                inv -= d.invR;
+
+                if (inv == 0.0f)
+                    continue;
+
+                // Time is not taken into account.
+                force = inv * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
+
+                d.unitX *= force;
+                d.unitY *= force;
+                d.unitZ *= force;
+
                 a = i * 3;
                 b = j * 3;
-                d1 = m_coordinates[a] - m_coordinates[b];
-                d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
-                d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
-                distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0f) {
-                    continue;
-                }
-                inv = 1.0f / distance;
-                theta = inv * inv * time_g;
-                //Q_ASSERT(theta == theta);
-
-                d1 *= inv * theta;
-                d2 *= inv * theta;
-                d3 *= inv * theta;
-
-                vels[a] -= d1 * m_masses[j];
-                vels[a + 1] -= d2 * m_masses[j];
-                vels[a + 2] -= d3 * m_masses[j];
-                vels[b] += d1 * m_masses[i];
-                vels[b + 1] += d2 * m_masses[i];
-                vels[b + 2] += d3 * m_masses[i];
+                vels[a    ] -= d.unitX * m_masses[j];
+                vels[a + 1] -= d.unitY * m_masses[j];
+                vels[a + 2] -= d.unitZ * m_masses[j];
+                vels[b    ] += d.unitX * m_masses[i];
+                vels[b + 1] += d.unitY * m_masses[i];
+                vels[b + 2] += d.unitZ * m_masses[i];
 
                 ++k;
             }
         }
+
         bhs::interactionMutex.lock();
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
             m_velocities[i] += vels[i];

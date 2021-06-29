@@ -1,7 +1,5 @@
 #include "abstractnbodyengine.h"
 
-#include <QThread>
-
 template class AbstractNBodyEngine<float>;
 template class AbstractNBodyEngine<double>;
 
@@ -126,12 +124,6 @@ template <typename T>
 int AbstractNBodyEngine<T>::threadCount()
 {
     return m_timeProgressRanges.size();
-}
-
-template <typename T>
-void AbstractNBodyEngine<T>::resultReady() const
-{
-    emit UpdateUi::it().resultReady();
 }
 
 template <typename T>

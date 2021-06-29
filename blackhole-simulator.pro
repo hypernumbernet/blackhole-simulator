@@ -4,17 +4,12 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
-    abstractenginecoredouble.cpp \
-    abstractenginecoresingle.cpp \
+    abstractenginecore.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
-    g3dmassdiffcore.cpp \
-    g3dmassdiffcoredouble.cpp \
-    g3dmassintegralcore.cpp \
-    g3svmassdiffcore.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
-    initializer3d3s.cpp \
+    initializer3d4d.cpp \
     initializerdialog.cpp \
     main.cpp \
     mainwidget.cpp \
@@ -24,21 +19,24 @@ SOURCES += \
     worldmodels.cpp
 
 HEADERS += \
+    abstractenginecore.h \
     abstractenginecoredouble.h \
     abstractenginecoresingle.h \
     abstractinitializer.h \
     abstractnbodyengine.h \
     camera.h \
-    g3dmassdiffcore.h \
+    g3d4dmassdiffcoredouble.h \
+    g3d4dmassdiffcoresingle.h \
+    g3d4dmassdiffnbe.h \
     g3dmassdiffcoredouble.h \
+    g3dmassdiffcoresingle.h \
     g3dmassdiffnbe.h \
-    g3dmassintegralcore.h \
+    g3dmassintegralcoredouble.h \
+    g3dmassintegralcoresingle.h \
     g3dmassintegralnbe.h \
-    g3svmassdiffcore.h \
-    g3svmassdiffnbe.h \
     graphicwindow.h \
     initializer3d.h \
-    initializer3d3s.h \
+    initializer3d4d.h \
     initializerdialog.h \
     mainwidget.h \
     particles.h \

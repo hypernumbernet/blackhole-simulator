@@ -3,8 +3,10 @@
 #include "abstractinitializer.h"
 #include "quaternion.h"
 
+using namespace bhs;
+
 template <typename T>
-class Initializer3D3S : public AbstractInitializer<T>
+class Initializer3D4D : public AbstractInitializer<T>
 {
 public:
     using AbstractInitializer<T>::AbstractInitializer;

@@ -1,6 +1,8 @@
 #pragma once
 
+#include "abstractenginecore.h"
 #include "abstractenginecoresingle.h"
+#include "abstractenginecoredouble.h"
 
 #include <QObject>
 #include <QThread>
@@ -14,7 +16,7 @@ public:
     explicit ThreadController(QObject* = nullptr);
     ~ThreadController();
 
-    void initialize(AbstractEngineCoreSingle* const);
+    void initialize(AbstractEngineCore* const);
     void reset();
     bool hasRangeTimeProgress(int) const;
     bool hasRangeInteraction(int) const;
@@ -24,6 +26,6 @@ signals:
     void calculateInteraction(int);
 
 private:
-    AbstractEngineCoreSingle* m_core;
+    AbstractEngineCore* m_core = nullptr;
     QThread workerThread;
 };

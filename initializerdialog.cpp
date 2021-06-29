@@ -158,7 +158,7 @@ bool InitializerDialog::validate()
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
 
     bool ok;
-    auto val = m_timePerFrameEdit.text().toFloat(&ok);
+    auto val = m_timePerFrameEdit.text().toDouble(&ok);
     if (ok) {
         m_timePerFrameEdit.setPalette(normalPal);
         m_simCondition.timePerFrame = val;
@@ -176,7 +176,7 @@ bool InitializerDialog::validate()
         m_particleNumEdit.setPalette(NGPal);
     }
 
-    auto massAvg = m_massAvgEdit.text().toFloat(&ok);
+    auto massAvg = m_massAvgEdit.text().toDouble(&ok);
     if (ok) {
         m_massAvgEdit.setPalette(normalPal);
         m_simCondition.massAvg = massAvg;
@@ -185,7 +185,7 @@ bool InitializerDialog::validate()
         m_massAvgEdit.setPalette(NGPal);
     }
 
-    auto scale = m_scaleEdit.text().toFloat(&ok);
+    auto scale = m_scaleEdit.text().toDouble(&ok);
     if (ok) {
         m_scaleEdit.setPalette(normalPal);
         m_simCondition.scale = scale;

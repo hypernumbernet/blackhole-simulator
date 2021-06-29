@@ -31,7 +31,7 @@ enum class Precision
 
 struct SimCondition
 {
-    Precision precision= Precision::Single;
+    Precision precision= Precision::Double;
     int engine = 0;
     Preset preset = Preset::RandomCube;
     double timePerFrame = 1000.0;
@@ -47,7 +47,8 @@ struct IntRange
     quint64 end;
 };
 
-inline float randf() {return (float)rand() / (float)RAND_MAX;}
+template <typename T>
+inline float randf() {return (T)rand() / (T)RAND_MAX;}
 
 // Random numbers in the range of equality between plus and minus areas
 inline float rand0centerf()
