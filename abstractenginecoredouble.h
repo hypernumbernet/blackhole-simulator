@@ -56,7 +56,7 @@ protected:
     }
 
     AbstractNBodyEngine<double>* const m_engine;
-    quint64 m_numberOfParticles;
+    const quint64 m_numberOfParticles;
 
     // Particle coordinates
     double* const m_coordinates;
@@ -71,5 +71,5 @@ protected:
     double* const m_inversedDistances;
 
     // Physically calculated time per frame (second)
-    double m_timePerFrame;
+    const double m_timePerFrame;
 };
