@@ -4,7 +4,6 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
-    abstractenginecore.cpp \
     abstractnbodyengine.cpp \
     camera.cpp \
     graphicwindow.cpp \

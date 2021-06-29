@@ -5,7 +5,7 @@ template class AbstractNBodyEngine<double>;
 
 template <typename T>
 AbstractNBodyEngine<T>::AbstractNBodyEngine()
-    : m_modelScale(1.0f)
+    : m_modelScale(1.0)
 {
 }
 
