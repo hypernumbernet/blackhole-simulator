@@ -4,11 +4,11 @@
 
 #include <QObject>
 
-class AbstractEngineCore : public QObject
+class AbstractEngineCoreSingle : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractEngineCore(AbstractNBodyEngine* const, QObject* = nullptr);
+    explicit AbstractEngineCoreSingle(AbstractNBodyEngine<float>* const, QObject* = nullptr);
 
     bool hasRangeTimeProgress(int) const;
     bool hasRangeInteraction(int) const;
@@ -21,11 +21,11 @@ protected:
     void resultReady() const;
     void debug() const;
 
-    AbstractNBodyEngine* const m_engine;
+    AbstractNBodyEngine<float>* const m_engine;
     quint64 m_numberOfParticles;
 
     // Particle coordinates
-    double* const m_coordinates;
+    float* const m_coordinates;
 
     // Particle velocity
     float* const m_velocities;

@@ -30,14 +30,12 @@ public:
     void reset(const bhs::SimCondition&);
 
 private:
-
-    //UpdateUi* const m_updateUi;
     ThreadAdmin* const m_threadAdmin;
 
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
-    AbstractNBodyEngine* m_NBodyEngine;
+    AbstractNBodyEngine<float>* m_NBodyEngine;
 
     // It varies depending on the size of the window.
     float m_pointSizeScale;

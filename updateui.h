@@ -41,6 +41,12 @@ struct SimCondition
     double scale = 1.0e+11;
 };
 
+struct IntRange
+{
+    quint64 start;
+    quint64 end;
+};
+
 inline float randf() {return (float)rand() / (float)RAND_MAX;}
 
 // Random numbers in the range of equality between plus and minus areas

@@ -1,6 +1,6 @@
-#include "abstractenginecore.h"
+#include "abstractenginecoredouble.h"
 
-AbstractEngineCore::AbstractEngineCore(AbstractNBodyEngine* const engine, QObject* parent)
+AbstractEngineCoreDouble::AbstractEngineCoreDouble(AbstractNBodyEngine<double>* const engine, QObject *parent)
     : QObject(parent)
     , m_engine(engine)
     , m_numberOfParticles(engine->numberOfParticle())
@@ -13,12 +13,12 @@ AbstractEngineCore::AbstractEngineCore(AbstractNBodyEngine* const engine, QObjec
 
 }
 
-void AbstractEngineCore::resultReady() const
+void AbstractEngineCoreDouble::resultReady() const
 {
     emit UpdateUi::it().resultReady();
 }
 
-void AbstractEngineCore::debug() const
+void AbstractEngineCoreDouble::debug() const
 {
     for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
     {
@@ -30,13 +30,13 @@ void AbstractEngineCore::debug() const
     }
 }
 
-bool AbstractEngineCore::hasRangeTimeProgress(int threadNum) const
+bool AbstractEngineCoreDouble::hasRangeTimeProgress(int threadNum) const
 {
     auto range = m_engine->timeProgressRanges().at(threadNum);
     return range.end - range.start > 0;
 }
 
-bool AbstractEngineCore::hasRangeInteraction(int threadNum) const
+bool AbstractEngineCoreDouble::hasRangeInteraction(int threadNum) const
 {
     auto range = m_engine->interactionRanges().at(threadNum);
     return range.end - range.start > 0;

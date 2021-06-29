@@ -7,7 +7,7 @@
 // Gravity 3D Mass Integral N-Body Engine
 
 template <typename T>
-class G3DMassIntegralNBE : public AbstractNBodyEngine, private Initializer3D
+class G3DMassIntegralNBE : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
 
@@ -19,57 +19,57 @@ public:
     };
 
     G3DMassIntegralNBE(const bhs::SimCondition& sim)
-        : AbstractNBodyEngine()
-        , Initializer3D(sim, this)
+        : AbstractNBodyEngine<T>()
+        , Initializer3D<T>(sim, this)
     {
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
         case bhs::Preset::RandomSphere:
         case bhs::Preset::RandomBall:
-            setNumberOfParticles(sim.numberOfParticles);
+            this->setNumberOfParticles(sim.numberOfParticles);
             break;
         case bhs::Preset::SunEarth:
         case bhs::Preset::EarthSun:
         case bhs::Preset::EarthMoon:
         case bhs::Preset::TestSamePosition:
-            setNumberOfParticles(2);
+            this->setNumberOfParticles(2);
             break;
         case bhs::Preset::SunEarthVenus:
-            setNumberOfParticles(3);
+            this->setNumberOfParticles(3);
             break;
         }
 
-        m_masses = new float[m_numberOfParticles];
-        m_coordinates = new double[m_numberOfParticles * 3];
-        m_velocities = new float[m_numberOfParticles * 3];
+        this->m_masses = new T[this->m_numberOfParticles];
+        this->m_coordinates = new T[this->m_numberOfParticles * 3];
+        this->m_velocities = new T[this->m_numberOfParticles * 3];
 
         quint64 numberOfInteractions = sim.numberOfParticles * (sim.numberOfParticles - 1) / 2;
-        m_inversedDistances = new float[numberOfInteractions];
+        this->m_inversedDistances = new T[numberOfInteractions];
 
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
-            initRandamCube();
+            this->initRandamCube();
             break;
         case bhs::Preset::RandomSphere:
-            initRandamSphere(0.9f);
+            this->initRandamSphere(0.9f);
             break;
         case bhs::Preset::RandomBall:
-            initRandamSphere(0.0f);
+            this->initRandamSphere(0.0f);
             break;
         case bhs::Preset::SunEarth:
-            initSunEarth();
+            this->initSunEarth();
             break;
         case bhs::Preset::EarthSun:
-            initEarthSun();
+            this->initEarthSun();
             break;
         case bhs::Preset::EarthMoon:
-            initEarthMoon();
+            this->initEarthMoon();
             break;
         case bhs::Preset::TestSamePosition:
-            initTestSamePosition();
+            this->initTestSamePosition();
             break;
         case bhs::Preset::SunEarthVenus:
-            initSunEarthVenus();
+            this->initSunEarthVenus();
             break;
         }
 
@@ -79,30 +79,30 @@ public:
 
     ~G3DMassIntegralNBE()
     {
-        delete[] m_coordinates;
-        delete[] m_velocities;
-        delete[] m_masses;
-        delete[] m_inversedDistances;
+        delete[] this->m_coordinates;
+        delete[] this->m_velocities;
+        delete[] this->m_masses;
+        delete[] this->m_inversedDistances;
     }
 
-    void setTimePerFrame(const float time)
+    void setTimePerFrame(const T time)
     {
-        m_timePerFrame = time;
+        this->m_timePerFrame = time;
         emit UpdateUi::it().displayTimePerFrame(time);
     }
 
     static inline bool calculateDistance(
             Distance& result,
-            const double* const coord,
+            const T* const coord,
             const quint64 a,
             const quint64 b)
     {
         quint64 ai = a * 3;
         quint64 bi = b * 3;
-        float dx = coord[ai] - coord[bi]; ++ai; ++bi;
-        float dy = coord[ai] - coord[bi]; ++ai; ++bi;
-        float dz = coord[ai] - coord[bi];
-        float r = sqrt(dx * dx + dy * dy + dz * dz);
+        T dx = coord[ai] - coord[bi]; ++ai; ++bi;
+        T dy = coord[ai] - coord[bi]; ++ai; ++bi;
+        T dz = coord[ai] - coord[bi];
+        T r = sqrt(dx * dx + dy * dy + dz * dz);
         if (r == 0.0f)
         {
             return false;
@@ -122,18 +122,18 @@ private:
         quint64 k = 0;
         Distance d;
 
-        if (m_numberOfParticles == 0)
+        if (this->m_numberOfParticles == 0)
             return;
 
-        for (quint64 i = 0; i < m_numberOfParticles - 1; ++i)
+        for (quint64 i = 0; i < this->m_numberOfParticles - 1; ++i)
         {
-            for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
+            for (quint64 j = i + 1; j < this->m_numberOfParticles; ++j)
             {
-                if (!calculateDistance(d, m_coordinates, i, j))
+                if (!calculateDistance(d, this->m_coordinates, i, j))
                 {
                     continue;
                 }
-                m_inversedDistances[k] = d.invR;
+                this->m_inversedDistances[k] = d.invR;
 
                 ++k;
             }

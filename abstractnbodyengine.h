@@ -8,61 +8,56 @@
 #include <QDebug>
 #include <QMutex>
 
+template <typename T>
 class AbstractNBodyEngine
 {
 public:
-    static constexpr float GRAVITATIONAL_CONSTANT = 6.6743e-11f; // 2018 CODATA
-    static constexpr float SPEED_OF_LIGHT = 2.99792458e+8f;
-    static constexpr float PI = 3.141592653589793f;
-    static constexpr float VANGLE = PI / SPEED_OF_LIGHT;
-
-    struct IntRange
-    {
-        quint64 start;
-        quint64 end;
-    };
+    static constexpr T GRAVITATIONAL_CONSTANT = 6.6743e-11; // 2018 CODATA
+    static constexpr T SPEED_OF_LIGHT = 2.99792458e+8;
+    static constexpr T PI = 3.141592653589793;
+    static constexpr T VANGLE = PI / SPEED_OF_LIGHT;
 
     explicit AbstractNBodyEngine();
     virtual ~AbstractNBodyEngine();
 
-    double* coordinates() const;
-    float* velocities() const;
-    float* masses() const;
-    float* inversedDistances() const;
+    T* coordinates() const;
+    T* velocities() const;
+    T* masses() const;
+    T* inversedDistances() const;
 
     quint64 numberOfParticle() const;
-    float modelScale() const;
-    float timePerFrame() const;
+    T modelScale() const;
+    T timePerFrame() const;
 
-    void setModelScale(float);
-    void setModelScaleRatio(double);
-    void changeModelScale(float);
+    void setModelScale(T);
+    void setModelScaleRatio(T);
+    void changeModelScale(T);
     int threadCount();
     void resultReady() const;
-    QVector<IntRange> timeProgressRanges() const;
-    QVector<IntRange> interactionRanges() const;
+    QVector<bhs::IntRange> timeProgressRanges() const;
+    QVector<bhs::IntRange> interactionRanges() const;
 
 protected:
     void setNumberOfParticles(quint64);
 
     // Particle coordinates
-    double* m_coordinates;
+    T* m_coordinates;
 
     // Particle velocity
-    float* m_velocities;
+    T* m_velocities;
 
     // Stores the mass of each particle (kg)
-    float* m_masses;
+    T* m_masses;
 
     // Stores the reciprocal of the previously calculated distance.
-    float* m_inversedDistances;
+    T* m_inversedDistances;
 
     // Physically calculated time per frame (second)
-    float m_timePerFrame;
+    T m_timePerFrame;
 
     quint64 m_numberOfParticles;
-    double m_modelScale;
-    double m_scaleCenterValue;
-    QVector<IntRange> m_timeProgressRanges;
-    QVector<IntRange> m_interactionRanges;
+    T m_modelScale;
+    T m_scaleCenterValue;
+    QVector<bhs::IntRange> m_timeProgressRanges;
+    QVector<bhs::IntRange> m_interactionRanges;
 };

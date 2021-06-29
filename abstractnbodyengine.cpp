@@ -2,16 +2,22 @@
 
 #include <QThread>
 
-AbstractNBodyEngine::AbstractNBodyEngine()
+template class AbstractNBodyEngine<float>;
+template class AbstractNBodyEngine<double>;
+
+template <typename T>
+AbstractNBodyEngine<T>::AbstractNBodyEngine()
     : m_modelScale(1.0f)
 {
 }
 
-AbstractNBodyEngine::~AbstractNBodyEngine()
+template <typename T>
+AbstractNBodyEngine<T>::~AbstractNBodyEngine()
 {
 }
 
-void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
+template <typename T>
+void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
 {
     m_numberOfParticles = num;
     emit UpdateUi::it().displayNumberOfParticles(num);
@@ -43,7 +49,7 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
         if (s < 0) {
             m_interactionRanges[i].start = num;
         } else {
-            m_interactionRanges[i].start = j - (int)floor(sqrt((double)s));
+            m_interactionRanges[i].start = j - (int)floor(sqrt((T)s));
         }
     }
     for (int i = 0; i < tcount - 1; ++i)
@@ -53,75 +59,89 @@ void AbstractNBodyEngine::setNumberOfParticles(const quint64 num)
     m_interactionRanges[tcount - 1].end = num;
 }
 
-void AbstractNBodyEngine::setModelScale(const float scale)
+template <typename T>
+void AbstractNBodyEngine<T>::setModelScale(const T scale)
 {
     m_modelScale = scale;
 }
 
-void AbstractNBodyEngine::setModelScaleRatio(const double ratio)
+template <typename T>
+void AbstractNBodyEngine<T>::setModelScaleRatio(const T ratio)
 {
     m_modelScale = m_scaleCenterValue * ratio;
     emit UpdateUi::it().displayModelScale(m_modelScale);
 }
 
-void AbstractNBodyEngine::changeModelScale(const float scale)
+template <typename T>
+void AbstractNBodyEngine<T>::changeModelScale(const T scale)
 {
     m_modelScale = scale;
     m_scaleCenterValue = scale;
     emit UpdateUi::it().displayModelScale(scale);
 }
 
-quint64 AbstractNBodyEngine::numberOfParticle() const
+template <typename T>
+quint64 AbstractNBodyEngine<T>::numberOfParticle() const
 {
     return m_numberOfParticles;
 }
 
-float AbstractNBodyEngine::modelScale() const
+template <typename T>
+T AbstractNBodyEngine<T>::modelScale() const
 {
     return m_modelScale;
 }
 
-double* AbstractNBodyEngine::coordinates() const
+template <typename T>
+T* AbstractNBodyEngine<T>::coordinates() const
 {
     return m_coordinates;
 }
 
-float* AbstractNBodyEngine::masses() const
+template <typename T>
+T* AbstractNBodyEngine<T>::masses() const
 {
     return m_masses;
 }
 
-float* AbstractNBodyEngine::velocities() const
+template <typename T>
+T* AbstractNBodyEngine<T>::velocities() const
 {
     return m_velocities;
 }
 
-float* AbstractNBodyEngine::inversedDistances() const
+template <typename T>
+T* AbstractNBodyEngine<T>::inversedDistances() const
 {
     return m_inversedDistances;
 }
 
-float AbstractNBodyEngine::timePerFrame() const
+template <typename T>
+T AbstractNBodyEngine<T>::timePerFrame() const
 {
     return m_timePerFrame;
 }
 
-int AbstractNBodyEngine::threadCount()
+template <typename T>
+int AbstractNBodyEngine<T>::threadCount()
 {
     return m_timeProgressRanges.size();
 }
 
-void AbstractNBodyEngine::resultReady() const
+template <typename T>
+void AbstractNBodyEngine<T>::resultReady() const
 {
     emit UpdateUi::it().resultReady();
 }
 
-QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::timeProgressRanges() const
+template <typename T>
+QVector<bhs::IntRange> AbstractNBodyEngine<T>::timeProgressRanges() const
 {
     return m_timeProgressRanges;
 }
 
-QVector<AbstractNBodyEngine::IntRange> AbstractNBodyEngine::interactionRanges() const
+template <typename T>
+QVector<bhs::IntRange> AbstractNBodyEngine<T>::interactionRanges() const
 {
     return m_interactionRanges;
 }

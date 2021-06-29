@@ -1,7 +1,7 @@
 #include "g3dmassintegralcore.h"
 
-G3DMassIntegralCore::G3DMassIntegralCore(AbstractNBodyEngine* const engine, QObject* parent)
-    : AbstractEngineCore(engine, parent)
+G3DMassIntegralCore::G3DMassIntegralCore(AbstractNBodyEngine<float>* const engine, QObject* parent)
+    : AbstractEngineCoreSingle(engine, parent)
 {
 
 }
@@ -57,7 +57,7 @@ void G3DMassIntegralCore::calculateInteraction(int threadNumber) const
             }
 
             // Time is not taken into account.
-            force = inv * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT;
+            force = inv * AbstractNBodyEngine<float>::GRAVITATIONAL_CONSTANT;
 
             d.unitX *= force;
             d.unitY *= force;

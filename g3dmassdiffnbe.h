@@ -9,57 +9,58 @@
 
 // Gravity 3D Mass Differential N-Body Engine
 
-class G3DMassDiffNBE : public AbstractNBodyEngine, private Initializer3D
+template <typename T>
+class G3DMassDiffNBE : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
     explicit G3DMassDiffNBE(const bhs::SimCondition& sim)
-        : AbstractNBodyEngine()
-        , Initializer3D(sim, this)
+        : AbstractNBodyEngine<T>()
+        , Initializer3D<T>(sim, this)
     {
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
         case bhs::Preset::RandomSphere:
         case bhs::Preset::RandomBall:
-            setNumberOfParticles(sim.numberOfParticles);
+            this->setNumberOfParticles(sim.numberOfParticles);
             break;
         case bhs::Preset::SunEarth:
         case bhs::Preset::EarthSun:
         case bhs::Preset::EarthMoon:
         case bhs::Preset::TestSamePosition:
-            setNumberOfParticles(2);
+            this->setNumberOfParticles(2);
             break;
         case bhs::Preset::SunEarthVenus:
-            setNumberOfParticles(3);
+            this->setNumberOfParticles(3);
             break;
         }
-        m_masses = new float[m_numberOfParticles];
-        m_coordinates = new double[m_numberOfParticles * 3];
-        m_velocities = new float[m_numberOfParticles * 3];
+        this->m_masses = new T[this->m_numberOfParticles];
+        this->m_coordinates = new T[this->m_numberOfParticles * 3];
+        this->m_velocities = new T[this->m_numberOfParticles * 3];
 
         switch (sim.preset) {
         case bhs::Preset::RandomCube:
-            initRandamCube();
+            this->initRandamCube();
             break;
         case bhs::Preset::RandomSphere:
-            initRandamSphere(0.9f);
+            this->initRandamSphere(0.9f);
             break;
         case bhs::Preset::RandomBall:
-            initRandamSphere(0.0f);
+            this->initRandamSphere(0.0f);
             break;
         case bhs::Preset::SunEarth:
-            initSunEarth();
+            this->initSunEarth();
             break;
         case bhs::Preset::EarthSun:
-            initEarthSun();
+            this->initEarthSun();
             break;
         case bhs::Preset::EarthMoon:
-            initEarthMoon();
+            this->initEarthMoon();
             break;
         case bhs::Preset::TestSamePosition:
-            initTestSamePosition();
+            this->initTestSamePosition();
             break;
         case bhs::Preset::SunEarthVenus:
-            initSunEarthVenus();
+            this->initSunEarthVenus();
             break;
         }
 
@@ -68,14 +69,14 @@ public:
 
     ~G3DMassDiffNBE()
     {
-        delete[] m_coordinates;
-        delete[] m_velocities;
-        delete[] m_masses;
+        delete[] this->m_coordinates;
+        delete[] this->m_velocities;
+        delete[] this->m_masses;
     }
 
     void setTimePerFrame(const float time)
     {
-        m_timePerFrame = time;
+        this->m_timePerFrame = time;
         emit UpdateUi::it().displayTimePerFrame(time);
     }
 };

@@ -4,12 +4,12 @@ using namespace bhs;
 
 // Gravity 3D-Coordinate 3S-Velocity Mass Differential N-Body Engine
 
-G3SVMassDiffCore::G3SVMassDiffCore(AbstractNBodyEngine* const engine, QObject* parent)
-    : AbstractEngineCore(engine, parent)
-    , m_cinv(1.0f / AbstractNBodyEngine::SPEED_OF_LIGHT)
+G3SVMassDiffCore::G3SVMassDiffCore(AbstractNBodyEngine<float>* const engine, QObject* parent)
+    : AbstractEngineCoreSingle(engine, parent)
+    , m_cinv(1.0f / AbstractNBodyEngine<float>::SPEED_OF_LIGHT)
 
     // Half the circumference is assumed to be the speed of light.
-    , m_vangle(AbstractNBodyEngine::PI * m_cinv)
+    , m_vangle(AbstractNBodyEngine<float>::PI * m_cinv)
 
     , m_vangle_inv(1.0f / m_vangle)
 {
@@ -41,7 +41,7 @@ void G3SVMassDiffCore::calculateInteraction(int threadNumber) const
     const quint64 start = m_engine->interactionRanges().at(threadNumber).start;
     const quint64 end = m_engine->interactionRanges().at(threadNumber).end;
     const float vangle_half = m_vangle * 0.5f;
-    const float time_g = m_timePerFrame * AbstractNBodyEngine::GRAVITATIONAL_CONSTANT;
+    const float time_g = m_timePerFrame * AbstractNBodyEngine<float>::GRAVITATIONAL_CONSTANT;
 
     float d1, d2, d3, distance, inv, theta;
     quint64 k = 0, a, b;

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "abstractenginecore.h"
+#include "abstractenginecoresingle.h"
 #include "quaternion.h"
 
-class G3SVMassDiffCore : public AbstractEngineCore
+class G3SVMassDiffCore : public AbstractEngineCoreSingle
 {
     Q_OBJECT
 public:
-    explicit G3SVMassDiffCore(AbstractNBodyEngine* const, QObject* = nullptr);
+    explicit G3SVMassDiffCore(AbstractNBodyEngine<float>* const, QObject* = nullptr);
 
 public slots:
     void calculateTimeProgress(int threadNumber) const;

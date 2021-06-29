@@ -42,7 +42,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     switch (sim.engine) {
     default:
-        m_NBodyEngine = new G3DMassDiffNBE(sim);
+        m_NBodyEngine = new G3DMassDiffNBE<float>(sim);
 
         for (int i = 0; i < m_threadAdmin->size(); ++i) {
             m_threadAdmin->at(i)->initialize(new G3DMassDiffCore(m_NBodyEngine));
@@ -83,12 +83,17 @@ void Particles::updateGL()
 
     const int VECTOR_SIZE = 3;
 
+//    GLenum precision = GL_DOUBLE;
+//    quint64 size = sizeof(double);
+    GLenum precision = GL_FLOAT;
+    quint64 size = sizeof(float);
+
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(m_NBodyEngine->coordinates(), m_NBodyEngine->numberOfParticle() * VECTOR_SIZE * sizeof(double));
+    glBuf.allocate(m_NBodyEngine->coordinates(), m_NBodyEngine->numberOfParticle() * VECTOR_SIZE * size);
     m_program.enableAttributeArray(0);
-    m_program.setAttributeBuffer(0, GL_DOUBLE, 0, VECTOR_SIZE);
+    m_program.setAttributeBuffer(0, precision, 0, VECTOR_SIZE);
 
     m_vao.release();
 }

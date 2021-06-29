@@ -11,12 +11,12 @@ ThreadController::~ThreadController()
     workerThread.wait();
 }
 
-void ThreadController::initialize(AbstractEngineCore* const core)
+void ThreadController::initialize(AbstractEngineCoreSingle* const core)
 {
     m_core = core;
     core->moveToThread(&workerThread);
-    connect(this, &ThreadController::calculateTimeProgress, core, &AbstractEngineCore::calculateTimeProgress);
-    connect(this, &ThreadController::calculateInteraction, core, &AbstractEngineCore::calculateInteraction);
+    connect(this, &ThreadController::calculateTimeProgress, core, &AbstractEngineCoreSingle::calculateTimeProgress);
+    connect(this, &ThreadController::calculateInteraction, core, &AbstractEngineCoreSingle::calculateInteraction);
     workerThread.start();
 }
 
