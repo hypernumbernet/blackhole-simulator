@@ -42,24 +42,21 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
     if (sim.precision == bhs::Precision::Single) {
         switch (sim.engine) {
-        case 0:
+        case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineSingle = new G3DMassDiffNBE<float>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3DMassDiffCoreSingle(m_NBodyEngineSingle));
             }
             break;
-        case 1:
+        case bhs::Engine::G3DMassIntegral:
             m_NBodyEngineSingle = new G3DMassIntegralNBE<float>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3DMassIntegralCoreSingle(m_NBodyEngineSingle));
             }
             break;
-        case 2:
+        case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineSingle = new G3D4DMassDiffNBE<float>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3D4DMassDiffCoreSingle(m_NBodyEngineSingle));
             }
@@ -67,38 +64,30 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         }
     } else {
         switch (sim.engine) {
-        case 0:
+        case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineDouble = new G3DMassDiffNBE<double>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3DMassDiffCoreDouble(m_NBodyEngineDouble));
             }
             break;
-        case 1:
+        case bhs::Engine::G3DMassIntegral:
             m_NBodyEngineDouble = new G3DMassIntegralNBE<double>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3DMassIntegralCoreDouble(m_NBodyEngineDouble));
             }
             break;
-        case 2:
+        case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineDouble = new G3D4DMassDiffNBE<double>(sim);
-
             for (int i = 0; i < m_threadAdmin->size(); ++i) {
                 m_threadAdmin->at(i)->initialize(new G3D4DMassDiffCoreDouble(m_NBodyEngineDouble));
             }
             break;
         }
     }
-
-    QString engine = UpdateUi::it().ENGINE->value(sim.engine);
-    emit UpdateUi::it().displayEngineName(engine);
-
+    emit UpdateUi::it().displayEngineName(sim.engine);
     emit UpdateUi::it().displayPrecision(sim.precision);
-
-    QString preset = UpdateUi::it().PRESET->value(sim.preset);
-    emit UpdateUi::it().displayPresetName(preset);
+    emit UpdateUi::it().displayPresetName(sim.preset);
 
     m_precision = sim.precision;
 }

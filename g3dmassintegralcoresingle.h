@@ -60,9 +60,7 @@ public slots:
                 inv -= d.invR;
 
                 if (inv == 0.0f)
-                {
                     continue;
-                }
 
                 // Time is not taken into account.
                 force = inv * AbstractNBodyEngine<float>::GRAVITATIONAL_CONSTANT;

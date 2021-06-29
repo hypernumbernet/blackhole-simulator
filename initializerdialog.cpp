@@ -13,9 +13,9 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 
     for (const auto& e : UpdateUi::it().ENGINE->toStdMap()) {
         auto radio = new QRadioButton(e.second);
-        m_engineButtonGroup.addButton(radio, e.first);
+        m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
         engineVbox->addWidget(radio);
-        if (e.first == 0)
+        if (e.first == bhs::Engine::G3DMassDiff)
             radio->setChecked(true);
     }
 
@@ -27,14 +27,13 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     auto precisionGroup = new QGroupBox(tr("Precision"));
     auto precisionHbox = new QHBoxLayout;
 
-    auto precisionSingleRadio = new QRadioButton(tr("Single"));
-    m_precisionButtonGroup.addButton(precisionSingleRadio, 0);
-    precisionHbox->addWidget(precisionSingleRadio);
-
-    auto precisionDoubleRadio = new QRadioButton(tr("Double"));
-    m_precisionButtonGroup.addButton(precisionDoubleRadio, 1);
-    precisionHbox->addWidget(precisionDoubleRadio);
-    precisionDoubleRadio->setChecked(true);
+    for (const auto& e : UpdateUi::it().PRECISION->toStdMap()) {
+        auto radio = new QRadioButton(e.second);
+        m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
+        precisionHbox->addWidget(radio);
+        if (e.first == bhs::Precision::Double)
+            radio->setChecked(true);
+    }
 
     precisionGroup->setLayout(precisionHbox);
     firstLayout->addWidget(precisionGroup);
@@ -152,7 +151,7 @@ bool InitializerDialog::validate()
     QPalette NGPal(palette());
     NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
-    m_simCondition.engine = m_engineButtonGroup.checkedId();
+    m_simCondition.engine = static_cast<bhs::Engine>(m_engineButtonGroup.checkedId());
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
     m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());

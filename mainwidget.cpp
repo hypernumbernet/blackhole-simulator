@@ -265,9 +265,9 @@ void MainWidget::acceptInitializerDialog()
     reset(m_simCondition);
 }
 
-void MainWidget::displayEngineName(const QString& name)
+void MainWidget::displayEngineName(const bhs::Engine engine)
 {
-    m_engineValue.setText(name);
+    m_engineValue.setText(UpdateUi::it().ENGINE->value(engine));
 }
 
 void MainWidget::reset(const bhs::SimCondition& sim)
@@ -277,9 +277,9 @@ void MainWidget::reset(const bhs::SimCondition& sim)
     updateStartButtonText(false);
 }
 
-void MainWidget::displayPresetName(const QString& name)
+void MainWidget::displayPresetName(const bhs::Preset preset)
 {
-    m_presetValue.setText(name);
+    m_presetValue.setText(UpdateUi::it().PRESET->value(preset));
 }
 
 void MainWidget::resetInitial()

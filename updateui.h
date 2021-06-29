@@ -11,6 +11,19 @@
 namespace bhs // Black Hole Simulator
 {
 
+enum class Engine
+{
+    G3DMassDiff,
+    G3DMassIntegral,
+    G3D4DMassDiff,
+};
+
+enum class Precision
+{
+    Single,
+    Double,
+};
+
 enum class Preset
 {
     RandomCube,
@@ -23,16 +36,10 @@ enum class Preset
     TestSamePosition,
 };
 
-enum class Precision
-{
-    Single,
-    Double,
-};
-
 struct SimCondition
 {
+    Engine engine = Engine::G3DMassDiff;
     Precision precision= Precision::Double;
-    int engine = 0;
     Preset preset = Preset::RandomCube;
     double timePerFrame = 1000.0;
     int numberOfParticles = 800;
@@ -80,7 +87,7 @@ public:
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
 
-    const QMap<int, QString>* const ENGINE;
+    const QMap<bhs::Engine, QString>* const ENGINE;
     const QMap<bhs::Precision, QString>* const PRECISION;
     const QMap<bhs::Preset, QString>* const PRESET;
 
@@ -92,10 +99,10 @@ public:
 
 private:
     UpdateUi()
-        : ENGINE(new QMap<int, QString>{
-            {0, tr("Gravity 3D Mass Differential")},
-            {1, tr("Gravity 3D Mass Integral (Exp.)")},
-            {2, tr("Gravity 3S-Velocity M. Diff.")},
+        : ENGINE(new QMap<bhs::Engine, QString>{
+            {bhs::Engine::G3DMassDiff, tr("Gravity 3D Mass Differential")},
+            {bhs::Engine::G3DMassIntegral, tr("Gravity 3D Mass Integral (Exp.)")},
+            {bhs::Engine::G3D4DMassDiff, tr("Gravity 3S-Velocity M. Diff.")},
             //{0, tr("Gravity3DIntegral")},
             //{0, tr("Gravity2DDifferential")},
             //{0, tr("Gravity2DIntegral")},
@@ -125,10 +132,10 @@ signals:
     void displayModelScale(float);
     void displayTimePerFrame(float);
     void updateStartButtonText(bool);
-    void displayEngineName(const QString&);
-    void displayPresetName(const QString&);
     void frameAdvance(int);
     void resultReady();
     void resetParticles();
+    void displayEngineName(bhs::Engine);
     void displayPrecision(bhs::Precision);
+    void displayPresetName(bhs::Preset);
 };

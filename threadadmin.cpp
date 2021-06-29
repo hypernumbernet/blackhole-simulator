@@ -110,7 +110,7 @@ int ThreadAdmin::size() const
     return m_controllers.size();
 }
 
-ThreadController*  ThreadAdmin::at(int i) const
+ThreadController* ThreadAdmin::at(int i) const
 {
     return m_controllers.at(i);
 }

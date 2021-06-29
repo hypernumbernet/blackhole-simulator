@@ -30,11 +30,11 @@ public slots:
     void displayTimePerFrame(float);
     void showInitializerDialog();
     void acceptInitializerDialog();
-    void displayEngineName(const QString&);
     void resetInitial();
-    void displayPresetName(const QString&);
     void displayNumberOfParticles(int);
+    void displayEngineName(bhs::Engine);
     void displayPrecision(bhs::Precision);
+    void displayPresetName(bhs::Preset);
 
 private:
     void initUi();
@@ -43,7 +43,6 @@ private:
     void displayStyle(QLCDNumber&);
     void displayStyle(QLabel&);
 
-    //UpdateUi m_updateUi;
     GraphicWindow m_graphicWindows;
     QHBoxLayout m_hLayout;
     QVBoxLayout m_vLayout;

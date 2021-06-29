@@ -33,15 +33,7 @@ public:
         return range.end - range.start > 0;
     }
 
-public slots:
-    virtual void calculateTimeProgress(int threadNumber) const = 0;
-    virtual void calculateInteraction(int threadNumber) const = 0;
-
 protected:
-    void resultReady() const
-    {
-        emit UpdateUi::it().resultReady();
-    }
 
     void debug() const
     {
