@@ -17,17 +17,17 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
-class Particles : private QOpenGLFunctions_4_5_Core
+class ParticleShaders : private QOpenGLFunctions_4_5_Core
 {
 public:
-    explicit Particles(ThreadAdmin*);
-    ~Particles();
+    explicit ParticleShaders(ThreadAdmin*);
+    ~ParticleShaders();
 
     bool initialize(int screenHeight);
     void paint(const QMatrix4x4& viewProjection);
     void resize(int height);
     void updateGL();
-    void selectNBodyEngine(const bhs::SimCondition&);
+    void setNBodyEngine(const bhs::SimCondition&);
     void setModelScale(double);
     void setModelScaleRatio(double);
     void reset(const bhs::SimCondition&);

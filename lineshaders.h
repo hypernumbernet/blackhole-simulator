@@ -10,11 +10,11 @@
 #include <QOpenGLBuffer>
 #include <QVector>
 
-class WorldModels : private QOpenGLFunctions_4_5_Core
+class LineShaders : private QOpenGLFunctions_4_5_Core
 {
 public:
-    WorldModels();
-    ~WorldModels();
+    LineShaders();
+    ~LineShaders();
 
     bool initialize();
     void paint(const QMatrix4x4& viewProjection);

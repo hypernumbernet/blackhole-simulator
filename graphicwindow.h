@@ -1,8 +1,8 @@
 #pragma once
 
 #include "camera.h"
-#include "worldmodels.h"
-#include "particles.h"
+#include "lineshaders.h"
+#include "particleshaders.h"
 #include "updateui.h"
 #include "threadadmin.h"
 
@@ -55,8 +55,8 @@ private:
     void wheelEvent(QWheelEvent*) override;
 
     ThreadAdmin  m_threadAdmin;
-    WorldModels* const m_worldModels; // TODO not pointer
-    Particles* const m_particleModels; // TODO not pointer
+    LineShaders* const m_worldModels;
+    ParticleShaders* const m_particleModels;
 
     float m_walkSpeed;
     float m_lookAroundSpeed;
@@ -72,9 +72,9 @@ private:
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     const bhs::SimCondition* m_simCondition = nullptr;
-    GLint m_maxComputeWorkSizeX;
-    GLint m_maxComputeWorkSizeY;
-    GLint m_maxComputeWorkSizeZ;
+    GLint m_maxComputeWorkCountX;
+    GLint m_maxComputeWorkCountY;
+    GLint m_maxComputeWorkCountZ;
     GLint m_maxConputeWorkInvocations;
-    quint64 m_maxComputeWorkSize;
+    quint64 m_maxComputeWorkCount;
 };

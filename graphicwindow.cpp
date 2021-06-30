@@ -2,8 +2,8 @@
 
 GraphicWindow::GraphicWindow()
     : m_threadAdmin(this)
-    , m_worldModels(new WorldModels)
-    , m_particleModels(new Particles(&m_threadAdmin))
+    , m_worldModels(new LineShaders)
+    , m_particleModels(new ParticleShaders(&m_threadAdmin))
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -40,13 +40,13 @@ void GraphicWindow::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkSizeX);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkSizeY);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkSizeZ);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkCountX);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkCountY);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkCountZ);
 
     glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
 
-    m_maxComputeWorkSize = m_maxComputeWorkSizeX * m_maxComputeWorkSizeY * m_maxComputeWorkSizeZ;
+    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -61,7 +61,7 @@ void GraphicWindow::initializeGL()
     }
 
     bhs::SimCondition sim;
-    m_particleModels->selectNBodyEngine(sim);
+    m_particleModels->setNBodyEngine(sim);
     m_particleModels->updateGL();
     paintGL();
 

@@ -10,12 +10,12 @@ SOURCES += \
     initializer3d.cpp \
     initializer3d4d.cpp \
     initializerdialog.cpp \
+    lineshaders.cpp \
     main.cpp \
     mainwidget.cpp \
-    particles.cpp \
+    particleshaders.cpp \
     threadadmin.cpp \
-    threadcontroller.cpp \
-    worldmodels.cpp
+    threadcontroller.cpp
 
 HEADERS += \
     abstractenginecore.h \
@@ -37,14 +37,14 @@ HEADERS += \
     initializer3d.h \
     initializer3d4d.h \
     initializerdialog.h \
+    lineshaders.h \
     mainwidget.h \
-    particles.h \
+    particleshaders.h \
     quaternion.h \
     threadadmin.h \
     threadcontroller.h \
     updateui.h \
-    vector3.h \
-    worldmodels.h
+    vector3.h
 
 RESOURCES += \
     shaders.qrc

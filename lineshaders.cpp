@@ -1,13 +1,13 @@
-#include "worldmodels.h"
+#include "lineshaders.h"
 
-WorldModels::WorldModels()
+LineShaders::LineShaders()
     : m_enableGridLines(true)
     , m_lineType(0)
 {
     linesXZMeshes();
 }
 
-void WorldModels::appendLine(const QVector3D& start, const QVector3D& end, const QVector3D& color)
+void LineShaders::appendLine(const QVector3D& start, const QVector3D& end, const QVector3D& color)
 {
     m_vertex.append(start);
     m_vertex.append(color);
@@ -15,12 +15,12 @@ void WorldModels::appendLine(const QVector3D& start, const QVector3D& end, const
     m_vertex.append(color);
 }
 
-WorldModels::~WorldModels()
+LineShaders::~LineShaders()
 {
     m_vao.destroy();
 }
 
-bool WorldModels::initialize()
+bool LineShaders::initialize()
 {
     if (!initializeOpenGLFunctions()) {
         return false;
@@ -41,7 +41,7 @@ bool WorldModels::initialize()
     return true;
 }
 
-void WorldModels::initGridLines()
+void LineShaders::initGridLines()
 {
     m_vao.bind();
 
@@ -61,7 +61,7 @@ void WorldModels::initGridLines()
     m_vao.release();
 }
 
-void WorldModels::paint(const QMatrix4x4& viewProjection)
+void LineShaders::paint(const QMatrix4x4& viewProjection)
 {
     if (m_enableGridLines) {
         m_program.bind();
@@ -76,12 +76,12 @@ void WorldModels::paint(const QMatrix4x4& viewProjection)
     }
 }
 
-void WorldModels::enableGridLines(const bool enabled)
+void LineShaders::enableGridLines(const bool enabled)
 {
     m_enableGridLines = enabled;
 }
 
-void WorldModels::changeLineType()
+void LineShaders::changeLineType()
 {
     m_vertex.clear();
     ++m_lineType;
@@ -104,14 +104,14 @@ void WorldModels::changeLineType()
     initGridLines();
 }
 
-void WorldModels::linesAxis()
+void LineShaders::linesAxis()
 {
     appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
 }
 
-void WorldModels::lines2Meshes()
+void LineShaders::lines2Meshes()
 {
     for (int i = 0; i < 3; ++i) {
         appendLine({-1.0f, -1.0f, i - 1.0f}, {1.0f, -1.0f, i - 1.0f}, RED);
@@ -125,7 +125,7 @@ void WorldModels::lines2Meshes()
     }
 }
 
-void WorldModels::linesXZMeshes()
+void LineShaders::linesXZMeshes()
 {
     for (int i = -10; i <= 10; ++i) {
         appendLine({-10, 0.0f, (float)i}, {10, 0.0f, (float)i}, RED);
@@ -134,7 +134,7 @@ void WorldModels::linesXZMeshes()
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
 }
 
-void WorldModels::drawCircle(const int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color)
+void LineShaders::drawCircle(const int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color)
 {
     float degree = 360.0f / (float)resolution;
     QVector3D prev = startPoint;
@@ -148,7 +148,7 @@ void WorldModels::drawCircle(const int resolution, const QVector3D& axis, const 
     }
 }
 
-void WorldModels::linesCubeMeshes()
+void LineShaders::linesCubeMeshes()
 {
     int resolution = 36;
     float angle = 10.0f;

@@ -1,18 +1,18 @@
-#include "particles.h"
+#include "particleshaders.h"
 
-Particles::Particles(ThreadAdmin* const threadAdmin)
+ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)
     , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
 {
 }
 
-Particles::~Particles()
+ParticleShaders::~ParticleShaders()
 {
     m_vao.destroy();
 }
 
-bool Particles::initialize(const int screenHeight)
+bool ParticleShaders::initialize(const int screenHeight)
 {
     m_initHeight = screenHeight;
     if (!initializeOpenGLFunctions()) {
@@ -38,7 +38,7 @@ bool Particles::initialize(const int screenHeight)
     return true;
 }
 
-void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
+void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
 {
     if (sim.precision == bhs::Precision::Float) {
         switch (sim.engine) {
@@ -81,7 +81,7 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 }
 
 // This function must be called from the GUI thread.
-void Particles::updateGL()
+void ParticleShaders::updateGL()
 {
     if (numberOfParticle() == 0)
         return;
@@ -107,7 +107,7 @@ void Particles::updateGL()
     m_vao.release();
 }
 
-void Particles::paint(const QMatrix4x4& viewProjection)
+void ParticleShaders::paint(const QMatrix4x4& viewProjection)
 {
     if (numberOfParticle() == 0)
         return;
@@ -126,12 +126,12 @@ void Particles::paint(const QMatrix4x4& viewProjection)
     m_program.release();
 }
 
-void Particles::resize(int height)
+void ParticleShaders::resize(int height)
 {
     m_pointSizeScale = (double)height / (double)m_initHeight;
 }
 
-void Particles::reset(const bhs::SimCondition& sim)
+void ParticleShaders::reset(const bhs::SimCondition& sim)
 {
     if (m_NBodyEngineFloat) {
         delete m_NBodyEngineFloat;
@@ -141,10 +141,10 @@ void Particles::reset(const bhs::SimCondition& sim)
         delete m_NBodyEngineDouble;
         m_NBodyEngineDouble = nullptr;
     }
-    selectNBodyEngine(sim);
+    setNBodyEngine(sim);
 }
 
-void Particles::setModelScale(double val)
+void ParticleShaders::setModelScale(double val)
 {
     if (m_NBodyEngineFloat) {
         m_NBodyEngineFloat->setModelScale(val);
@@ -154,7 +154,7 @@ void Particles::setModelScale(double val)
     }
 }
 
-void Particles::setModelScaleRatio(double val)
+void ParticleShaders::setModelScaleRatio(double val)
 {
     if (m_NBodyEngineFloat) {
         m_NBodyEngineFloat->setModelScaleRatio(val);
@@ -164,7 +164,7 @@ void Particles::setModelScaleRatio(double val)
     }
 }
 
-quint64 Particles::numberOfParticle() const
+quint64 ParticleShaders::numberOfParticle() const
 {
     quint64 ret = 0;
     if (m_NBodyEngineFloat) {
@@ -176,7 +176,7 @@ quint64 Particles::numberOfParticle() const
     return ret;
 }
 
-const void* Particles::coordinates() const
+const void* ParticleShaders::coordinates() const
 {
     const void* ret = nullptr;
     if (m_NBodyEngineFloat) {
@@ -188,7 +188,7 @@ const void* Particles::coordinates() const
     return ret;
 }
 
-double Particles::modelScale() const
+double ParticleShaders::modelScale() const
 {
     double ret = 0.0;
     if (m_NBodyEngineFloat) {
