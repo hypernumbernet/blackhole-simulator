@@ -40,20 +40,20 @@ bool Particles::initialize(const int screenHeight)
 
 void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
 {
-    if (sim.precision == bhs::Precision::Single) {
+    if (sim.precision == bhs::Precision::Float) {
         switch (sim.engine) {
         case bhs::Engine::G3DMassDiff:
         default:
-            m_NBodyEngineSingle = new G3DMassDiffNBE<float>(sim);
-            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3DMassDiffCoreSingle::factory);
+            m_NBodyEngineFloat = new G3DMassDiffNBE<float>(sim);
+            m_threadAdmin->initializeFloat(m_NBodyEngineFloat, G3DMassDiffCoreFloat::factory);
             break;
         case bhs::Engine::G3DMassIntegral:
-            m_NBodyEngineSingle = new G3DMassIntegralNBE<float>(sim);
-            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3DMassIntegralCoreSingle::factory);
+            m_NBodyEngineFloat = new G3DMassIntegralNBE<float>(sim);
+            m_threadAdmin->initializeFloat(m_NBodyEngineFloat, G3DMassIntegralCoreFloat::factory);
             break;
         case bhs::Engine::G3D4DMassDiff:
-            m_NBodyEngineSingle = new G3D4DMassDiffNBE<float>(sim);
-            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3D4DMassDiffCoreSingle::factory);
+            m_NBodyEngineFloat = new G3D4DMassDiffNBE<float>(sim);
+            m_threadAdmin->initializeFloat(m_NBodyEngineFloat, G3D4DMassDiffCoreFloat::factory);
             break;
         }
     } else {
@@ -92,7 +92,7 @@ void Particles::updateGL()
     GLenum precision = GL_DOUBLE;
     quint64 size = sizeof(double);
 
-    if (m_precision == bhs::Precision::Single) {
+    if (m_precision == bhs::Precision::Float) {
         precision = GL_FLOAT;
         size = sizeof(float);
     }
@@ -135,9 +135,9 @@ void Particles::resize(int height)
 
 void Particles::reset(const bhs::SimCondition& sim)
 {
-    if (m_NBodyEngineSingle) {
-        delete m_NBodyEngineSingle;
-        m_NBodyEngineSingle = nullptr;
+    if (m_NBodyEngineFloat) {
+        delete m_NBodyEngineFloat;
+        m_NBodyEngineFloat = nullptr;
     }
     if (m_NBodyEngineDouble) {
         delete m_NBodyEngineDouble;
@@ -148,8 +148,8 @@ void Particles::reset(const bhs::SimCondition& sim)
 
 void Particles::setModelScale(double val)
 {
-    if (m_NBodyEngineSingle) {
-        m_NBodyEngineSingle->setModelScale(val);
+    if (m_NBodyEngineFloat) {
+        m_NBodyEngineFloat->setModelScale(val);
     }
     if (m_NBodyEngineDouble) {
         m_NBodyEngineDouble->setModelScale(val);
@@ -158,8 +158,8 @@ void Particles::setModelScale(double val)
 
 void Particles::setModelScaleRatio(double val)
 {
-    if (m_NBodyEngineSingle) {
-        m_NBodyEngineSingle->setModelScaleRatio(val);
+    if (m_NBodyEngineFloat) {
+        m_NBodyEngineFloat->setModelScaleRatio(val);
     }
     if (m_NBodyEngineDouble) {
         m_NBodyEngineDouble->setModelScaleRatio(val);
@@ -169,8 +169,8 @@ void Particles::setModelScaleRatio(double val)
 quint64 Particles::numberOfParticle() const
 {
     quint64 ret = 0;
-    if (m_NBodyEngineSingle) {
-        ret = m_NBodyEngineSingle->numberOfParticle();
+    if (m_NBodyEngineFloat) {
+        ret = m_NBodyEngineFloat->numberOfParticle();
     }
     if (m_NBodyEngineDouble) {
         ret = m_NBodyEngineDouble->numberOfParticle();
@@ -181,8 +181,8 @@ quint64 Particles::numberOfParticle() const
 const void* Particles::coordinates() const
 {
     const void* ret = nullptr;
-    if (m_NBodyEngineSingle) {
-        ret = m_NBodyEngineSingle->coordinates();
+    if (m_NBodyEngineFloat) {
+        ret = m_NBodyEngineFloat->coordinates();
     }
     if (m_NBodyEngineDouble) {
         ret = m_NBodyEngineDouble->coordinates();
@@ -193,8 +193,8 @@ const void* Particles::coordinates() const
 double Particles::modelScale() const
 {
     double ret = 0.0;
-    if (m_NBodyEngineSingle) {
-        ret = m_NBodyEngineSingle->modelScale();
+    if (m_NBodyEngineFloat) {
+        ret = m_NBodyEngineFloat->modelScale();
     }
     if (m_NBodyEngineDouble) {
         ret = m_NBodyEngineDouble->modelScale();

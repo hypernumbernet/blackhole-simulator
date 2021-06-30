@@ -1,20 +1,20 @@
 #pragma once
 
-#include "abstractenginecoresingle.h"
+#include "abstractenginecorefloat.h"
 
-class G3DMassDiffCoreSingle : public AbstractEngineCoreSingle
+class G3DMassDiffCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    explicit G3DMassDiffCoreSingle(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreSingle(engine, parent)
+    explicit G3DMassDiffCoreFloat(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
+        : AbstractEngineCoreFloat(engine, parent)
     {
 
     }
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine)
     {
-        return new G3DMassDiffCoreSingle(engine);
+        return new G3DMassDiffCoreFloat(engine);
     }
 
 public slots:

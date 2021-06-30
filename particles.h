@@ -1,13 +1,13 @@
 #pragma once
 
 #include "g3dmassdiffnbe.h"
-#include "g3dmassdiffcoresingle.h"
+#include "g3dmassdiffcorefloat.h"
 #include "g3dmassdiffcoredouble.h"
 #include "g3dmassintegralnbe.h"
-#include "g3dmassintegralcoresingle.h"
+#include "g3dmassintegralcorefloat.h"
 #include "g3dmassintegralcoredouble.h"
 #include "g3d4dmassdiffnbe.h"
-#include "g3d4dmassdiffcoresingle.h"
+#include "g3d4dmassdiffcorefloat.h"
 #include "g3d4dmassdiffcoredouble.h"
 
 #include <math.h>
@@ -42,7 +42,7 @@ private:
     QOpenGLShaderProgram m_program;
     QOpenGLVertexArrayObject m_vao;
 
-    AbstractNBodyEngine<float>* m_NBodyEngineSingle = nullptr;
+    AbstractNBodyEngine<float>* m_NBodyEngineFloat = nullptr;
     AbstractNBodyEngine<double>* m_NBodyEngineDouble = nullptr;
 
     // It varies depending on the size of the window.

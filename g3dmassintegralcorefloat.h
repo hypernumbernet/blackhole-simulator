@@ -1,21 +1,21 @@
 #pragma once
 
-#include "abstractenginecoresingle.h"
+#include "abstractenginecorefloat.h"
 #include "g3dmassintegralnbe.h"
 
-class G3DMassIntegralCoreSingle : public AbstractEngineCoreSingle
+class G3DMassIntegralCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 
 public:
-    explicit G3DMassIntegralCoreSingle(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreSingle(engine, parent)
+    explicit G3DMassIntegralCoreFloat(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
+        : AbstractEngineCoreFloat(engine, parent)
     {
     }
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine)
     {
-        return new G3DMassIntegralCoreSingle(engine);
+        return new G3DMassIntegralCoreFloat(engine);
     }
 
 public slots:

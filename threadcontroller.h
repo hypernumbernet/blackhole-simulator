@@ -1,7 +1,7 @@
 #pragma once
 
 #include "abstractenginecore.h"
-#include "abstractenginecoresingle.h"
+#include "abstractenginecorefloat.h"
 #include "abstractenginecoredouble.h"
 
 #include <QObject>

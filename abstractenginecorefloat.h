@@ -5,11 +5,11 @@
 
 #include <QObject>
 
-class AbstractEngineCoreSingle : public AbstractEngineCore
+class AbstractEngineCoreFloat : public AbstractEngineCore
 {
     Q_OBJECT
 public:
-    explicit AbstractEngineCoreSingle(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
+    explicit AbstractEngineCoreFloat(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
         : AbstractEngineCore(parent)
         , m_engine(engine)
         , m_numberOfParticles(engine->numberOfParticle())

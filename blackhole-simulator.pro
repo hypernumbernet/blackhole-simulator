@@ -20,18 +20,18 @@ SOURCES += \
 HEADERS += \
     abstractenginecore.h \
     abstractenginecoredouble.h \
-    abstractenginecoresingle.h \
+    abstractenginecorefloat.h \
     abstractinitializer.h \
     abstractnbodyengine.h \
     camera.h \
     g3d4dmassdiffcoredouble.h \
-    g3d4dmassdiffcoresingle.h \
+    g3d4dmassdiffcorefloat.h \
     g3d4dmassdiffnbe.h \
     g3dmassdiffcoredouble.h \
-    g3dmassdiffcoresingle.h \
+    g3dmassdiffcorefloat.h \
     g3dmassdiffnbe.h \
     g3dmassintegralcoredouble.h \
-    g3dmassintegralcoresingle.h \
+    g3dmassintegralcorefloat.h \
     g3dmassintegralnbe.h \
     graphicwindow.h \
     initializer3d.h \

@@ -20,7 +20,7 @@ enum class Engine
 
 enum class Precision
 {
-    Single,
+    Float,
     Double,
 };
 
@@ -108,7 +108,7 @@ private:
             //{0, tr("Gravity2DIntegral")},
         })
         , PRECISION(new QMap<bhs::Precision, QString>{
-            {bhs::Precision::Single, tr("Single")},
+            {bhs::Precision::Float, tr("Float")},
             {bhs::Precision::Double, tr("Double")},
         })
         , PRESET(new QMap<bhs::Preset, QString>{

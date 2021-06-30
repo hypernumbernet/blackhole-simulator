@@ -1,16 +1,16 @@
 #pragma once
 
-#include "abstractenginecoresingle.h"
+#include "abstractenginecorefloat.h"
 #include "quaternion.h"
 
 using namespace bhs;
 
-class G3D4DMassDiffCoreSingle : public AbstractEngineCoreSingle
+class G3D4DMassDiffCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    explicit G3D4DMassDiffCoreSingle(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreSingle(engine, parent)
+    explicit G3D4DMassDiffCoreFloat(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
+        : AbstractEngineCoreFloat(engine, parent)
         , m_cinv(1.0f / AbstractNBodyEngine<float>::SPEED_OF_LIGHT)
 
         // Half the circumference is assumed to be the speed of light.
@@ -22,7 +22,7 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine)
     {
-        return new G3D4DMassDiffCoreSingle(engine);
+        return new G3D4DMassDiffCoreFloat(engine);
     }
 
 public slots:
