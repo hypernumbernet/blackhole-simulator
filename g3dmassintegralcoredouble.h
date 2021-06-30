@@ -13,6 +13,11 @@ public:
     {
     }
 
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine)
+    {
+        return new G3DMassIntegralCoreDouble(engine);
+    }
+
 public slots:
     void calculateTimeProgress(int threadNumber) const
     {
@@ -45,7 +50,7 @@ public slots:
 
         double* vels = new double[m_numberOfParticles * 3];
         for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
-            vels[i] = 0.0f;
+            vels[i] = 0.0;
         }
 
         for (quint64 i = start; i < end; ++i)
@@ -59,7 +64,7 @@ public slots:
                 m_inversedDistances[k] = d.invR;
                 inv -= d.invR;
 
-                if (inv == 0.0f)
+                if (inv == 0.0)
                     continue;
 
                 // Time is not taken into account.

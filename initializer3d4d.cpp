@@ -9,7 +9,7 @@ void Initializer3D4D<T>::initRandamCube()
     this->m_engine->changeModelScale(1.0 / this->m_sim.scale);
 
     const quint64 num = this->m_engine->numberOfParticle();
-    T* const coordinates = this->m_engine->coordinates();
+    T* const coordinates = (T*)this->m_engine->coordinates();
     T* const velocities = this->m_engine->velocities();
 
     T* const masses = this->m_engine->masses();
@@ -51,7 +51,7 @@ void Initializer3D4D<T>::initRandamSphere(const T rate)
 
     quint64 num = this->m_engine->numberOfParticle();
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     if (this->m_sim.massRandom) {
@@ -107,7 +107,7 @@ void Initializer3D4D<T>::initSunEarth()
     this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     masses[0] = (T)1.9891e+30;
@@ -131,7 +131,7 @@ void Initializer3D4D<T>::initEarthSun()
     this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     masses[0] = (T)5.972e+24;
@@ -157,7 +157,7 @@ void Initializer3D4D<T>::initEarthMoon()
     this->m_engine->changeModelScale((T)0.25e-8);
 
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     masses[0] = (T)5.972e+24;
@@ -183,7 +183,7 @@ void Initializer3D4D<T>::initSunEarthVenus()
     this->m_engine->changeModelScale((T)1.0e-11);
 
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     masses[0] = (T)1.9891e+30;
@@ -216,7 +216,7 @@ void Initializer3D4D<T>::initTestSamePosition()
     this->m_engine->changeModelScale(1.0);
 
     T* masses = this->m_engine->masses();
-    T* coordinates = this->m_engine->coordinates();
+    T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
     masses[0] = 1.0e+10;

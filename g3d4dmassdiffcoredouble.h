@@ -20,6 +20,11 @@ public:
     {
     }
 
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine)
+    {
+        return new G3D4DMassDiffCoreDouble(engine);
+    }
+
 public slots:
     void calculateTimeProgress(int threadNumber) const
     {
@@ -55,10 +60,10 @@ public slots:
         double* vels = new double[m_numberOfParticles * 4];
         for (quint64 i = 0; i < m_numberOfParticles; ++i) {
             auto i4 = i * 4;
-            vels[i4    ] = 1.0f;
-            vels[i4 + 1] = 0.0f;
-            vels[i4 + 2] = 0.0f;
-            vels[i4 + 3] = 0.0f;
+            vels[i4    ] = 1.0;
+            vels[i4 + 1] = 0.0;
+            vels[i4 + 2] = 0.0;
+            vels[i4 + 3] = 0.0;
         }
 
         for (quint64 i = start; i < end; ++i)
@@ -72,7 +77,7 @@ public slots:
                 d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
                 d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
                 distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0f) {
+                if (distance <= 0.0) {
                     continue;
                 }
                 inv = 1.0f / distance;

@@ -45,21 +45,15 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineSingle = new G3DMassDiffNBE<float>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3DMassDiffCoreSingle(m_NBodyEngineSingle));
-            }
+            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3DMassDiffCoreSingle::factory);
             break;
         case bhs::Engine::G3DMassIntegral:
             m_NBodyEngineSingle = new G3DMassIntegralNBE<float>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3DMassIntegralCoreSingle(m_NBodyEngineSingle));
-            }
+            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3DMassIntegralCoreSingle::factory);
             break;
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineSingle = new G3D4DMassDiffNBE<float>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3D4DMassDiffCoreSingle(m_NBodyEngineSingle));
-            }
+            m_threadAdmin->initializeFloat(m_NBodyEngineSingle, G3D4DMassDiffCoreSingle::factory);
             break;
         }
     } else {
@@ -67,21 +61,15 @@ void Particles::selectNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineDouble = new G3DMassDiffNBE<double>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3DMassDiffCoreDouble(m_NBodyEngineDouble));
-            }
+            m_threadAdmin->initializeDouble(m_NBodyEngineDouble, G3DMassDiffCoreDouble::factory);
             break;
         case bhs::Engine::G3DMassIntegral:
             m_NBodyEngineDouble = new G3DMassIntegralNBE<double>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3DMassIntegralCoreDouble(m_NBodyEngineDouble));
-            }
+            m_threadAdmin->initializeDouble(m_NBodyEngineDouble, G3DMassIntegralCoreDouble::factory);
             break;
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineDouble = new G3D4DMassDiffNBE<double>(sim);
-            for (int i = 0; i < m_threadAdmin->size(); ++i) {
-                m_threadAdmin->at(i)->initialize(new G3D4DMassDiffCoreDouble(m_NBodyEngineDouble));
-            }
+            m_threadAdmin->initializeDouble(m_NBodyEngineDouble, G3D4DMassDiffCoreDouble::factory);
             break;
         }
     }

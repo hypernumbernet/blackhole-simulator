@@ -13,7 +13,6 @@ public:
     {
     }
 
-
 protected:
     const bhs::SimCondition& m_sim;
     AbstractNBodyEngine<T>* const m_engine;

@@ -11,6 +11,11 @@ public:
     {
     }
 
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine)
+    {
+        return new G3DMassDiffCoreDouble(engine);
+    }
+
 public slots:
     void calculateTimeProgress(int threadNumber) const
     {

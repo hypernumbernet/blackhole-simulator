@@ -103,11 +103,11 @@ public:
         T dy = coord[ai] - coord[bi]; ++ai; ++bi;
         T dz = coord[ai] - coord[bi];
         T r = sqrt(dx * dx + dy * dy + dz * dz);
-        if (r == 0.0f)
+        if (r == 0.0)
         {
             return false;
         }
-        r = 1.0f / r;
+        r = 1.0 / r;
         result.invR = r;
         result.unitX = dx * r;
         result.unitY = dy * r;
