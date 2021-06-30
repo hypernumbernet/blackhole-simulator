@@ -100,9 +100,7 @@ void Particles::updateGL()
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    const void* ret = coordinates();
-    if (ret)
-        glBuf.allocate(coordinates(), numberOfParticle() * VECTOR_SIZE * size);
+    glBuf.allocate(coordinates(), numberOfParticle() * VECTOR_SIZE * size);
     m_program.enableAttributeArray(0);
     m_program.setAttributeBuffer(0, precision, 0, VECTOR_SIZE);
 

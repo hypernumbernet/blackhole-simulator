@@ -38,9 +38,15 @@ GraphicWindow::~GraphicWindow()
 
 void GraphicWindow::initializeGL()
 {
-    m_startTime = QTime::currentTime();
-
     initializeOpenGLFunctions();
+
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkSizeX);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkSizeY);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkSizeZ);
+
+    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
+
+    m_maxComputeWorkSize = m_maxComputeWorkSizeX * m_maxComputeWorkSizeY * m_maxComputeWorkSizeZ;
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

@@ -66,11 +66,15 @@ private:
     bool m_mousePressing = false;
     QPoint m_mousePressPosition;
     QMatrix4x4 m_projection;
-    QTime m_startTime;
     QBasicTimer m_uiTimer;
     QBasicTimer m_fpsTimer;
     int m_fpsPreFrame;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     const bhs::SimCondition* m_simCondition = nullptr;
+    GLint m_maxComputeWorkSizeX;
+    GLint m_maxComputeWorkSizeY;
+    GLint m_maxComputeWorkSizeZ;
+    GLint m_maxConputeWorkInvocations;
+    quint64 m_maxComputeWorkSize;
 };
