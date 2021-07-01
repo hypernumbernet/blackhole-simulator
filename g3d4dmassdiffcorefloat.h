@@ -57,13 +57,9 @@ public slots:
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
 
-        float* vels = new float[m_numberOfParticles * 4];
+        float* vels = new float[m_numberOfParticles * 4]();
         for (quint64 i = 0; i < m_numberOfParticles; ++i) {
-            auto i4 = i * 4;
-            vels[i4    ] = 1.0f;
-            vels[i4 + 1] = 0.0f;
-            vels[i4 + 2] = 0.0f;
-            vels[i4 + 3] = 0.0f;
+            vels[i * 4] = 1.0;
         }
 
         for (quint64 i = start; i < end; ++i)

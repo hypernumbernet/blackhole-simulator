@@ -41,10 +41,8 @@ public slots:
         quint64 k = 0, a, b;
         double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
 
-        double* vels = new double[m_numberOfParticles * 3];
-        for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
-            vels[i] = 0.0f;
-        }
+        double* vels = new double[m_numberOfParticles * 3]();
+        //Q_ASSERT(vels[0] == 0.0);
 
         for (quint64 i = start; i < end; ++i)
         {
