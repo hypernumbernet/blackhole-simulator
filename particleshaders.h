@@ -9,6 +9,7 @@
 #include "g3d4dmassdiffnbe.h"
 #include "g3d4dmassdiffcorefloat.h"
 #include "g3d4dmassdiffcoredouble.h"
+#include "computeshaders.h"
 
 #include <math.h>
 
@@ -53,4 +54,5 @@ private:
 
     int m_initHeight;
     bhs::Precision m_precision;
+    ComputeShaders* const m_computeShaders;
 };

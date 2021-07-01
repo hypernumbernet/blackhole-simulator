@@ -2,8 +2,8 @@
 
 GraphicWindow::GraphicWindow()
     : m_threadAdmin(this)
-    , m_worldModels(new LineShaders)
-    , m_particleModels(new ParticleShaders(&m_threadAdmin))
+    , m_lineShaders(new LineShaders)
+    , m_particleShaders(new ParticleShaders(&m_threadAdmin))
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -31,8 +31,8 @@ GraphicWindow::~GraphicWindow()
     m_threadAdmin.wait();
 
     makeCurrent();
-    delete m_worldModels;
-    delete m_particleModels;
+    delete m_lineShaders;
+    delete m_particleShaders;
     doneCurrent();
 }
 
@@ -40,29 +40,21 @@ void GraphicWindow::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkCountX);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkCountY);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkCountZ);
-
-    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
-
-    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     //glDepthFunc(GL_LESS);
 
-    m_worldModels->initialize();
+    m_lineShaders->initialize();
 
-    if (!m_particleModels->initialize(this->height())) {
+    if (!m_particleShaders->initialize(this->height())) {
         return; // TODO error message
     }
 
     bhs::SimCondition sim;
-    m_particleModels->setNBodyEngine(sim);
-    m_particleModels->updateGL();
+    m_particleShaders->setNBodyEngine(sim);
+    m_particleShaders->updateGL();
     paintGL();
 
     m_uiTimer.start(30, this);
@@ -76,7 +68,7 @@ void GraphicWindow::resizeGL(int w, int h)
     m_projection.setToIdentity();
     m_projection.perspective(fov, aspect, zNear, zFar);
 
-    m_particleModels->resize(h);
+    m_particleShaders->resize(h);
 }
 
 void GraphicWindow::paintGL()
@@ -85,8 +77,8 @@ void GraphicWindow::paintGL()
 
     auto viewMatrix = m_camera.viewMatrix();
 
-    m_worldModels->paint(m_projection * viewMatrix);
-    m_particleModels->paint(m_projection * viewMatrix);
+    m_lineShaders->paint(m_projection * viewMatrix);
+    m_particleShaders->paint(m_projection * viewMatrix);
 }
 
 void GraphicWindow::keyPressEvent(QKeyEvent *ev)
@@ -223,7 +215,7 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
         }
 
-        m_particleModels->updateGL();
+        m_particleShaders->updateGL();
         emit UpdateUi::it().displayFrameNumber(m_threadAdmin.frameNum());
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
@@ -240,7 +232,7 @@ void GraphicWindow::focusOutEvent(QFocusEvent*)
 
 void GraphicWindow::enableGridLines(const bool enabled)
 {
-    m_worldModels->enableGridLines(enabled);
+    m_lineShaders->enableGridLines(enabled);
 }
 
 void GraphicWindow::startSim()
@@ -250,7 +242,7 @@ void GraphicWindow::startSim()
 
 void GraphicWindow::changeLinePosition()
 {
-    m_worldModels->changeLineType();
+    m_lineShaders->changeLineType();
 }
 
 void GraphicWindow::frameAdvance1()
@@ -285,7 +277,7 @@ void GraphicWindow::resetWaitForDone(const bhs::SimCondition& sim)
 
 void GraphicWindow::resetParticles()
 {
-    m_particleModels->reset(*m_simCondition);
+    m_particleShaders->reset(*m_simCondition);
 }
 
 void GraphicWindow::setModelScale(const QString& text)
@@ -294,12 +286,12 @@ void GraphicWindow::setModelScale(const QString& text)
     auto val = text.toDouble(&ok);
     if (ok && val > 0.0)
     {
-        m_particleModels->setModelScale(1.0 / val);
+        m_particleShaders->setModelScale(1.0 / val);
     }
 }
 
 void GraphicWindow::setModelScaleInt(int val)
 {
     double r1 = (double)val / (double)UpdateUi::SCALE_SLIDER_CENTER;
-    m_particleModels->setModelScaleRatio(pow(r1, 10.0));
+    m_particleShaders->setModelScaleRatio(pow(r1, 10.0));
 }

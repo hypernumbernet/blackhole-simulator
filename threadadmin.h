@@ -33,11 +33,11 @@ public:
     ThreadController*  at(int) const;
     void reset();
 
-    typedef AbstractEngineCore* (*initFactoryFloat)(AbstractNBodyEngine<float>* const);
-    typedef AbstractEngineCore* (*initFactoryDouble)(AbstractNBodyEngine<double>* const);
+    typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const);
+    typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const);
 
-    void initializeFloat(AbstractNBodyEngine<float>* const, initFactoryFloat);
-    void initializeDouble(AbstractNBodyEngine<double>* const, initFactoryDouble);
+    void initializeFloat(AbstractNBodyEngine<float>* const, engineFactoryFloat);
+    void initializeDouble(AbstractNBodyEngine<double>* const, engineFactoryDouble);
 
 public slots:
     void frameAdvance(int = 1);

@@ -4,5 +4,6 @@
         <file>world.vert</file>
         <file>particle.vert</file>
         <file>particle.frag</file>
+        <file>timeprogress.glsl</file>
     </qresource>
 </RCC>

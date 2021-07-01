@@ -4,6 +4,7 @@ ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)
     , m_pointSizeScale(1.0f)
     , m_pointSize(30.0f)
+    , m_computeShaders(new ComputeShaders)
 {
 }
 
@@ -34,6 +35,8 @@ bool ParticleShaders::initialize(const int screenHeight)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     glEnable(GL_POINT_SPRITE);
     //glPointSize(pointSize);
+
+    m_computeShaders->initialize();
 
     return true;
 }
@@ -72,6 +75,7 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_threadAdmin->initializeDouble(m_NBodyEngineDouble, G3D4DMassDiffCoreDouble::factory);
             break;
         }
+        m_computeShaders->bindDouble(m_NBodyEngineDouble);
     }
     emit UpdateUi::it().displayEngineName(sim.engine);
     emit UpdateUi::it().displayPrecision(sim.precision);
@@ -83,7 +87,11 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
 // This function must be called from the GUI thread.
 void ParticleShaders::updateGL()
 {
+    m_computeShaders->run();
     if (numberOfParticle() == 0)
+        return;
+    const void* const coord = coordinates();
+    if (coord == nullptr)
         return;
 
     m_vao.bind();
@@ -100,7 +108,7 @@ void ParticleShaders::updateGL()
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(coordinates(), numberOfParticle() * VECTOR_SIZE * size);
+    glBuf.allocate(coord, numberOfParticle() * VECTOR_SIZE * size);
     m_program.enableAttributeArray(0);
     m_program.setAttributeBuffer(0, precision, 0, VECTOR_SIZE);
 

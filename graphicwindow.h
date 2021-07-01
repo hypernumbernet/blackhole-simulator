@@ -54,9 +54,9 @@ private:
     void mouseReleaseEvent(QMouseEvent*) override;
     void wheelEvent(QWheelEvent*) override;
 
-    ThreadAdmin  m_threadAdmin;
-    LineShaders* const m_worldModels;
-    ParticleShaders* const m_particleModels;
+    ThreadAdmin m_threadAdmin;
+    LineShaders* const m_lineShaders;
+    ParticleShaders* const m_particleShaders;
 
     float m_walkSpeed;
     float m_lookAroundSpeed;
@@ -72,9 +72,4 @@ private:
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
     const bhs::SimCondition* m_simCondition = nullptr;
-    GLint m_maxComputeWorkCountX;
-    GLint m_maxComputeWorkCountY;
-    GLint m_maxComputeWorkCountZ;
-    GLint m_maxConputeWorkInvocations;
-    quint64 m_maxComputeWorkCount;
 };

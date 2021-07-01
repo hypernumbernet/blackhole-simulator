@@ -6,6 +6,7 @@ CONFIG += c++17
 SOURCES += \
     abstractnbodyengine.cpp \
     camera.cpp \
+    computeshaders.cpp \
     graphicwindow.cpp \
     initializer3d.cpp \
     initializer3d4d.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     abstractinitializer.h \
     abstractnbodyengine.h \
     camera.h \
+    computeshaders.h \
     g3d4dmassdiffcoredouble.h \
     g3d4dmassdiffcorefloat.h \
     g3d4dmassdiffnbe.h \

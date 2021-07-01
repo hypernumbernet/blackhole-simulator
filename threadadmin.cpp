@@ -115,14 +115,14 @@ ThreadController* ThreadAdmin::at(int i) const
     return m_controllers.at(i);
 }
 
-void ThreadAdmin::initializeFloat(AbstractNBodyEngine<float>* const engine, initFactoryFloat factory)
+void ThreadAdmin::initializeFloat(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
 {
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
     }
 }
 
-void ThreadAdmin::initializeDouble(AbstractNBodyEngine<double>* const engine, initFactoryDouble factory)
+void ThreadAdmin::initializeDouble(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
 {
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
