@@ -57,5 +57,5 @@ private:
     int m_initHeight;
     bhs::Precision m_precision;
     ComputeShaders* const m_computeShaders;
-    uint32_t ssbo = 0;
+    uint32_t m_ssbo = 0;
 };
