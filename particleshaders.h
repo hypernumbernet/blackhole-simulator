@@ -37,10 +37,12 @@ private:
     quint64 numberOfParticle() const;
     const void* coordinates() const;
     double modelScale() const;
+    QOpenGLShaderProgram* program();
 
     ThreadAdmin* const m_threadAdmin;
 
-    QOpenGLShaderProgram m_program;
+    QOpenGLShaderProgram m_programFloat;
+    QOpenGLShaderProgram m_programDouble;
     QOpenGLVertexArrayObject m_vao;
 
     AbstractNBodyEngine<float>* m_NBodyEngineFloat = nullptr;
@@ -55,4 +57,5 @@ private:
     int m_initHeight;
     bhs::Precision m_precision;
     ComputeShaders* const m_computeShaders;
+    uint32_t ssbo = 0;
 };

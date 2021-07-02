@@ -19,13 +19,22 @@ bool ParticleShaders::initialize(const int screenHeight)
     if (!initializeOpenGLFunctions()) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/particle.vert")) {
+    if (!m_programFloat.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/particle_float.vert")) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/particle.frag")) {
+    if (!m_programFloat.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/particle.frag")) {
         return false;
     }
-    if (!m_program.link()) {
+    if (!m_programFloat.link()) {
+        return false;
+    }
+    if (!m_programDouble.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/particle_double.vert")) {
+        return false;
+    }
+    if (!m_programDouble.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/particle.frag")) {
+        return false;
+    }
+    if (!m_programDouble.link()) {
         return false;
     }
     if (!m_vao.create()) {
@@ -36,7 +45,7 @@ bool ParticleShaders::initialize(const int screenHeight)
     glEnable(GL_POINT_SPRITE);
     //glPointSize(pointSize);
 
-    m_computeShaders->initialize();
+    //m_computeShaders->initialize();
 
     return true;
 }
@@ -75,63 +84,112 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_threadAdmin->initializeDouble(m_NBodyEngineDouble, G3D4DMassDiffCoreDouble::factory);
             break;
         }
-        m_computeShaders->bindDouble(m_NBodyEngineDouble);
+        //m_computeShaders->bindDouble(m_NBodyEngineDouble);
     }
     emit UpdateUi::it().displayEngineName(sim.engine);
     emit UpdateUi::it().displayPrecision(sim.precision);
     emit UpdateUi::it().displayPresetName(sim.preset);
 
     m_precision = sim.precision;
+
+    const int VECTOR_SIZE = 3;
+//    GLenum precision = GL_DOUBLE;
+    quint64 size = sizeof(double);
+//    quint64 num = numberOfParticle();
+    if (m_precision == bhs::Precision::Float) {
+//        precision = GL_FLOAT;
+        size = sizeof(float);
+    }
+
+    //uint32_t ssbo = 0;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    //glBufferStorage(GL_SHADER_STORAGE_BUFFER, numberOfParticle() * VECTOR_SIZE * size, coordinates(), GL_DYNAMIC_STORAGE_BIT);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, numberOfParticle() * VECTOR_SIZE * size, coordinates(), GL_STATIC_DRAW);
+
+    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, ssbo);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    program()->bind();
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+    program()->release();
+
+//    m_vao.bind();
+//    glBindBuffer(GL_ARRAY_BUFFER, ssbo);
+//    glVertexAttribPointer(0, 3, precision, GL_FALSE, 0, nullptr);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    m_vao.release();
+
+//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, 0, numberOfParticle() * VECTOR_SIZE * size);
 }
 
 // This function must be called from the GUI thread.
 void ParticleShaders::updateGL()
 {
-    m_computeShaders->run();
+    //m_computeShaders->run();
     if (numberOfParticle() == 0)
         return;
     const void* const coord = coordinates();
     if (coord == nullptr)
         return;
 
-    m_vao.bind();
-
     const int VECTOR_SIZE = 3;
-    GLenum precision = GL_DOUBLE;
+//    GLenum precision = GL_DOUBLE;
     quint64 size = sizeof(double);
-
     if (m_precision == bhs::Precision::Float) {
-        precision = GL_FLOAT;
+//        precision = GL_FLOAT;
         size = sizeof(float);
     }
 
-    QOpenGLBuffer glBuf;
-    glBuf.create();
-    glBuf.bind();
-    glBuf.allocate(coord, numberOfParticle() * VECTOR_SIZE * size);
-    m_program.enableAttributeArray(0);
-    m_program.setAttributeBuffer(0, precision, 0, VECTOR_SIZE);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, numberOfParticle() * VECTOR_SIZE * size, coordinates());
 
-    m_vao.release();
+//    glGenBuffers(1, &ssbo);
+//    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+//    glBufferData(GL_SHADER_STORAGE_BUFFER, numberOfParticle() * VECTOR_SIZE * size, coordinates(), GL_STATIC_DRAW);
+
+//    const int VECTOR_SIZE = 3;
+//    GLenum precision = GL_DOUBLE;
+//    quint64 size = sizeof(double);
+//    if (m_precision == bhs::Precision::Float) {
+//        precision = GL_FLOAT;
+//        size = sizeof(float);
+//    }
+
+//    glBindBuffer(GL_ARRAY_BUFFER, packed_particles_buffer_handle);
+//    glVertexAttribPointer(0, VECTOR_SIZE, precision, GL_FALSE, 0, nullptr);
+
+//    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+//    glBufferStorage(GL_SHADER_STORAGE_BUFFER, numberOfParticle() * VECTOR_SIZE * size, coordinates(), GL_DYNAMIC_STORAGE_BIT);
+//    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+//    QOpenGLBuffer glBuf;
+//    glBuf.create();
+//    glBuf.bind();
+//    glBuf.allocate(coord, numberOfParticle() * VECTOR_SIZE * size);
+//    m_vao.bind();
+//    m_program.enableAttributeArray(0);
+//    m_program.setAttributeBuffer(0, precision, 0, VECTOR_SIZE);
+//    m_vao.release();
 }
 
 void ParticleShaders::paint(const QMatrix4x4& viewProjection)
 {
     if (numberOfParticle() == 0)
         return;
-    m_program.bind();
 
     QMatrix4x4 modelMatrix;
     modelMatrix.scale(modelScale());
 
-    m_program.setUniformValue("mvp_matrix", viewProjection * modelMatrix);
-    m_program.setUniformValue("size", m_pointSize * m_pointSizeScale);
+    program()->bind();
+    program()->setUniformValue("mvp_matrix", viewProjection * modelMatrix);
+    program()->setUniformValue("size", m_pointSize * m_pointSizeScale);
     m_vao.bind();
 
     glDrawArrays(GL_POINTS, 0, numberOfParticle());
 
     m_vao.release();
-    m_program.release();
+    program()->release();
 }
 
 void ParticleShaders::resize(int height)
@@ -206,4 +264,12 @@ double ParticleShaders::modelScale() const
         ret = m_NBodyEngineDouble->modelScale();
     }
     return ret;
+}
+
+QOpenGLShaderProgram* ParticleShaders::program()
+{
+    if (m_precision == bhs::Precision::Float)
+        return &m_programFloat;
+    else
+        return &m_programDouble;
 }

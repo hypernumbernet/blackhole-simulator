@@ -133,42 +133,43 @@ void ComputeShaders::bindDouble(AbstractNBodyEngine<double>* engine)
     glGenBuffers(1, &m_bufferHandle);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_bufferHandle);
 
-    GLsizeiptr size = engine->numberOfParticle();
+    GLsizeiptr num = engine->numberOfParticle();
     //m_maxComputeWorkCount = ((size + 128 - 1) / 128);
-    m_maxComputeWorkCount = size;
+    m_maxComputeWorkCount = num;
 
-    double* coords = engine->coordinates();
-    //std::vector<double> coordsVct(coords, );
+    double* glData = new double[num * 3 * 2];
 
-    GLsizeiptr coordsSize = size * sizeof(double) * 3;
-
+    const double* coords = engine->coordinates();
+    GLsizeiptr coordsSize = num * 3;
     const double* vels = engine->velocities();
-    GLsizeiptr velsSize = size * sizeof(double) * 3;
-
+    GLsizeiptr velsSize = num * 3;
     GLsizeiptr total = coordsSize + velsSize;
 
-    void* initial_data = std::malloc(total);
-    std::memset(initial_data, 0, coordsSize);
-    std::memcpy(initial_data, coords, coordsSize);
-    //std::copy(0, )
+    for (GLsizeiptr i = 0; i < coordsSize; ++i) {
+        glData[i] = coords[i];
+    }
+    for (GLsizeiptr i = 0; i < velsSize; ++i) {
+        glData[coordsSize + i] = vels[i];
+    }
 
-//    QVector<double> data;
-//    data.append(*coords);
-//    data.append(*vels);
+//    glBufferStorage(GL_SHADER_STORAGE_BUFFER, total * sizeof(double), glData, GL_DYNAMIC_STORAGE_BIT);
 
-//    glBufferStorage(GL_SHADER_STORAGE_BUFFER, total, data.constData(), GL_DYNAMIC_STORAGE_BIT);
+//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, m_bufferHandle, 0, coordsSize * sizeof(double));
+//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, m_bufferHandle, coordsSize * sizeof(double), velsSize * sizeof(double));
 
-//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, m_bufferHandle, 0, coordsSize);
-//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, m_bufferHandle, coordsSize, velsSize);
+    glBufferStorage(GL_SHADER_STORAGE_BUFFER, coordsSize * sizeof(double), engine->coordinates(), GL_DYNAMIC_STORAGE_BIT);
+
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, m_bufferHandle, 0, coordsSize * sizeof(double));
+    //glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, m_bufferHandle, coordsSize * sizeof(double), velsSize * sizeof(double));
 
 
 }
 
 void ComputeShaders::run()
 {
-//    m_program.bind();
-//    glDispatchCompute(m_maxComputeWorkCount, 1, 1);
-//    m_program.release();
+    m_program.bind();
+    glDispatchCompute(m_maxComputeWorkCount, 1, 1);
+    m_program.release();
 }
 
 //GLuint ComputeShaders::numberOfWorkGroups()

@@ -2,8 +2,9 @@
     <qresource prefix="/">
         <file>world.frag</file>
         <file>world.vert</file>
-        <file>particle.vert</file>
+        <file>particle_float.vert</file>
         <file>particle.frag</file>
         <file>timeprogress.glsl</file>
+        <file>particle_double.vert</file>
     </qresource>
 </RCC>
