@@ -43,6 +43,8 @@ bool ParticleShaders::initialize(const int screenHeight)
 void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
 {
     m_precision = sim.precision;
+    int coordinateVectorSize = 3;
+    int velocityVectorSize = 3;
 
     if (sim.precision == bhs::Precision::Float) {
         switch (sim.engine) {
@@ -58,6 +60,7 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineFloat = new G3D4DMassDiffNBE<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DMassDiffCoreFloat::factory);
+            velocityVectorSize = 4;
             break;
         }
     } else {
@@ -74,6 +77,7 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineDouble = new G3D4DMassDiffNBE<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DMassDiffCoreDouble::factory);
+            velocityVectorSize = 4;
             break;
         }
     }
@@ -81,25 +85,18 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     emit UpdateUi::it().displayPrecision(sim.precision);
     emit UpdateUi::it().displayPresetName(sim.preset);
 
-    const int VECTOR_SIZE = 3;
+    SSBODataStruct ssboStruct;
+    GetSSBOStruct(ssboStruct, coordinateVectorSize, velocityVectorSize);
 
-    quint64 num = numberOfParticle();
-    int size = num * VECTOR_SIZE * sizeof(double);
-    GLenum precision = GL_DOUBLE;
-    if (m_precision == bhs::Precision::Float) {
-        size = num * VECTOR_SIZE * sizeof(float);
-        precision = GL_FLOAT;
-    }
-
-    uint32_t ssbo = 0;
+    quint32 ssbo = 0;
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glBufferStorage(GL_SHADER_STORAGE_BUFFER, size * 2, ssboData(), GL_DYNAMIC_STORAGE_BIT);
+    glBufferStorage(GL_SHADER_STORAGE_BUFFER, ssboStruct.total, ssboStruct.data, GL_DYNAMIC_STORAGE_BIT);
 
     m_vao.bind();
 
     glBindBuffer(GL_ARRAY_BUFFER, ssbo);
-    glVertexAttribPointer(0, VECTOR_SIZE, precision, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(0, coordinateVectorSize, ssboStruct.precision, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -107,8 +104,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
 
     //const int LAYOUT_BINDING = 0;
     //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, LAYOUT_BINDING, ssbo);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, 0, size);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, size, size);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, ssboStruct.coordinateOffset, ssboStruct.coordinateSize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, ssboStruct.velocityOffset, ssboStruct.velocitySize);
 }
 
 // This function must be called from the GUI thread.
@@ -196,13 +193,13 @@ quint64 ParticleShaders::numberOfParticle() const
     return ret;
 }
 
-const void* ParticleShaders::ssboData() const
+const void* ParticleShaders::ssboData(const SSBODataStruct& ssobStruct) const
 {
     const void* ret = nullptr;
     if (m_precision == bhs::Precision::Float) {
-        ret = makeSSBOData<float>();
+        ret = makeSSBOData<float>(ssobStruct);
     } else {
-        ret = makeSSBOData<double>();
+        ret = makeSSBOData<double>(ssobStruct);
     }
     return ret;
 }
@@ -217,4 +214,28 @@ double ParticleShaders::modelScale() const
         ret = m_NBodyEngineDouble->modelScale();
     }
     return ret;
+}
+
+void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
+{
+    quint64 num = numberOfParticle();
+    result.coordinateOffset = 0;
+    result.coordinateSize = num * coordinateVectorSize;
+    result.velocityOffset = result.coordinateSize;
+    result.velocitySize = num * velocityVectorSize;
+    result.total = result.velocityOffset + result.velocitySize;
+
+    result.data = ssboData(result);
+
+    if (m_precision == bhs::Precision::Float) {
+        result.dataSize = sizeof(float);
+        result.precision = GL_FLOAT;
+    } else {
+        result.dataSize = sizeof(double);
+        result.precision = GL_DOUBLE;
+    }
+    result.coordinateSize *= result.dataSize;
+    result.velocityOffset *= result.dataSize;
+    result.velocitySize *= result.dataSize;
+    result.total *= result.dataSize;
 }

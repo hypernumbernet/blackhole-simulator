@@ -34,9 +34,22 @@ public:
     void reset(const bhs::SimCondition&);
 
 private:
+
+    struct SSBODataStruct {
+        const void* data;
+        qint64 total;
+        qint64 coordinateOffset;
+        qint64 coordinateSize;
+        qint64 velocityOffset;
+        qint64 velocitySize;
+        GLenum precision;
+        int dataSize;
+    };
+
     quint64 numberOfParticle() const;
-    const void* ssboData() const;
+    const void* ssboData(const SSBODataStruct&) const;
     double modelScale() const;
+    void GetSSBOStruct(SSBODataStruct&, int, int) const;
 
     ThreadAdmin* const m_threadAdmin;
 
@@ -82,21 +95,18 @@ private:
     }
 
     template <typename T>
-    inline const void* makeSSBOData() const
+    inline const void* makeSSBOData(const SSBODataStruct& ssboStruct) const
     {
-        const T* coords = coordinates<T>();
-        const T* vels = velocities<T>();
+        T* data = new T[ssboStruct.total];
 
-        quint64 num = numberOfParticle();
-        quint64 coordsSize = num * 3;
-        quint64 velsSize = num * 3;
-        quint64 total = coordsSize + velsSize;
-        T* data = new T[total];
-        for (quint64 i = 0; i < coordsSize; ++i) {
+        const T* coords = coordinates<T>();
+        for (qint64 i = 0; i < ssboStruct.coordinateSize; ++i) {
             data[i] = coords[i];
         }
-        for (quint64 i = 0; i < velsSize; ++i) {
-            data[coordsSize + i] = vels[i];
+
+        const T* vels = velocities<T>();
+        for (qint64 i = 0; i < ssboStruct.velocitySize; ++i) {
+            data[ssboStruct.coordinateSize + i] = vels[i];
         }
         return data;
     }
