@@ -6,23 +6,20 @@ class G3DMassDiffCoreDouble : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    explicit G3DMassDiffCoreDouble(AbstractNBodyEngine<double>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreDouble(engine, parent)
+    explicit G3DMassDiffCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+        : AbstractEngineCoreDouble(engine, threadNumber)
     {
     }
 
-    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine)
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new G3DMassDiffCoreDouble(engine);
+        return new G3DMassDiffCoreDouble(engine, threadNumber);
     }
 
 public slots:
-    void calculateTimeProgress(int threadNumber) const
+    void calculateTimeProgress() const
     {
-        quint64 start = m_engine->timeProgressRanges().at(threadNumber).start;
-        quint64 end = m_engine->timeProgressRanges().at(threadNumber).end;
-
-        for (quint64 i = start; i < end; ++i)
+        for (quint64 i = m_start; i < m_end; ++i)
         {
             quint64 j = i * 3;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
@@ -32,11 +29,8 @@ public slots:
         resultReady();
     }
 
-    void calculateInteraction(int threadNumber) const
+    void calculateInteraction() const
     {
-        quint64 start = m_engine->interactionRanges().at(threadNumber).start;
-        quint64 end = m_engine->interactionRanges().at(threadNumber).end;
-
         double d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
         double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
@@ -44,7 +38,7 @@ public slots:
         double* vels = new double[m_numberOfParticles * 3]();
         //Q_ASSERT(vels[0] == 0.0);
 
-        for (quint64 i = start; i < end; ++i)
+        for (quint64 i = m_start; i < m_end; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {

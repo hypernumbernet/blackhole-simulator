@@ -35,8 +35,8 @@ public:
     void reset();
     void setComputeDevice(bhs::Compute);
 
-    typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const);
-    typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const);
+    typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const, int);
+    typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const, int);
 
     void initialize(AbstractNBodyEngine<float>* const, engineFactoryFloat);
     void initialize(AbstractNBodyEngine<double>* const, engineFactoryDouble);

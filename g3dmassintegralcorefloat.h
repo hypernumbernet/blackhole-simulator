@@ -8,23 +8,20 @@ class G3DMassIntegralCoreFloat : public AbstractEngineCoreFloat
     Q_OBJECT
 
 public:
-    explicit G3DMassIntegralCoreFloat(AbstractNBodyEngine<float>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCoreFloat(engine, parent)
+    explicit G3DMassIntegralCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+        : AbstractEngineCoreFloat(engine, threadNumber)
     {
     }
 
-    static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine)
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
-        return new G3DMassIntegralCoreFloat(engine);
+        return new G3DMassIntegralCoreFloat(engine, threadNumber);
     }
 
 public slots:
-    void calculateTimeProgress(int threadNumber) const
+    void calculateTimeProgress() const
     {
-        quint64 start = m_engine->timeProgressRanges().at(threadNumber).start;
-        quint64 end = m_engine->timeProgressRanges().at(threadNumber).end;
-
-        for (quint64 i = start; i < end; ++i)
+        for (quint64 i = m_start; i < m_end; ++i)
         {
             quint64 j = i * 3;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
@@ -34,15 +31,12 @@ public slots:
         resultReady();
     }
 
-    void calculateInteraction(int threadNumber) const
+    void calculateInteraction() const
     {
         // Perform integral calculation of universal gravitation.
         // The memory cost is high because the distance data calculated last time is saved and used.
         // However, if the distance variation is large, it may be more accurate to calculate by this method.
         // The celestial scale vibrates violently at float resolution?
-
-        quint64 start = m_engine->interactionRanges().at(threadNumber).start;
-        quint64 end = m_engine->interactionRanges().at(threadNumber).end;
 
         float inv, force;
         G3DMassIntegralNBE<float>::Distance d;
@@ -50,7 +44,7 @@ public slots:
 
         float* vels = new float[m_numberOfParticles * 3]();
 
-        for (quint64 i = start; i < end; ++i)
+        for (quint64 i = m_start; i < m_end; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {

@@ -8,8 +8,8 @@ class AbstractEngineCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractEngineCore(QObject* parent = nullptr)
-        : QObject(parent)
+    explicit AbstractEngineCore(const int threadNumber)
+        : m_threadNumber(threadNumber)
     {
     }
 
@@ -23,6 +23,9 @@ protected:
     }
 
 public slots:
-    virtual void calculateTimeProgress(int threadNumber) const = 0;
-    virtual void calculateInteraction(int threadNumber) const = 0;
+    virtual void calculateTimeProgress() const = 0;
+    virtual void calculateInteraction() const = 0;
+
+private:
+    int m_threadNumber;
 };

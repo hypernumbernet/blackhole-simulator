@@ -9,8 +9,8 @@ class AbstractEngineCoreDouble : public AbstractEngineCore
 {
     Q_OBJECT
 public:
-    explicit AbstractEngineCoreDouble(AbstractNBodyEngine<double>* const engine, QObject* parent = nullptr)
-        : AbstractEngineCore(parent)
+    explicit AbstractEngineCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+        : AbstractEngineCore(threadNumber)
         , m_engine(engine)
         , m_numberOfParticles(engine->numberOfParticle())
         , m_coordinates(engine->coordinates())
@@ -18,6 +18,8 @@ public:
         , m_masses(engine->masses())
         , m_inversedDistances(engine->inversedDistances())
         , m_timePerFrame(engine->timePerFrame())
+        , m_start(m_engine->timeProgressRanges().at(threadNumber).start)
+        , m_end(m_engine->timeProgressRanges().at(threadNumber).end)
     {
     }
 
@@ -64,4 +66,7 @@ protected:
 
     // Physically calculated time per frame (second)
     const double m_timePerFrame;
+
+    const quint64 m_start;
+    const quint64 m_end;
 };

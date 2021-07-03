@@ -124,7 +124,7 @@ ThreadController* ThreadAdmin::at(int i) const
 void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
 {
     for (int i = 0; i < size(); ++i) {
-        at(i)->initialize(factory(engine));
+        at(i)->initialize(factory(engine, i));
     }
     m_computeShaders->bind(engine);
 }
@@ -132,7 +132,7 @@ void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFac
 void ThreadAdmin::initialize(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
 {
     for (int i = 0; i < size(); ++i) {
-        at(i)->initialize(factory(engine));
+        at(i)->initialize(factory(engine, i));
     }
     m_computeShaders->bind(engine);
 }
