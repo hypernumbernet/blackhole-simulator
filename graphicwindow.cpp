@@ -4,6 +4,7 @@ GraphicWindow::GraphicWindow()
     : m_threadAdmin(this)
     , m_lineShaders(new LineShaders)
     , m_particleShaders(new ParticleShaders(&m_threadAdmin))
+    , m_computeShaders(new ComputeShaders)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -31,6 +32,7 @@ GraphicWindow::~GraphicWindow()
     m_threadAdmin.wait();
 
     makeCurrent();
+    delete m_computeShaders;
     delete m_lineShaders;
     delete m_particleShaders;
     doneCurrent();
@@ -51,11 +53,12 @@ void GraphicWindow::initializeGL()
     if (!m_particleShaders->initialize(this->height())) {
         return; // TODO error message
     }
-
     bhs::SimCondition sim;
     m_particleShaders->setNBodyEngine(sim);
-    m_particleShaders->updateGL();
-    paintGL();
+
+    m_computeShaders->initialize();
+
+    m_threadAdmin.setCompute(sim.compute, m_computeShaders);
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
@@ -215,7 +218,9 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
         }
 
-        m_particleShaders->updateGL();
+        if (m_simCondition && m_simCondition->compute == bhs::Compute::CPU)
+            m_particleShaders->updateGL();
+
         emit UpdateUi::it().displayFrameNumber(m_threadAdmin.frameNum());
         update();
     } else if (ev->timerId() == m_fpsTimer.timerId()) {
@@ -277,6 +282,7 @@ void GraphicWindow::resetWaitForDone(const bhs::SimCondition& sim)
 
 void GraphicWindow::resetParticles()
 {
+    m_threadAdmin.setCompute(m_simCondition->compute, m_computeShaders);
     m_particleShaders->reset(*m_simCondition);
 }
 

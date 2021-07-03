@@ -8,13 +8,15 @@
 
 class ComputeShaders : private QOpenGLFunctions_4_5_Core
 {
+    static constexpr GLuint WORK_GROUP_SIZE = 128;
+
 public:
     ComputeShaders();
     ~ComputeShaders();
 
     bool initialize();
     void bindDouble(AbstractNBodyEngine<double>*);
-    void run();
+    void update(quint64 numberOfParticles);
 //    GLuint numberOfWorkGroups();
 
 private:

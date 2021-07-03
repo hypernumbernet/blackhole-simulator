@@ -24,6 +24,12 @@ enum class Precision
     Double,
 };
 
+enum class Compute
+{
+    CPU,
+    GPU,
+};
+
 enum class Preset
 {
     RandomCube,
@@ -39,7 +45,8 @@ enum class Preset
 struct SimCondition
 {
     Engine engine = Engine::G3DMassDiff;
-    Precision precision= Precision::Double;
+    Precision precision = Precision::Double;
+    Compute compute = Compute::GPU;
     Preset preset = Preset::RandomCube;
     double timePerFrame = 1000.0;
     int numberOfParticles = 800;
@@ -89,6 +96,7 @@ public:
 
     const QMap<bhs::Engine, QString>* const ENGINE;
     const QMap<bhs::Precision, QString>* const PRECISION;
+    const QMap<bhs::Compute, QString>* const COMPUTE;
     const QMap<bhs::Preset, QString>* const PRESET;
 
     static UpdateUi& it()
@@ -110,6 +118,10 @@ private:
         , PRECISION(new QMap<bhs::Precision, QString>{
             {bhs::Precision::Float, tr("Float")},
             {bhs::Precision::Double, tr("Double")},
+        })
+        , COMPUTE(new QMap<bhs::Compute, QString>{
+            {bhs::Compute::CPU, tr("CPU")},
+            {bhs::Compute::GPU, tr("GPU")},
         })
         , PRESET(new QMap<bhs::Preset, QString>{
             {bhs::Preset::RandomCube, tr("Random Cube")},

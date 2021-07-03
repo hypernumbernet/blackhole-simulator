@@ -57,6 +57,7 @@ private:
     ThreadAdmin m_threadAdmin;
     LineShaders* const m_lineShaders;
     ParticleShaders* const m_particleShaders;
+    ComputeShaders* const m_computeShaders;
 
     float m_walkSpeed;
     float m_lookAroundSpeed;

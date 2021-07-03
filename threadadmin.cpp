@@ -67,6 +67,11 @@ void ThreadAdmin::handleResults()
 
 void ThreadAdmin::updateParticles()
 {
+    if (m_compute == bhs::Compute::GPU) {
+        m_computeShaders->update(m_numberOfParticles);
+        ++m_frameNum;
+        return;
+    }
     if (m_waitForDone <= 0)
     {
         if (m_calculateNext == 0)
@@ -115,16 +120,24 @@ ThreadController* ThreadAdmin::at(int i) const
     return m_controllers.at(i);
 }
 
-void ThreadAdmin::initializeFloat(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
+void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
 {
+    m_numberOfParticles = engine->numberOfParticle();
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
     }
 }
 
-void ThreadAdmin::initializeDouble(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
+void ThreadAdmin::initialize(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
 {
+    m_numberOfParticles = engine->numberOfParticle();
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
     }
+}
+
+void ThreadAdmin::setCompute(bhs::Compute cmp, ComputeShaders* cs)
+{
+    m_compute = cmp;
+    m_computeShaders = cs;
 }

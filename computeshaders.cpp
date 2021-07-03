@@ -101,7 +101,7 @@ bool ComputeShaders::initialize()
     if (!initializeOpenGLFunctions()) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Compute, ":/timeprogress.glsl")) {
+    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/timeprogress.comp")) {
         return false;
     }
     if (!m_program.link()) {
@@ -137,13 +137,12 @@ void ComputeShaders::bindDouble(AbstractNBodyEngine<double>* engine)
     //m_maxComputeWorkCount = ((size + 128 - 1) / 128);
     m_maxComputeWorkCount = num;
 
-    double* glData = new double[num * 3 * 2];
-
     const double* coords = engine->coordinates();
     GLsizeiptr coordsSize = num * 3;
     const double* vels = engine->velocities();
     GLsizeiptr velsSize = num * 3;
     GLsizeiptr total = coordsSize + velsSize;
+    double* glData = new double[total];
 
     for (GLsizeiptr i = 0; i < coordsSize; ++i) {
         glData[i] = coords[i];
@@ -165,11 +164,13 @@ void ComputeShaders::bindDouble(AbstractNBodyEngine<double>* engine)
 
 }
 
-void ComputeShaders::run()
+void ComputeShaders::update(const quint64 numberOfParticles)
 {
+    GLuint num = ((numberOfParticles + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
     m_program.bind();
-    glDispatchCompute(m_maxComputeWorkCount, 1, 1);
-    m_program.release();
+    glDispatchCompute(num, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    //m_program.release();
 }
 
 //GLuint ComputeShaders::numberOfWorkGroups()

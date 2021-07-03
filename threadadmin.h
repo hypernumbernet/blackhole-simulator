@@ -3,6 +3,7 @@
 #include "updateui.h"
 #include "threadcontroller.h"
 #include "abstractnbodyengine.h"
+#include "computeshaders.h"
 
 #include "g3dmassdiffnbe.h"
 #include "g3dmassdiffcorefloat.h"
@@ -24,20 +25,21 @@ class ThreadAdmin : public QThread
     Q_OBJECT
 
 public:
-    explicit ThreadAdmin(QObject* = nullptr);
+    explicit ThreadAdmin(QObject*);
     ~ThreadAdmin();
 
     int frameNum();
     void startSim();
     int size() const;
-    ThreadController*  at(int) const;
+    ThreadController* at(int) const;
     void reset();
+    void setCompute(bhs::Compute, ComputeShaders*);
 
     typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const);
     typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const);
 
-    void initializeFloat(AbstractNBodyEngine<float>* const, engineFactoryFloat);
-    void initializeDouble(AbstractNBodyEngine<double>* const, engineFactoryDouble);
+    void initialize(AbstractNBodyEngine<float>* const, engineFactoryFloat);
+    void initialize(AbstractNBodyEngine<double>* const, engineFactoryDouble);
 
 public slots:
     void frameAdvance(int = 1);
@@ -52,6 +54,9 @@ private:
     int m_calculateNext;
     int m_frameNum;
     int m_endOfFrameAdvance;
+    bhs::Compute m_compute;
+    ComputeShaders* m_computeShaders;
+    quint64 m_numberOfParticles;
 
     QBasicTimer m_simulateTimer;
     QBasicTimer m_resetTimer;

@@ -25,10 +25,10 @@ bool LineShaders::initialize()
     if (!initializeOpenGLFunctions()) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/world.vert")) {
+    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/world.vert")) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/world.frag")) {
+    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/world.frag")) {
         return false;
     }
     if (!m_program.link()) {

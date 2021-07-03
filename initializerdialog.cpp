@@ -10,6 +10,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 
     auto engineGroup = new QGroupBox(tr("Simulation Engine"));
     auto engineVbox = new QVBoxLayout;
+    engineGroup->setLayout(engineVbox);
+    firstLayout->addWidget(engineGroup);
 
     for (const auto& e : UpdateUi::it().ENGINE->toStdMap()) {
         auto radio = new QRadioButton(e.second);
@@ -19,13 +21,12 @@ InitializerDialog::InitializerDialog(QWidget* parent)
             radio->setChecked(true);
     }
 
-    engineGroup->setLayout(engineVbox);
-    firstLayout->addWidget(engineGroup);
-
     // Precision
 
     auto precisionGroup = new QGroupBox(tr("Precision"));
     auto precisionHbox = new QHBoxLayout;
+    precisionGroup->setLayout(precisionHbox);
+    firstLayout->addWidget(precisionGroup);
 
     for (const auto& e : UpdateUi::it().PRECISION->toStdMap()) {
         auto radio = new QRadioButton(e.second);
@@ -35,13 +36,27 @@ InitializerDialog::InitializerDialog(QWidget* parent)
             radio->setChecked(true);
     }
 
-    precisionGroup->setLayout(precisionHbox);
-    firstLayout->addWidget(precisionGroup);
+    // Compute Device
+
+    auto computeGroup = new QGroupBox(tr("Compute Device"));
+    auto computeHbox = new QHBoxLayout;
+    computeGroup->setLayout(computeHbox);
+    firstLayout->addWidget(computeGroup);
+
+    for (const auto& e : UpdateUi::it().COMPUTE->toStdMap()) {
+        auto radio = new QRadioButton(e.second);
+        m_computeButtonGroup.addButton(radio, static_cast<int>(e.first));
+        computeHbox->addWidget(radio);
+        if (e.first == bhs::Compute::CPU)
+            radio->setChecked(true);
+    }
 
     // Initial Conditions Preset
 
     auto presetGroup = new QGroupBox(tr("Initial Conditions Preset"));
     auto presetVbox = new QVBoxLayout;
+    presetGroup->setLayout(presetVbox);
+    firstLayout->addWidget(presetGroup);
 
     for (const auto& e : UpdateUi::it().PRESET->toStdMap()) {
         auto radio = new QRadioButton(e.second);
@@ -50,9 +65,6 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         if (e.first == bhs::Preset::RandomCube)
             radio->setChecked(true);
     }
-
-    presetGroup->setLayout(presetVbox);
-    firstLayout->addWidget(presetGroup);
 
     //########################################################################
     auto secondLayout = new QVBoxLayout;
@@ -155,6 +167,7 @@ bool InitializerDialog::validate()
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
     m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
+    m_simCondition.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
 
     bool ok;
     auto val = m_timePerFrameEdit.text().toDouble(&ok);

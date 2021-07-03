@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>world.frag</file>
-        <file>world.vert</file>
-        <file>particle_float.vert</file>
-        <file>particle.frag</file>
-        <file>timeprogress.glsl</file>
-        <file>particle_double.vert</file>
+        <file>shader/particle.frag</file>
+        <file>shader/particle.vert</file>
+        <file>shader/timeprogress.comp</file>
+        <file>shader/world.frag</file>
+        <file>shader/world.vert</file>
+        <file>shader/interaction.comp</file>
     </qresource>
 </RCC>
