@@ -93,7 +93,6 @@ ComputeShaders::ComputeShaders()
 
 ComputeShaders::~ComputeShaders()
 {
-    glDeleteBuffers(1, &m_bufferHandle);
 }
 
 bool ComputeShaders::initialize()
@@ -101,22 +100,25 @@ bool ComputeShaders::initialize()
     if (!initializeOpenGLFunctions()) {
         return false;
     }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/timeprogress.comp")) {
+    if (!m_programTimeProgress.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/timeprogress_d.comp")) {
         return false;
     }
-    if (!m_program.link()) {
+    if (!m_programTimeProgress.link()) {
+        return false;
+    }
+    if (!m_programInteraction.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/interaction_d.comp")) {
+        return false;
+    }
+    if (!m_programInteraction.link()) {
         return false;
     }
 
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &m_maxComputeWorkSizeX);
-
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkCountX);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkCountY);
-    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkCountZ);
-
-    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
-
-    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
+//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &m_maxComputeWorkSizeX);
+//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkCountX);
+//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkCountY);
+//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkCountZ);
+//    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
+//    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
 
 #ifdef QT_DEBUG
 //    glEnable(GL_DEBUG_OUTPUT);
@@ -128,49 +130,24 @@ bool ComputeShaders::initialize()
     return true;
 }
 
-void ComputeShaders::bindDouble(AbstractNBodyEngine<double>* engine)
+void ComputeShaders::bind(AbstractNBodyEngine<float>* engine)
 {
-    glGenBuffers(1, &m_bufferHandle);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_bufferHandle);
-
-    GLsizeiptr num = engine->numberOfParticle();
-    //m_maxComputeWorkCount = ((size + 128 - 1) / 128);
-    m_maxComputeWorkCount = num;
-
-    const double* coords = engine->coordinates();
-    GLsizeiptr coordsSize = num * 3;
-    const double* vels = engine->velocities();
-    GLsizeiptr velsSize = num * 3;
-    GLsizeiptr total = coordsSize + velsSize;
-    double* glData = new double[total];
-
-    for (GLsizeiptr i = 0; i < coordsSize; ++i) {
-        glData[i] = coords[i];
-    }
-    for (GLsizeiptr i = 0; i < velsSize; ++i) {
-        glData[coordsSize + i] = vels[i];
-    }
-
-//    glBufferStorage(GL_SHADER_STORAGE_BUFFER, total * sizeof(double), glData, GL_DYNAMIC_STORAGE_BIT);
-
-//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, m_bufferHandle, 0, coordsSize * sizeof(double));
-//    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, m_bufferHandle, coordsSize * sizeof(double), velsSize * sizeof(double));
-
-    glBufferStorage(GL_SHADER_STORAGE_BUFFER, coordsSize * sizeof(double), engine->coordinates(), GL_DYNAMIC_STORAGE_BIT);
-
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, m_bufferHandle, 0, coordsSize * sizeof(double));
-    //glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, m_bufferHandle, coordsSize * sizeof(double), velsSize * sizeof(double));
-
-
+    m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
 }
 
-void ComputeShaders::update(const quint64 numberOfParticles)
+void ComputeShaders::bind(AbstractNBodyEngine<double>* engine)
 {
-    GLuint num = ((numberOfParticles + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE);
-    m_program.bind();
-    glDispatchCompute(num, 1, 1);
+    m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
+}
+
+void ComputeShaders::update()
+{
+    m_programTimeProgress.bind();
+    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-    //m_program.release();
+    m_programInteraction.bind();
+    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
 //GLuint ComputeShaders::numberOfWorkGroups()

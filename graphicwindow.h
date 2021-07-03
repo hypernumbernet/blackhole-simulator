@@ -54,10 +54,10 @@ private:
     void mouseReleaseEvent(QMouseEvent*) override;
     void wheelEvent(QWheelEvent*) override;
 
-    ThreadAdmin m_threadAdmin;
     LineShaders* const m_lineShaders;
     ParticleShaders* const m_particleShaders;
     ComputeShaders* const m_computeShaders;
+    ThreadAdmin m_threadAdmin;
 
     float m_walkSpeed;
     float m_lookAroundSpeed;

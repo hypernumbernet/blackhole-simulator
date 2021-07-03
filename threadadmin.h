@@ -25,7 +25,7 @@ class ThreadAdmin : public QThread
     Q_OBJECT
 
 public:
-    explicit ThreadAdmin(QObject*);
+    explicit ThreadAdmin(QObject*, ComputeShaders*);
     ~ThreadAdmin();
 
     int frameNum();
@@ -33,7 +33,7 @@ public:
     int size() const;
     ThreadController* at(int) const;
     void reset();
-    void setCompute(bhs::Compute, ComputeShaders*);
+    void setComputeDevice(bhs::Compute);
 
     typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const);
     typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const);
@@ -56,7 +56,6 @@ private:
     int m_endOfFrameAdvance;
     bhs::Compute m_compute;
     ComputeShaders* m_computeShaders;
-    quint64 m_numberOfParticles;
 
     QBasicTimer m_simulateTimer;
     QBasicTimer m_resetTimer;

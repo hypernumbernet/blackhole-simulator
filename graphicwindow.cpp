@@ -1,10 +1,10 @@
 #include "graphicwindow.h"
 
 GraphicWindow::GraphicWindow()
-    : m_threadAdmin(this)
-    , m_lineShaders(new LineShaders)
+    : m_lineShaders(new LineShaders)
     , m_particleShaders(new ParticleShaders(&m_threadAdmin))
     , m_computeShaders(new ComputeShaders)
+    , m_threadAdmin(this, m_computeShaders)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
     , m_camera(CAMERA_INI_POS)
@@ -58,7 +58,7 @@ void GraphicWindow::initializeGL()
 
     m_computeShaders->initialize();
 
-    m_threadAdmin.setCompute(sim.compute, m_computeShaders);
+    m_threadAdmin.setComputeDevice(sim.compute);
 
     m_uiTimer.start(30, this);
     m_fpsTimer.start(1000, this);
@@ -282,8 +282,8 @@ void GraphicWindow::resetWaitForDone(const bhs::SimCondition& sim)
 
 void GraphicWindow::resetParticles()
 {
-    m_threadAdmin.setCompute(m_simCondition->compute, m_computeShaders);
     m_particleShaders->reset(*m_simCondition);
+    m_threadAdmin.setComputeDevice(m_simCondition->compute);
 }
 
 void GraphicWindow::setModelScale(const QString& text)

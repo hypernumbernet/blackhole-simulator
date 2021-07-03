@@ -20,5 +20,5 @@ void main()
 
     //position[i] +=  velocity[i];
     //coordinate[i] *= 1.00001;
-    coordinate[i] += velocity[i];
+    velocity[i] += 1.0;
 }

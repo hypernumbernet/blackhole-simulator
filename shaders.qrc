@@ -2,9 +2,9 @@
     <qresource prefix="/">
         <file>shader/particle.frag</file>
         <file>shader/particle.vert</file>
-        <file>shader/timeprogress.comp</file>
+        <file>shader/timeprogress_d.comp</file>
         <file>shader/world.frag</file>
         <file>shader/world.vert</file>
-        <file>shader/interaction.comp</file>
+        <file>shader/interaction_d.comp</file>
     </qresource>
 </RCC>

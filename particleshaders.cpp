@@ -42,6 +42,8 @@ bool ParticleShaders::initialize(const int screenHeight)
 
 void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
 {
+    m_precision = sim.precision;
+
     if (sim.precision == bhs::Precision::Float) {
         switch (sim.engine) {
         case bhs::Engine::G3DMassDiff:
@@ -79,41 +81,34 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     emit UpdateUi::it().displayPrecision(sim.precision);
     emit UpdateUi::it().displayPresetName(sim.preset);
 
-    m_precision = sim.precision;
-
     const int VECTOR_SIZE = 3;
 
-    int size = numberOfParticle() * VECTOR_SIZE * sizeof(double);
+    quint64 num = numberOfParticle();
+    int size = num * VECTOR_SIZE * sizeof(double);
     GLenum precision = GL_DOUBLE;
     if (m_precision == bhs::Precision::Float) {
-        size = numberOfParticle() * VECTOR_SIZE * sizeof(float);
+        size = num * VECTOR_SIZE * sizeof(float);
         precision = GL_FLOAT;
     }
 
-    uint32_t ssboCoord = 0;
-    glGenBuffers(1, &ssboCoord);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboCoord);
-    glBufferStorage(GL_SHADER_STORAGE_BUFFER, size, coordinates(), GL_DYNAMIC_STORAGE_BIT);
-    //glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    uint32_t ssbo = 0;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferStorage(GL_SHADER_STORAGE_BUFFER, size * 2, ssboData(), GL_DYNAMIC_STORAGE_BIT);
 
     m_vao.bind();
 
-    glBindBuffer(GL_ARRAY_BUFFER, ssboCoord);
+    glBindBuffer(GL_ARRAY_BUFFER, ssbo);
     glVertexAttribPointer(0, VECTOR_SIZE, precision, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     m_vao.release();
 
-    const int LAYOUT_BINDING = 0;
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, LAYOUT_BINDING, ssboCoord);
-
-//    uint32_t ssboVels = 0;
-//    glGenBuffers(1, &ssboVels);
-//    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboVels);
-//    glBufferStorage(GL_SHADER_STORAGE_BUFFER, size, velocities(), GL_DYNAMIC_STORAGE_BIT);
-//    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssboVels);
-
+    //const int LAYOUT_BINDING = 0;
+    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, LAYOUT_BINDING, ssbo);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, 0, size);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, size, size);
 }
 
 // This function must be called from the GUI thread.
@@ -121,16 +116,15 @@ void ParticleShaders::updateGL()
 {
     if (numberOfParticle() == 0)
         return;
-    if (coordinates() == nullptr)
-        return;
 
     const int VECTOR_SIZE = 3;
-    quint64 size = sizeof(double);
     if (m_precision == bhs::Precision::Float) {
-        size = sizeof(float);
+        quint64 size = numberOfParticle() * VECTOR_SIZE * sizeof(float);
+        glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, coordinates<float>());
+    } else {
+        quint64 size = numberOfParticle() * VECTOR_SIZE * sizeof(double);
+        glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, coordinates<double>());
     }
-
-    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, numberOfParticle() * VECTOR_SIZE * size, coordinates());
 }
 
 void ParticleShaders::paint(const QMatrix4x4& viewProjection)
@@ -202,26 +196,13 @@ quint64 ParticleShaders::numberOfParticle() const
     return ret;
 }
 
-const void* ParticleShaders::coordinates() const
+const void* ParticleShaders::ssboData() const
 {
     const void* ret = nullptr;
-    if (m_NBodyEngineFloat) {
-        ret = m_NBodyEngineFloat->coordinates();
-    }
-    if (m_NBodyEngineDouble) {
-        ret = m_NBodyEngineDouble->coordinates();
-    }
-    return ret;
-}
-
-const void* ParticleShaders::velocities() const
-{
-    const void* ret = nullptr;
-    if (m_NBodyEngineFloat) {
-        ret = m_NBodyEngineFloat->velocities();
-    }
-    if (m_NBodyEngineDouble) {
-        ret = m_NBodyEngineDouble->velocities();
+    if (m_precision == bhs::Precision::Float) {
+        ret = makeSSBOData<float>();
+    } else {
+        ret = makeSSBOData<double>();
     }
     return ret;
 }

@@ -1,11 +1,12 @@
 #include "threadadmin.h"
 
-ThreadAdmin::ThreadAdmin(QObject* parent)
+ThreadAdmin::ThreadAdmin(QObject* parent, ComputeShaders* cs)
     : QThread(parent)
     , m_threadCount(QThread::idealThreadCount())
     , m_waitForDone(0)
     , m_calculateNext(0)
     , m_frameNum(0)
+    , m_computeShaders(cs)
 {
     for (int i = 0; i < m_threadCount; ++i) {
         m_controllers.append(new ThreadController(this));
@@ -68,7 +69,7 @@ void ThreadAdmin::handleResults()
 void ThreadAdmin::updateParticles()
 {
     if (m_compute == bhs::Compute::GPU) {
-        m_computeShaders->update(m_numberOfParticles);
+        m_computeShaders->update();
         ++m_frameNum;
         return;
     }
@@ -122,22 +123,21 @@ ThreadController* ThreadAdmin::at(int i) const
 
 void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
 {
-    m_numberOfParticles = engine->numberOfParticle();
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
     }
+    m_computeShaders->bind(engine);
 }
 
 void ThreadAdmin::initialize(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
 {
-    m_numberOfParticles = engine->numberOfParticle();
     for (int i = 0; i < size(); ++i) {
         at(i)->initialize(factory(engine));
     }
+    m_computeShaders->bind(engine);
 }
 
-void ThreadAdmin::setCompute(bhs::Compute cmp, ComputeShaders* cs)
+void ThreadAdmin::setComputeDevice(bhs::Compute cmp)
 {
     m_compute = cmp;
-    m_computeShaders = cs;
 }
