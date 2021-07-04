@@ -15,23 +15,20 @@ ParticleShaders::~ParticleShaders()
 bool ParticleShaders::initialize(const int screenHeight)
 {
     m_initHeight = screenHeight;
-    if (!initializeOpenGLFunctions()) {
+    if (!initializeOpenGLFunctions())
         return false;
-    }
 
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/particle.vert")) {
+    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/particle.vert"))
         return false;
-    }
-    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/particle.frag")) {
-        return false;
-    }
-    if (!m_program.link()) {
-        return false;
-    }
 
-    if (!m_vao.create()) {
+    if (!m_program.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/particle.frag"))
         return false;
-    }
+
+    if (!m_program.link())
+        return false;
+
+    if (!m_vao.create())
+        return false;
 
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
     glEnable(GL_POINT_SPRITE);
@@ -46,8 +43,10 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     int coordinateVectorSize = 3;
     int velocityVectorSize = 3;
 
-    if (sim.precision == bhs::Precision::Float) {
-        switch (sim.engine) {
+    if (sim.precision == bhs::Precision::Float)
+    {
+        switch (sim.engine)
+        {
         case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineFloat = new G3DMassDiffNBE<float>(sim);
@@ -64,7 +63,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             break;
         }
     } else {
-        switch (sim.engine) {
+        switch (sim.engine)
+        {
         case bhs::Engine::G3DMassDiff:
         default:
             m_NBodyEngineDouble = new G3DMassDiffNBE<double>(sim);
@@ -115,7 +115,8 @@ void ParticleShaders::updateGL()
         return;
 
     const int VECTOR_SIZE = 3;
-    if (m_precision == bhs::Precision::Float) {
+    if (m_precision == bhs::Precision::Float)
+    {
         quint64 size = numberOfParticle() * VECTOR_SIZE * sizeof(float);
         glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, coordinates<float>());
     } else {
@@ -150,11 +151,13 @@ void ParticleShaders::resize(int height)
 
 void ParticleShaders::reset(const bhs::SimCondition& sim)
 {
-    if (m_NBodyEngineFloat) {
+    if (m_NBodyEngineFloat)
+    {
         delete m_NBodyEngineFloat;
         m_NBodyEngineFloat = nullptr;
     }
-    if (m_NBodyEngineDouble) {
+    if (m_NBodyEngineDouble)
+    {
         delete m_NBodyEngineDouble;
         m_NBodyEngineDouble = nullptr;
     }
@@ -163,56 +166,54 @@ void ParticleShaders::reset(const bhs::SimCondition& sim)
 
 void ParticleShaders::setModelScale(double val)
 {
-    if (m_NBodyEngineFloat) {
+    if (m_NBodyEngineFloat)
         m_NBodyEngineFloat->setModelScale(val);
-    }
-    if (m_NBodyEngineDouble) {
+
+    if (m_NBodyEngineDouble)
         m_NBodyEngineDouble->setModelScale(val);
-    }
 }
 
 void ParticleShaders::setModelScaleRatio(double val)
 {
-    if (m_NBodyEngineFloat) {
+    if (m_NBodyEngineFloat)
         m_NBodyEngineFloat->setModelScaleRatio(val);
-    }
-    if (m_NBodyEngineDouble) {
+
+    if (m_NBodyEngineDouble)
         m_NBodyEngineDouble->setModelScaleRatio(val);
-    }
 }
 
 quint64 ParticleShaders::numberOfParticle() const
 {
     quint64 ret = 0;
-    if (m_NBodyEngineFloat) {
+    if (m_NBodyEngineFloat)
         ret = m_NBodyEngineFloat->numberOfParticle();
-    }
-    if (m_NBodyEngineDouble) {
+
+    if (m_NBodyEngineDouble)
         ret = m_NBodyEngineDouble->numberOfParticle();
-    }
+
     return ret;
 }
 
 const void* ParticleShaders::ssboData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
 {
     const void* ret = nullptr;
-    if (m_precision == bhs::Precision::Float) {
+    if (m_precision == bhs::Precision::Float)
         ret = makeSSBOData<float>(result, coordinateVectorSize, velocityVectorSize);
-    } else {
+    else
         ret = makeSSBOData<double>(result, coordinateVectorSize, velocityVectorSize);
-    }
+
     return ret;
 }
 
 double ParticleShaders::modelScale() const
 {
     double ret = 0.0;
-    if (m_NBodyEngineFloat) {
+    if (m_NBodyEngineFloat)
         ret = m_NBodyEngineFloat->modelScale();
-    }
-    if (m_NBodyEngineDouble) {
+
+    if (m_NBodyEngineDouble)
         ret = m_NBodyEngineDouble->modelScale();
-    }
+
     return ret;
 }
 
@@ -221,7 +222,8 @@ void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVector
     SSBODataStruct ssboDataStruct;
     result.data = ssboData(ssboDataStruct, coordinateVectorSize, velocityVectorSize);
 
-    if (m_precision == bhs::Precision::Float) {
+    if (m_precision == bhs::Precision::Float)
+    {
         result.dataSize = sizeof(float);
         result.precision = GL_FLOAT;
     } else {

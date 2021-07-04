@@ -149,7 +149,8 @@ void ComputeShaders::bind(AbstractNBodyEngine<double>* engine)
 
 void ComputeShaders::update()
 {
-    if ( m_precision == bhs::Precision::Float) {
+    if ( m_precision == bhs::Precision::Float)
+    {
         m_programTimeProgressFloat.bind();
         glDispatchCompute(m_numberOfWorkGroups, 1, 1);
         glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);

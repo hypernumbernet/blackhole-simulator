@@ -44,11 +44,10 @@ void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
     for (int i = 0; i < tcount; ++i)
     {
         int s = j * j - 2 * k * i;
-        if (s < 0) {
+        if (s < 0)
             m_interactionRanges[i].start = num;
-        } else {
+        else
             m_interactionRanges[i].start = j - (int)floor(sqrt((T)s));
-        }
     }
     for (int i = 0; i < tcount - 1; ++i)
     {

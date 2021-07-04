@@ -202,11 +202,11 @@ void MainWidget::displayFPS(const int fps)
 
 void MainWidget::updateStartButtonText(const bool setStop)
 {
-    if (setStop) {
+    if (setStop)
         m_startButton.setText(tr("Stop"));
-    } else {
+    else
         m_startButton.setText(tr("Start"));
-    }
+
     m_frameAdvance1.setDisabled(setStop);
     m_frameAdvance10.setDisabled(setStop);
     m_frameAdvance100.setDisabled(setStop);
@@ -226,9 +226,9 @@ void MainWidget::displayStyle(QLabel& lbl)
 
 void MainWidget::displayModelScale(const float val)
 {
-    if (val <= 0.0f) {
+    if (val <= 0.0f)
         return;
-    }
+
     bool state = m_scaleValue.blockSignals(true);
     m_scaleValue.setText(QString::number(1.0f / val));
     m_scaleValue.blockSignals(state);
@@ -249,7 +249,8 @@ void MainWidget::displayTimePerFrame(const float time)
 
 void MainWidget::showInitializerDialog()
 {
-    if (!m_initializerDialog) {
+    if (!m_initializerDialog)
+    {
         m_initializerDialog = new InitializerDialog(this);
         connect(m_initializerDialog, &InitializerDialog::accepted, this, &MainWidget::acceptInitializerDialog);
     }

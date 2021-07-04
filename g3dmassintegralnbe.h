@@ -11,7 +11,8 @@ class G3DMassIntegralNBE : public AbstractNBodyEngine<T>, private Initializer3D<
 {
 public:
 
-    struct Distance {
+    struct Distance
+    {
         T invR;
         T unitX;
         T unitY;
@@ -22,7 +23,8 @@ public:
         : AbstractNBodyEngine<T>()
         , Initializer3D<T>(sim, this)
     {
-        switch (sim.preset) {
+        switch (sim.preset)
+        {
         case bhs::Preset::RandomCube:
         case bhs::Preset::RandomSphere:
         case bhs::Preset::RandomBall:
@@ -46,7 +48,8 @@ public:
         quint64 numberOfInteractions = sim.numberOfParticles * (sim.numberOfParticles - 1) / 2;
         this->m_inversedDistances = new T[numberOfInteractions];
 
-        switch (sim.preset) {
+        switch (sim.preset)
+        {
         case bhs::Preset::RandomCube:
             this->initRandamCube();
             break;
@@ -104,9 +107,8 @@ public:
         T dz = coord[ai] - coord[bi];
         T r = sqrt(dx * dx + dy * dy + dz * dz);
         if (r == 0.0)
-        {
             return false;
-        }
+
         r = 1.0 / r;
         result.invR = r;
         result.unitX = dx * r;
@@ -130,9 +132,8 @@ private:
             for (quint64 j = i + 1; j < this->m_numberOfParticles; ++j)
             {
                 if (!calculateDistance(d, this->m_coordinates, i, j))
-                {
                     continue;
-                }
+
                 this->m_inversedDistances[k] = d.invR;
 
                 ++k;

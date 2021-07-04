@@ -28,7 +28,8 @@ public:
 
 private:
     UpdateUi()
-        : ENGINE(new QMap<bhs::Engine, QString>{
+        : ENGINE(new QMap<bhs::Engine, QString>
+        {
             {bhs::Engine::G3DMassDiff, tr("Gravity 3D Mass Differential")},
             {bhs::Engine::G3DMassIntegral, tr("Gravity 3D Mass Integral (Exp.)")},
             {bhs::Engine::G3D4DMassDiff, tr("Gravity 3S-Velocity M. Diff.")},
@@ -36,15 +37,18 @@ private:
             //{0, tr("Gravity2DDifferential")},
             //{0, tr("Gravity2DIntegral")},
         })
-        , PRECISION(new QMap<bhs::Precision, QString>{
+        , PRECISION(new QMap<bhs::Precision, QString>
+        {
             {bhs::Precision::Float, tr("Float")},
             {bhs::Precision::Double, tr("Double")},
         })
-        , COMPUTE(new QMap<bhs::Compute, QString>{
+        , COMPUTE(new QMap<bhs::Compute, QString>
+        {
             {bhs::Compute::CPU, tr("CPU")},
             {bhs::Compute::GPU, tr("GPU")},
         })
-        , PRESET(new QMap<bhs::Preset, QString>{
+        , PRESET(new QMap<bhs::Preset, QString>
+        {
             {bhs::Preset::RandomCube, tr("Random Cube")},
             {bhs::Preset::RandomSphere, tr("Random Sphere")},
             {bhs::Preset::RandomBall, tr("Random Ball")},

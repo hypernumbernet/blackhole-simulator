@@ -142,7 +142,8 @@ bool Camera::lookAt(const QVector3D& point, const float rate)
 bool Camera::setPosition(const QVector3D& pos, const float rate)
 {
     QMutexLocker  locker(&m_mutex);
-    if (rate >= 1.0f) {
+    if (rate >= 1.0f)
+    {
         m_position = pos;
         return true;
     }
@@ -160,10 +161,11 @@ void Camera::circleStrafing(const float amount)
     m_position += amount * m_right;
     auto direction = m_position.normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
-    if (cosVal > 1.0f) {
-        // Occurs rarely with vigorous operation. Always be careful when using inner products.
+
+    // Occurs rarely with vigorous operation. Always be careful when using inner products.
+    if (cosVal > 1.0f)
         cosVal = 1.0f;
-    }
+
     auto angle = acos(cosVal) * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_forward);
     cross.normalize();

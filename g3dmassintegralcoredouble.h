@@ -79,7 +79,8 @@ public slots:
         }
 
         bhs::interactionMutex.lock();
-        for (quint64 i = 0; i < m_numberOfParticles * 3; ++i) {
+        for (quint64 i = 0; i < m_numberOfParticles * 3; ++i)
+        {
             m_velocities[i] += vels[i];
         }
         bhs::interactionMutex.unlock();

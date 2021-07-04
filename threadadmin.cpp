@@ -8,7 +8,8 @@ ThreadAdmin::ThreadAdmin(QObject* parent, ComputeShaders* cs)
     , m_frameNum(0)
     , m_computeShaders(cs)
 {
-    for (int i = 0; i < m_threadCount; ++i) {
+    for (int i = 0; i < m_threadCount; ++i)
+    {
         m_controllers.append(new ThreadController(this));
     }
 }
@@ -26,11 +27,13 @@ void ThreadAdmin::reset()
     m_simulateTimer.stop();
     m_frameNum = 0;
 
-    if (m_waitForDone > 0) {
+    if (m_waitForDone > 0)
+    {
         m_resetTimer.start(100, this);
         return;
     }
-    for (int i = 0; i < m_controllers.size(); ++i) {
+    for (int i = 0; i < m_controllers.size(); ++i)
+    {
         m_controllers.at(i)->reset();
     }
     emit UpdateUi::it().resetParticles();
@@ -44,18 +47,18 @@ int ThreadAdmin::frameNum()
 void ThreadAdmin::startSim(const int msec)
 {
     m_frameAdvanceTimer.stop();
-    if (m_simulateTimer.isActive()) {
+    if (m_simulateTimer.isActive())
         m_simulateTimer.stop();
-    } else {
+    else
         m_simulateTimer.start(msec, this);
-    }
 
     emit UpdateUi::it().updateStartButtonText(m_simulateTimer.isActive());
 }
 
 void ThreadAdmin::frameAdvance(int count)
 {
-    if (!m_simulateTimer.isActive()) {
+    if (!m_simulateTimer.isActive())
+    {
         m_endOfFrameAdvance = m_frameNum + count;
         m_frameAdvanceTimer.start(0, this);
     }
@@ -68,7 +71,8 @@ void ThreadAdmin::handleResults()
 
 void ThreadAdmin::updateParticles()
 {
-    if (m_compute == bhs::Compute::GPU) {
+    if (m_compute == bhs::Compute::GPU)
+    {
         m_computeShaders->update();
         ++m_frameNum;
         return;
@@ -78,16 +82,20 @@ void ThreadAdmin::updateParticles()
         if (m_calculateNext == 0)
         {
             m_calculateNext = 1;
-            for (int i = 0; i < m_controllers.size(); ++i) {
-                if (m_controllers.at(i)->hasRangeTimeProgress(i)) {
+            for (int i = 0; i < m_controllers.size(); ++i)
+            {
+                if (m_controllers.at(i)->hasRangeTimeProgress(i))
+                {
                     ++m_waitForDone;
                     emit m_controllers.at(i)->calculateTimeProgress(i);
                 }
             }
         } else {
             m_calculateNext = 0;
-            for (int i = 0; i < m_controllers.size(); ++i) {
-                if (m_controllers.at(i)->hasRangeInteraction(i)) {
+            for (int i = 0; i < m_controllers.size(); ++i)
+            {
+                if (m_controllers.at(i)->hasRangeInteraction(i))
+                {
                     ++m_waitForDone;
                     emit m_controllers.at(i)->calculateInteraction(i);
                 }
@@ -99,12 +107,17 @@ void ThreadAdmin::updateParticles()
 
 void ThreadAdmin::timerEvent(QTimerEvent* ev)
 {
-    if (ev->timerId() == m_resetTimer.timerId()) {
+    if (ev->timerId() == m_resetTimer.timerId())
+    {
         m_resetTimer.stop();
         reset();
-    } else if (ev->timerId() == m_simulateTimer.timerId() && m_simulateTimer.isActive()) {
+    }
+    else if (ev->timerId() == m_simulateTimer.timerId() && m_simulateTimer.isActive())
+    {
         updateParticles();
-    } else if (ev->timerId() == m_frameAdvanceTimer.timerId()) {
+    }
+    else if (ev->timerId() == m_frameAdvanceTimer.timerId())
+    {
         updateParticles();
         if (m_frameNum >= m_endOfFrameAdvance)
             m_frameAdvanceTimer.stop();
@@ -123,7 +136,8 @@ ThreadController* ThreadAdmin::at(int i) const
 
 void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFactoryFloat factory)
 {
-    for (int i = 0; i < size(); ++i) {
+    for (int i = 0; i < size(); ++i)
+    {
         at(i)->initialize(factory(engine, i));
     }
     m_computeShaders->bind(engine);
@@ -131,7 +145,8 @@ void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, engineFac
 
 void ThreadAdmin::initialize(AbstractNBodyEngine<double>* const engine, engineFactoryDouble factory)
 {
-    for (int i = 0; i < size(); ++i) {
+    for (int i = 0; i < size(); ++i)
+    {
         at(i)->initialize(factory(engine, i));
     }
     m_computeShaders->bind(engine);

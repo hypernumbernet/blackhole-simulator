@@ -13,12 +13,15 @@ void Initializer3D<T>::initRandamCube()
     T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    if (this->m_sim.massRandom) {
-        for (quint64 i = 0; i < num; ++i) {
+    if (this->m_sim.massRandom)
+    {
+        for (quint64 i = 0; i < num; ++i)
+        {
             masses[i] = randf<T>() * this->m_sim.massAvg * (T)2.0;
         }
     } else {
-        for (quint64 i = 0; i < num; ++i) {
+        for (quint64 i = 0; i < num; ++i)
+        {
             masses[i] = this->m_sim.massAvg;
         }
     }
@@ -47,12 +50,15 @@ void Initializer3D<T>::initRandamSphere(const T rate)
     T* coordinates = (T*)this->m_engine->coordinates();
     T* velocities = this->m_engine->velocities();
 
-    if (this->m_sim.massRandom) {
-        for (quint64 i = 0; i < num; ++i) {
+    if (this->m_sim.massRandom)
+    {
+        for (quint64 i = 0; i < num; ++i)
+        {
             masses[i] = randf<T>() * this->m_sim.massAvg * (T)2.0;
         }
     } else {
-        for (quint64 i = 0; i < num; ++i) {
+        for (quint64 i = 0; i < num; ++i)
+        {
             masses[i] = this->m_sim.massAvg;
         }
     }
@@ -63,7 +69,8 @@ void Initializer3D<T>::initRandamSphere(const T rate)
     {
         i3 = i * 3;
 
-        do {
+        do
+        {
             cood.set(
                 bhs::rand0center1maxf(),
                 bhs::rand0center1maxf(),

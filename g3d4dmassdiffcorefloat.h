@@ -53,7 +53,8 @@ public slots:
         quint64 k = 0, a, b;
 
         float* vels = new float[m_numberOfParticles * 4]();
-        for (quint64 i = 0; i < m_numberOfParticles; ++i) {
+        for (quint64 i = 0; i < m_numberOfParticles; ++i)
+        {
             vels[i * 4] = 1.0;
         }
 
@@ -68,9 +69,9 @@ public slots:
                 d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
                 d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
                 distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0f) {
+                if (distance <= 0.0f)
                     continue;
-                }
+
                 inv = 1.0f / distance;
                 theta = inv * inv * time_g;
 
@@ -106,7 +107,8 @@ public slots:
         }
 
         interactionMutex.lock();
-        for (quint64 i = 0; i < m_numberOfParticles; ++i) {
+        for (quint64 i = 0; i < m_numberOfParticles; ++i)
+        {
             auto i4 = i * 4;
             auto vq = Quaternion<float>(m_velocities, i4);
             auto vp = Quaternion<float>(vels, i4);

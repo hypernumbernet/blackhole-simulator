@@ -218,14 +218,12 @@ public:
         T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
         T e = exp(i0);
         T a;
+
         if (n == 0)
-        {
             a = e;
-        }
         else
-        {
             a = e * sin(n) / n;
-        }
+
         return Quaternion(e * cos(n), i1 * a, i2 * a, i3 * a);
     }
 
@@ -234,14 +232,12 @@ public:
     {
         T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
         T a;
+
         if (n == 0)
-        {
             a = 0;
-        }
         else
-        {
             a = sin(n) / n;
-        }
+
         return Quaternion(cos(n), i1 * a, i2 * a, i3 * a);
     }
 
@@ -250,14 +246,12 @@ public:
     {
         T n = sqrt(x * x + y * y + z * z);
         T a;
+
         if (n == 0)
-        {
             a = 0;
-        }
         else
-        {
             a = sin(n) / n;
-        }
+
         return Quaternion(cos(n), x * a, y * a, z * a);
     }
 
@@ -266,14 +260,12 @@ public:
     {
         T n = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         T a;
+
         if (n == 0)
-        {
             a = 0;
-        }
         else
-        {
             a = sin(n) / n;
-        }
+
         return Quaternion(cos(n), v.x * a, v.y * a, v.z * a);
     }
 
@@ -282,14 +274,12 @@ public:
     {
         T n = sqrt(x * x + y * y + z * z);
         T a;
+
         if (n == 0)
-        {
             a = 0;
-        }
         else
-        {
             a = sinh(n) / n;
-        }
+
         return Quaternion(cosh(n), x * a, y * a, z * a);
     }
 
@@ -299,9 +289,8 @@ public:
     {
         T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
         if (n == 0)
-        {
             return Quaternion::Zero;
-        }
+
         n = atan2(n, i0) / n;
         //scalar part
         //0.5 * log(a.i0 * a.i0 + a.i1 * a.i1 + a.i2 * a.i2 + a.i3 * a.i3)
@@ -313,9 +302,8 @@ public:
     {
         T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
         if (n == 0)
-        {
             return Vector3<T>(0, 0, 0);
-        }
+
         n = atan2(n, i0) / n;
         return Vector3<T>(i1 * n, i2 * n, i3 * n);
     }
@@ -324,9 +312,8 @@ public:
     {
         T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
         if (n == 0)
-        {
             return Vector3<T>(0, 0, 0);
-        }
+
         n = ATANH(n) / n;
         return Vector3<T>(i1 * n, i2 * n, i3 * n);
     }
@@ -402,7 +389,7 @@ public:
             -i0 * a.i1 + i1 * a.i0 - i2 * a.i3 + i3 * a.i2,
             -i0 * a.i2 + i1 * a.i3 + i2 * a.i0 - i3 * a.i1,
             -i0 * a.i3 - i1 * a.i2 + i2 * a.i1 + i3 * a.i0
-            );
+        );
     }
 
     // Slerp on 3-sphere (4-dimensional)

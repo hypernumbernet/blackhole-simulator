@@ -13,7 +13,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     engineGroup->setLayout(engineVbox);
     firstLayout->addWidget(engineGroup);
 
-    for (const auto& e : UpdateUi::it().ENGINE->toStdMap()) {
+    for (const auto& e : UpdateUi::it().ENGINE->toStdMap())
+    {
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
         engineVbox->addWidget(radio);
@@ -28,7 +29,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     precisionGroup->setLayout(precisionHbox);
     firstLayout->addWidget(precisionGroup);
 
-    for (const auto& e : UpdateUi::it().PRECISION->toStdMap()) {
+    for (const auto& e : UpdateUi::it().PRECISION->toStdMap())
+    {
         auto radio = new QRadioButton(e.second);
         m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
         precisionHbox->addWidget(radio);
@@ -43,7 +45,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     computeGroup->setLayout(computeHbox);
     firstLayout->addWidget(computeGroup);
 
-    for (const auto& e : UpdateUi::it().COMPUTE->toStdMap()) {
+    for (const auto& e : UpdateUi::it().COMPUTE->toStdMap())
+    {
         auto radio = new QRadioButton(e.second);
         m_computeButtonGroup.addButton(radio, static_cast<int>(e.first));
         computeHbox->addWidget(radio);
@@ -58,7 +61,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     presetGroup->setLayout(presetVbox);
     firstLayout->addWidget(presetGroup);
 
-    for (const auto& e : UpdateUi::it().PRESET->toStdMap()) {
+    for (const auto& e : UpdateUi::it().PRESET->toStdMap())
+    {
         auto radio = new QRadioButton(e.second);
         m_presetButtonGroup.addButton(radio, static_cast<int>(e.first));
         presetVbox->addWidget(radio);
@@ -171,7 +175,8 @@ bool InitializerDialog::validate()
 
     bool ok;
     auto val = m_timePerFrameEdit.text().toDouble(&ok);
-    if (ok) {
+    if (ok)
+    {
         m_timePerFrameEdit.setPalette(normalPal);
         m_simCondition.timePerFrame = val;
     } else {
@@ -180,7 +185,8 @@ bool InitializerDialog::validate()
     }
 
     auto num = m_particleNumEdit.text().toInt(&ok);
-    if (ok) {
+    if (ok)
+    {
         m_particleNumEdit.setPalette(normalPal);
         m_simCondition.numberOfParticles = num;
     } else {
@@ -189,7 +195,8 @@ bool InitializerDialog::validate()
     }
 
     auto massAvg = m_massAvgEdit.text().toDouble(&ok);
-    if (ok) {
+    if (ok)
+    {
         m_massAvgEdit.setPalette(normalPal);
         m_simCondition.massAvg = massAvg;
     } else {
@@ -198,7 +205,8 @@ bool InitializerDialog::validate()
     }
 
     auto scale = m_scaleEdit.text().toDouble(&ok);
-    if (ok) {
+    if (ok)
+    {
         m_scaleEdit.setPalette(normalPal);
         m_simCondition.scale = scale;
     } else {
@@ -211,16 +219,14 @@ bool InitializerDialog::validate()
 
 void InitializerDialog::okButtonClicked()
 {
-    if (validate()) {
+    if (validate())
         accept();
-    }
 }
 
 void InitializerDialog::applyButtonClicked()
 {
-    if (validate()) {
+    if (validate())
         emit accepted();
-    }
 }
 
 const bhs::SimCondition& InitializerDialog::simCondition() const

@@ -36,7 +36,8 @@ public:
 
 private:
 
-    struct SSBODataStruct {
+    struct SSBODataStruct
+    {
         const void* data;
         qint64 total;
         qint64 coordinateOffset;
@@ -76,12 +77,12 @@ private:
     inline const T* coordinates() const
     {
         const T* ret = nullptr;
-        if constexpr (std::is_same_v<T, float>) {
+        if constexpr (std::is_same_v<T, float>)
             ret = m_NBodyEngineFloat->coordinates();
-        }
-        if constexpr (std::is_same_v<T, double>) {
+
+        if constexpr (std::is_same_v<T, double>)
             ret = m_NBodyEngineDouble->coordinates();
-        }
+
         return ret;
     }
 
@@ -89,12 +90,12 @@ private:
     inline const T* velocities() const
     {
         const T* ret = nullptr;
-        if constexpr (std::is_same_v<T, float>) {
+        if constexpr (std::is_same_v<T, float>)
             ret = m_NBodyEngineFloat->velocities();
-        }
-        if constexpr (std::is_same_v<T, double>) {
+
+        if constexpr (std::is_same_v<T, double>)
             ret = m_NBodyEngineDouble->velocities();
-        }
+
         return ret;
     }
 
@@ -102,12 +103,12 @@ private:
     inline const T* masses() const
     {
         const T* ret = nullptr;
-        if constexpr (std::is_same_v<T, float>) {
+        if constexpr (std::is_same_v<T, float>)
             ret = m_NBodyEngineFloat->masses();
-        }
-        if constexpr (std::is_same_v<T, double>) {
+
+        if constexpr (std::is_same_v<T, double>)
             ret = m_NBodyEngineDouble->masses();
-        }
+
         return ret;
     }
 
@@ -129,17 +130,20 @@ private:
         T* data = new T[total]();
 
         const T* coords = coordinates<T>();
-        for (quint64 i = 0; i < num * coordinateVectorSize; ++i) {
+        for (quint64 i = 0; i < num * coordinateVectorSize; ++i)
+        {
             data[i] = coords[i];
         }
 
         const T* vels = velocities<T>();
-        for (quint64 i = 0; i < num * velocityVectorSize; ++i) {
+        for (quint64 i = 0; i < num * velocityVectorSize; ++i)
+        {
             data[velocityOffset + i] = vels[i];
         }
 
         const T* mss = masses<T>();
-        for (quint64 i = 0; i < num; ++i) {
+        for (quint64 i = 0; i < num; ++i)
+        {
             data[massOffset + i] = mss[i];
         }
 
@@ -162,11 +166,10 @@ private:
     template <typename T>
     inline T timePerFrame() const
     {
-        if constexpr (std::is_same_v<T, float>) {
+        if constexpr (std::is_same_v<T, float>)
             return m_NBodyEngineFloat->timePerFrame();
-        }
-        if constexpr (std::is_same_v<T, double>) {
+
+        if constexpr (std::is_same_v<T, double>)
             return m_NBodyEngineDouble->timePerFrame();
-        }
     }
 };

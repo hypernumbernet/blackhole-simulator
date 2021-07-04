@@ -15,7 +15,8 @@ public:
         : AbstractNBodyEngine<T>()
         , Initializer3D<T>(sim, this)
     {
-        switch (sim.preset) {
+        switch (sim.preset)
+        {
         case bhs::Preset::RandomCube:
         case bhs::Preset::RandomSphere:
         case bhs::Preset::RandomBall:
@@ -35,7 +36,8 @@ public:
         this->m_coordinates = new T[this->m_numberOfParticles * 3];
         this->m_velocities = new T[this->m_numberOfParticles * 3];
 
-        switch (sim.preset) {
+        switch (sim.preset)
+        {
         case bhs::Preset::RandomCube:
             this->initRandamCube();
             break;

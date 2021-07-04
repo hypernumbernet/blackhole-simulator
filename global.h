@@ -62,20 +62,18 @@ inline float randf() {return (T)rand() / (T)RAND_MAX;}
 // Random numbers in the range of equality between plus and minus areas
 inline float rand0centerf()
 {
-    if (rand() % 2 == 0) {
+    if (rand() % 2 == 0)
         return (float)rand();
-    } else {
+    else
         return -(float)rand();
-    }
 }
 
 inline float rand0center1maxf()
 {
-    if (rand() % 2 == 0) {
+    if (rand() % 2 == 0)
         return (float)rand() / (float)RAND_MAX;
-    } else {
+    else
         return -(float)rand() / (float)RAND_MAX;
-    }
 }
 
 inline QRecursiveMutex interactionMutex;
