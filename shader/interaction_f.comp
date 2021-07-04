@@ -1,7 +1,5 @@
 #version 450 core
 
-#define GRAVITATIONAL_CONSTANT 6.6743e-11
-
 layout (local_size_x = 128) in;
 
 layout (std430, binding = 0) buffer coordinate_block
@@ -23,13 +21,14 @@ layout(std430, binding = 3) buffer param_block
 {
     float timePerFrame;
     float numberOfPerticles;
+    float GConstant;
 };
 
 void main()
 {
     const uint i = gl_GlobalInvocationID.x;
     uint num = uint(numberOfPerticles);
-    float time_g = timePerFrame * float(GRAVITATIONAL_CONSTANT);
+    float time_g = timePerFrame * GConstant;
     uint i3 = i * 3;
 
     float force_x = 0.0;

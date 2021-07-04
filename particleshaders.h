@@ -116,8 +116,6 @@ private:
     {
         quint64 num = numberOfParticle();
         quint64 ssboNum = num % 4 ? num / 4 * 4 + 4 : num;
-        //quint64 ssboNum = num % 8 ? num / 8 * 8 + 8 : num;
-        //quint64 ssboNum = num;
 
         qint64 coordinateSize = ssboNum * coordinateVectorSize;
         qint64 velocityOffset = coordinateSize;
@@ -125,7 +123,7 @@ private:
         qint64 massOffset = velocityOffset + velocitySize;
         qint64 massSize = ssboNum;
         qint64 paramOffset = massOffset + massSize;
-        qint64 paramSize = 2;
+        qint64 paramSize = 3;
         qint64 total = paramOffset + paramSize;
 
         T* data = new T[total]();
@@ -147,6 +145,7 @@ private:
 
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
+        data[paramOffset + 2] = AbstractNBodyEngine<T>::GRAVITATIONAL_CONSTANT;
 
         result.coordinateSize = coordinateSize;
         result.velocityOffset = velocityOffset;
