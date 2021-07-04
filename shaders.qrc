@@ -6,5 +6,7 @@
         <file>shader/world.frag</file>
         <file>shader/world.vert</file>
         <file>shader/interaction_d.comp</file>
+        <file>shader/interaction_f.comp</file>
+        <file>shader/timeprogress_f.comp</file>
     </qresource>
 </RCC>

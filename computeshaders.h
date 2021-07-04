@@ -18,17 +18,14 @@ public:
     void bind(AbstractNBodyEngine<float>*);
     void bind(AbstractNBodyEngine<double>*);
     void update();
-//    GLuint numberOfWorkGroups();
 
 private:
-    QOpenGLShaderProgram m_programTimeProgress;
-    QOpenGLShaderProgram m_programInteraction;
-    GLuint m_numberOfWorkGroups = 0;
+    bool addShader(QOpenGLShaderProgram*, const char*);
 
-//    GLint m_maxComputeWorkSizeX = 0;
-//    GLint m_maxComputeWorkCountX;
-//    GLint m_maxComputeWorkCountY;
-//    GLint m_maxComputeWorkCountZ;
-//    GLint m_maxConputeWorkInvocations;
-//    quint64 m_maxComputeWorkCount;
+    QOpenGLShaderProgram m_programTimeProgressFloat;
+    QOpenGLShaderProgram m_programInteractionFloat;
+    QOpenGLShaderProgram m_programTimeProgressDouble;
+    QOpenGLShaderProgram m_programInteractionDouble;
+    GLuint m_numberOfWorkGroups = 0;
+    bhs::Precision m_precision;
 };

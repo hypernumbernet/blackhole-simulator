@@ -1,0 +1,70 @@
+#version 450 core
+
+#define GRAVITATIONAL_CONSTANT 6.6743e-11
+
+layout (local_size_x = 128) in;
+
+layout (std430, binding = 0) buffer coordinate_block
+{
+    float coordinate[];
+};
+
+layout(std430, binding = 1) buffer velocity_block
+{
+    float velocity[];
+};
+
+layout(std430, binding = 2) buffer mass_block
+{
+    float mass[];
+};
+
+layout(std430, binding = 3) buffer param_block
+{
+    float timePerFrame;
+    float numberOfPerticles;
+};
+
+void main()
+{
+    const uint i = gl_GlobalInvocationID.x;
+    uint num = uint(numberOfPerticles);
+    float time_g = timePerFrame * float(GRAVITATIONAL_CONSTANT);
+    uint i3 = i * 3;
+
+    float force_x = 0.0;
+    float force_y = 0.0;
+    float force_z = 0.0;
+
+    for (int j = 0; j < num; j++)
+    {
+        if (i == j)
+        {
+            continue;
+        }
+        uint j3 = j * 3;
+
+        float delta_x = coordinate[j3    ] - coordinate[i3    ];
+        float delta_y = coordinate[j3 + 1] - coordinate[i3 + 1];
+        float delta_z = coordinate[j3 + 2] - coordinate[i3 + 2];
+
+        float r = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
+        if (r <= 0.0)
+        {
+            continue;
+        }
+        float inv = 1.0 / r;
+        float theta = inv * inv * inv * time_g * mass[j];
+        
+        delta_x *= theta;
+        delta_y *= theta;
+        delta_z *= theta;
+
+        force_x += delta_x;
+        force_y += delta_y;
+        force_z += delta_z;
+    }
+    velocity[i3    ] += force_x;
+    velocity[i3 + 1] += force_y;
+    velocity[i3 + 2] += force_z;
+}

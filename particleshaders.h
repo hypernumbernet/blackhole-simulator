@@ -116,6 +116,8 @@ private:
     {
         quint64 num = numberOfParticle();
         quint64 ssboNum = num % 4 ? num / 4 * 4 + 4 : num;
+        //quint64 ssboNum = num % 8 ? num / 8 * 8 + 8 : num;
+        //quint64 ssboNum = num;
 
         qint64 coordinateSize = ssboNum * coordinateVectorSize;
         qint64 velocityOffset = coordinateSize;

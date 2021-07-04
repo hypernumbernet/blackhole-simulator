@@ -35,6 +35,7 @@ HEADERS += \
     g3dmassintegralcoredouble.h \
     g3dmassintegralcorefloat.h \
     g3dmassintegralnbe.h \
+    global.h \
     graphicwindow.h \
     initializer3d.h \
     initializer3d4d.h \
@@ -54,3 +55,5 @@ RESOURCES += \
 win32-msvc*{
     QMAKE_CXXFLAGS += /source-charset:utf-8
 }
+
+DISTFILES +=

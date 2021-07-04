@@ -97,30 +97,33 @@ ComputeShaders::~ComputeShaders()
 {
 }
 
+bool ComputeShaders::addShader(QOpenGLShaderProgram* const pro, const char* file)
+{
+    if (!pro->addShaderFromSourceFile(QOpenGLShader::Compute, file))
+        return false;
+
+    if (!pro->link())
+        return false;
+
+    return true;
+}
+
 bool ComputeShaders::initialize()
 {
-    if (!initializeOpenGLFunctions()) {
+    if (!initializeOpenGLFunctions())
         return false;
-    }
-    if (!m_programTimeProgress.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/timeprogress_d.comp")) {
-        return false;
-    }
-    if (!m_programTimeProgress.link()) {
-        return false;
-    }
-    if (!m_programInteraction.addShaderFromSourceFile(QOpenGLShader::Compute, ":/shader/interaction_d.comp")) {
-        return false;
-    }
-    if (!m_programInteraction.link()) {
-        return false;
-    }
 
-//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &m_maxComputeWorkSizeX);
-//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &m_maxComputeWorkCountX);
-//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &m_maxComputeWorkCountY);
-//    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &m_maxComputeWorkCountZ);
-//    glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &m_maxConputeWorkInvocations);
-//    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
+    if (!addShader(&m_programTimeProgressFloat, ":/shader/timeprogress_f.comp"))
+        return false;
+
+    if (!addShader(&m_programInteractionFloat, ":/shader/interaction_f.comp"))
+        return false;
+
+    if (!addShader(&m_programTimeProgressDouble, ":/shader/timeprogress_d.comp"))
+        return false;
+
+    if (!addShader(&m_programInteractionDouble, ":/shader/interaction_d.comp"))
+        return false;
 
 #ifdef QT_DEBUG
     glEnable(GL_DEBUG_OUTPUT);
@@ -135,24 +138,30 @@ bool ComputeShaders::initialize()
 void ComputeShaders::bind(AbstractNBodyEngine<float>* engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
+    m_precision = bhs::Precision::Float;
 }
 
 void ComputeShaders::bind(AbstractNBodyEngine<double>* engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
+    m_precision = bhs::Precision::Double;
 }
 
 void ComputeShaders::update()
 {
-    m_programTimeProgress.bind();
-    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-    m_programInteraction.bind();
-    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    if ( m_precision == bhs::Precision::Float) {
+        m_programTimeProgressFloat.bind();
+        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+        m_programInteractionFloat.bind();
+        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    } else {
+        m_programTimeProgressDouble.bind();
+        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+        m_programInteractionDouble.bind();
+        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    }
 }
-
-//GLuint ComputeShaders::numberOfWorkGroups()
-//{
-//    return
-//}

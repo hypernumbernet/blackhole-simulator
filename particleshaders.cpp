@@ -92,7 +92,11 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
     glBufferStorage(GL_SHADER_STORAGE_BUFFER, ssboStruct.total, ssboStruct.data, GL_DYNAMIC_STORAGE_BIT);
-    //glBufferStorage(GL_SHADER_STORAGE_BUFFER, ssboStruct.total, ssboStruct.data, GL_DYNAMIC_DRAW);
+
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, ssboStruct.coordinateOffset, ssboStruct.coordinateSize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, ssboStruct.velocityOffset, ssboStruct.velocitySize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 2, ssbo, ssboStruct.massOffset, ssboStruct.massSize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 3, ssbo, ssboStruct.paramOffset, ssboStruct.paramSize);
 
     m_vao.bind();
 
@@ -102,13 +106,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     m_vao.release();
-
-    //const int LAYOUT_BINDING = 0;
-    //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, LAYOUT_BINDING, ssbo);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, ssboStruct.coordinateOffset, ssboStruct.coordinateSize);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, ssboStruct.velocityOffset, ssboStruct.velocitySize);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 2, ssbo, ssboStruct.massOffset, ssboStruct.massSize);
-    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 3, ssbo, ssboStruct.paramOffset, ssboStruct.paramSize);
 }
 
 // This function must be called from the GUI thread.
