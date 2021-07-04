@@ -5,8 +5,6 @@
 #include "initializer3d.h"
 #include "threadadmin.h"
 
-#include <QThread>
-
 // Gravity 3D Mass Differential N-Body Engine
 
 template <typename T>

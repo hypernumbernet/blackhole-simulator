@@ -244,9 +244,12 @@ void GraphicWindow::enableGridLines(const bool enabled)
 void GraphicWindow::startSim()
 {
     int msec = 0;
-    if (m_simCondition->compute == bhs::Compute::GPU &&
-            m_particleShaders->numberOfParticle() > 300) {
-        msec = 1;
+    if (m_simCondition->compute == bhs::Compute::GPU) {
+        if (m_particleShaders->numberOfParticle() > 300) {
+            msec = 1;
+        } else if (m_particleShaders->numberOfParticle() > 2000) {
+            msec = 10;
+        }
     }
     m_threadAdmin.startSim(msec);
 }

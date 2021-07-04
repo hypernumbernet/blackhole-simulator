@@ -117,12 +117,9 @@ private:
         quint64 num = numberOfParticle();
         quint64 ssboNum = num % 4 ? num / 4 * 4 + 4 : num;
 
-        //qint64 coordinateOffset = 0;
-        //qint64 coordinateSize = ssboNum * 4;
-        qint64 coordinateSize = ssboNum * 3;
+        qint64 coordinateSize = ssboNum * coordinateVectorSize;
         qint64 velocityOffset = coordinateSize;
-        //qint64 velocitySize = ssboNum * 4;
-        qint64 velocitySize = ssboNum * 3;
+        qint64 velocitySize = ssboNum * velocityVectorSize;
         qint64 massOffset = velocityOffset + velocitySize;
         qint64 massSize = ssboNum;
         qint64 paramOffset = massOffset + massSize;
@@ -132,40 +129,12 @@ private:
         T* data = new T[total]();
 
         const T* coords = coordinates<T>();
-//        if (coordinateVectorSize == 3) {
-//            for (quint64 i = 0; i < num; ++i) {
-//                int i3 = i * 3;
-//                int i4 = i * 4;
-//                data[i4 + 3] = coords[i3 + 0];
-//                data[i4 + 2] = coords[i3 + 1];
-//                data[i4 + 1] = coords[i3 + 2];
-//                data[i4 + 0] = (T)0.0;
-//            }
-//        } else {
-//            for (quint64 i = 0; i < num * 4; ++i) {
-//                data[i] = coords[i];
-//            }
-//        }
-        for (quint64 i = 0; i < num * 3; ++i) {
+        for (quint64 i = 0; i < num * coordinateVectorSize; ++i) {
             data[i] = coords[i];
         }
 
         const T* vels = velocities<T>();
-//        if (velocityVectorSize == 3) {
-//            for (quint64 i = 0; i < num; ++i) {
-//                int i3 = i * 3;
-//                int i4 = velocityOffset + i * 4;
-//                data[i4++] = vels[i3++];
-//                data[i4++] = vels[i3++];
-//                data[i4++] = vels[i3++];
-//                data[i4] = (T)0.0;
-//            }
-//        } else {
-//            for (quint64 i = 0; i < num * 4; ++i) {
-//                data[velocityOffset + i] = vels[i];
-//            }
-//        }
-        for (quint64 i = 0; i < num * 3; ++i) {
+        for (quint64 i = 0; i < num * velocityVectorSize; ++i) {
             data[velocityOffset + i] = vels[i];
         }
 
