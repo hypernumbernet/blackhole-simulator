@@ -41,13 +41,13 @@ int ThreadAdmin::frameNum()
     return m_frameNum;
 }
 
-void ThreadAdmin::startSim()
+void ThreadAdmin::startSim(const int msec)
 {
     m_frameAdvanceTimer.stop();
     if (m_simulateTimer.isActive()) {
         m_simulateTimer.stop();
     } else {
-        m_simulateTimer.start(0, this);
+        m_simulateTimer.start(msec, this);
     }
 
     emit UpdateUi::it().updateStartButtonText(m_simulateTimer.isActive());

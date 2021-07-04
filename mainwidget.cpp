@@ -2,7 +2,8 @@
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
-    , m_graphicWindows()
+    , m_simCondition()
+    , m_graphicWindows(m_simCondition)
     , m_hLayout(this)
     , m_frameNumberLCD(12)
     , m_fpsLCD(12)

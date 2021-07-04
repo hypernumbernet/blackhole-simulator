@@ -29,7 +29,7 @@ public:
     ~ThreadAdmin();
 
     int frameNum();
-    void startSim();
+    void startSim(int);
     int size() const;
     ThreadController* at(int) const;
     void reset();

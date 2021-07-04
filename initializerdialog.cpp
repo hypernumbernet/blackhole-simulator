@@ -47,7 +47,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_computeButtonGroup.addButton(radio, static_cast<int>(e.first));
         computeHbox->addWidget(radio);
-        if (e.first == bhs::Compute::CPU)
+        if (e.first == bhs::Compute::GPU)
             radio->setChecked(true);
     }
 

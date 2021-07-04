@@ -43,6 +43,7 @@ private:
     void displayStyle(QLCDNumber&);
     void displayStyle(QLabel&);
 
+    bhs::SimCondition m_simCondition;
     GraphicWindow m_graphicWindows;
     QHBoxLayout m_hLayout;
     QVBoxLayout m_vLayout;
@@ -61,8 +62,6 @@ private:
     QLabel m_presetValue;
     QLabel m_particleNumValue;
     QLabel m_precisionValue;
-
-    bhs::SimCondition m_simCondition;
 
     InitializerDialog* m_initializerDialog = nullptr;
 };

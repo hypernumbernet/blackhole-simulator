@@ -83,7 +83,9 @@ void APIENTRY gl_debug_callback(
         severity_str = "?";
         break;
     }
-    qDebug() << "[" << source_str << "][" << type_str << "][" << id << "][" << severity_str << "] " << msg;
+
+    if (source == GL_DEBUG_SOURCE_APPLICATION)
+        qDebug() << "[" << source_str << "][" << type_str << "][" << id << "][" << severity_str << "] " << msg;
 }
 #endif
 
@@ -121,10 +123,10 @@ bool ComputeShaders::initialize()
 //    m_maxComputeWorkCount = m_maxComputeWorkCountX * m_maxComputeWorkCountY * m_maxComputeWorkCountZ;
 
 #ifdef QT_DEBUG
-//    glEnable(GL_DEBUG_OUTPUT);
-//    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-//    glDebugMessageCallback(gl_debug_callback, nullptr);
-//    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(gl_debug_callback, nullptr);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 #endif
 
     return true;

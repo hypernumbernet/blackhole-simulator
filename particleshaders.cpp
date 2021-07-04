@@ -92,6 +92,7 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
     glBufferStorage(GL_SHADER_STORAGE_BUFFER, ssboStruct.total, ssboStruct.data, GL_DYNAMIC_STORAGE_BIT);
+    //glBufferStorage(GL_SHADER_STORAGE_BUFFER, ssboStruct.total, ssboStruct.data, GL_DYNAMIC_DRAW);
 
     m_vao.bind();
 
@@ -106,6 +107,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     //glBindBufferBase(GL_SHADER_STORAGE_BUFFER, LAYOUT_BINDING, ssbo);
     glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 0, ssbo, ssboStruct.coordinateOffset, ssboStruct.coordinateSize);
     glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 1, ssbo, ssboStruct.velocityOffset, ssboStruct.velocitySize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 2, ssbo, ssboStruct.massOffset, ssboStruct.massSize);
+    glBindBufferRange(GL_SHADER_STORAGE_BUFFER, 3, ssbo, ssboStruct.paramOffset, ssboStruct.paramSize);
 }
 
 // This function must be called from the GUI thread.
@@ -193,13 +196,13 @@ quint64 ParticleShaders::numberOfParticle() const
     return ret;
 }
 
-const void* ParticleShaders::ssboData(const SSBODataStruct& ssobStruct) const
+const void* ParticleShaders::ssboData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
 {
     const void* ret = nullptr;
     if (m_precision == bhs::Precision::Float) {
-        ret = makeSSBOData<float>(ssobStruct);
+        ret = makeSSBOData<float>(result, coordinateVectorSize, velocityVectorSize);
     } else {
-        ret = makeSSBOData<double>(ssobStruct);
+        ret = makeSSBOData<double>(result, coordinateVectorSize, velocityVectorSize);
     }
     return ret;
 }
@@ -218,14 +221,8 @@ double ParticleShaders::modelScale() const
 
 void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
 {
-    quint64 num = numberOfParticle();
-    result.coordinateOffset = 0;
-    result.coordinateSize = num * coordinateVectorSize;
-    result.velocityOffset = result.coordinateSize;
-    result.velocitySize = num * velocityVectorSize;
-    result.total = result.velocityOffset + result.velocitySize;
-
-    result.data = ssboData(result);
+    SSBODataStruct ssboDataStruct;
+    result.data = ssboData(ssboDataStruct, coordinateVectorSize, velocityVectorSize);
 
     if (m_precision == bhs::Precision::Float) {
         result.dataSize = sizeof(float);
@@ -234,8 +231,13 @@ void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVector
         result.dataSize = sizeof(double);
         result.precision = GL_DOUBLE;
     }
-    result.coordinateSize *= result.dataSize;
-    result.velocityOffset *= result.dataSize;
-    result.velocitySize *= result.dataSize;
-    result.total *= result.dataSize;
+    result.coordinateOffset = 0;
+    result.coordinateSize = ssboDataStruct.coordinateSize * result.dataSize;
+    result.velocityOffset = ssboDataStruct.velocityOffset * result.dataSize;
+    result.velocitySize = ssboDataStruct.velocitySize * result.dataSize;
+    result.massOffset = ssboDataStruct.massOffset * result.dataSize;
+    result.massSize = ssboDataStruct.massSize * result.dataSize;
+    result.paramOffset = ssboDataStruct.paramOffset * result.dataSize;
+    result.paramSize = ssboDataStruct.paramSize * result.dataSize;
+    result.total = ssboDataStruct.total * result.dataSize;
 }

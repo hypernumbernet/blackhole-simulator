@@ -21,7 +21,7 @@ class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
     Q_OBJECT
 
 public:
-    explicit GraphicWindow();
+    explicit GraphicWindow(const bhs::SimCondition&);
     ~GraphicWindow();
 
 public slots:
@@ -72,5 +72,5 @@ private:
     int m_fpsPreFrame;
     bool m_isCircleStrafing;
     float m_circleStrafingSpeed;
-    const bhs::SimCondition* m_simCondition = nullptr;
+    const bhs::SimCondition* m_simCondition;
 };

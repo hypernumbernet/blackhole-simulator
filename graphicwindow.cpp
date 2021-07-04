@@ -1,6 +1,6 @@
 #include "graphicwindow.h"
 
-GraphicWindow::GraphicWindow()
+GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     : m_lineShaders(new LineShaders)
     , m_particleShaders(new ParticleShaders(&m_threadAdmin))
     , m_computeShaders(new ComputeShaders)
@@ -11,6 +11,7 @@ GraphicWindow::GraphicWindow()
     , m_fpsPreFrame(0)
     , m_isCircleStrafing(false)
     , m_circleStrafingSpeed(1.0f)
+    , m_simCondition(&simCondition)
 {
     m_camera.lookAtZero(1.0f);
     m_camera.standXZ(false, 1.0f);
@@ -218,7 +219,7 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);
         }
 
-        if (m_simCondition && m_simCondition->compute == bhs::Compute::CPU)
+        if (m_simCondition->compute == bhs::Compute::CPU)
             m_particleShaders->updateGL();
 
         emit UpdateUi::it().displayFrameNumber(m_threadAdmin.frameNum());
@@ -242,7 +243,12 @@ void GraphicWindow::enableGridLines(const bool enabled)
 
 void GraphicWindow::startSim()
 {
-    m_threadAdmin.startSim();
+    int msec = 0;
+    if (m_simCondition->compute == bhs::Compute::GPU &&
+            m_particleShaders->numberOfParticle() > 300) {
+        msec = 1;
+    }
+    m_threadAdmin.startSim(msec);
 }
 
 void GraphicWindow::changeLinePosition()

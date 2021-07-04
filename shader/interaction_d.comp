@@ -1,24 +1,81 @@
 #version 450 core
 
-//layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+#define GRAVITATIONAL_CONSTANT 6.6743e-11
+
 layout (local_size_x = 128) in;
 
 layout (std430, binding = 0) buffer coordinate_block
 {
-    dvec3 coordinate[];
+    double coordinate[];
 };
 
 layout(std430, binding = 1) buffer velocity_block
 {
-    dvec3 velocity[];
+    double velocity[];
+};
+
+layout(std430, binding = 2) buffer mass_block
+{
+    double mass[];
+};
+
+layout(std430, binding = 3) buffer param_block
+{
+    double timePerFrame;
+    double numberOfPerticles;
 };
 
 void main()
 {
-    //const uint i = gl_WorkGroupID.x;
     const uint i = gl_GlobalInvocationID.x;
+    uint num = uint(numberOfPerticles);
+    double time_g = timePerFrame * GRAVITATIONAL_CONSTANT;
+    uint i3 = i * 3;
+    //dvec3 force = dvec3(0.0, 0.0, 0.0);
+    //velocity[i3+0] = velocity[i3+0] * 0.999999;
+    //velocity[i3+1] = velocity[i3+1] * 0.999999;
+    //velocity[i3+2] = velocity[i3+2] * 0.99;
+    //dvec3 force = dvec3(1000.0, 0.0, 0.0);
+    double force_x = 0.0;
+    double force_y = 0.0;
+    double force_z = 0.0;
+    for (int j = 0; j < num; j++)
+    {
+        if (i == j)
+        {
+            continue;
+        }
+        uint j3 = j * 3;
 
-    //position[i] +=  velocity[i];
-    //coordinate[i] *= 1.00001;
-    velocity[i] += 1.0;
+        //dvec3 delta = coordinate[j] - coordinate[i];
+        double delta_x = coordinate[j3    ] - coordinate[i3    ];
+        double delta_y = coordinate[j3 + 1] - coordinate[i3 + 1];
+        double delta_z = coordinate[j3 + 2] - coordinate[i3 + 2];
+        //double r = length(delta);
+        //double dist = distance(coordinate[j], coordinate[i]);
+        double r = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
+        if (r <= 0.0)
+        {
+            continue;
+        }
+        double inv = 1.0 / r;
+        double theta = inv * inv * inv * time_g * mass[j];
+        //double theta = pow(inv, 3) * time_g * mass[j];
+        
+        delta_x *= theta;
+        delta_y *= theta;
+        delta_z *= theta;
+        //dvec3 gamma = dvec3(delta.x * theta, delta.y * theta, delta.z * theta);
+
+        force_x += delta_x;
+        force_y += delta_y;
+        force_z += delta_z;
+        //velocity[i].x = velocity[i].x + gamma.x;
+        //velocity[i].y = velocity[i].y + gamma.y;
+        //velocity[i].z = velocity[i].z + gamma.z;
+    }
+    //velocity[i] = dvec3(1000.0, 0.0, 0.0);
+    velocity[i3    ] += force_x;
+    velocity[i3 + 1] += force_y;
+    velocity[i3 + 2] += force_z;
 }

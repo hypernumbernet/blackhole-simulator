@@ -49,10 +49,10 @@ public slots:
                 d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
                 d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
                 distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0f) {
+                if (distance <= 0.0) {
                     continue;
                 }
-                inv = 1.0f / distance;
+                inv = 1.0 / distance;
                 theta = inv * inv * time_g;
                 //Q_ASSERT(theta == theta);
 
