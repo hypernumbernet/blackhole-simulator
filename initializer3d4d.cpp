@@ -6,28 +6,28 @@ template class Initializer3D4D<double>;
 template <typename T>
 void Initializer3D4D<T>::initRandamCube()
 {
-    m_engine->changeModelScale(1.0 / this->m_sim.scale);
+    m_engine->changeModelScale(1.0 / m_sim.scale);
 
     const quint64 num = m_engine->numberOfParticle();
     T* const coordinates = m_engine->coordinates();
     T* const velocities = m_engine->velocities();
 
     T* const masses = m_engine->masses();
-    if (this->m_sim.massRandom)
+    if (m_sim.massRandom)
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = randf<T>() * this->m_sim.massAvg * 2.0;
+            masses[i] = randf<T>() * m_sim.massAvg * 2.0;
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = this->m_sim.massAvg;
+            masses[i] = m_sim.massAvg;
         }
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = bhs::rand0center1maxf() * (T)this->m_sim.scale;
+        coordinates[i] = bhs::rand0center1maxf() * (T)m_sim.scale;
     }
 
     bhs::Vector3<T> axis;
@@ -50,23 +50,23 @@ void Initializer3D4D<T>::initRandamCube()
 template <typename T>
 void Initializer3D4D<T>::initRandamSphere(const double rate)
 {
-    m_engine->changeModelScale(1.0 / this->m_sim.scale);
+    m_engine->changeModelScale(1.0 / m_sim.scale);
 
     quint64 num = m_engine->numberOfParticle();
     T* masses = m_engine->masses();
     T* coordinates = m_engine->coordinates();
     T* velocities = m_engine->velocities();
 
-    if (this->m_sim.massRandom)
+    if (m_sim.massRandom)
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = randf<T>() * this->m_sim.massAvg * 2.0;
+            masses[i] = randf<T>() * m_sim.massAvg * 2.0;
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = this->m_sim.massAvg;
+            masses[i] = m_sim.massAvg;
         }
     }
 
@@ -85,7 +85,7 @@ void Initializer3D4D<T>::initRandamSphere(const double rate)
         }
         while (cood.Norm() > 1.0 || cood.Norm() < (T)rate);
 
-        cood *= (T)this->m_sim.scale;
+        cood *= (T)m_sim.scale;
         coordinates[i3    ] = cood.x;
         coordinates[i3 + 1] = cood.y;
         coordinates[i3 + 2] = cood.z;
@@ -156,30 +156,6 @@ void Initializer3D4D<T>::initEarthSun()
     velocities[5] = 0.0;
     velocities[6] = 0.0;
     velocities[7] = 0.0;
-}
-
-template <typename T>
-void Initializer3D4D<T>::initSunEarthAu()
-{
-    m_engine->changeModelScale((T)1.0e-11);
-
-    T* masses = m_engine->masses();
-    T* coordinates = m_engine->coordinates();
-    T* velocities = m_engine->velocities();
-
-    masses[0] = (T)1.9891e+30;
-    coordinates[0] = coordinates[1] = coordinates[2] = 0.0;
-    velocities[0] = 1.0;
-    velocities[1] = 0.0;
-    velocities[2] = 0.0;
-    velocities[3] = 0.0;
-
-    masses[1] = (T)5.972e+24;
-    coordinates[3] = (T)1.495978e+11;
-    coordinates[4] = 0.0;
-    coordinates[5] = 0.0;
-    auto q = fromDirectionAndSpeed(0.0, 1.0, 0.0, 29780.0);
-    embedQuaternionToArray(q, velocities, 4);
 }
 
 template <typename T>

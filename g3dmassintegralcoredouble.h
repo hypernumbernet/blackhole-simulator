@@ -41,7 +41,7 @@ public slots:
         double inv, force;
         G3DMassIntegralNBE<double>::Distance d;
         quint64 k = 0, a, b;
-        double g = m_engine->gravitationalConstant();
+        double g = m_engine->m_gravitationalConstant;
 
         double* vels = new double[m_numberOfParticles * 3]();
 

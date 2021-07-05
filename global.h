@@ -57,7 +57,10 @@ struct IntRange
 };
 
 template <typename T>
-inline float randf() {return (T)rand() / (T)RAND_MAX;}
+inline T randf()
+{
+    return (T)rand() / (T)RAND_MAX;
+}
 
 // Random numbers in the range of equality between plus and minus areas
 inline float rand0centerf()

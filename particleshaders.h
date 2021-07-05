@@ -126,10 +126,10 @@ private:
     inline T gravitationalConstant() const
     {
         if constexpr (std::is_same_v<T, float>)
-            return m_NBodyEngineFloat->gravitationalConstant();
+            return m_NBodyEngineFloat->m_gravitationalConstant;
 
         if constexpr (std::is_same_v<T, double>)
-            return m_NBodyEngineDouble->gravitationalConstant();
+            return m_NBodyEngineDouble->m_gravitationalConstant;
     }
 
     template <typename T>

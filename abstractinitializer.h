@@ -10,6 +10,7 @@ public:
         : m_sim(sim)
     {
     }
+    virtual ~AbstractInitializer(){}
 
 protected:
     const bhs::SimCondition& m_sim;
@@ -19,7 +20,6 @@ private:
     virtual void initRandamSphere(double) = 0;
     virtual void initSunEarth() = 0;
     virtual void initEarthSun() = 0;
-    virtual void initSunEarthAu() = 0;
     virtual void initEarthMoon() = 0;
     virtual void initSunEarthVenus() = 0;
     virtual void initTestSamePosition() = 0;

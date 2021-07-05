@@ -20,7 +20,6 @@ protected:
     void initRandamSphere(double) override;
     void initSunEarth() override;
     void initEarthSun() override;
-    void initSunEarthAu() override;
     void initEarthMoon() override;
     void initSunEarthVenus() override;
     void initTestSamePosition() override;

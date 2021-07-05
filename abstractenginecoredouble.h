@@ -10,8 +10,7 @@ class AbstractEngineCoreDouble : public AbstractEngineCore
     Q_OBJECT
 public:
     explicit AbstractEngineCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
-        : AbstractEngineCore(threadNumber)
-        , m_engine(engine)
+        : m_engine(engine)
         , m_numberOfParticles(engine->numberOfParticle())
         , m_coordinates(engine->coordinates())
         , m_velocities(engine->velocities())

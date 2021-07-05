@@ -9,7 +9,6 @@ public:
     explicit G3DMassDiffCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
     {
-
     }
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
@@ -34,7 +33,7 @@ public slots:
     {
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
-        float time_g = m_timePerFrame * m_engine->gravitationalConstant();
+        float time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
 
         float* vels = new float[m_numberOfParticles * 3]();
 
