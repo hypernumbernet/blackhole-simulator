@@ -6,17 +6,26 @@
 using namespace bhs;
 
 template <typename T>
-class Initializer3D : private AbstractInitializer<T>
+class Initializer3D : private AbstractInitializer
 {
 public:
-    using AbstractInitializer<T>::AbstractInitializer;
+
+    explicit Initializer3D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+        : AbstractInitializer(sim)
+        , m_engine(engine)
+    {
+    }
 
 protected:
     void initRandamCube() override;
-    void initRandamSphere(T) override;
+    void initRandamSphere(double) override;
     void initSunEarth() override;
     void initEarthSun() override;
+    void initSunEarthAu() override;
     void initEarthMoon() override;
     void initSunEarthVenus() override;
     void initTestSamePosition() override;
+
+private:
+    AbstractNBodyEngine<T>* const m_engine;
 };

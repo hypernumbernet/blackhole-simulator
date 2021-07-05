@@ -113,6 +113,26 @@ private:
     }
 
     template <typename T>
+    inline T timePerFrame() const
+    {
+        if constexpr (std::is_same_v<T, float>)
+            return m_NBodyEngineFloat->timePerFrame();
+
+        if constexpr (std::is_same_v<T, double>)
+            return m_NBodyEngineDouble->timePerFrame();
+    }
+
+    template <typename T>
+    inline T gravitationalConstant() const
+    {
+        if constexpr (std::is_same_v<T, float>)
+            return m_NBodyEngineFloat->gravitationalConstant();
+
+        if constexpr (std::is_same_v<T, double>)
+            return m_NBodyEngineDouble->gravitationalConstant();
+    }
+
+    template <typename T>
     inline const void* makeSSBOData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
     {
         quint64 num = numberOfParticle();
@@ -149,7 +169,7 @@ private:
 
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
-        data[paramOffset + 2] = AbstractNBodyEngine<T>::GRAVITATIONAL_CONSTANT;
+        data[paramOffset + 2] = gravitationalConstant<T>();
 
         result.coordinateSize = coordinateSize;
         result.velocityOffset = velocityOffset;
@@ -161,15 +181,5 @@ private:
         result.total = total;
 
         return data;
-    }
-
-    template <typename T>
-    inline T timePerFrame() const
-    {
-        if constexpr (std::is_same_v<T, float>)
-            return m_NBodyEngineFloat->timePerFrame();
-
-        if constexpr (std::is_same_v<T, double>)
-            return m_NBodyEngineDouble->timePerFrame();
     }
 };

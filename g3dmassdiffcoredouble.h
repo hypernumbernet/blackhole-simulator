@@ -33,7 +33,7 @@ public slots:
     {
         double d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
-        double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
+        double time_g = m_timePerFrame * m_engine->gravitationalConstant();
 
         double* vels = new double[m_numberOfParticles * 3]();
         //Q_ASSERT(vels[0] == 0.0);

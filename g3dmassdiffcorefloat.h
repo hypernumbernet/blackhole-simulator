@@ -34,7 +34,7 @@ public slots:
     {
         float d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
-        float time_g = m_timePerFrame * AbstractNBodyEngine<float>::GRAVITATIONAL_CONSTANT;
+        float time_g = m_timePerFrame * m_engine->gravitationalConstant();
 
         float* vels = new float[m_numberOfParticles * 3]();
 

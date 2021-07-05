@@ -41,6 +41,7 @@ public slots:
         double inv, force;
         G3DMassIntegralNBE<double>::Distance d;
         quint64 k = 0, a, b;
+        double g = m_engine->gravitationalConstant();
 
         double* vels = new double[m_numberOfParticles * 3]();
 
@@ -59,7 +60,7 @@ public slots:
                     continue;
 
                 // Time is not taken into account.
-                force = inv * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
+                force = inv * g;
 
                 d.unitX *= force;
                 d.unitY *= force;

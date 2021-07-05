@@ -47,7 +47,7 @@ public slots:
     void calculateInteraction() const
     {
         const double vangle_half = m_vangle * 0.5f;
-        const double time_g = m_timePerFrame * AbstractNBodyEngine<double>::GRAVITATIONAL_CONSTANT;
+        const double time_g = m_timePerFrame * m_engine->gravitationalConstant();
 
         double d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;

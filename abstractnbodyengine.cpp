@@ -6,6 +6,7 @@ template class AbstractNBodyEngine<double>;
 template <typename T>
 AbstractNBodyEngine<T>::AbstractNBodyEngine()
     : m_modelScale(1.0)
+    , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
 {
 }
 
@@ -135,4 +136,16 @@ template <typename T>
 QVector<bhs::IntRange> AbstractNBodyEngine<T>::interactionRanges() const
 {
     return m_interactionRanges;
+}
+
+template <typename T>
+T AbstractNBodyEngine<T>::gravitationalConstant() const
+{
+    return m_gravitationalConstant;
+}
+
+template <typename T>
+void AbstractNBodyEngine<T>::setGravitationalConstant(const T g)
+{
+    m_gravitationalConstant = g;
 }

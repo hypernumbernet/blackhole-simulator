@@ -6,16 +6,21 @@
 using namespace bhs;
 
 template <typename T>
-class Initializer3D4D : public AbstractInitializer<T>
+class Initializer3D4D : public AbstractInitializer
 {
 public:
-    using AbstractInitializer<T>::AbstractInitializer;
+    explicit Initializer3D4D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+        : AbstractInitializer(sim)
+        , m_engine(engine)
+    {
+    }
 
 protected:
     void initRandamCube() override;
-    void initRandamSphere(T) override;
+    void initRandamSphere(double) override;
     void initSunEarth() override;
     void initEarthSun() override;
+    void initSunEarthAu() override;
     void initEarthMoon() override;
     void initSunEarthVenus() override;
     void initTestSamePosition() override;
@@ -40,4 +45,6 @@ private:
         a[index + 2] = q.i2;
         a[index + 3] = q.i3;
     }
+
+    AbstractNBodyEngine<T>* const m_engine;
 };
