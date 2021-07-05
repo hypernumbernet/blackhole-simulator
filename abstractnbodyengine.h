@@ -27,12 +27,12 @@ public:
     T* inversedDistances() const;
 
     quint64 numberOfParticle() const;
-    T modelScale() const;
+    double modelScale() const;
     T timePerFrame() const;
 
-    void setModelScale(T);
-    void setModelScaleRatio(T);
-    void changeModelScale(T);
+    void setModelScale(double);
+    void setModelScaleRatio(double);
+    void changeModelScale(double);
     int threadCount();
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
@@ -58,8 +58,8 @@ protected:
     T m_timePerFrame;
 
     quint64 m_numberOfParticles;
-    T m_modelScale;
-    T m_scaleCenterValue;
+    double m_modelScale;
+    double m_scaleCenterValue;
     QVector<bhs::IntRange> m_timeProgressRanges;
     QVector<bhs::IntRange> m_interactionRanges;
 };

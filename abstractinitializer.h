@@ -6,6 +6,17 @@ class AbstractInitializer
 {
 public:
 
+    struct Correct
+    {
+        double m;
+        double kg;
+        Correct(double scale)
+        {
+            m = 1.0 / scale;
+            kg = m * m * m;
+        }
+    };
+
     explicit AbstractInitializer(const bhs::SimCondition& sim)
         : m_sim(sim)
     {

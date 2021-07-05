@@ -122,8 +122,8 @@ void MainWidget::initUi()
     m_vLayout.addWidget(btnLineType);
     connect(btnLineType, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::changeLinePosition);
 
-    // Model Scale
-    auto scaleLabel = new QLabel(tr("Model Scale (m):"));
+    // Scale
+    auto scaleLabel = new QLabel(tr("Scale (m):"));
     m_vLayout.addWidget(scaleLabel);
 
     m_scaleValue.setAlignment(Qt::AlignRight);

@@ -58,23 +58,23 @@ void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::setModelScale(const T scale)
+void AbstractNBodyEngine<T>::setModelScale(const double scale)
 {
-    m_modelScale = scale;
+    m_modelScale = scale / m_scaleCenterValue;
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::setModelScaleRatio(const T ratio)
+void AbstractNBodyEngine<T>::setModelScaleRatio(const double ratio)
 {
-    m_modelScale = m_scaleCenterValue * ratio;
-    emit UpdateUi::it().displayModelScale(m_modelScale);
+    m_modelScale = ratio;
+    emit UpdateUi::it().displayModelScale(m_modelScale * m_scaleCenterValue);
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::changeModelScale(const T scale)
+void AbstractNBodyEngine<T>::changeModelScale(const double scale)
 {
-    m_modelScale = scale;
     m_scaleCenterValue = scale;
+    m_modelScale = scale / m_scaleCenterValue;
     emit UpdateUi::it().displayModelScale(scale);
 }
 
@@ -85,7 +85,7 @@ quint64 AbstractNBodyEngine<T>::numberOfParticle() const
 }
 
 template <typename T>
-T AbstractNBodyEngine<T>::modelScale() const
+double AbstractNBodyEngine<T>::modelScale() const
 {
     return m_modelScale;
 }

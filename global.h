@@ -56,27 +56,18 @@ struct IntRange
     quint64 end;
 };
 
-template <typename T>
-inline T randf()
+inline double rand0to1()
 {
-    return (T)rand() / (T)RAND_MAX;
+    return (double)rand() / (double)RAND_MAX;
 }
 
 // Random numbers in the range of equality between plus and minus areas
-inline float rand0centerf()
+inline double rand0center1max()
 {
     if (rand() % 2 == 0)
-        return (float)rand();
+        return (double)rand() / (double)RAND_MAX;
     else
-        return -(float)rand();
-}
-
-inline float rand0center1maxf()
-{
-    if (rand() % 2 == 0)
-        return (float)rand() / (float)RAND_MAX;
-    else
-        return -(float)rand() / (float)RAND_MAX;
+        return -(double)rand() / (double)RAND_MAX;
 }
 
 inline QRecursiveMutex interactionMutex;
