@@ -2,18 +2,18 @@
 
 #include "abstractenginecoredouble.h"
 
-class G3DMassEulerCoreDouble : public AbstractEngineCoreDouble
+class G3DEulerCoreDouble : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    explicit G3DMassEulerCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    explicit G3DEulerCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
     {
     }
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new G3DMassEulerCoreDouble(engine, threadNumber);
+        return new G3DEulerCoreDouble(engine, threadNumber);
     }
 
 public slots:

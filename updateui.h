@@ -30,8 +30,8 @@ private:
     UpdateUi()
         : ENGINE(new QMap<bhs::Engine, QString>
         {
-            {bhs::Engine::G3DMassEuler, tr("Gravity 3D Mass Euler method")},
-            {bhs::Engine::G3D4DMassEuler, tr("Gravity 3S-Velocity M. Euler.")},
+            {bhs::Engine::G3DMassEuler, tr("Gravity 3D Euler method")},
+            {bhs::Engine::G3D4DMassEuler, tr("Gravity 3S-Velocity Euler method")},
         })
         , PRECISION(new QMap<bhs::Precision, QString>
         {

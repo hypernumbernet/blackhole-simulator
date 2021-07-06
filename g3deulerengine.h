@@ -8,10 +8,10 @@
 // Gravity 3D with Mass Euler method N-Body Engine
 
 template <typename T>
-class G3DMassEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D<T>
+class G3DEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
-    explicit G3DMassEulerEngine(const bhs::SimCondition& sim)
+    explicit G3DEulerEngine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>()
         , Initializer3D<T>(sim, this)
     {
@@ -67,7 +67,7 @@ public:
         setTimePerFrame(sim.timePerFrame);
     }
 
-    ~G3DMassEulerEngine()
+    ~G3DEulerEngine()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

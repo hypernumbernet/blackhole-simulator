@@ -49,12 +49,12 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         {
         case bhs::Engine::G3DMassEuler:
         default:
-            m_NBodyEngineFloat = new G3DMassEulerEngine<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, G3DMassEulerCoreFloat::factory);
+            m_NBodyEngineFloat = new G3DEulerEngine<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, G3DEulerCoreFloat::factory);
             break;
         case bhs::Engine::G3D4DMassEuler:
-            m_NBodyEngineFloat = new G3D4DMassEulerEngine<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DMassEulerCoreFloat::factory);
+            m_NBodyEngineFloat = new G3D4DEulerEngine<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DEulerCoreFloat::factory);
             velocityVectorSize = 4;
             break;
         }
@@ -63,12 +63,12 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         {
         case bhs::Engine::G3DMassEuler:
         default:
-            m_NBodyEngineDouble = new G3DMassEulerEngine<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, G3DMassEulerCoreDouble::factory);
+            m_NBodyEngineDouble = new G3DEulerEngine<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, G3DEulerCoreDouble::factory);
             break;
         case bhs::Engine::G3D4DMassEuler:
-            m_NBodyEngineDouble = new G3D4DMassEulerEngine<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DMassEulerCoreDouble::factory);
+            m_NBodyEngineDouble = new G3D4DEulerEngine<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DEulerCoreDouble::factory);
             velocityVectorSize = 4;
             break;
         }

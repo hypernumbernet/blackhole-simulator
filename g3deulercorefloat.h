@@ -2,18 +2,18 @@
 
 #include "abstractenginecorefloat.h"
 
-class G3DMassEulerCoreFloat : public AbstractEngineCoreFloat
+class G3DEulerCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    explicit G3DMassEulerCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    explicit G3DEulerCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
     {
     }
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
-        return new G3DMassEulerCoreFloat(engine, threadNumber);
+        return new G3DEulerCoreFloat(engine, threadNumber);
     }
 
 public slots:

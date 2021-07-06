@@ -26,12 +26,12 @@ HEADERS += \
     abstractnbodyengine.h \
     camera.h \
     computeshaders.h \
-    g3d4dmasseulercoredouble.h \
-    g3d4dmasseulercorefloat.h \
-    g3d4dmasseulerengine.h \
-    g3dmasseulercoredouble.h \
-    g3dmasseulercorefloat.h \
-    g3dmasseulerengine.h \
+    g3d4deulercoredouble.h \
+    g3d4deulercorefloat.h \
+    g3d4deulerengine.h \
+    g3deulercoredouble.h \
+    g3deulercorefloat.h \
+    g3deulerengine.h \
     global.h \
     graphicwindow.h \
     initializer3d.h \

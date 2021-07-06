@@ -5,11 +5,11 @@
 
 using namespace bhs;
 
-class G3D4DMassEulerCoreFloat : public AbstractEngineCoreFloat
+class G3D4DEulerCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    explicit G3D4DMassEulerCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    explicit G3D4DEulerCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
         , m_cinv(1.0f / AbstractNBodyEngine<float>::SPEED_OF_LIGHT)
 
@@ -22,7 +22,7 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
-        return new G3D4DMassEulerCoreFloat(engine, threadNumber);
+        return new G3D4DEulerCoreFloat(engine, threadNumber);
     }
 
 public slots:

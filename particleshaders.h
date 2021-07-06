@@ -1,11 +1,11 @@
 #pragma once
 
-#include "g3dmasseulerengine.h"
-#include "g3dmasseulercorefloat.h"
-#include "g3dmasseulercoredouble.h"
-#include "g3d4dmasseulerengine.h"
-#include "g3d4dmasseulercorefloat.h"
-#include "g3d4dmasseulercoredouble.h"
+#include "g3deulerengine.h"
+#include "g3deulercorefloat.h"
+#include "g3deulercoredouble.h"
+#include "g3d4deulerengine.h"
+#include "g3d4deulercorefloat.h"
+#include "g3d4deulercoredouble.h"
 #include "computeshaders.h"
 
 #include <math.h>
