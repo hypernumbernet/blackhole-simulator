@@ -19,7 +19,7 @@ public:
 public slots:
     void calculateTimeProgress() const
     {
-        for (quint64 i = m_start; i < m_end; ++i)
+        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             quint64 j = i * 3;
             m_coordinates[j] += m_velocities[j] * m_timePerFrame; ++j;
@@ -38,7 +38,7 @@ public slots:
         double* vels = new double[m_numberOfParticles * 3]();
         //Q_ASSERT(vels[0] == 0.0);
 
-        for (quint64 i = m_start; i < m_end; ++i)
+        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {

@@ -17,21 +17,21 @@ public:
         , m_masses(engine->masses())
         , m_inversedDistances(engine->inversedDistances())
         , m_timePerFrame(engine->timePerFrame())
-        , m_start(m_engine->timeProgressRanges().at(threadNumber).start)
-        , m_end(m_engine->timeProgressRanges().at(threadNumber).end)
+        , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
+        , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
+        , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
+        , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
     {
     }
 
-    bool hasRangeTimeProgress(const int threadNum) const
+    bool hasRangeTimeProgress() const
     {
-        auto range = m_engine->timeProgressRanges().at(threadNum);
-        return range.end - range.start > 0;
+        return m_timeProgresEnd - m_timeProgresStart > 0;
     }
 
-    bool hasRangeInteraction(const int threadNum) const
+    bool hasRangeInteraction() const
     {
-        auto range = m_engine->interactionRanges().at(threadNum);
-        return range.end - range.start > 0;
+        return m_interactionEnd - m_interactionStart > 0;
     }
 
 protected:
@@ -66,6 +66,8 @@ protected:
     // Physically calculated time per frame (second)
     const double m_timePerFrame;
 
-    const quint64 m_start;
-    const quint64 m_end;
+    const quint64 m_timeProgresStart;
+    const quint64 m_timeProgresEnd;
+    const quint64 m_interactionStart;
+    const quint64 m_interactionEnd;
 };

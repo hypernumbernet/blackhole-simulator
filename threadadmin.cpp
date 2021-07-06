@@ -84,20 +84,20 @@ void ThreadAdmin::updateParticles()
             m_calculateNext = 1;
             for (int i = 0; i < m_controllers.size(); ++i)
             {
-                if (m_controllers.at(i)->hasRangeTimeProgress(i))
+                if (m_controllers.at(i)->hasRangeTimeProgress())
                 {
                     ++m_waitForDone;
-                    emit m_controllers.at(i)->calculateTimeProgress(i);
+                    emit m_controllers.at(i)->calculateTimeProgress();
                 }
             }
         } else {
             m_calculateNext = 0;
             for (int i = 0; i < m_controllers.size(); ++i)
             {
-                if (m_controllers.at(i)->hasRangeInteraction(i))
+                if (m_controllers.at(i)->hasRangeInteraction())
                 {
                     ++m_waitForDone;
-                    emit m_controllers.at(i)->calculateInteraction(i);
+                    emit m_controllers.at(i)->calculateInteraction();
                 }
             }
             ++m_frameNum;

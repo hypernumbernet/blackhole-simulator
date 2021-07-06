@@ -11,8 +11,8 @@ public:
     explicit AbstractEngineCore(){}
     virtual ~AbstractEngineCore(){}
 
-    virtual bool hasRangeTimeProgress(const int threadNum) const = 0;
-    virtual bool hasRangeInteraction(const int threadNum) const = 0;
+    virtual bool hasRangeTimeProgress() const = 0;
+    virtual bool hasRangeInteraction() const = 0;
 
 protected:
     void resultReady() const

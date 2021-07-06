@@ -44,7 +44,7 @@ struct SimCondition
     Compute compute = Compute::GPU;
     Preset preset = Preset::RandomCube;
     double timePerFrame = 1000.0;
-    int numberOfParticles = 800;
+    int numberOfParticles = 2000;
     double massAvg = 6.0e+29;
     bool massRandom = true;
     double scale = 1.0e+11;

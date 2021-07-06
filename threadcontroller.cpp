@@ -27,12 +27,12 @@ void ThreadController::reset()
     m_core = nullptr;
 }
 
-bool ThreadController::hasRangeTimeProgress(int threadNum) const
+bool ThreadController::hasRangeTimeProgress() const
 {
-    return m_core->hasRangeTimeProgress(threadNum);
+    return m_core->hasRangeTimeProgress();
 }
 
-bool ThreadController::hasRangeInteraction(int threadNum) const
+bool ThreadController::hasRangeInteraction() const
 {
-    return m_core->hasRangeInteraction(threadNum);
+    return m_core->hasRangeInteraction();
 }

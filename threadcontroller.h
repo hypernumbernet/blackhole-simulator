@@ -18,12 +18,12 @@ public:
 
     void initialize(AbstractEngineCore* const);
     void reset();
-    bool hasRangeTimeProgress(int) const;
-    bool hasRangeInteraction(int) const;
+    bool hasRangeTimeProgress() const;
+    bool hasRangeInteraction() const;
 
 signals:
-    void calculateTimeProgress(int);
-    void calculateInteraction(int);
+    void calculateTimeProgress();
+    void calculateInteraction();
 
 private:
     AbstractEngineCore* m_core = nullptr;

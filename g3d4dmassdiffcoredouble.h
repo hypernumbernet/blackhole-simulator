@@ -28,7 +28,7 @@ public:
 public slots:
     void calculateTimeProgress() const
     {
-        for (quint64 i = m_start; i < m_end; ++i)
+        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             auto vq = Quaternion<double>(m_velocities, i * 4);
             vq.Normalize();
@@ -58,7 +58,7 @@ public slots:
             vels[i * 4] = 1.0;
         }
 
-        for (quint64 i = m_start; i < m_end; ++i)
+        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {
