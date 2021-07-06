@@ -7,13 +7,13 @@
 
 using namespace bhs;
 
-// Gravity 3D-Coordinate 3S-Velocity Mass Differential N-Body Engine
+// Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
 template <typename T>
-class G3D4DMassDiffNBE : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
+class G3D4DMassEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
 {
 public:
-    G3D4DMassDiffNBE(const bhs::SimCondition& sim)
+    G3D4DMassEulerEngine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>()
         , Initializer3D4D<T>(sim, this)
     {
@@ -69,7 +69,7 @@ public:
         setTimePerFrame(sim.timePerFrame);
     }
 
-    ~G3D4DMassDiffNBE()
+    ~G3D4DMassEulerEngine()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

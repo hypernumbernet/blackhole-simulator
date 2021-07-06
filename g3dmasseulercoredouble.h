@@ -1,19 +1,19 @@
 #pragma once
 
-#include "abstractenginecorefloat.h"
+#include "abstractenginecoredouble.h"
 
-class G3DMassDiffCoreFloat : public AbstractEngineCoreFloat
+class G3DMassEulerCoreDouble : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    explicit G3DMassDiffCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
-        : AbstractEngineCoreFloat(engine, threadNumber)
+    explicit G3DMassEulerCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+        : AbstractEngineCoreDouble(engine, threadNumber)
     {
     }
 
-    static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new G3DMassDiffCoreFloat(engine, threadNumber);
+        return new G3DMassEulerCoreDouble(engine, threadNumber);
     }
 
 public slots:
@@ -31,27 +31,27 @@ public slots:
 
     void calculateInteraction() const
     {
-        float d1, d2, d3, distance, inv, theta;
+        double d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
-        float time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
+        double time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
 
-        float* vels = new float[m_numberOfParticles * 3]();
+        double* vels = new double[m_numberOfParticles * 3]();
+        //Q_ASSERT(vels[0] == 0.0);
 
         for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
             {
-                // Perform differential calculation of universal gravitation.
                 a = i * 3;
                 b = j * 3;
                 d1 = m_coordinates[a] - m_coordinates[b];
                 d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
                 d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
                 distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0f)
+                if (distance <= 0.0)
                     continue;
 
-                inv = 1.0f / distance;
+                inv = 1.0 / distance;
                 theta = inv * inv * time_g;
                 //Q_ASSERT(theta == theta);
 

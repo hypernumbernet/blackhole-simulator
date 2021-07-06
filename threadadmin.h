@@ -5,12 +5,12 @@
 #include "abstractnbodyengine.h"
 #include "computeshaders.h"
 
-#include "g3dmassdiffnbe.h"
-#include "g3dmassdiffcorefloat.h"
-#include "g3dmassdiffcoredouble.h"
-#include "g3d4dmassdiffnbe.h"
-#include "g3d4dmassdiffcorefloat.h"
-#include "g3d4dmassdiffcoredouble.h"
+#include "g3dmasseulerengine.h"
+#include "g3dmasseulercorefloat.h"
+#include "g3dmasseulercoredouble.h"
+#include "g3d4dmasseulerengine.h"
+#include "g3d4dmasseulercorefloat.h"
+#include "g3d4dmasseulercoredouble.h"
 
 #include <QObject>
 #include <QBasicTimer>

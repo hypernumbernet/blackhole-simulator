@@ -18,7 +18,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
         engineVbox->addWidget(radio);
-        if (e.first == bhs::Engine::G3DMassDiff)
+        if (e.first == bhs::Engine::G3DMassEuler)
             radio->setChecked(true);
     }
 
@@ -34,7 +34,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
         precisionHbox->addWidget(radio);
-        if (e.first == bhs::Precision::Double)
+        if (e.first == bhs::Precision::Float)
             radio->setChecked(true);
     }
 

@@ -5,13 +5,13 @@
 #include "initializer3d.h"
 #include "threadadmin.h"
 
-// Gravity 3D Mass Differential N-Body Engine
+// Gravity 3D with Mass Euler method N-Body Engine
 
 template <typename T>
-class G3DMassDiffNBE : public AbstractNBodyEngine<T>, private Initializer3D<T>
+class G3DMassEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
-    explicit G3DMassDiffNBE(const bhs::SimCondition& sim)
+    explicit G3DMassEulerEngine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>()
         , Initializer3D<T>(sim, this)
     {
@@ -67,7 +67,7 @@ public:
         setTimePerFrame(sim.timePerFrame);
     }
 
-    ~G3DMassDiffNBE()
+    ~G3DMassEulerEngine()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;
