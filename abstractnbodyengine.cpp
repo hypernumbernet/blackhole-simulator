@@ -4,8 +4,9 @@ template class AbstractNBodyEngine<float>;
 template class AbstractNBodyEngine<double>;
 
 template <typename T>
-AbstractNBodyEngine<T>::AbstractNBodyEngine()
-    : m_modelScale(1.0)
+AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
+    : m_sim(sim)
+    , m_modelScale(1.0)
     , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
 {
 }
@@ -71,6 +72,13 @@ void AbstractNBodyEngine<T>::setModelScaleRatio(const double ratio)
 }
 
 template <typename T>
+void AbstractNBodyEngine<T>::setTimePerFrame(const double time)
+{
+    m_timePerFrame = (T)time;
+    emit UpdateUi::it().displayTimePerFrame(time);
+}
+
+template <typename T>
 void AbstractNBodyEngine<T>::changeModelScale(const double scale)
 {
     m_scaleCenterValue = scale;
@@ -112,12 +120,6 @@ template <typename T>
 T AbstractNBodyEngine<T>::timePerFrame() const
 {
     return m_timePerFrame;
-}
-
-template <typename T>
-int AbstractNBodyEngine<T>::threadCount()
-{
-    return m_timeProgressRanges.size();
 }
 
 template <typename T>

@@ -8,8 +8,8 @@ namespace bhs // Black Hole Simulator
 
 enum class Engine
 {
-    G3DMassEuler,
-    G3D4DMassEuler,
+    G3DEuler,
+    G3D4DEuler,
 };
 
 enum class Precision
@@ -38,7 +38,7 @@ enum class Preset
 
 struct SimCondition
 {
-    Engine engine = Engine::G3DMassEuler;
+    Engine engine = Engine::G3DEuler;
     Precision precision = Precision::Float;
     Compute compute = Compute::GPU;
     Preset preset = Preset::RandomBall;

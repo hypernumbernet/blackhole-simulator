@@ -18,7 +18,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
         engineVbox->addWidget(radio);
-        if (e.first == bhs::Engine::G3DMassEuler)
+        if (e.first == bhs::Engine::G3DEuler)
             radio->setChecked(true);
     }
 

@@ -18,7 +18,7 @@ public:
     static constexpr T PI = (T)3.141592653589793;
     static constexpr T VANGLE = PI / SPEED_OF_LIGHT;
 
-    explicit AbstractNBodyEngine();
+    explicit AbstractNBodyEngine(const bhs::SimCondition&);
     virtual ~AbstractNBodyEngine();
 
     T* coordinates() const;
@@ -26,23 +26,20 @@ public:
     T* masses() const;
 
     quint64 numberOfParticle() const;
-    double modelScale() const;
-    T timePerFrame() const;
 
+    T timePerFrame() const;
+    void setTimePerFrame(const double time);
+
+    double modelScale() const;
     void setModelScale(double);
     void setModelScaleRatio(double);
-
-    void setTimePerFrame(const double time)
-    {
-        this->m_timePerFrame = (T)time;
-        emit UpdateUi::it().displayTimePerFrame(time);
-    }
     void changeModelScale(double);
-    int threadCount();
+
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
 
     T m_gravitationalConstant;
+    const bhs::SimCondition& m_sim;
 
 protected:
     void setNumberOfParticles(quint64);

@@ -125,6 +125,12 @@ bool ComputeShaders::initialize()
     if (!addShader(&m_programInteractionDouble, ":/shader/interaction_d.comp"))
         return false;
 
+    if (!addShader(&m_programTimeProgress3D4DFloat, ":/shader/timeprogress3D4D_f.comp"))
+        return false;
+
+    if (!addShader(&m_programInteraction3D4DFloat, ":/shader/interaction3D4D_f.comp"))
+        return false;
+
 #ifdef QT_DEBUG
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -135,34 +141,42 @@ bool ComputeShaders::initialize()
     return true;
 }
 
-void ComputeShaders::bind(AbstractNBodyEngine<float>* engine)
+void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
-    m_precision = bhs::Precision::Float;
+    switch (engine->m_sim.engine)
+    {
+    case bhs::Engine::G3DEuler:
+        m_programTimeProgressUsing = &m_programTimeProgressFloat;
+        m_programInteractionUsing = &m_programInteractionFloat;
+        break;
+    case bhs::Engine::G3D4DEuler:
+        m_programTimeProgressUsing = &m_programTimeProgress3D4DFloat;
+        m_programInteractionUsing = &m_programInteraction3D4DFloat;
+        break;
+    }
 }
 
-void ComputeShaders::bind(AbstractNBodyEngine<double>* engine)
+void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
-    m_precision = bhs::Precision::Double;
+    switch (engine->m_sim.engine)
+    {
+    case bhs::Engine::G3DEuler:
+    case bhs::Engine::G3D4DEuler:
+        m_programTimeProgressUsing = &m_programTimeProgressDouble;
+        m_programInteractionUsing = &m_programInteractionDouble;
+        break;
+    }
 }
 
 void ComputeShaders::update()
 {
-    if ( m_precision == bhs::Precision::Float)
-    {
-        m_programTimeProgressFloat.bind();
-        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-        m_programInteractionFloat.bind();
-        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-    } else {
-        m_programTimeProgressDouble.bind();
-        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-        m_programInteractionDouble.bind();
-        glDispatchCompute(m_numberOfWorkGroups, 1, 1);
-        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-    }
+    m_programTimeProgressUsing->bind();
+    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+    m_programInteractionUsing->bind();
+    glDispatchCompute(m_numberOfWorkGroups, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }

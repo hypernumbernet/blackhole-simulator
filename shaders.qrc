@@ -8,5 +8,7 @@
         <file>shader/interaction_d.comp</file>
         <file>shader/interaction_f.comp</file>
         <file>shader/timeprogress_f.comp</file>
+        <file>shader/interaction3D4D_f.comp</file>
+        <file>shader/timeprogress3D4D_f.comp</file>
     </qresource>
 </RCC>

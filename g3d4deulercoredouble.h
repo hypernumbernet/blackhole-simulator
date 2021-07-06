@@ -11,12 +11,12 @@ class G3D4DEulerCoreDouble : public AbstractEngineCoreDouble
 public:
     explicit G3D4DEulerCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
-        , m_cinv(1.0f / AbstractNBodyEngine<double>::SPEED_OF_LIGHT)
+        , m_cinv(1.0 / AbstractNBodyEngine<double>::SPEED_OF_LIGHT)
 
         // Half the circumference is assumed to be the speed of light.
         , m_vangle(AbstractNBodyEngine<double>::PI * m_cinv)
 
-        , m_vangle_inv(1.0f / m_vangle)
+        , m_vangle_inv(1.0 / m_vangle)
     {
     }
 
@@ -46,7 +46,7 @@ public slots:
 
     void calculateInteraction() const
     {
-        const double vangle_half = m_vangle * 0.5f;
+        const double vangle_half = m_vangle * 0.5;
         const double time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
 
         double d1, d2, d3, distance, inv, theta;

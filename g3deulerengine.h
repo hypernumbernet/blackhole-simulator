@@ -12,7 +12,7 @@ class G3DEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
     explicit G3DEulerEngine(const bhs::SimCondition& sim)
-        : AbstractNBodyEngine<T>()
+        : AbstractNBodyEngine<T>(sim)
         , Initializer3D<T>(sim, this)
     {
         switch (sim.preset)

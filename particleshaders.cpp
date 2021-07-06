@@ -47,12 +47,12 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     {
         switch (sim.engine)
         {
-        case bhs::Engine::G3DMassEuler:
+        case bhs::Engine::G3DEuler:
         default:
             m_NBodyEngineFloat = new G3DEulerEngine<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3DEulerCoreFloat::factory);
             break;
-        case bhs::Engine::G3D4DMassEuler:
+        case bhs::Engine::G3D4DEuler:
             m_NBodyEngineFloat = new G3D4DEulerEngine<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DEulerCoreFloat::factory);
             velocityVectorSize = 4;
@@ -61,12 +61,12 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     } else {
         switch (sim.engine)
         {
-        case bhs::Engine::G3DMassEuler:
+        case bhs::Engine::G3DEuler:
         default:
             m_NBodyEngineDouble = new G3DEulerEngine<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, G3DEulerCoreDouble::factory);
             break;
-        case bhs::Engine::G3D4DMassEuler:
+        case bhs::Engine::G3D4DEuler:
             m_NBodyEngineDouble = new G3D4DEulerEngine<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DEulerCoreDouble::factory);
             velocityVectorSize = 4;

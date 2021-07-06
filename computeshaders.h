@@ -15,17 +15,26 @@ public:
     ~ComputeShaders();
 
     bool initialize();
-    void bind(AbstractNBodyEngine<float>*);
-    void bind(AbstractNBodyEngine<double>*);
+    void bind(const AbstractNBodyEngine<float>*);
+    void bind(const AbstractNBodyEngine<double>*);
     void update();
 
 private:
     bool addShader(QOpenGLShaderProgram*, const char*);
+    void useTimeProgressProgram();
+    void useInteractionProgram();
 
     QOpenGLShaderProgram m_programTimeProgressFloat;
     QOpenGLShaderProgram m_programInteractionFloat;
+
     QOpenGLShaderProgram m_programTimeProgressDouble;
     QOpenGLShaderProgram m_programInteractionDouble;
+
+    QOpenGLShaderProgram m_programTimeProgress3D4DFloat;
+    QOpenGLShaderProgram m_programInteraction3D4DFloat;
+
+    QOpenGLShaderProgram* m_programTimeProgressUsing = nullptr;
+    QOpenGLShaderProgram* m_programInteractionUsing = nullptr;
+
     GLuint m_numberOfWorkGroups = 0;
-    bhs::Precision m_precision;
 };

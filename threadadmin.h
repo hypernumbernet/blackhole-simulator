@@ -32,11 +32,11 @@ public:
     void reset();
     void setComputeDevice(bhs::Compute);
 
-    typedef AbstractEngineCore* (*engineFactoryFloat)(AbstractNBodyEngine<float>* const, int);
-    typedef AbstractEngineCore* (*engineFactoryDouble)(AbstractNBodyEngine<double>* const, int);
+    typedef AbstractEngineCore* (*coreFactoryFloat)(AbstractNBodyEngine<float>* const, int);
+    typedef AbstractEngineCore* (*coreFactoryDouble)(AbstractNBodyEngine<double>* const, int);
 
-    void initialize(AbstractNBodyEngine<float>* const, engineFactoryFloat);
-    void initialize(AbstractNBodyEngine<double>* const, engineFactoryDouble);
+    void initialize(AbstractNBodyEngine<float>* const, coreFactoryFloat);
+    void initialize(AbstractNBodyEngine<double>* const, coreFactoryDouble);
 
 public slots:
     void frameAdvance(int = 1);
