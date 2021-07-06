@@ -66,7 +66,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_presetButtonGroup.addButton(radio, static_cast<int>(e.first));
         presetVbox->addWidget(radio);
-        if (e.first == bhs::Preset::RandomCube)
+        if (e.first == bhs::Preset::RandomBall)
             radio->setChecked(true);
     }
 

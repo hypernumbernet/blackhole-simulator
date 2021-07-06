@@ -41,7 +41,7 @@ struct SimCondition
     Engine engine = Engine::G3DMassEuler;
     Precision precision = Precision::Float;
     Compute compute = Compute::GPU;
-    Preset preset = Preset::RandomCube;
+    Preset preset = Preset::RandomBall;
     double timePerFrame = 1000.0;
     int numberOfParticles = 2000;
     double massAvg = 6.0e+29;
