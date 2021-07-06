@@ -224,13 +224,13 @@ void MainWidget::displayStyle(QLabel& lbl)
     lbl.setAlignment(Qt::AlignRight);
 }
 
-void MainWidget::displayModelScale(const float val)
+void MainWidget::displayModelScale(const double val)
 {
-    if (val <= 0.0f)
+    if (val <= 0.0)
         return;
 
     bool state = m_scaleValue.blockSignals(true);
-    m_scaleValue.setText(QString::number(1.0f / val));
+    m_scaleValue.setText(QString::number(1.0 / val));
     m_scaleValue.blockSignals(state);
 }
 
@@ -241,7 +241,7 @@ void MainWidget::resetScaleSlider()
     m_scaleSlider.blockSignals(state);
 }
 
-void MainWidget::displayTimePerFrame(const float time)
+void MainWidget::displayTimePerFrame(const double time)
 {
     m_simCondition.timePerFrame = time;
     m_timePerFrameValue.setText(QString::number(time));

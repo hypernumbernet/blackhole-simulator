@@ -66,8 +66,8 @@ signals:
     void displayNumberOfParticles(int);
     void displayFrameNumber(int);
     void displayFps(int);
-    void displayModelScale(float);
-    void displayTimePerFrame(float);
+    void displayModelScale(double);
+    void displayTimePerFrame(double);
     void updateStartButtonText(bool);
     void frameAdvance(int);
     void resultReady();

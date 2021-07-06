@@ -32,6 +32,12 @@ public:
 
     void setModelScale(double);
     void setModelScaleRatio(double);
+
+    void setTimePerFrame(const double time)
+    {
+        this->m_timePerFrame = (T)time;
+        emit UpdateUi::it().displayTimePerFrame(time);
+    }
     void changeModelScale(double);
     int threadCount();
     QVector<bhs::IntRange> timeProgressRanges() const;

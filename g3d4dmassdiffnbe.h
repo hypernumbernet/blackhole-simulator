@@ -44,10 +44,10 @@ public:
             this->initRandamCube();
             break;
         case bhs::Preset::RandomSphere:
-            this->initRandamSphere(0.9f);
+            this->initRandamSphere(0.9);
             break;
         case bhs::Preset::RandomBall:
-            this->initRandamSphere(0.0f);
+            this->initRandamSphere(0.0);
             break;
         case bhs::Preset::SunEarth:
             this->initSunEarth();
@@ -74,11 +74,5 @@ public:
         delete[] this->m_coordinates;
         delete[] this->m_velocities;
         delete[] this->m_masses;
-    }
-
-    void setTimePerFrame(const float time)
-    {
-        this->m_timePerFrame = time;
-        emit UpdateUi::it().displayTimePerFrame(time);
     }
 };

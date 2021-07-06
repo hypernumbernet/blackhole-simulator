@@ -25,9 +25,9 @@ public slots:
     void displayFrameNumber(int);
     void displayFPS(int);
     void updateStartButtonText(bool);
-    void displayModelScale(float);
+    void displayModelScale(double);
     void resetScaleSlider();
-    void displayTimePerFrame(float);
+    void displayTimePerFrame(double);
     void showInitializerDialog();
     void acceptInitializerDialog();
     void resetInitial();
