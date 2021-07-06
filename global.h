@@ -9,7 +9,6 @@ namespace bhs // Black Hole Simulator
 enum class Engine
 {
     G3DMassDiff,
-    G3DMassIntegral,
     G3D4DMassDiff,
 };
 

@@ -32,9 +32,6 @@ HEADERS += \
     g3dmassdiffcoredouble.h \
     g3dmassdiffcorefloat.h \
     g3dmassdiffnbe.h \
-    g3dmassintegralcoredouble.h \
-    g3dmassintegralcorefloat.h \
-    g3dmassintegralnbe.h \
     global.h \
     graphicwindow.h \
     initializer3d.h \

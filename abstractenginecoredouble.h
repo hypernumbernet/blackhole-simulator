@@ -15,7 +15,6 @@ public:
         , m_coordinates(engine->coordinates())
         , m_velocities(engine->velocities())
         , m_masses(engine->masses())
-        , m_inversedDistances(engine->inversedDistances())
         , m_timePerFrame(engine->timePerFrame())
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
@@ -59,9 +58,6 @@ protected:
 
     // Stores the mass of each particle (kg)
     double* const m_masses;
-
-    // Stores the reciprocal of the previously calculated distance.
-    double* const m_inversedDistances;
 
     // Physically calculated time per frame (second)
     const double m_timePerFrame;

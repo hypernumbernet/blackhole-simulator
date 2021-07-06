@@ -109,12 +109,6 @@ T* AbstractNBodyEngine<T>::velocities() const
 }
 
 template <typename T>
-T* AbstractNBodyEngine<T>::inversedDistances() const
-{
-    return m_inversedDistances;
-}
-
-template <typename T>
 T AbstractNBodyEngine<T>::timePerFrame() const
 {
     return m_timePerFrame;

@@ -52,10 +52,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_NBodyEngineFloat = new G3DMassDiffNBE<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3DMassDiffCoreFloat::factory);
             break;
-        case bhs::Engine::G3DMassIntegral:
-            m_NBodyEngineFloat = new G3DMassIntegralNBE<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, G3DMassIntegralCoreFloat::factory);
-            break;
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineFloat = new G3D4DMassDiffNBE<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DMassDiffCoreFloat::factory);
@@ -69,10 +65,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         default:
             m_NBodyEngineDouble = new G3DMassDiffNBE<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, G3DMassDiffCoreDouble::factory);
-            break;
-        case bhs::Engine::G3DMassIntegral:
-            m_NBodyEngineDouble = new G3DMassIntegralNBE<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, G3DMassIntegralCoreDouble::factory);
             break;
         case bhs::Engine::G3D4DMassDiff:
             m_NBodyEngineDouble = new G3D4DMassDiffNBE<double>(sim);

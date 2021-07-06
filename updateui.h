@@ -31,7 +31,6 @@ private:
         : ENGINE(new QMap<bhs::Engine, QString>
         {
             {bhs::Engine::G3DMassDiff, tr("Gravity 3D Mass Differential")},
-            {bhs::Engine::G3DMassIntegral, tr("Gravity 3D Mass Integral (Exp.)")},
             {bhs::Engine::G3D4DMassDiff, tr("Gravity 3S-Velocity M. Diff.")},
             //{0, tr("Gravity3DIntegral")},
             //{0, tr("Gravity2DDifferential")},

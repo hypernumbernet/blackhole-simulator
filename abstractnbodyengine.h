@@ -24,7 +24,6 @@ public:
     T* coordinates() const;
     T* velocities() const;
     T* masses() const;
-    T* inversedDistances() const;
 
     quint64 numberOfParticle() const;
     double modelScale() const;
@@ -56,9 +55,6 @@ protected:
 
     // Stores the mass of each particle (kg)
     T* m_masses;
-
-    // Stores the reciprocal of the previously calculated distance.
-    T* m_inversedDistances;
 
     // Physically calculated time per frame (second)
     T m_timePerFrame;
