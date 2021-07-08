@@ -436,13 +436,12 @@ public:
     template <typename X>
     inline Quaternion& MakeRotation(X theta)
     {
-        X c = cos(theta);
         X s = sin(theta);
-        i0 = c;
+        i0 = cos(theta);
         i1 *= s;
         i2 *= s;
         i3 *= s;
-        return (*this);
+        return *this;
     }
 
     inline static Quaternion MakeRotation(Vector3<T> v, T theta)

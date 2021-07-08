@@ -1,0 +1,60 @@
+#version 450 core
+
+#define PI 3.141592653589793
+
+layout (local_size_x = 128) in;
+
+layout (std430, binding = 0) buffer coordinate_block
+{
+    double coordinate[];
+};
+
+layout(std430, binding = 1) buffer velocity_block
+{
+    double velocity[];
+};
+
+layout(std430, binding = 2) buffer mass_block
+{
+    double mass[];
+};
+
+layout(std430, binding = 3) buffer param_block
+{
+    double timePerFrame;
+    double numberOfPerticles;
+    double GConstant;
+    double vangleInv;
+};
+
+double atan2(in double y, in double x)
+{
+    return x == 0.0 ? sign(y) * PI / 2.0 : double(atan(float(y), float(x)));
+}
+
+dvec3 LnV3(in dvec4 qua)
+{
+    dvec3 im = dvec3(qua.x, qua.y, qua.z);
+    double n = length(im);
+    if (n == 0.0)
+        return dvec3(0.0, 0.0, 0.0);
+    n = atan2(n, qua.w) / n;
+    return dvec3(qua.x * n, qua.y * n, qua.z * n);
+}
+
+void main()
+{
+    const uint i = gl_GlobalInvocationID.x;
+
+    uint i3 = i * 3;
+    uint i4 = i * 4;
+
+    dvec4 vq = dvec4(velocity[i4 + 1], velocity[i4 + 2], velocity[i4 + 3], velocity[i4]);
+    vq = normalize(vq);
+    dvec3 vv3 = LnV3(vq);
+    dvec3 add = vv3 * vangleInv * timePerFrame;
+
+    coordinate[i3    ] += add.x;
+    coordinate[i3 + 1] += add.y;
+    coordinate[i3 + 2] += add.z;
+}

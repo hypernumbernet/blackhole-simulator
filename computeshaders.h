@@ -33,6 +33,9 @@ private:
     QOpenGLShaderProgram m_programTimeProgress3D4DFloat;
     QOpenGLShaderProgram m_programInteraction3D4DFloat;
 
+    QOpenGLShaderProgram m_programTimeProgress3D4DDouble;
+    QOpenGLShaderProgram m_programInteraction3D4DDouble;
+
     QOpenGLShaderProgram* m_programTimeProgressUsing = nullptr;
     QOpenGLShaderProgram* m_programInteractionUsing = nullptr;
 

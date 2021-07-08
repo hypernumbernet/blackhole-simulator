@@ -10,4 +10,8 @@ void main()
     if (n.z < 0.0)
         discard;
     color = vec4(n.z, n.z, n.z, 1.0);
+
+    // for debug
+    //if (gl_PrimitiveID == 0)
+    //    color = vec4(0.0, n.z, 0.0, 1.0);
 }

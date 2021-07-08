@@ -141,7 +141,7 @@ private:
         qint64 massOffset = velocityOffset + velocitySize;
         qint64 massSize = ssboNum;
         qint64 paramOffset = massOffset + massSize;
-        qint64 paramSize = 4;
+        qint64 paramSize = 5;
         qint64 total = paramOffset + paramSize;
 
         T* data = new T[total]();
@@ -167,7 +167,8 @@ private:
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
         data[paramOffset + 2] = gravitationalConstant<T>();
-        data[paramOffset + 3] = AbstractNBodyEngine<T>::SPEED_OF_LIGHT / AbstractNBodyEngine<T>::PI;
+        data[paramOffset + 3] = (T)(AbstractNBodyEngine<double>::SPEED_OF_LIGHT / AbstractNBodyEngine<double>::PI);
+        data[paramOffset + 4] = (T)(0.5 * AbstractNBodyEngine<double>::PI / AbstractNBodyEngine<double>::SPEED_OF_LIGHT);
 
         result.coordinateSize = coordinateSize;
         result.velocityOffset = velocityOffset;

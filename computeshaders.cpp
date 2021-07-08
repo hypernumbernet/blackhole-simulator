@@ -131,6 +131,12 @@ bool ComputeShaders::initialize()
     if (!addShader(&m_programInteraction3D4DFloat, ":/shader/interaction3D4D_f.comp"))
         return false;
 
+    if (!addShader(&m_programTimeProgress3D4DDouble, ":/shader/timeprogress3D4D_d.comp"))
+        return false;
+
+    if (!addShader(&m_programInteraction3D4DDouble, ":/shader/interaction3D4D_d.comp"))
+        return false;
+
 #ifdef QT_DEBUG
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -163,9 +169,11 @@ void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
     switch (engine->m_sim.engine)
     {
     case bhs::Engine::G3DEuler:
-    case bhs::Engine::G3D4DEuler:
         m_programTimeProgressUsing = &m_programTimeProgressDouble;
         m_programInteractionUsing = &m_programInteractionDouble;
+    case bhs::Engine::G3D4DEuler:
+        m_programTimeProgressUsing = &m_programTimeProgress3D4DDouble;
+        m_programInteractionUsing = &m_programInteraction3D4DDouble;
         break;
     }
 }

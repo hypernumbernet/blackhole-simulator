@@ -1,0 +1,138 @@
+#version 450 core
+
+layout (local_size_x = 128) in;
+
+layout (std430, binding = 0) buffer coordinate_block
+{
+    double coordinate[];
+};
+
+layout(std430, binding = 1) buffer velocity_block
+{
+    double velocity[];
+};
+
+layout(std430, binding = 2) buffer mass_block
+{
+    double mass[];
+};
+
+layout(std430, binding = 3) buffer param_block
+{
+    double timePerFrame;
+    double numberOfPerticles;
+    double GConstant;
+    double vangleInv;
+    double vangleHalf;
+};
+
+void MakeRotation(inout dvec4 qua, in double theta)
+{
+    qua.w = double(cos(float(theta)));
+    double s = double(sin(float(theta)));
+    qua.x *= s;
+    qua.y *= s;
+    qua.z *= s;
+}
+
+void Rot8(inout dvec4 qua, in dvec4 rot)
+{
+    double q0 = (rot.w * qua.w - rot.x * qua.x - rot.y * qua.y - rot.z * qua.z) * rot.w
+            - (rot.w * qua.x + rot.x * qua.w + rot.y * qua.z - rot.z * qua.y) * rot.x
+            - (rot.w * qua.y - rot.x * qua.z + rot.y * qua.w + rot.z * qua.x) * rot.y
+            - (rot.w * qua.z + rot.x * qua.y - rot.y * qua.x + rot.z * qua.w) * rot.z;
+    double q1 = (rot.w * qua.w - rot.x * qua.x - rot.y * qua.y - rot.z * qua.z) * rot.x
+            + (rot.w * qua.x + rot.x * qua.w + rot.y * qua.z - rot.z * qua.y) * rot.w
+            - (rot.w * qua.y - rot.x * qua.z + rot.y * qua.w + rot.z * qua.x) * rot.z
+            + (rot.w * qua.z + rot.x * qua.y - rot.y * qua.x + rot.z * qua.w) * rot.y;
+    double q2 = (rot.w * qua.w - rot.x * qua.x - rot.y * qua.y - rot.z * qua.z) * rot.y
+            + (rot.w * qua.x + rot.x * qua.w + rot.y * qua.z - rot.z * qua.y) * rot.z
+            + (rot.w * qua.y - rot.x * qua.z + rot.y * qua.w + rot.z * qua.x) * rot.w
+            - (rot.w * qua.z + rot.x * qua.y - rot.y * qua.x + rot.z * qua.w) * rot.x;
+    double q3 = (rot.w * qua.w - rot.x * qua.x - rot.y * qua.y - rot.z * qua.z) * rot.z
+            - (rot.w * qua.x + rot.x * qua.w + rot.y * qua.z - rot.z * qua.y) * rot.y
+            + (rot.w * qua.y - rot.x * qua.z + rot.y * qua.w + rot.z * qua.x) * rot.x
+            + (rot.w * qua.z + rot.x * qua.y - rot.y * qua.x + rot.z * qua.w) * rot.w;
+    qua.x = q1;
+    qua.y = q2;
+    qua.z = q3;
+    qua.w = q0;
+}
+
+void Product(inout dvec4 a, in dvec4 b)
+{
+    double q0 = a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z;
+    double q1 = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y;
+    double q2 = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x;
+    double q3 = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w;
+    a.x = q1;
+    a.y = q2;
+    a.z = q3;
+    a.w = q0;
+}
+
+void main()
+{
+    const uint i = gl_GlobalInvocationID.x;
+    uint num = uint(numberOfPerticles);
+    double time_g = timePerFrame * GConstant * vangleHalf;
+    uint a = i * 3;
+    uint b;
+    double d1, d2, d3;
+    double r, inv, theta;
+    dvec4 rota, va;
+
+    dvec4 rotTotal = dvec4(0.0, 0.0, 0.0, 1.0);
+    for (int j = 0; j < num; j++)
+    {
+        if (i == j)
+            continue;
+
+        b = j * 3;
+
+        d1 = coordinate[b    ] - coordinate[a    ];
+        d2 = coordinate[b + 1] - coordinate[a + 1];
+        d3 = coordinate[b + 2] - coordinate[a + 2];
+
+        r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+        if (r <= 0.0)
+            continue;
+
+        inv = 1.0 / r;
+        theta = inv * inv * time_g * mass[j];
+
+        d1 *= inv;
+        d2 *= inv;
+        d3 *= inv;
+
+        rota.x = d1;
+        rota.y = d2;
+        rota.z = d3;
+        rota.w = 0.0;
+        MakeRotation(rota, theta);
+        // 5.239612743679345e-09
+        // 6e+29
+        //MakeRotation(rota, -1.0e-20);
+        //MakeRotation(rota, float(-1.0e-30 * 6.0e+29 * 5.239612743679345e-09));
+        
+        //Rot8(rotTotal, rota);
+        Product(rotTotal, rota);
+    }
+    a = i * 4;
+    
+    //rota.x = 0.0;
+    //rota.y = 0.0;
+    //rota.z = 1.0;
+    //rota.w = 0.0;
+    //MakeRotation(rota, 1.0e-18);
+    
+    va.x = velocity[a + 1];
+    va.y = velocity[a + 2];
+    va.z = velocity[a + 3];
+    va.w = velocity[a];
+    Product(va, rotTotal);
+    velocity[a + 1] = va.x;
+    velocity[a + 2] = va.y;
+    velocity[a + 3] = va.z;
+    velocity[a] = va.w;
+}

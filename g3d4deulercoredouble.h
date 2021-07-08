@@ -47,7 +47,7 @@ public slots:
     void calculateInteraction() const
     {
         const double vangle_half = m_vangle * 0.5;
-        const double time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
+        const double time_g = m_timePerFrame * m_engine->m_gravitationalConstant * vangle_half;
 
         double d1, d2, d3, distance, inv, theta;
         quint64 k = 0, a, b;
@@ -81,8 +81,8 @@ public slots:
 
                 auto rota = Quaternion<double>(0.0, d1, d2, d3);
                 auto rotb = Quaternion<double>(0.0, d1, d2, d3);
-                rota.MakeRotation(-theta * m_masses[j] * vangle_half);
-                rotb.MakeRotation(theta * m_masses[i] * vangle_half);
+                rota.MakeRotation(-theta * m_masses[j]);
+                rotb.MakeRotation(theta * m_masses[i]);
 
                 a = i * 4;
                 b = j * 4;
