@@ -100,7 +100,6 @@ void main()
     uint b;
     float d1, d2, d3;
     float r, inv, theta;
-    vec4 rota, va;
 
     float total_x = 0.0;
     float total_y = 0.0;
@@ -128,39 +127,16 @@ void main()
         d2 *= theta;
         d3 *= theta;
 
-
-        // if (i == 0 && j == 1)
-        // {
-            // coordinate[0] = d1;
-            // coordinate[1] = d2;
-            // coordinate[2] = d3;
-        // }
-
-
-        // rota.x = d1; * vangleHalf
-        // rota.y = d2;
-        // rota.z = d3;
-        // rota.w = 0.0;
-        //MakeRotation(rota, theta);
-        // 5.239612743679345e-09
-        // 6e+29
-        //MakeRotation(rota, -1.0e-20);
-        //MakeRotation(rota, float(-1.0e-30 * 6.0e+29 * 5.239612743679345e-09));
-        
-        //Rot8(rotTotal, rota);
-        //Product(rotTotal, rota);
         total_x += d1;
         total_y += d2;
         total_z += d3;
     }
     a = i * 4;
 
-    //rota.x = 0.0;
-    //rota.y = 0.0;
-    //rota.z = 1.0;
-    //rota.w = 0.0;
-    //MakeRotation(rota, 1.0e-18);
     r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
+    if (r <= 0.0)
+        return;
+
     total_x /= r;
     total_y /= r;
     total_z /= r;
@@ -169,18 +145,18 @@ void main()
     // for degub
     // if (i == 0)
     // {
-        // coordinate[0] = acc.x;
-        // coordinate[1] = acc.y;
-        // coordinate[2] = acc.z;
+        // coordinate[0] = acc.w;
+        // coordinate[1] = 0.0;
+        // coordinate[2] = 0.0;
     // }
 
+    vec4 va;
     va.x = velocity[a + 1];
     va.y = velocity[a + 2];
     va.z = velocity[a + 3];
     va.w = velocity[a];
-    //vec4 acc = Exp(rotTotal.x, rotTotal.y, rotTotal.z);
-    Product(va, acc);
-    //Rot8(va, acc);
+
+    Rot8(va, acc);
 
     velocity[a + 1] = va.x;
     velocity[a + 2] = va.y;

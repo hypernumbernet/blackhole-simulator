@@ -54,7 +54,7 @@ void main()
 
         inv = 1.0 / r;
         theta = inv * inv * inv * time_g * mass[j];
-        
+
         delta_x *= theta;
         delta_y *= theta;
         delta_z *= theta;

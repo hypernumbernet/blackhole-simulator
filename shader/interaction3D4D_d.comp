@@ -26,13 +26,22 @@ layout(std430, binding = 3) buffer param_block
     double vangleHalf;
 };
 
-void MakeRotation(inout dvec4 qua, in double theta)
+dvec4 MakeRotation(in double x, in double y, in double z, in double theta)
 {
-    qua.w = double(cos(float(theta)));
-    double s = double(sin(float(theta)));
-    qua.x *= s;
-    qua.y *= s;
-    qua.z *= s;
+    dvec4 qua;
+    double s;
+    if (theta > 0.01)
+    {
+        qua.w = double(cos(float(theta)));
+        s = double(sin(float(theta)));
+    } else {
+        qua.w = 1.0 - 0.5 * theta * theta;
+        s = theta;
+    }
+    qua.x = x * s;
+    qua.y = y * s;
+    qua.z = z * s;
+    return qua;
 }
 
 void Rot8(inout dvec4 qua, in dvec4 rot)
@@ -59,30 +68,20 @@ void Rot8(inout dvec4 qua, in dvec4 rot)
     qua.w = q0;
 }
 
-void Product(inout dvec4 a, in dvec4 b)
-{
-    double q0 = a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z;
-    double q1 = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y;
-    double q2 = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x;
-    double q3 = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w;
-    a.x = q1;
-    a.y = q2;
-    a.z = q3;
-    a.w = q0;
-}
-
 void main()
 {
     const uint i = gl_GlobalInvocationID.x;
     uint num = uint(numberOfPerticles);
-    double time_g = timePerFrame * GConstant * vangleHalf;
+    double time_g = timePerFrame * GConstant;
     uint a = i * 3;
     uint b;
     double d1, d2, d3;
     double r, inv, theta;
-    dvec4 rota, va;
 
-    dvec4 rotTotal = dvec4(0.0, 0.0, 0.0, 1.0);
+    double total_x = 0.0;
+    double total_y = 0.0;
+    double total_z = 0.0;
+
     for (int j = 0; j < num; j++)
     {
         if (i == j)
@@ -99,38 +98,35 @@ void main()
             continue;
 
         inv = 1.0 / r;
-        theta = inv * inv * time_g * mass[j];
+        theta = inv * inv * inv * time_g * mass[j];
 
-        d1 *= inv;
-        d2 *= inv;
-        d3 *= inv;
+        d1 *= theta;
+        d2 *= theta;
+        d3 *= theta;
 
-        rota.x = d1;
-        rota.y = d2;
-        rota.z = d3;
-        rota.w = 0.0;
-        MakeRotation(rota, theta);
-        // 5.239612743679345e-09
-        // 6e+29
-        //MakeRotation(rota, -1.0e-20);
-        //MakeRotation(rota, float(-1.0e-30 * 6.0e+29 * 5.239612743679345e-09));
-        
-        //Rot8(rotTotal, rota);
-        Product(rotTotal, rota);
+        total_x += d1;
+        total_y += d2;
+        total_z += d3;
     }
     a = i * 4;
-    
-    //rota.x = 0.0;
-    //rota.y = 0.0;
-    //rota.z = 1.0;
-    //rota.w = 0.0;
-    //MakeRotation(rota, 1.0e-18);
-    
+
+    r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
+    if (r <= 0.0)
+        return;
+
+    total_x /= r;
+    total_y /= r;
+    total_z /= r;
+    dvec4 acc = MakeRotation(total_x, total_y, total_z, r * vangleHalf);
+
+    dvec4 va;
     va.x = velocity[a + 1];
     va.y = velocity[a + 2];
     va.z = velocity[a + 3];
     va.w = velocity[a];
-    Product(va, rotTotal);
+
+    Rot8(va, acc);
+
     velocity[a + 1] = va.x;
     velocity[a + 2] = va.y;
     velocity[a + 3] = va.z;
