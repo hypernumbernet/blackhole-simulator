@@ -89,8 +89,8 @@ public slots:
                 auto va = Quaternion<float>(vels, a);
                 auto vb = Quaternion<float>(vels, b);
 
-                auto rotatedA = va.Rot8(rota);
-                auto rotatedB = vb.Rot8(rotb);
+                auto rotatedA = va.Rotated8(rota);
+                auto rotatedB = vb.Rotated8(rotb);
 
                 vels[a    ] = rotatedA.i0;
                 vels[a + 1] = rotatedA.i1;

@@ -47,81 +47,65 @@ public slots:
     void calculateInteraction() const
     {
         const double vangle_half = m_vangle * 0.5;
-        const double time_g = m_timePerFrame * m_engine->m_gravitationalConstant * vangle_half;
+        const double time_g = m_timePerFrame * m_engine->m_gravitationalConstant;
 
-        double d1, d2, d3, distance, inv, theta;
-        quint64 k = 0, a, b;
+        double d1, d2, d3, r, inv, theta;
+        quint64 a, b;
 
-        double* vels = new double[m_numberOfParticles * 4]();
-        for (quint64 i = 0; i < m_numberOfParticles; ++i)
+        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            vels[i * 4] = 1.0;
-        }
+            a = i * 3;
 
-        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
-        {
-            for (quint64 j = i + 1; j < m_numberOfParticles; ++j)
+            double total_x = 0.0;
+            double total_y = 0.0;
+            double total_z = 0.0;
+
+            for (quint64 j = 0; j < m_numberOfParticles; ++j)
             {
-                a = i * 3;
-                b = j * 3;
-
-                d1 = m_coordinates[a    ] - m_coordinates[b    ];
-                d2 = m_coordinates[a + 1] - m_coordinates[b + 1];
-                d3 = m_coordinates[a + 2] - m_coordinates[b + 2];
-                distance = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (distance <= 0.0)
+                if (i == j)
                     continue;
 
-                inv = 1.0f / distance;
-                theta = inv * inv * time_g;
+                b = j * 3;
 
-                d1 *= inv;
-                d2 *= inv;
-                d3 *= inv;
+                d1 = m_coordinates[b    ] - m_coordinates[a    ];
+                d2 = m_coordinates[b + 1] - m_coordinates[a + 1];
+                d3 = m_coordinates[b + 2] - m_coordinates[a + 2];
 
-                auto rota = Quaternion<double>(0.0, d1, d2, d3);
-                auto rotb = Quaternion<double>(0.0, d1, d2, d3);
-                rota.MakeRotation(-theta * m_masses[j]);
-                rotb.MakeRotation(theta * m_masses[i]);
+                r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                if (r <= 0.0)
+                    continue;
 
-                a = i * 4;
-                b = j * 4;
-                auto va = Quaternion<double>(vels, a);
-                auto vb = Quaternion<double>(vels, b);
+                inv = 1.0 / r;
+                theta = inv * inv * inv * time_g * m_masses[j];
 
-                auto rotatedA = va.Rot8(rota);
-                auto rotatedB = vb.Rot8(rotb);
+                d1 *= theta;
+                d2 *= theta;
+                d3 *= theta;
 
-                vels[a    ] = rotatedA.i0;
-                vels[a + 1] = rotatedA.i1;
-                vels[a + 2] = rotatedA.i2;
-                vels[a + 3] = rotatedA.i3;
-
-                vels[b    ] = rotatedB.i0;
-                vels[b + 1] = rotatedB.i1;
-                vels[b + 2] = rotatedB.i2;
-                vels[b + 3] = rotatedB.i3;
-
-                ++k;
+                total_x += d1;
+                total_y += d2;
+                total_z += d3;
             }
+            a = i * 4;
+
+            r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
+            if (r <= 0.0)
+                continue;
+
+            total_x /= r;
+            total_y /= r;
+            total_z /= r;
+            auto acc = Quaternion<double>::MakeRotation(total_x, total_y, total_z, r * vangle_half);
+
+            auto va = Quaternion<double>(m_velocities, a);
+
+            va.Rotate8(acc);
+
+            m_velocities[a    ] = va.i0;
+            m_velocities[a + 1] = va.i1;
+            m_velocities[a + 2] = va.i2;
+            m_velocities[a + 3] = va.i3;
         }
-
-        interactionMutex.lock();
-        for (quint64 i = 0; i < m_numberOfParticles; ++i)
-        {
-            auto i4 = i * 4;
-            auto vq = Quaternion<double>(m_velocities, i4);
-            auto vp = Quaternion<double>(vels, i4);
-            vq *= vp;
-
-            m_velocities[i4    ] = vq.i0;
-            m_velocities[i4 + 1] = vq.i1;
-            m_velocities[i4 + 2] = vq.i2;
-            m_velocities[i4 + 3] = vq.i3;
-        }
-        interactionMutex.unlock();
-
-        delete[] vels;
 
         resultReady();
     }

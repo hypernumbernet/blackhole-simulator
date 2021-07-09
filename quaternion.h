@@ -396,29 +396,53 @@ public:
     // The right four of the result of conjugate producting
     // the right four of the octonion with the left four of the octonion.
     // It has been omitted a lot from the octonion's 8 * 8 * 8 products.
-    inline Quaternion Rot8(const Quaternion& rot) const
+    inline Quaternion Rotated8(const Quaternion& rot) const
     {
         return Quaternion(
-            (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i0
+              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i0
             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i1
             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i2
             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i3
             ,
-            (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i1
+              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i1
             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i0
             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i3
             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i2
             ,
-            (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i2
+              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i2
             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i3
             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i0
             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i1
             ,
-            (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i3
+              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i3
             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i2
             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i1
             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i0
         );
+    }
+
+    inline void Rotate8(const Quaternion& rot)
+    {
+        T q0 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i0
+             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i1
+             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i2
+             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i3;
+        T q1 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i1
+             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i0
+             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i3
+             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i2;
+        T q2 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i2
+             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i3
+             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i0
+             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i1;
+        T q3 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i3
+             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i2
+             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i1
+             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i0;
+        i0 = q0;
+        i1 = q1;
+        i2 = q2;
+        i3 = q3;
     }
 
     // Slerp on 3-sphere from identity
@@ -449,6 +473,13 @@ public:
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(c, v.x * s, v.y * s, v.z * s);
+    }
+
+    inline static Quaternion MakeRotation(T x, T y, T z, T theta)
+    {
+        T c = cos(theta);
+        T s = sin(theta);
+        return Quaternion(c, x * s, y * s, z * s);
     }
 
     // The function that combines MakeRotation and Rot8.

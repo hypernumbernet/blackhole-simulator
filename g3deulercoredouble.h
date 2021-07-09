@@ -59,10 +59,10 @@ public slots:
                 d2 *= inv * theta;
                 d3 *= inv * theta;
 
-                vels[a] -= d1 * m_masses[j];
+                vels[a    ] -= d1 * m_masses[j];
                 vels[a + 1] -= d2 * m_masses[j];
                 vels[a + 2] -= d3 * m_masses[j];
-                vels[b] += d1 * m_masses[i];
+                vels[b    ] += d1 * m_masses[i];
                 vels[b + 1] += d2 * m_masses[i];
                 vels[b + 2] += d3 * m_masses[i];
 
