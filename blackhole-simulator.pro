@@ -26,9 +26,11 @@ HEADERS += \
     abstractnbodyengine.h \
     camera.h \
     computeshaders.h \
+    g3d4deulercalculation.h \
     g3d4deulercoredouble.h \
     g3d4deulercorefloat.h \
     g3d4deulerengine.h \
+    g3deulercalculation.h \
     g3deulercoredouble.h \
     g3deulercorefloat.h \
     g3deulerengine.h \

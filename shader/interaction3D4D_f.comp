@@ -105,7 +105,7 @@ void main()
     float total_y = 0.0;
     float total_z = 0.0;
 
-    for (int j = 0; j < num; j++)
+    for (int j = 0; j < num; ++j)
     {
         if (i == j)
             continue;

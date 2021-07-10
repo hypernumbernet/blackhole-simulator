@@ -37,7 +37,7 @@ void main()
     double force_y = 0.0;
     double force_z = 0.0;
 
-    for (int j = 0; j < num; j++)
+    for (int j = 0; j < num; ++j)
     {
         if (i == j)
             continue;
