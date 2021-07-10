@@ -64,7 +64,7 @@ public:
             break;
         }
 
-        setTimePerFrame(sim.timePerFrame);
+        this->setTimePerFrame(sim.timePerFrame);
     }
 
     ~G3DEulerEngine()

@@ -5,9 +5,9 @@ template class AbstractNBodyEngine<double>;
 
 template <typename T>
 AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
-    : m_sim(sim)
+    : m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
+    , m_sim(sim)
     , m_modelScale(1.0)
-    , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
 {
 }
 

@@ -41,12 +41,10 @@ public:
         T* const velocities = m_engine->velocities();
         const T* const masses = m_engine->masses();
 
-        const T vangle = AbstractNBodyEngine<T>::PI / AbstractNBodyEngine<T>::SPEED_OF_LIGHT;
-        const T vangleHalf = vangle * 0.5;
         const T timePerFrame = m_engine->timePerFrame();
         const T gravitationalConstant = m_engine->m_gravitationalConstant;
         const T timeG = timePerFrame * gravitationalConstant;
-        const T numberOfParticles = m_engine->numberOfParticle();
+        quint64 numberOfParticles = m_engine->numberOfParticle();
 
         T d1, d2, d3, r, inv, theta;
         quint64 a, b;
