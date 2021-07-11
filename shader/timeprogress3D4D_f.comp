@@ -53,6 +53,20 @@ vec4 Ln(in vec4 qua)
     return vec4(qua.x * n, qua.y * n, qua.z * n, theta);
 }
 
+vec3 LnV3Half(in vec4 qua)
+{
+    vec3 im = vec3(qua.x, qua.y, qua.z);
+    float v = length(im);
+    if (v == 0.0)
+        return vec3(0.0, 0.0, 0.0);
+    float a;
+    if (qua.w == 0.0)
+        a = PI / 2.0;
+    else
+        a = atan(v / qua.w) / v;
+    return vec3(qua.x * a, qua.y * a, qua.z * a);
+}
+
 void main()
 {
     const uint i = gl_GlobalInvocationID.x;
@@ -66,7 +80,7 @@ void main()
     vec4 vq = vec4(velocity[i4 + 1], velocity[i4 + 2], velocity[i4 + 3], velocity[i4]);
     vq = normalize(vq);
 
-    vec3 vv3 = LnV3(vq);
+    vec3 vv3 = LnV3Half(vq);
     vec3 add = vv3 * vangleInv * timePerFrame;
 
     coordinate[i3    ] += add.x;

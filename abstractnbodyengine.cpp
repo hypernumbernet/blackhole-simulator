@@ -111,6 +111,12 @@ T* AbstractNBodyEngine<T>::masses() const
 }
 
 template <typename T>
+T* AbstractNBodyEngine<T>::curvature() const
+{
+    return m_curvature;
+}
+
+template <typename T>
 T* AbstractNBodyEngine<T>::velocities() const
 {
     return m_velocities;

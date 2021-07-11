@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QButtonGroup>
+#include <QMessageBox>
 
 class InitializerDialog : public QDialog
 {

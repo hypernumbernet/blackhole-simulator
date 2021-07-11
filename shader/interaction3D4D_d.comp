@@ -24,6 +24,7 @@ layout(std430, binding = 3) buffer param_block
     double GConstant;
     double vangleInv;
     double vangleHalf;
+    double boundaryToInvalidate;
 };
 
 dvec4 MakeRotation(in double x, in double y, in double z, in double theta)
@@ -111,7 +112,7 @@ void main()
     a = i * 4;
 
     r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-    if (r <= 0.0)
+    if (r <= boundaryToInvalidate)
         return;
 
     total_x /= r;

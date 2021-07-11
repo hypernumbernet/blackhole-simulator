@@ -2,15 +2,15 @@
 
 #include "abstractenginecoredouble.h"
 #include "quaternion.h"
-#include "g3d4deulercalculation.h"
+#include "g3d4dcalculation.h"
 
 using namespace bhs;
 
-class G3D4DEulerCoreDouble : public AbstractEngineCoreDouble
+class G3D4DCoreDouble : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    G3D4DEulerCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    G3D4DCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -18,7 +18,7 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new G3D4DEulerCoreDouble(engine, threadNumber);
+        return new G3D4DCoreDouble(engine, threadNumber);
     }
 
 public slots:
@@ -35,5 +35,5 @@ public slots:
     }
 
 private:
-    G3D4DEulerCalculation<double> m_calc;
+    G3D4DCalculation<double> m_calc;
 };

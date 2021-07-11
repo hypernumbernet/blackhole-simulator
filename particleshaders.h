@@ -1,11 +1,11 @@
 #pragma once
 
-#include "g3deulerengine.h"
-#include "g3deulercorefloat.h"
-#include "g3deulercoredouble.h"
-#include "g3d4deulerengine.h"
-#include "g3d4deulercorefloat.h"
-#include "g3d4deulercoredouble.h"
+#include "engine/g3d/g3dengine.h"
+#include "engine/g3d/g3dcorefloat.h"
+#include "engine/g3d/g3dcoredouble.h"
+#include "engine/g3d4d/g3d4dengine.h"
+#include "engine/g3d4d/g3d4dcorefloat.h"
+#include "engine/g3d4d/g3d4dcoredouble.h"
 #include "computeshaders.h"
 
 #include <math.h>
@@ -167,8 +167,9 @@ private:
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
         data[paramOffset + 2] = gravitationalConstant<T>();
-        data[paramOffset + 3] = (T)(AbstractNBodyEngine<double>::SPEED_OF_LIGHT / AbstractNBodyEngine<double>::PI);
-        data[paramOffset + 4] = (T)(0.5 * AbstractNBodyEngine<double>::PI / AbstractNBodyEngine<double>::SPEED_OF_LIGHT);
+        data[paramOffset + 3] = T(1.0) / AbstractNBodyEngine<T>::VANGLE;
+        data[paramOffset + 4] = T(0.5) * AbstractNBodyEngine<T>::VANGLE;
+        data[paramOffset + 5] = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         result.coordinateSize = coordinateSize;
         result.velocityOffset = velocityOffset;

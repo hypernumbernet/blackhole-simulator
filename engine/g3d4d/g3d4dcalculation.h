@@ -4,14 +4,15 @@
 #include "abstractnbodyengine.h"
 
 #include <QObject>
+#include <QDebug>
 
 using namespace bhs;
 
 template <typename T>
-class G3D4DEulerCalculation
+class G3D4DCalculation
 {
 public:
-    G3D4DEulerCalculation(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    G3D4DCalculation(AbstractNBodyEngine<T>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
@@ -25,14 +26,13 @@ public:
         T* const coordinates = m_engine->coordinates();
         const T* const velocities = m_engine->velocities();
 
-        const T vangleInv = AbstractNBodyEngine<T>::SPEED_OF_LIGHT / AbstractNBodyEngine<T>::PI;
+        const T vangleInv = T(1) / AbstractNBodyEngine<T>::VANGLE;
         const T timePerFrame = m_engine->timePerFrame();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             auto vq = Quaternion<T>(velocities, i * 4);
-            vq.Normalize();
-            auto vv3 = vq.LnV3();
+            auto vv3 = vq.LnV3Half();
 
             auto to_add = vv3 * vangleInv * timePerFrame;
 
@@ -49,12 +49,13 @@ public:
         T* const velocities = m_engine->velocities();
         const T* const masses = m_engine->masses();
 
-        const T vangle = AbstractNBodyEngine<T>::PI / AbstractNBodyEngine<T>::SPEED_OF_LIGHT;
-        const T vangleHalf = vangle * 0.5;
+        const T vangle = AbstractNBodyEngine<T>::VANGLE;
+        const T vangleHalf = vangle * T(0.5);
         const T timePerFrame = m_engine->timePerFrame();
         const T gravitationalConstant = m_engine->m_gravitationalConstant;
         const T timeG = timePerFrame * gravitationalConstant;
         quint64 numberOfParticles = m_engine->numberOfParticle();
+        const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         T d1, d2, d3, r, inv, theta;
         quint64 a, b;
@@ -79,7 +80,7 @@ public:
                 d3 = coordinates[b + 2] - coordinates[a + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (r <= 0.0)
+                if (r <= boundaryToInvalidate)
                     continue;
 
                 inv = 1.0 / r;
@@ -102,10 +103,11 @@ public:
             total_x /= r;
             total_y /= r;
             total_z /= r;
+
             auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, r * vangleHalf);
 
             auto va = Quaternion<T>(velocities, a);
-
+            va.Normalize();
             va.Rotate8(acc);
 
             velocities[a    ] = va.i0;

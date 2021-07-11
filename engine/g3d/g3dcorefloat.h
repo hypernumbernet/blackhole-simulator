@@ -1,13 +1,13 @@
 #pragma once
 
 #include "abstractenginecorefloat.h"
-#include "g3deulercalculation.h"
+#include "g3dcalculation.h"
 
-class G3DEulerCoreFloat : public AbstractEngineCoreFloat
+class G3DCoreFloat : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    explicit G3DEulerCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    explicit G3DCoreFloat(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,7 +15,7 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
-        return new G3DEulerCoreFloat(engine, threadNumber);
+        return new G3DCoreFloat(engine, threadNumber);
     }
 
 public slots:
@@ -32,5 +32,5 @@ public slots:
     }
 
 private:
-    G3DEulerCalculation<float> m_calc;
+    G3DCalculation<float> m_calc;
 };

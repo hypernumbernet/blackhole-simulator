@@ -22,6 +22,9 @@ layout(std430, binding = 3) buffer param_block
     float timePerFrame;
     float numberOfPerticles;
     float GConstant;
+    float vangleInv;
+    float vangleHalf;
+    float boundaryToInvalidate;
 };
 
 void main()
@@ -49,7 +52,7 @@ void main()
         delta_z = coordinate[j3 + 2] - coordinate[i3 + 2];
 
         r = sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
-        if (r <= 0.0)
+        if (r <= boundaryToInvalidate)
             continue;
 
         inv = 1.0 / r;

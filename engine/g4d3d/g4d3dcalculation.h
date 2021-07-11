@@ -8,30 +8,37 @@
 using namespace bhs;
 
 template <typename T>
-class G3DEulerCalculation
+class G4D3DCalculation
 {
 public:
-    G3DEulerCalculation(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    G4D3DCalculation(AbstractNBodyEngine<T>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-    {}
+    {
+    }
 
     inline void calculateTimeProgress() const
     {
         T* const coordinates = m_engine->coordinates();
         const T* const velocities = m_engine->velocities();
 
+        const T vangleInv = T(1) / AbstractNBodyEngine<T>::VANGLE;
         const T timePerFrame = m_engine->timePerFrame();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
+            auto vq = Quaternion<T>(velocities, i * 4);
+            auto vv3 = vq.LnV3Half();
+
+            auto to_add = vv3 * vangleInv * timePerFrame;
+
             quint64 j = i * 3;
-            coordinates[j] += velocities[j] * timePerFrame; ++j;
-            coordinates[j] += velocities[j] * timePerFrame; ++j;
-            coordinates[j] += velocities[j] * timePerFrame;
+            coordinates[j] += to_add.x; ++j;
+            coordinates[j] += to_add.y; ++j;
+            coordinates[j] += to_add.z;
         }
     }
 
@@ -41,6 +48,8 @@ public:
         T* const velocities = m_engine->velocities();
         const T* const masses = m_engine->masses();
 
+        const T vangle = AbstractNBodyEngine<T>::VANGLE;
+        const T vangleHalf = vangle * T(0.5);
         const T timePerFrame = m_engine->timePerFrame();
         const T gravitationalConstant = m_engine->m_gravitationalConstant;
         const T timeG = timePerFrame * gravitationalConstant;
@@ -49,13 +58,19 @@ public:
         T d1, d2, d3, r, inv, theta;
         quint64 a, b;
 
-        T* vels = new T[numberOfParticles * 3]();
-
-        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
+        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             a = i * 3;
-            for (quint64 j = i + 1; j < numberOfParticles; ++j)
+
+            T total_x = 0.0;
+            T total_y = 0.0;
+            T total_z = 0.0;
+
+            for (quint64 j = 0; j < numberOfParticles; ++j)
             {
+                if (i == j)
+                    continue;
+
                 b = j * 3;
 
                 d1 = coordinates[b    ] - coordinates[a    ];
@@ -63,33 +78,41 @@ public:
                 d3 = coordinates[b + 2] - coordinates[a + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (r <= 0.0)
+                if (r <= 0.01)
                     continue;
 
                 inv = 1.0 / r;
-                theta = inv * inv * inv * timeG;
+                theta = inv * inv * inv * timeG * masses[j];
 
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
 
-                vels[a    ] += d1 * masses[j];
-                vels[a + 1] += d2 * masses[j];
-                vels[a + 2] += d3 * masses[j];
-                vels[b    ] -= d1 * masses[i];
-                vels[b + 1] -= d2 * masses[i];
-                vels[b + 2] -= d3 * masses[i];
+                total_x += d1;
+                total_y += d2;
+                total_z += d3;
             }
-        }
-        bhs::interactionMutex.lock();
-        quint64 end = numberOfParticles * 3;
-        for (quint64 i = 0; i < end; ++i)
-        {
-            velocities[i] += vels[i];
-        }
-        bhs::interactionMutex.unlock();
+            a = i * 4;
 
-        delete[] vels;
+            r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
+            if (r <= 0.0)
+                continue;
+
+            total_x /= r;
+            total_y /= r;
+            total_z /= r;
+
+            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, r * vangleHalf);
+
+            auto va = Quaternion<T>(velocities, a);
+            va.Normalize();
+            va.Rotate8(acc);
+
+            velocities[a    ] = va.i0;
+            velocities[a + 1] = va.i1;
+            velocities[a + 2] = va.i2;
+            velocities[a + 3] = va.i3;
+        }
     }
 
 private:

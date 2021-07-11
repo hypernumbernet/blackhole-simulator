@@ -1,7 +1,5 @@
 #pragma once
 
-#define ATANH(x) ((log(1 + (x)) - log(1 - (x))) / 2)
-
 #include "vector3.h"
 
 namespace bhs
@@ -11,6 +9,8 @@ template <typename TYPE>
 class Quaternion
 {
     using T = TYPE;
+
+    static constexpr T PI = T(3.141592653589793);
 
 public:
     union
@@ -28,7 +28,7 @@ public:
     inline Quaternion(){}
 
     //inline Quaternion(T real)
-    //  : i0(real){}
+    //    : i0(real){}
 
     inline Quaternion(T real, T imaginary1, T imaginary2, T imaginary3)
         : i0(real), i1(imaginary1), i2(imaginary2), i3(imaginary3){}
@@ -195,7 +195,7 @@ public:
         return (*this) /= sqrt(i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3);
     }
 
-    inline Quaternion Conjugate() const
+    inline Quaternion Conjugated() const
     {
         return Quaternion(i0, -i1, -i2, -i3);
     }
@@ -314,8 +314,22 @@ public:
         if (n == 0)
             return Vector3<T>(0, 0, 0);
 
-        n = ATANH(n) / n;
+        n = atanh(n) / n;
         return Vector3<T>(i1 * n, i2 * n, i3 * n);
+    }
+
+    inline Vector3<T> LnV3Half() const
+    {
+        T v = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        if (v == 0)
+            return Vector3<T>(0, 0, 0);
+
+        T a;
+        if (i0 == 0) // v == 1
+            a = PI / (T)2;
+        else
+            a = atan(v / i0) / v;
+        return Vector3<T>(i1 * a, i2 * a, i3 * a);
     }
 
     inline Quaternion Rot() const

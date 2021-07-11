@@ -27,19 +27,18 @@ layout(std430, binding = 3) buffer param_block
     double vangleInv;
 };
 
-double atan2(in double y, in double x)
-{
-    return x == 0.0 ? sign(y) * PI / 2.0 : double(atan(float(y), float(x)));
-}
-
-dvec3 LnV3(in dvec4 qua)
+dvec3 LnV3Half(in dvec4 qua)
 {
     dvec3 im = dvec3(qua.x, qua.y, qua.z);
-    double n = length(im);
-    if (n == 0.0)
+    double v = length(im);
+    if (v == 0.0)
         return dvec3(0.0, 0.0, 0.0);
-    n = atan2(n, qua.w) / n;
-    return dvec3(qua.x * n, qua.y * n, qua.z * n);
+    double a;
+    if (qua.w == 0.0)
+        a = PI / 2.0;
+    else
+        a = double(atan(float(v / qua.w))) / v;
+    return dvec3(qua.x * a, qua.y * a, qua.z * a);
 }
 
 void main()
@@ -51,7 +50,7 @@ void main()
 
     dvec4 vq = dvec4(velocity[i4 + 1], velocity[i4 + 2], velocity[i4 + 3], velocity[i4]);
     vq = normalize(vq);
-    dvec3 vv3 = LnV3(vq);
+    dvec3 vv3 = LnV3Half(vq);
     dvec3 add = vv3 * vangleInv * timePerFrame;
 
     coordinate[i3    ] += add.x;

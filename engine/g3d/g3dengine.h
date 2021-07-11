@@ -2,20 +2,18 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer3d4d.h"
-#include "quaternion.h"
+#include "initializer/initializer3d.h"
+#include "threadadmin.h"
 
-using namespace bhs;
-
-// Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
+// Gravity 3D with Mass Euler method N-Body Engine
 
 template <typename T>
-class G3D4DEulerEngine : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
+class G3DEngine : public AbstractNBodyEngine<T>, private Initializer3D<T>
 {
 public:
-    G3D4DEulerEngine(const bhs::SimCondition& sim)
+    explicit G3DEngine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
-        , Initializer3D4D<T>(sim, this)
+        , Initializer3D<T>(sim, this)
     {
         switch (sim.preset)
         {
@@ -36,7 +34,7 @@ public:
         }
         this->m_masses = new T[this->m_numberOfParticles];
         this->m_coordinates = new T[this->m_numberOfParticles * 3];
-        this->m_velocities = new T[this->m_numberOfParticles * 4];
+        this->m_velocities = new T[this->m_numberOfParticles * 3];
 
         switch (sim.preset)
         {
@@ -69,7 +67,7 @@ public:
         this->setTimePerFrame(sim.timePerFrame);
     }
 
-    ~G3D4DEulerEngine()
+    ~G3DEngine()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

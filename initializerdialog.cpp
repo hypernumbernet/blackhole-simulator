@@ -18,7 +18,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
         engineVbox->addWidget(radio);
-        if (e.first == bhs::Engine::G3DEuler)
+        if (e.first == bhs::Engine::G3D)
             radio->setChecked(true);
     }
 
@@ -172,6 +172,12 @@ bool InitializerDialog::validate()
     m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
     m_simCondition.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
+
+    if ( m_simCondition.engine == bhs::Engine::G3D4DH)
+    {
+        QMessageBox::information(this, tr("Sorry"), tr("The Engine is not implemented"));
+        return false;
+    }
 
     bool ok;
     auto val = m_timePerFrameEdit.text().toDouble(&ok);

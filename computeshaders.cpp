@@ -56,11 +56,12 @@ void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
     switch (engine->m_sim.engine)
     {
-    case bhs::Engine::G3DEuler:
+    case bhs::Engine::G3D:
         m_programTimeProgressUsing = &m_programTimeProgressFloat;
         m_programInteractionUsing = &m_programInteractionFloat;
         break;
-    case bhs::Engine::G3D4DEuler:
+    case bhs::Engine::G3D4D:
+    case bhs::Engine::G3D4DH:
         m_programTimeProgressUsing = &m_programTimeProgress3D4DFloat;
         m_programInteractionUsing = &m_programInteraction3D4DFloat;
         break;
@@ -72,11 +73,12 @@ void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
     switch (engine->m_sim.engine)
     {
-    case bhs::Engine::G3DEuler:
+    case bhs::Engine::G3D:
         m_programTimeProgressUsing = &m_programTimeProgressDouble;
         m_programInteractionUsing = &m_programInteractionDouble;
         break;
-    case bhs::Engine::G3D4DEuler:
+    case bhs::Engine::G3D4D:
+    case bhs::Engine::G3D4DH:
         m_programTimeProgressUsing = &m_programTimeProgress3D4DDouble;
         m_programInteractionUsing = &m_programInteraction3D4DDouble;
         break;

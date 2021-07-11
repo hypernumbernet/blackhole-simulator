@@ -8,8 +8,9 @@ namespace bhs // Black Hole Simulator
 
 enum class Engine
 {
-    G3DEuler,
-    G3D4DEuler,
+    G3D,
+    G3D4D,
+    G3D4DH,
 };
 
 enum class Precision
@@ -38,7 +39,7 @@ enum class Preset
 
 struct SimCondition
 {
-    Engine engine = Engine::G3DEuler;
+    Engine engine = Engine::G3D;
     Precision precision = Precision::Float;
     Compute compute = Compute::GPU;
     Preset preset = Preset::RandomBall;
@@ -70,5 +71,7 @@ inline double rand0center1max()
 }
 
 inline QRecursiveMutex interactionMutex;
+
+inline double m_max = 0.0;
 
 }

@@ -24,6 +24,7 @@ layout(std430, binding = 3) buffer param_block
     float GConstant;
     float vangleInv;
     float vangleHalf;
+    float boundaryToInvalidate;
 };
 
 vec4 MakeRotation(in float x, in float y, in float z, in float theta)
@@ -134,7 +135,7 @@ void main()
     a = i * 4;
 
     r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-    if (r <= 0.0)
+    if (r <= boundaryToInvalidate)
         return;
 
     total_x /= r;
