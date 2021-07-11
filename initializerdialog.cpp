@@ -173,7 +173,7 @@ bool InitializerDialog::validate()
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
     m_simCondition.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
 
-    if ( m_simCondition.engine == bhs::Engine::G3D4DH)
+    if ( m_simCondition.engine == bhs::Engine::G4D3D)
     {
         QMessageBox::information(this, tr("Sorry"), tr("The Engine is not implemented"));
         return false;

@@ -95,7 +95,7 @@ void main()
         d3 = coordinate[b + 2] - coordinate[a + 2];
 
         r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-        if (r <= 0.0)
+        if (r <= boundaryToInvalidate)
             continue;
 
         inv = 1.0 / r;
@@ -112,7 +112,7 @@ void main()
     a = i * 4;
 
     r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-    if (r <= boundaryToInvalidate)
+    if (r <= 0.0)
         return;
 
     total_x /= r;

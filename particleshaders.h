@@ -141,7 +141,7 @@ private:
         qint64 massOffset = velocityOffset + velocitySize;
         qint64 massSize = ssboNum;
         qint64 paramOffset = massOffset + massSize;
-        qint64 paramSize = 5;
+        qint64 paramSize = 6;
         qint64 total = paramOffset + paramSize;
 
         T* data = new T[total]();

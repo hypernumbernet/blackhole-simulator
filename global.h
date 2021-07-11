@@ -10,7 +10,7 @@ enum class Engine
 {
     G3D,
     G3D4D,
-    G3D4DH,
+    G4D3D,
 };
 
 enum class Precision
