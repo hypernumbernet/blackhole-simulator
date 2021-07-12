@@ -1,5 +1,7 @@
 #pragma once
 
+#include "quaternion.h"
+
 #include <QObject>
 #include <QMutex>
 
@@ -73,5 +75,22 @@ inline double rand0center1max()
 inline QRecursiveMutex interactionMutex;
 
 inline double m_max = 0.0;
+
+template <typename T>
+inline void embedQuaternionToArray(const bhs::Quaternion<T>& q, T* const a, const quint64 index)
+{
+    a[index    ] = q.i0;
+    a[index + 1] = q.i1;
+    a[index + 2] = q.i2;
+    a[index + 3] = q.i3;
+}
+
+template <typename T>
+inline void embedVector3ToArray(const bhs::Vector3<T>& v, T* const a, const quint64 index)
+{
+    a[index    ] = v.x;
+    a[index + 1] = v.y;
+    a[index + 2] = v.z;
+}
 
 }

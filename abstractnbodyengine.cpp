@@ -111,9 +111,9 @@ T* AbstractNBodyEngine<T>::masses() const
 }
 
 template <typename T>
-T* AbstractNBodyEngine<T>::curvature() const
+T* AbstractNBodyEngine<T>::distanceInv() const
 {
-    return m_curvature;
+    return m_distanceInv;
 }
 
 template <typename T>
@@ -138,4 +138,10 @@ template <typename T>
 QVector<bhs::IntRange> AbstractNBodyEngine<T>::interactionRanges() const
 {
     return m_interactionRanges;
+}
+
+template <typename T>
+T* AbstractNBodyEngine<T>::locations() const
+{
+    return m_locations;
 }

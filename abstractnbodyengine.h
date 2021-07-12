@@ -25,7 +25,8 @@ public:
     T* coordinates() const;
     T* velocities() const;
     T* masses() const;
-    T* curvature() const;
+    T* distanceInv() const;
+    T* locations() const;
 
     quint64 numberOfParticle() const;
 
@@ -58,7 +59,9 @@ protected:
     // Physically calculated time per frame (second)
     T m_timePerFrame;
 
-    T* m_curvature;
+    T* m_distanceInv;
+
+    T* m_locations;
 
     quint64 m_numberOfParticles;
     double m_modelScale;

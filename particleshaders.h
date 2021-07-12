@@ -6,6 +6,9 @@
 #include "engine/g3d4d/g3d4dengine.h"
 #include "engine/g3d4d/g3d4dcorefloat.h"
 #include "engine/g3d4d/g3d4dcoredouble.h"
+#include "engine/g4d3d/g4d3dengine.h"
+#include "engine/g4d3d/g4d3dcorefloat.h"
+#include "engine/g4d3d/g4d3dcoredouble.h"
 #include "computeshaders.h"
 
 #include <math.h>

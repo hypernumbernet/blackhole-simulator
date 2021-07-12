@@ -9,7 +9,7 @@ template <typename T>
 class Initializer3D4D : public AbstractInitializer
 {
 public:
-    explicit Initializer3D4D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    Initializer3D4D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
         , m_3d(sim, engine)

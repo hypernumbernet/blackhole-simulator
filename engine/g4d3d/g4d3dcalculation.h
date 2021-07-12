@@ -23,22 +23,19 @@ public:
     inline void calculateTimeProgress() const
     {
         T* const coordinates = m_engine->coordinates();
+        T* const locations = m_engine->locations();
         const T* const velocities = m_engine->velocities();
-
-        const T vangleInv = T(1) / AbstractNBodyEngine<T>::VANGLE;
-        const T timePerFrame = m_engine->timePerFrame();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            auto vq = Quaternion<T>(velocities, i * 4);
-            auto vv3 = vq.LnV3Half();
-
-            auto to_add = vv3 * vangleInv * timePerFrame;
-
-            quint64 j = i * 3;
-            coordinates[j] += to_add.x; ++j;
-            coordinates[j] += to_add.y; ++j;
-            coordinates[j] += to_add.z;
+            quint64 i3 = i * 3;
+            quint64 i4 = i * 4;
+            auto vq = Quaternion<T>::Exp({velocities, i3});
+            auto lq = Quaternion<T>(locations, i4);
+            lq = vq * lq;
+            bhs::embedQuaternionToArray<T>(lq, locations, i4);
+            auto ln = lq.LnV3();
+            bhs::embedVector3ToArray<T>(ln, coordinates, i3);
         }
     }
 
@@ -46,73 +43,64 @@ public:
     {
         const T* const coordinates = m_engine->coordinates();
         T* const velocities = m_engine->velocities();
-        const T* const masses = m_engine->masses();
+        T* const distanceInv = m_engine->distanceInv();
+        const quint64 numberOfParticles = m_engine->numberOfParticle();
+        const T gravitationalConstant = m_engine->m_gravitationalConstant * 1000000.0;
 
-        const T vangle = AbstractNBodyEngine<T>::VANGLE;
-        const T vangleHalf = vangle * T(0.5);
-        const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->m_gravitationalConstant;
-        const T timeG = timePerFrame * gravitationalConstant;
-        quint64 numberOfParticles = m_engine->numberOfParticle();
+        quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
 
-        T d1, d2, d3, r, inv, theta;
-        quint64 a, b;
+        T d1, d2, d3, r, theta;
+        quint64 i3, j3;
 
-        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
+        Quaternion<T>* vels = new Quaternion<T>[numberOfParticles]();
+        for (quint64 i = 0; i < numberOfParticles; ++i)
         {
-            a = i * 3;
-
-            T total_x = 0.0;
-            T total_y = 0.0;
-            T total_z = 0.0;
-
-            for (quint64 j = 0; j < numberOfParticles; ++j)
-            {
-                if (i == j)
-                    continue;
-
-                b = j * 3;
-
-                d1 = coordinates[b    ] - coordinates[a    ];
-                d2 = coordinates[b + 1] - coordinates[a + 1];
-                d3 = coordinates[b + 2] - coordinates[a + 2];
-
-                r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (r <= 0.01)
-                    continue;
-
-                inv = 1.0 / r;
-                theta = inv * inv * inv * timeG * masses[j];
-
-                d1 *= theta;
-                d2 *= theta;
-                d3 *= theta;
-
-                total_x += d1;
-                total_y += d2;
-                total_z += d3;
-            }
-            a = i * 4;
-
-            r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-            if (r <= 0.0)
-                continue;
-
-            total_x /= r;
-            total_y /= r;
-            total_z /= r;
-
-            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, r * vangleHalf);
-
-            auto va = Quaternion<T>(velocities, a);
-            va.Normalize();
-            va.Rotate8(acc);
-
-            velocities[a    ] = va.i0;
-            velocities[a + 1] = va.i1;
-            velocities[a + 2] = va.i2;
-            velocities[a + 3] = va.i3;
+            vels[i].set(1.0, 0.0, 0.0, 0.0);
         }
+
+        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
+        {
+            i3 = i * 3;
+            for (quint64 j = i + 1; j < numberOfParticles; ++j)
+            {
+                j3 = j * 3;
+                d1 = coordinates[j3    ] - coordinates[i3    ];
+                d2 = coordinates[j3 + 1] - coordinates[i3 + 1];
+                d3 = coordinates[j3 + 2] - coordinates[i3 + 2];
+                r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+
+                theta = distanceInv[k];
+                distanceInv[k] = 1.0 / r;
+                theta -= distanceInv[k];
+
+                if (theta == theta)
+                {
+                    theta = fabs(theta);
+                    theta *= gravitationalConstant;
+                    d1 *= theta;
+                    d2 *= theta;
+                    d3 *= theta;
+                    vels[i] *= Quaternion<T>::Exp(d1, d2, d3);
+                    vels[j] *= Quaternion<T>::Exp(-d1, -d2, -d3);
+                } else {
+                    distanceInv[k] = std::numeric_limits<T>::max();
+                }
+                ++k;
+            }
+        }
+
+        bhs::interactionMutex.lock();
+        for (quint64 i = 0; i < numberOfParticles; ++i)
+        {
+            i3 = i * 3;
+            auto speed = vels[i].LnV3();
+            velocities[i3    ] += speed.x;
+            velocities[i3 + 1] += speed.y;
+            velocities[i3 + 2] += speed.z;
+        }
+        bhs::interactionMutex.unlock();
+
+        delete[] vels;
     }
 
 private:

@@ -9,13 +9,17 @@ template <typename T>
 class Initializer3D4D;
 
 template <typename T>
+class Initializer4D3D;
+
+template <typename T>
 class Initializer3D : private AbstractInitializer
 {
     friend Initializer3D4D<T>;
+    friend Initializer4D3D<T>;
 
 public:
 
-    explicit Initializer3D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    Initializer3D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
     {

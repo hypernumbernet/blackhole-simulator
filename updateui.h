@@ -32,7 +32,7 @@ private:
         {
             {bhs::Engine::G3D, tr("Gravity 3D")},
             {bhs::Engine::G3D4D, tr("Gravity 3S-Velocity")},
-            {bhs::Engine::G4D3D, tr("Gravity 3S-Velocity PI Half")},
+            {bhs::Engine::G4D3D, tr("Gravity 3S-Coordinate")},
         })
         , PRECISION(new QMap<bhs::Precision, QString>
         {

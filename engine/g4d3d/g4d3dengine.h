@@ -2,7 +2,7 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer/initializer3d4d.h"
+#include "initializer/initializer4d3d.h"
 #include "quaternion.h"
 
 using namespace bhs;
@@ -10,12 +10,12 @@ using namespace bhs;
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
 template <typename T>
-class G4D3DEngine : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
+class G4D3DEngine : public AbstractNBodyEngine<T>, private Initializer4D3D<T>
 {
 public:
-    G4D3DEngine(const bhs::SimCondition& sim)
+    explicit G4D3DEngine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
-        , Initializer3D4D<T>(sim, this)
+        , Initializer4D3D<T>(sim, this)
     {
         switch (sim.preset)
         {
@@ -35,9 +35,13 @@ public:
             break;
         }
 
-        this->m_coordinates = new T[this->m_numberOfParticles * 4];
+        this->m_coordinates = new T[this->m_numberOfParticles * 3];
         this->m_velocities = new T[this->m_numberOfParticles * 3];
         this->m_masses = new T[this->m_numberOfParticles];
+        this->m_locations = new T[this->m_numberOfParticles * 4];
+
+        quint64 numberOfInteraction = this->m_numberOfParticles * (this->m_numberOfParticles - 1) / 2;
+        this->m_distanceInv = new T[numberOfInteraction];
 
         switch (sim.preset)
         {
@@ -67,7 +71,23 @@ public:
             break;
         }
 
-        this->setTimePerFrame(sim.timePerFrame);
+        T d1, d2, d3, r;
+        quint64 a, b;
+        quint64 k = 0;
+        for (quint64 i = 0; i < this->m_numberOfParticles - 1; ++i)
+        {
+            a = i * 3;
+            for (quint64 j = i + 1; j < this->m_numberOfParticles; ++j)
+            {
+                b = j * 3;
+                d1 = this->m_coordinates[b    ] - this->m_coordinates[a    ];
+                d2 = this->m_coordinates[b + 1] - this->m_coordinates[a + 1];
+                d3 = this->m_coordinates[b + 2] - this->m_coordinates[a + 2];
+                r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                this->m_distanceInv[k] = T(1.0) / r;
+                ++k;
+            }
+        }
     }
 
     ~G4D3DEngine()
@@ -75,5 +95,7 @@ public:
         delete[] this->m_coordinates;
         delete[] this->m_velocities;
         delete[] this->m_masses;
+        delete[] this->m_locations;
+        delete[] this->m_distanceInv;
     }
 };

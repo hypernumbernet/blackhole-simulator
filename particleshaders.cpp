@@ -58,9 +58,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G4D3D:
-            m_NBodyEngineDouble = new G3D4DEngine<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DCoreDouble::factory);
-            velocityVectorSize = 4;
+            m_NBodyEngineFloat = new G4D3DEngine<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, G4D3DCoreFloat::factory);
             break;
         }
     } else {
@@ -77,9 +76,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G4D3D:
-            m_NBodyEngineDouble = new G3D4DEngine<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DCoreDouble::factory);
-            velocityVectorSize = 4;
+            m_NBodyEngineDouble = new G4D3DEngine<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, G4D3DCoreDouble::factory);
             break;
         }
     }
