@@ -33,6 +33,7 @@ public:
             auto vq = Quaternion<T>::Exp({velocities, i3});
             auto lq = Quaternion<T>(locations, i4);
             lq = vq * lq;
+            //lq = lq * vq;
             bhs::embedQuaternionToArray<T>(lq, locations, i4);
             auto ln = lq.LnV3();
             bhs::embedVector3ToArray<T>(ln, coordinates, i3);
@@ -45,7 +46,10 @@ public:
         T* const velocities = m_engine->velocities();
         T* const distanceInv = m_engine->distanceInv();
         const quint64 numberOfParticles = m_engine->numberOfParticle();
-        const T gravitationalConstant = m_engine->m_gravitationalConstant * 1000000.0;
+        const T timePerFrame = m_engine->timePerFrame();
+        const T gravitationalConstant = m_engine->gravitationalConstant();
+        const T timeG = timePerFrame * gravitationalConstant;
+        //const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
 
@@ -64,10 +68,14 @@ public:
             for (quint64 j = i + 1; j < numberOfParticles; ++j)
             {
                 j3 = j * 3;
+
                 d1 = coordinates[j3    ] - coordinates[i3    ];
                 d2 = coordinates[j3 + 1] - coordinates[i3 + 1];
                 d3 = coordinates[j3 + 2] - coordinates[i3 + 2];
+
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                //if (r <= boundaryToInvalidate)
+                //    continue;
 
                 theta = distanceInv[k];
                 distanceInv[k] = 1.0 / r;
@@ -76,7 +84,7 @@ public:
                 if (theta == theta)
                 {
                     theta = fabs(theta);
-                    theta *= gravitationalConstant;
+                    theta *= timeG;
                     d1 *= theta;
                     d2 *= theta;
                     d3 *= theta;

@@ -26,15 +26,14 @@ public:
         T* const coordinates = m_engine->coordinates();
         const T* const velocities = m_engine->velocities();
 
-        const T vangleInv = T(1) / AbstractNBodyEngine<T>::VANGLE;
         const T timePerFrame = m_engine->timePerFrame();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             auto vq = Quaternion<T>(velocities, i * 4);
             auto vv3 = vq.LnV3Half();
-
-            auto to_add = vv3 * vangleInv * timePerFrame;
+            m_engine->angleToVelocity(vv3);
+            auto to_add = vv3 * timePerFrame;
 
             quint64 j = i * 3;
             coordinates[j] += to_add.x; ++j;
@@ -49,10 +48,8 @@ public:
         T* const velocities = m_engine->velocities();
         const T* const masses = m_engine->masses();
 
-        const T vangle = AbstractNBodyEngine<T>::VANGLE;
-        const T vangleHalf = vangle * T(0.5);
         const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->m_gravitationalConstant;
+        const T gravitationalConstant = m_engine->gravitationalConstant();
         const T timeG = timePerFrame * gravitationalConstant;
         quint64 numberOfParticles = m_engine->numberOfParticle();
         const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
@@ -104,7 +101,9 @@ public:
             total_y /= r;
             total_z /= r;
 
-            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, r * vangleHalf);
+            theta = m_engine->velocityToAngle(r);
+
+            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, theta * T(0.5));
 
             auto va = Quaternion<T>(velocities, a);
             va.Normalize();

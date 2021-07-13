@@ -43,6 +43,8 @@ public:
         quint64 numberOfInteraction = this->m_numberOfParticles * (this->m_numberOfParticles - 1) / 2;
         this->m_distanceInv = new T[numberOfInteraction];
 
+        this->setTimePerFrame(sim.timePerFrame);
+
         switch (sim.preset)
         {
         case bhs::Preset::RandomCube:
@@ -98,4 +100,6 @@ public:
         delete[] this->m_locations;
         delete[] this->m_distanceInv;
     }
+
+
 };

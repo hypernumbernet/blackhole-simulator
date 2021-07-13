@@ -1,8 +1,7 @@
 #pragma once
 
 #include "updateui.h"
-
-#include <math.h>
+#include "quaternion.h"
 
 #include <QtGlobal>
 #include <QDebug>
@@ -28,10 +27,12 @@ public:
     T* distanceInv() const;
     T* locations() const;
 
+    const bhs::SimCondition& sim() const;
     quint64 numberOfParticle() const;
-
     T timePerFrame() const;
-    void setTimePerFrame(const double time);
+    void setTimePerFrame(double);
+    T gravitationalConstant() const;
+    void setGravitationalConstant(T);
 
     double modelScale() const;
     void setModelScale(double);
@@ -41,11 +42,15 @@ public:
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
 
-    T m_gravitationalConstant;
-    const bhs::SimCondition& m_sim;
+    T velocityToAngle(T);
+    void angleToVelocity(bhs::Vector3<T>&);
 
 protected:
     void setNumberOfParticles(quint64);
+    void setTimeProgressRanges(int threadCount);
+    void setInteractionRanges(int threadCount);
+
+    const bhs::SimCondition& m_sim;
 
     // Particle coordinates
     T* m_coordinates;
@@ -66,6 +71,7 @@ protected:
     quint64 m_numberOfParticles;
     double m_modelScale;
     double m_scaleCenterValue;
+    T m_gravitationalConstant;
     QVector<bhs::IntRange> m_timeProgressRanges;
     QVector<bhs::IntRange> m_interactionRanges;
 };

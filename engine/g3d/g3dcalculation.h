@@ -42,7 +42,7 @@ public:
         const T* const masses = m_engine->masses();
 
         const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->m_gravitationalConstant;
+        const T gravitationalConstant = m_engine->gravitationalConstant();
         const T timeG = timePerFrame * gravitationalConstant;
         quint64 numberOfParticles = m_engine->numberOfParticle();
         const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;

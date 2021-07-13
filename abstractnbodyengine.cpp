@@ -5,9 +5,9 @@ template class AbstractNBodyEngine<double>;
 
 template <typename T>
 AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
-    : m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
-    , m_sim(sim)
+    : m_sim(sim)
     , m_modelScale(1.0)
+    , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
 {
 }
 
@@ -17,33 +17,33 @@ AbstractNBodyEngine<T>::~AbstractNBodyEngine()
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
+void AbstractNBodyEngine<T>::setTimeProgressRanges(const int threadCount)
 {
-    m_numberOfParticles = num;
-    emit UpdateUi::it().displayNumberOfParticles(num);
-
-    int tcount = QThread::idealThreadCount();
-
-    m_timeProgressRanges.resize(tcount);
-    int k = num / tcount;
-    for (int i = 0; i < tcount; ++i)
+    m_timeProgressRanges.resize(threadCount);
+    int k = m_numberOfParticles / threadCount;
+    for (int i = 0; i < threadCount; ++i)
     {
         m_timeProgressRanges[i].start = i * k;
     }
-    for (int i = 0; i < tcount - 1; ++i)
+    for (int i = 0; i < threadCount - 1; ++i)
     {
         m_timeProgressRanges[i].end = m_timeProgressRanges[i + 1].start;
     }
-    m_timeProgressRanges[tcount - 1].end = num;
+    m_timeProgressRanges[threadCount - 1].end = m_numberOfParticles;
+}
 
-    // The length of the side that divides the area of a right-angled isosceles triangle
-    // into equal parts is calculated.
-    // x = N - sqrt(N^2 - 2y)
-    m_interactionRanges.resize(tcount);
+// The length of the side that divides the area of a right-angled isosceles triangle
+// into equal parts is calculated.
+// x = N - sqrt(N^2 - 2y)
+template <typename T>
+void AbstractNBodyEngine<T>::setInteractionRanges(const int threadCount)
+{
+    quint64 num = m_numberOfParticles;
+    m_interactionRanges.resize(threadCount);
     quint64 num_interaction = num * (num - 1) / 2;
-    k = num_interaction / tcount;
+    quint64 k = num_interaction / threadCount;
     int j = num - 1;
-    for (int i = 0; i < tcount; ++i)
+    for (int i = 0; i < threadCount; ++i)
     {
         int s = j * j - 2 * k * i;
         if (s < 0)
@@ -51,11 +51,21 @@ void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
         else
             m_interactionRanges[i].start = j - (int)floor(sqrt((T)s));
     }
-    for (int i = 0; i < tcount - 1; ++i)
+    for (int i = 0; i < threadCount - 1; ++i)
     {
         m_interactionRanges[i].end = m_interactionRanges[i + 1].start;
     }
-    m_interactionRanges[tcount - 1].end = num;
+    m_interactionRanges[threadCount - 1].end = num;
+}
+
+template <typename T>
+void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
+{
+    m_numberOfParticles = num;
+    emit UpdateUi::it().displayNumberOfParticles(num);
+    int tcount = QThread::idealThreadCount();
+    setTimeProgressRanges(tcount);
+    setInteractionRanges(tcount);
 }
 
 template <typename T>
@@ -82,7 +92,7 @@ template <typename T>
 void AbstractNBodyEngine<T>::changeModelScale(const double scale)
 {
     m_scaleCenterValue = scale;
-    m_modelScale = scale / m_scaleCenterValue;
+    m_modelScale = T(1.0);
     emit UpdateUi::it().displayModelScale(scale);
 }
 
@@ -144,4 +154,34 @@ template <typename T>
 T* AbstractNBodyEngine<T>::locations() const
 {
     return m_locations;
+}
+
+template <typename T>
+T AbstractNBodyEngine<T>::gravitationalConstant() const
+{
+    return m_gravitationalConstant;
+}
+
+template <typename T>
+void AbstractNBodyEngine<T>::setGravitationalConstant(const T g)
+{
+    m_gravitationalConstant = g;
+}
+
+template <typename T>
+const bhs::SimCondition& AbstractNBodyEngine<T>::sim() const
+{
+    return m_sim;
+}
+
+template <typename T>
+T AbstractNBodyEngine<T>::velocityToAngle(const T v)
+{
+    return v * T(AbstractNBodyEngine<double>::VANGLE * m_sim.scale);
+}
+
+template <typename T>
+void AbstractNBodyEngine<T>::angleToVelocity(bhs::Vector3<T>& a)
+{
+    a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE * m_sim.scale));
 }

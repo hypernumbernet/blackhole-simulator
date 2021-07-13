@@ -54,7 +54,7 @@ bool ComputeShaders::initialize()
 void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
-    switch (engine->m_sim.engine)
+    switch (engine->sim().engine)
     {
     case bhs::Engine::G3D:
         m_programTimeProgressUsing = &m_programTimeProgressFloat;
@@ -71,7 +71,7 @@ void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
 void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
 {
     m_numberOfWorkGroups = (engine->numberOfParticle() + WORK_GROUP_SIZE - 1) / WORK_GROUP_SIZE;
-    switch (engine->m_sim.engine)
+    switch (engine->sim().engine)
     {
     case bhs::Engine::G3D:
         m_programTimeProgressUsing = &m_programTimeProgressDouble;

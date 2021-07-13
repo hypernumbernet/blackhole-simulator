@@ -126,10 +126,20 @@ private:
     inline T gravitationalConstant() const
     {
         if constexpr (std::is_same_v<T, float>)
-            return m_NBodyEngineFloat->m_gravitationalConstant;
+            return m_NBodyEngineFloat->gravitationalConstant();
 
         if constexpr (std::is_same_v<T, double>)
-            return m_NBodyEngineDouble->m_gravitationalConstant;
+            return m_NBodyEngineDouble->gravitationalConstant();
+    }
+
+    template <typename T>
+    inline const bhs::SimCondition& sim() const
+    {
+        if constexpr (std::is_same_v<T, float>)
+            return m_NBodyEngineFloat->sim();
+
+        if constexpr (std::is_same_v<T, double>)
+            return m_NBodyEngineDouble->sim();
     }
 
     template <typename T>
@@ -144,7 +154,7 @@ private:
         qint64 massOffset = velocityOffset + velocitySize;
         qint64 massSize = ssboNum;
         qint64 paramOffset = massOffset + massSize;
-        qint64 paramSize = 6;
+        qint64 paramSize = 8;
         qint64 total = paramOffset + paramSize;
 
         T* data = new T[total]();
@@ -167,11 +177,13 @@ private:
             data[massOffset + i] = mss[i];
         }
 
+        double scale = sim<T>().scale;
+
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
         data[paramOffset + 2] = gravitationalConstant<T>();
-        data[paramOffset + 3] = T(1.0) / AbstractNBodyEngine<T>::VANGLE;
-        data[paramOffset + 4] = T(0.5) * AbstractNBodyEngine<T>::VANGLE;
+        data[paramOffset + 3] = T(1.0 / (AbstractNBodyEngine<double>::VANGLE * scale));
+        data[paramOffset + 4] = T(0.5 * AbstractNBodyEngine<double>::VANGLE * scale);
         data[paramOffset + 5] = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         result.coordinateSize = coordinateSize;

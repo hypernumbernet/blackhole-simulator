@@ -33,17 +33,8 @@ private:
     {
         bhs::Vector3<T> dr(x, y, z);
         dr.Normalize();
-        const auto angle = speed * AbstractNBodyEngine<T>::VANGLE;
+        const auto angle = m_engine->velocityToAngle(speed);
         return bhs::Quaternion<T>::Exp(dr * angle);
-    }
-
-    inline void embedQuaternionToArray(
-            const bhs::Quaternion<T>& q, T* const a, const quint64 index)
-    {
-        a[index    ] = q.i0;
-        a[index + 1] = q.i1;
-        a[index + 2] = q.i2;
-        a[index + 3] = q.i3;
     }
 
     inline bhs::Quaternion<T> fromVector3(bhs::Vector3<T> v3) const
@@ -65,7 +56,7 @@ private:
             quint64 i4 = i * 4;
 
             auto q = fromVector3({velocities, i3});
-            embedQuaternionToArray(q, vels, i4);
+            embedQuaternionToArray<T>(q, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)
         {

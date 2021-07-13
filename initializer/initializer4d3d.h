@@ -32,6 +32,8 @@ private:
         const quint64 num = m_engine->numberOfParticle();
         const T* const coordinates = m_engine->coordinates();
         T* const locations = m_engine->locations();
+        T* const velocities = m_engine->velocities();
+        T time = m_engine->timePerFrame();
 
         for (quint64 i = 0; i < num; ++i)
         {
@@ -39,7 +41,12 @@ private:
             quint64 i4 = i * 4;
 
             auto q = Quaternion<T>::Exp({coordinates, i3});
-            embedQuaternionToArray(q, locations, i4);
+            embedQuaternionToArray<T>(q, locations, i4);
+        }
+
+        for (quint64 i = 0; i < num * 3; ++i)
+        {
+            velocities[i] *= time;
         }
     }
 
