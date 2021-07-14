@@ -13,7 +13,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     engineGroup->setLayout(engineVbox);
     firstLayout->addWidget(engineGroup);
 
-    for (const auto& e : UpdateUi::it().ENGINE->toStdMap())
+    for (const auto& e : UpdateUi::engine().toStdMap())
     {
         auto radio = new QRadioButton(e.second);
         m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
@@ -29,7 +29,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     precisionGroup->setLayout(precisionHbox);
     firstLayout->addWidget(precisionGroup);
 
-    for (const auto& e : UpdateUi::it().PRECISION->toStdMap())
+    for (const auto& e : UpdateUi::precision().toStdMap())
     {
         auto radio = new QRadioButton(e.second);
         m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
@@ -45,7 +45,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     computeGroup->setLayout(computeHbox);
     firstLayout->addWidget(computeGroup);
 
-    for (const auto& e : UpdateUi::it().COMPUTE->toStdMap())
+    for (const auto& e : UpdateUi::compute().toStdMap())
     {
         auto radio = new QRadioButton(e.second);
         m_computeButtonGroup.addButton(radio, static_cast<int>(e.first));
@@ -61,7 +61,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     presetGroup->setLayout(presetVbox);
     firstLayout->addWidget(presetGroup);
 
-    for (const auto& e : UpdateUi::it().PRESET->toStdMap())
+    for (const auto& e : UpdateUi::preset().toStdMap())
     {
         auto radio = new QRadioButton(e.second);
         m_presetButtonGroup.addButton(radio, static_cast<int>(e.first));

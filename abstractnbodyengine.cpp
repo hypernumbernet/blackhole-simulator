@@ -175,26 +175,26 @@ const bhs::SimCondition& AbstractNBodyEngine<T>::sim() const
 }
 
 template <typename T>
-T AbstractNBodyEngine<T>::velocityToAngle(const T v)
+T AbstractNBodyEngine<T>::velocityToAngle(const T v) const
 {
     return v * T(AbstractNBodyEngine<double>::VANGLE * m_sim.scale);
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a)
+void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a) const
 {
     a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE * m_sim.scale));
 }
 
-// must v >= 0
 template <typename T>
-QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx, const T vy, const T vz)
+QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx, const T vy, const T vz) const
 {
-    QGenericMatrix<4, 4, T> ret;
+    T ci = T(m_sim.scale) / SPEED_OF_LIGHT;
 
-    T v = sqrt(vx * vx + vy * vy + vz * vz);
+    T vv = vx * vx + vy * vy + vz * vz;
+    T v = sqrt(vv);
 
-    T beta = v * (T(m_sim.scale) / SPEED_OF_LIGHT);
+    T beta = v * ci;
     if (beta > T(1))
     {
         beta += T(1);
@@ -202,13 +202,38 @@ QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx
         beta -= T(1);
     }
 
-    T alpha = sqrt(T(1) - beta * beta);
-    if (alpha == T(0))
+//    T alpha = sqrt(T(1) - beta * beta);
+//    if (alpha == T(0))
+//    {
+//        ret.fill(INFINITY);
+//        return ret;
+//    }
+
+    T gamma = T(1) / sqrt(T(1) - beta * beta);
+    if (isfinite(gamma))
     {
-        ret.setToIdentity();
+        QGenericMatrix<4, 4, T> ret;
+        ret.fill(INFINITY);
         return ret;
     }
 
-    //T gamma = T(1) / alpha;
-    return ret;
+    T gxc = - gamma * vx * ci;
+    T gyc = - gamma * vy * ci;
+    T gzc = - gamma * vz * ci;
+    T g1v = (gamma - T(1)) / vv;
+
+    T matrix[] = {
+        gamma, gxc, gyc, gzc,
+        gxc  , T(1) + g1v * vx * vx,        g1v * vx * vy,        g1v * vx * vz,
+        gyc  ,        g1v * vx * vy, T(1) + g1v * vy * vy,        g1v * vy * vz,
+        gzc  ,        g1v * vx * vz,        g1v * vy * vz, T(1) + g1v * vz * vz,
+    };
+
+    return QGenericMatrix<4, 4, T>(matrix);
+}
+
+template <typename T>
+QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const Vector3<T>& v) const
+{
+    return LorentzTransformation(v.x, v.y, v.z);
 }

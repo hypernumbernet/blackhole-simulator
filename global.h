@@ -4,6 +4,7 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QGenericMatrix>
 
 using namespace hnn;
 
@@ -14,6 +15,7 @@ enum class Engine
 {
     G3D,
     G3D4D,
+    G3D4DR1,
     G4D3D,
 };
 
@@ -93,6 +95,15 @@ inline void embedVector3ToArray(const Vector3<T>& v, T* const a, const quint64 i
     a[index    ] = v.x;
     a[index + 1] = v.y;
     a[index + 2] = v.z;
+}
+
+template <typename T>
+inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, T>& m, T* const a, const quint64 index)
+{
+    a[index    ] = m(0, 0);
+    a[index + 1] = m(0, 1);
+    a[index + 2] = m(0, 2);
+    a[index + 3] = m(0, 3);
 }
 
 }

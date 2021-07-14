@@ -269,7 +269,7 @@ void MainWidget::acceptInitializerDialog()
 
 void MainWidget::displayEngineName(const bhs::Engine engine)
 {
-    m_engineValue.setText(UpdateUi::it().ENGINE->value(engine));
+    m_engineValue.setText(UpdateUi::engine().value(engine));
 }
 
 void MainWidget::reset(const bhs::SimCondition& sim)
@@ -281,7 +281,7 @@ void MainWidget::reset(const bhs::SimCondition& sim)
 
 void MainWidget::displayPresetName(const bhs::Preset preset)
 {
-    m_presetValue.setText(UpdateUi::it().PRESET->value(preset));
+    m_presetValue.setText(UpdateUi::preset().value(preset));
 }
 
 void MainWidget::resetInitial()
@@ -297,6 +297,6 @@ void MainWidget::displayNumberOfParticles(const int num)
 
 void MainWidget::displayPrecision(bhs::Precision precision)
 {
-    QString s = UpdateUi::it().PRECISION->value(precision);
+    QString s = UpdateUi::precision().value(precision);
     m_precisionValue.setText(s);
 }

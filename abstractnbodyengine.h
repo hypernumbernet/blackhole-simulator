@@ -46,9 +46,10 @@ public:
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
 
-    T velocityToAngle(T);
-    void angleToVelocity(Vector3<T>&);
-    QGenericMatrix<4, 4, T> LorentzTransformation(T vx, T vy, T vz);
+    T velocityToAngle(T) const;
+    void angleToVelocity(Vector3<T>&) const;
+    QGenericMatrix<4, 4, T> LorentzTransformation(T, T, T) const;
+    QGenericMatrix<4, 4, T> LorentzTransformation(const Vector3<T>&) const;
 
 protected:
     void setNumberOfParticles(quint64);

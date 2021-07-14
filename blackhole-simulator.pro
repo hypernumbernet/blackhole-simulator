@@ -10,6 +10,7 @@ SOURCES += \
     graphicwindow.cpp \
     initializer/initializer3d.cpp \
     initializer/initializer3d4d.cpp \
+    initializer/initializer3d4dr1.cpp \
     initializer/initializer4d3d.cpp \
     initializerdialog.cpp \
     lineshaders.cpp \
@@ -35,6 +36,10 @@ HEADERS += \
     engine/g3d4d/g3d4dcoredouble.h \
     engine/g3d4d/g3d4dcorefloat.h \
     engine/g3d4d/g3d4dengine.h \
+    engine/g3d4dr1/g3d4dr1calculation.h \
+    engine/g3d4dr1/g3d4dr1coredouble.h \
+    engine/g3d4dr1/g3d4dr1corefloat.h \
+    engine/g3d4dr1/g3d4dr1engine.h \
     engine/g4d3d/g4d3dcalculation.h \
     engine/g4d3d/g4d3dcoredouble.h \
     engine/g4d3d/g4d3dcorefloat.h \
@@ -46,6 +51,7 @@ HEADERS += \
     hnn/vector3.h \
     initializer/initializer3d.h \
     initializer/initializer3d4d.h \
+    initializer/initializer3d4dr1.h \
     initializer/initializer4d3d.h \
     initializerdialog.h \
     lineshaders.h \
