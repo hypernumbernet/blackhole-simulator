@@ -1,12 +1,16 @@
 #pragma once
 
 #include "updateui.h"
-#include "quaternion.h"
+#include "hnn/quaternion.h"
 
 #include <QtGlobal>
 #include <QDebug>
 #include <QMutex>
 #include <QThread>
+#include <QVector4D>
+#include <QGenericMatrix>
+
+using namespace hnn;
 
 template <typename T>
 class AbstractNBodyEngine
@@ -43,7 +47,8 @@ public:
     QVector<bhs::IntRange> interactionRanges() const;
 
     T velocityToAngle(T);
-    void angleToVelocity(bhs::Vector3<T>&);
+    void angleToVelocity(Vector3<T>&);
+    QGenericMatrix<4, 4, T> LorentzTransformation(T vx, T vy, T vz);
 
 protected:
     void setNumberOfParticles(quint64);

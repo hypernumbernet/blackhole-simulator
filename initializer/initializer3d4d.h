@@ -1,9 +1,9 @@
 #pragma once
 
 #include "initializer3d.h"
-#include "quaternion.h"
+#include "hnn/quaternion.h"
 
-using namespace bhs;
+using namespace hnn;
 
 template <typename T>
 class Initializer3D4D : public AbstractInitializer
@@ -26,18 +26,18 @@ protected:
     void initTestSamePosition() override;
 
 private:
-    inline bhs::Quaternion<T> fromDirectionAndSpeed(
+    inline Quaternion<T> fromDirectionAndSpeed(
             const T x, const T y, const T z,
             const T speed
             ) const
     {
-        bhs::Vector3<T> dr(x, y, z);
+        Vector3<T> dr(x, y, z);
         dr.Normalize();
         const auto angle = m_engine->velocityToAngle(speed);
-        return bhs::Quaternion<T>::Exp(dr * angle);
+        return Quaternion<T>::Exp(dr * angle);
     }
 
-    inline bhs::Quaternion<T> fromVector3(bhs::Vector3<T> v3) const
+    inline Quaternion<T> fromVector3(Vector3<T> v3) const
     {
         const auto speed = v3.Abs();
         return fromDirectionAndSpeed(v3.x, v3.y, v3.z, speed);
@@ -56,7 +56,7 @@ private:
             quint64 i4 = i * 4;
 
             auto q = fromVector3({velocities, i3});
-            embedQuaternionToArray<T>(q, vels, i4);
+            bhs::embedQuaternionToArray<T>(q, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)
         {

@@ -181,7 +181,34 @@ T AbstractNBodyEngine<T>::velocityToAngle(const T v)
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::angleToVelocity(bhs::Vector3<T>& a)
+void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a)
 {
     a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE * m_sim.scale));
+}
+
+// must v >= 0
+template <typename T>
+QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx, const T vy, const T vz)
+{
+    QGenericMatrix<4, 4, T> ret;
+
+    T v = sqrt(vx * vx + vy * vy + vz * vz);
+
+    T beta = v * (T(m_sim.scale) / SPEED_OF_LIGHT);
+    if (beta > T(1))
+    {
+        beta += T(1);
+        beta = fmod(beta, T(2));
+        beta -= T(1);
+    }
+
+    T alpha = sqrt(T(1) - beta * beta);
+    if (alpha == T(0))
+    {
+        ret.setToIdentity();
+        return ret;
+    }
+
+    //T gamma = T(1) / alpha;
+    return ret;
 }

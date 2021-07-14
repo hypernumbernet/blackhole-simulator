@@ -2,7 +2,7 @@
 
 #include "vector3.h"
 
-namespace bhs
+namespace hnn // https://github.com/hypernumbernet
 {
 
 template <typename TYPE>

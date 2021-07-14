@@ -1,10 +1,7 @@
 #pragma once
 
 #include "abstractenginecoredouble.h"
-#include "quaternion.h"
 #include "g3d4dcalculation.h"
-
-using namespace bhs;
 
 class G3D4DCoreDouble : public AbstractEngineCoreDouble
 {

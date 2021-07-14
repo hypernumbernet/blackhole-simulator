@@ -33,7 +33,7 @@ void Initializer3D<T>::initRandamCube()
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = (T)(rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
+            masses[i] = (T)(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
@@ -66,7 +66,7 @@ void Initializer3D<T>::initRandamSphere(const double rate)
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = (T)(rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
+            masses[i] = (T)(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
@@ -76,7 +76,7 @@ void Initializer3D<T>::initRandamSphere(const double rate)
     }
 
     quint64 i3;
-    bhs::Vector3<T> coord;
+    Vector3<T> coord;
     for (quint64 i = 0; i < num; ++i)
     {
         i3 = i * 3;
@@ -96,7 +96,7 @@ void Initializer3D<T>::initRandamSphere(const double rate)
 
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = (T)(rand0center1max() * 1.5e+4 * correct.m);
+        velocities[i] = (T)(bhs::rand0center1max() * 1.5e+4 * correct.m);
     }
 }
 

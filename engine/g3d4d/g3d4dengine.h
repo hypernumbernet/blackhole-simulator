@@ -3,9 +3,6 @@
 #include "abstractnbodyengine.h"
 #include "updateui.h"
 #include "initializer/initializer3d4d.h"
-#include "quaternion.h"
-
-using namespace bhs;
 
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 

@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-namespace bhs
+namespace hnn // https://github.com/hypernumbernet
 {
 
 template <typename TYPE>
@@ -80,6 +80,15 @@ public:
         x *= a;
         y *= a;
         z *= a;
+        return *this;
+    }
+
+    template <typename X>
+    inline Vector3& operator /=(X a)
+    {
+        x /= a;
+        y /= a;
+        z /= a;
         return *this;
     }
 

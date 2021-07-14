@@ -1,9 +1,9 @@
 #pragma once
 
 #include "initializer3d.h"
-#include "quaternion.h"
+#include "hnn/quaternion.h"
 
-using namespace bhs;
+using namespace hnn;
 
 template <typename T>
 class Initializer4D3D : public AbstractInitializer
@@ -41,7 +41,7 @@ private:
             quint64 i4 = i * 4;
 
             auto q = Quaternion<T>::Exp({coordinates, i3});
-            embedQuaternionToArray<T>(q, locations, i4);
+            bhs::embedQuaternionToArray<T>(q, locations, i4);
         }
 
         for (quint64 i = 0; i < num * 3; ++i)

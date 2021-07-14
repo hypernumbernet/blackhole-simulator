@@ -1,9 +1,11 @@
 #pragma once
 
-#include "quaternion.h"
+#include "hnn/quaternion.h"
 
 #include <QObject>
 #include <QMutex>
+
+using namespace hnn;
 
 namespace bhs // Black Hole Simulator
 {
@@ -77,7 +79,7 @@ inline QRecursiveMutex interactionMutex;
 inline double m_max = 0.0;
 
 template <typename T>
-inline void embedQuaternionToArray(const bhs::Quaternion<T>& q, T* const a, const quint64 index)
+inline void embedQuaternionToArray(const Quaternion<T>& q, T* const a, const quint64 index)
 {
     a[index    ] = q.i0;
     a[index + 1] = q.i1;
@@ -86,7 +88,7 @@ inline void embedQuaternionToArray(const bhs::Quaternion<T>& q, T* const a, cons
 }
 
 template <typename T>
-inline void embedVector3ToArray(const bhs::Vector3<T>& v, T* const a, const quint64 index)
+inline void embedVector3ToArray(const Vector3<T>& v, T* const a, const quint64 index)
 {
     a[index    ] = v.x;
     a[index + 1] = v.y;

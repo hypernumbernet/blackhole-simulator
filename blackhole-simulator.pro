@@ -41,6 +41,9 @@ HEADERS += \
     engine/g4d3d/g4d3dengine.h \
     global.h \
     graphicwindow.h \
+    hnn/matrix4x4.h \
+    hnn/quaternion.h \
+    hnn/vector3.h \
     initializer/initializer3d.h \
     initializer/initializer3d4d.h \
     initializer/initializer4d3d.h \
@@ -48,11 +51,9 @@ HEADERS += \
     lineshaders.h \
     mainwidget.h \
     particleshaders.h \
-    quaternion.h \
     threadadmin.h \
     threadcontroller.h \
     updateui.h \
-    vector3.h
 
 RESOURCES += \
     shaders.qrc
@@ -60,5 +61,3 @@ RESOURCES += \
 win32-msvc*{
     QMAKE_CXXFLAGS += /source-charset:utf-8
 }
-
-DISTFILES +=

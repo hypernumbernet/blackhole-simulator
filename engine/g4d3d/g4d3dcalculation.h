@@ -1,11 +1,10 @@
 #pragma once
 
-#include "quaternion.h"
 #include "abstractnbodyengine.h"
 
 #include <QObject>
 
-using namespace bhs;
+using namespace hnn;
 
 template <typename T>
 class G4D3DCalculation

@@ -1,10 +1,7 @@
 #pragma once
 
 #include "abstractenginecorefloat.h"
-#include "quaternion.h"
 #include "g4d3dcalculation.h"
-
-using namespace bhs;
 
 class G4D3DCoreFloat : public AbstractEngineCoreFloat
 {
