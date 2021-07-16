@@ -37,6 +37,7 @@ public:
     void setTimePerFrame(double);
     T gravitationalConstant() const;
     void setGravitationalConstant(T);
+    const T speedOfLightInv() const;
 
     double modelScale() const;
     void setModelScale(double);
@@ -48,8 +49,8 @@ public:
 
     T velocityToAngle(T) const;
     void angleToVelocity(Vector3<T>&) const;
-    QGenericMatrix<4, 4, T> LorentzTransformation(T, T, T) const;
-    QGenericMatrix<4, 4, T> LorentzTransformation(const Vector3<T>&) const;
+    void LorentzTransformation(QGenericMatrix<4, 4, T>&, T, T, T) const;
+    void LorentzTransformation(QGenericMatrix<4, 4, T>&, const Vector3<T>&) const;
 
 protected:
     void setNumberOfParticles(quint64);
@@ -78,6 +79,7 @@ protected:
     double m_modelScale;
     double m_scaleCenterValue;
     T m_gravitationalConstant;
+    const T m_speedOfLightInv;
     QVector<bhs::IntRange> m_timeProgressRanges;
     QVector<bhs::IntRange> m_interactionRanges;
 };

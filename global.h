@@ -101,9 +101,9 @@ template <typename T>
 inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, T>& m, T* const a, const quint64 index)
 {
     a[index    ] = m(0, 0);
-    a[index + 1] = m(0, 1);
-    a[index + 2] = m(0, 2);
-    a[index + 3] = m(0, 3);
+    a[index + 1] = m(1, 0);
+    a[index + 2] = m(2, 0);
+    a[index + 3] = m(3, 0);
 }
 
 }

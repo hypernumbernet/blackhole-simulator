@@ -57,6 +57,11 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DCoreFloat::factory);
             velocityVectorSize = 4;
             break;
+        case bhs::Engine::G3D4DR1:
+            m_NBodyEngineFloat = new G3D4DR1Engine<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, G3D4DR1CoreFloat::factory);
+            velocityVectorSize = 4;
+            break;
         case bhs::Engine::G4D3D:
             m_NBodyEngineFloat = new G4D3DEngine<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, G4D3DCoreFloat::factory);
@@ -73,6 +78,11 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G3D4D:
             m_NBodyEngineDouble = new G3D4DEngine<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DCoreDouble::factory);
+            velocityVectorSize = 4;
+            break;
+        case bhs::Engine::G3D4DR1:
+            m_NBodyEngineDouble = new G3D4DR1Engine<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, G3D4DR1CoreDouble::factory);
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G4D3D:

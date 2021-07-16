@@ -25,19 +25,15 @@ public:
         T* const coordinates = m_engine->coordinates();
         const T* const velocities = m_engine->velocities();
 
-        const T timePerFrame = m_engine->timePerFrame();
+        quint64 i4, i3;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            auto vq = Quaternion<T>(velocities, i * 4);
-            auto vv3 = vq.LnV3Half();
-            m_engine->angleToVelocity(vv3);
-            auto to_add = vv3 * timePerFrame;
-
-            quint64 j = i * 3;
-            coordinates[j] += to_add.x; ++j;
-            coordinates[j] += to_add.y; ++j;
-            coordinates[j] += to_add.z;
+            i4 = i * 4;
+            i3 = i * 3;
+            coordinates[i3    ] += velocities[i4 + 1];
+            coordinates[i3 + 1] += velocities[i4 + 2];
+            coordinates[i3 + 2] += velocities[i4 + 3];
         }
     }
 
@@ -79,7 +75,7 @@ public:
                 if (r <= boundaryToInvalidate)
                     continue;
 
-                inv = 1.0 / r;
+                inv = T(1.0) / r;
                 theta = inv * inv * inv * timeG * masses[j];
 
                 d1 *= theta;
@@ -92,26 +88,22 @@ public:
             }
             a = i * 4;
 
-            r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-            if (r <= 0.0)
-                continue;
+            QGenericMatrix<4, 4, T> acc;
+            Vector3<T> total(-total_x, -total_y, -total_z);
+            m_engine->LorentzTransformation(acc, total);
 
-            total_x /= r;
-            total_y /= r;
-            total_z /= r;
+            QGenericMatrix<1, 4, T> speed;
+            speed(0, 0) = velocities[a    ];
+            speed(1, 0) = velocities[a + 1];
+            speed(2, 0) = velocities[a + 2];
+            speed(3, 0) = velocities[a + 3];
 
-            theta = m_engine->velocityToAngle(r);
+            auto trd = acc * speed;
 
-            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, theta * T(0.5));
-
-            auto va = Quaternion<T>(velocities, a);
-            va.Normalize();
-            va.Rotate8(acc);
-
-            velocities[a    ] = va.i0;
-            velocities[a + 1] = va.i1;
-            velocities[a + 2] = va.i2;
-            velocities[a + 3] = va.i3;
+            velocities[a    ] = trd(0, 0);
+            velocities[a + 1] = trd(1, 0);
+            velocities[a + 2] = trd(2, 0);
+            velocities[a + 3] = trd(3, 0);
         }
     }
 

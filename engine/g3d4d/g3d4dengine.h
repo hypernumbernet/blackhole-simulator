@@ -39,6 +39,8 @@ public:
 //        for (quint64 i = 0; i < this->m_numberOfParticles; ++i)
 //            this->m_curvature[i] = 1.0;
 
+        this->setTimePerFrame(sim.timePerFrame);
+
         switch (sim.preset)
         {
         case bhs::Preset::RandomCube:
@@ -66,8 +68,6 @@ public:
             this->initSunEarthVenus();
             break;
         }
-
-        this->setTimePerFrame(sim.timePerFrame);
     }
 
     ~G3D4DEngine()

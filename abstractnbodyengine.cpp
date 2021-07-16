@@ -8,6 +8,7 @@ AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
     : m_sim(sim)
     , m_modelScale(1.0)
     , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
+    , m_speedOfLightInv(T(sim.scale) / SPEED_OF_LIGHT)
 {
 }
 
@@ -187,14 +188,16 @@ void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a) const
 }
 
 template <typename T>
-QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx, const T vy, const T vz) const
+void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const T vx, const T vy, const T vz) const
 {
-    T ci = T(m_sim.scale) / SPEED_OF_LIGHT;
-
     T vv = vx * vx + vy * vy + vz * vz;
-    T v = sqrt(vv);
-
-    T beta = v * ci;
+    if (vv == T(0))
+    {
+        lt.setToIdentity();
+        return;
+    }
+    T ci = speedOfLightInv();
+    T beta = sqrt(vv) * ci;
     if (beta > T(1))
     {
         beta += T(1);
@@ -202,38 +205,38 @@ QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const T vx
         beta -= T(1);
     }
 
-//    T alpha = sqrt(T(1) - beta * beta);
-//    if (alpha == T(0))
-//    {
-//        ret.fill(INFINITY);
-//        return ret;
-//    }
-
     T gamma = T(1) / sqrt(T(1) - beta * beta);
-    if (isfinite(gamma))
+    if (!isfinite(gamma))
     {
-        QGenericMatrix<4, 4, T> ret;
-        ret.fill(INFINITY);
-        return ret;
+        lt.fill(INFINITY);
+        return;
     }
 
     T gxc = - gamma * vx * ci;
     T gyc = - gamma * vy * ci;
     T gzc = - gamma * vz * ci;
-    T g1v = (gamma - T(1)) / vv;
+    T g1 = gamma - T(1);
 
     T matrix[] = {
         gamma, gxc, gyc, gzc,
-        gxc  , T(1) + g1v * vx * vx,        g1v * vx * vy,        g1v * vx * vz,
-        gyc  ,        g1v * vx * vy, T(1) + g1v * vy * vy,        g1v * vy * vz,
-        gzc  ,        g1v * vx * vz,        g1v * vy * vz, T(1) + g1v * vz * vz,
+        gxc  , T(1) + g1 * (vx * vx / vv),        g1 * (vx * vy / vv),        g1 * (vx * vz / vv),
+        gyc  ,        g1 * (vx * vy / vv), T(1) + g1 * (vy * vy / vv),        g1 * (vy * vz / vv),
+        gzc  ,        g1 * (vx * vz / vv),        g1 * (vy * vz / vv), T(1) + g1 * (vz * vz / vv),
     };
-
-    return QGenericMatrix<4, 4, T>(matrix);
+    for (int i = 0; i < 16; ++i)
+    {
+        lt.data()[i] = matrix[i];
+    }
 }
 
 template <typename T>
-QGenericMatrix<4, 4, T> AbstractNBodyEngine<T>::LorentzTransformation(const Vector3<T>& v) const
+void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const Vector3<T>& v) const
 {
-    return LorentzTransformation(v.x, v.y, v.z);
+    LorentzTransformation(lt, v.x, v.y, v.z);
+}
+
+template <typename T>
+const T AbstractNBodyEngine<T>::speedOfLightInv() const
+{
+    return m_speedOfLightInv;
 }

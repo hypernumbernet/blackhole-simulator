@@ -2,17 +2,17 @@
 
 #include "abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer/initializer3d4d.h"
+#include "initializer/initializer3d4dr1.h"
 
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
 template <typename T>
-class G3D4DR1Engine : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
+class G3D4DR1Engine : public AbstractNBodyEngine<T>, private Initializer3D4DR1<T>
 {
 public:
     explicit G3D4DR1Engine(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
-        , Initializer3D4D<T>(sim, this)
+        , Initializer3D4DR1<T>(sim, this)
     {
         switch (sim.preset)
         {
@@ -35,9 +35,8 @@ public:
         this->m_coordinates = new T[this->m_numberOfParticles * 3];
         this->m_velocities = new T[this->m_numberOfParticles * 4];
         this->m_masses = new T[this->m_numberOfParticles];
-//        this->m_curvature = new T[this->m_numberOfParticles];
-//        for (quint64 i = 0; i < this->m_numberOfParticles; ++i)
-//            this->m_curvature[i] = 1.0;
+
+        this->setTimePerFrame(sim.timePerFrame);
 
         switch (sim.preset)
         {
@@ -66,8 +65,6 @@ public:
             this->initSunEarthVenus();
             break;
         }
-
-        this->setTimePerFrame(sim.timePerFrame);
     }
 
     ~G3D4DR1Engine()
@@ -75,6 +72,5 @@ public:
         delete[] this->m_coordinates;
         delete[] this->m_velocities;
         delete[] this->m_masses;
-//        delete[] this->m_curvature;
     }
 };

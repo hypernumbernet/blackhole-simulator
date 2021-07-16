@@ -26,7 +26,7 @@ public:
         static QMap<bhs::Engine, QString> map = {
             {bhs::Engine::G3D, tr("Gravity 3D")},
             {bhs::Engine::G3D4D, tr("Gravity 3S-Velocity")},
-            {bhs::Engine::G3D4DR1, tr("Gravity 3S-Velocity R1")},
+            {bhs::Engine::G3D4DR1, tr("Gravity R1")},
             {bhs::Engine::G4D3D, tr("Gravity 3S-Coordinate")},
         };
         return map;
@@ -66,7 +66,8 @@ public:
     }
 
 private:
-    UpdateUi() {};
+    UpdateUi(){};
+    UpdateUi(const UpdateUi&);
 
 signals:
     void displayNumberOfParticles(int);
