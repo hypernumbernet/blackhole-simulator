@@ -18,14 +18,19 @@ public:
         return new G3D4DR1CoreDouble(engine, threadNumber);
     }
 
+    bool hasRangeInteraction() const override
+    {
+        return m_hasRangeTimeProgress;
+    }
+
 public slots:
-    inline void calculateTimeProgress() const
+    inline void calculateTimeProgress() const override
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    inline void calculateInteraction() const
+    inline void calculateInteraction() const override
     {
         m_calc.calculateInteraction();
         resultReady();

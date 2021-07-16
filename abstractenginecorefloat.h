@@ -18,12 +18,12 @@ public:
     {
     }
 
-    bool hasRangeTimeProgress() const
+    bool hasRangeTimeProgress() const override
     {
         return m_hasRangeTimeProgress;
     }
 
-    bool hasRangeInteraction() const
+    bool hasRangeInteraction() const override
     {
         return m_hasRangeInteraction;
     }

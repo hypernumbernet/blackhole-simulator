@@ -34,7 +34,7 @@ void ThreadAdmin::reset()
     }
     for (int i = 0; i < m_controllers.size(); ++i)
     {
-        m_controllers.at(i)->reset();
+        at(i)->reset();
     }
     emit UpdateUi::it().resetParticles();
 }
@@ -84,20 +84,20 @@ void ThreadAdmin::updateParticles()
             m_calculateNext = 1;
             for (int i = 0; i < m_controllers.size(); ++i)
             {
-                if (m_controllers.at(i)->hasRangeTimeProgress())
+                if (at(i)->hasRangeTimeProgress())
                 {
                     ++m_waitForDone;
-                    emit m_controllers.at(i)->calculateTimeProgress();
+                    emit at(i)->calculateTimeProgress();
                 }
             }
         } else {
             m_calculateNext = 0;
             for (int i = 0; i < m_controllers.size(); ++i)
             {
-                if (m_controllers.at(i)->hasRangeInteraction())
+                if (at(i)->hasRangeInteraction())
                 {
                     ++m_waitForDone;
-                    emit m_controllers.at(i)->calculateInteraction();
+                    emit at(i)->calculateInteraction();
                 }
             }
             ++m_frameNum;
