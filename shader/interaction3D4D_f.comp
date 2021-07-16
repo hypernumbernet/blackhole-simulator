@@ -101,10 +101,7 @@ void main()
     uint b;
     float d1, d2, d3;
     float r, inv, theta;
-
-    float total_x = 0.0;
-    float total_y = 0.0;
-    float total_z = 0.0;
+    vec4 qi = vec4(0.0, 0.0, 0.0, 1.0);
 
     for (int j = 0; j < num; ++j)
     {
@@ -122,26 +119,15 @@ void main()
             continue;
 
         inv = 1.0 / r;
-        theta = inv * inv * inv * time_g * mass[j];
+        d1 *= inv;
+        d2 *= inv;
+        d3 *= inv;
+        theta = inv * inv * time_g * mass[j];
 
-        d1 *= theta;
-        d2 *= theta;
-        d3 *= theta;
-
-        total_x += d1;
-        total_y += d2;
-        total_z += d3;
+        vec4 acc = MakeRotation(d1, d2, d3, theta * vangleHalf);
+        Rot8(qi, acc);
     }
     a = i * 4;
-
-    r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-    if (r <= 0.0)
-        return;
-
-    total_x /= r;
-    total_y /= r;
-    total_z /= r;
-    vec4 acc = MakeRotation(total_x, total_y, total_z, r * vangleHalf);
 
     // for degub
     // if (i == 0)
@@ -157,7 +143,8 @@ void main()
     va.z = velocity[a + 3];
     va.w = velocity[a];
 
-    Rot8(va, acc);
+    Product(va, qi);
+    va = normalize(va);
 
     velocity[a + 1] = va.x;
     velocity[a + 2] = va.y;

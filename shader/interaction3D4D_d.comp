@@ -69,6 +69,18 @@ void Rot8(inout dvec4 qua, in dvec4 rot)
     qua.w = q0;
 }
 
+void Product(inout dvec4 a, in dvec4 b)
+{
+    double q0 = a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z;
+    double q1 = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y;
+    double q2 = a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x;
+    double q3 = a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w;
+    a.x = q1;
+    a.y = q2;
+    a.z = q3;
+    a.w = q0;
+}
+
 void main()
 {
     const uint i = gl_GlobalInvocationID.x;
@@ -78,10 +90,7 @@ void main()
     uint b;
     double d1, d2, d3;
     double r, inv, theta;
-
-    double total_x = 0.0;
-    double total_y = 0.0;
-    double total_z = 0.0;
+    dvec4 qi = dvec4(0.0, 0.0, 0.0, 1.0);
 
     for (int j = 0; j < num; ++j)
     {
@@ -99,26 +108,15 @@ void main()
             continue;
 
         inv = 1.0 / r;
-        theta = inv * inv * inv * time_g * mass[j];
+        d1 *= inv;
+        d2 *= inv;
+        d3 *= inv;
+        theta = inv * inv * time_g * mass[j];
 
-        d1 *= theta;
-        d2 *= theta;
-        d3 *= theta;
-
-        total_x += d1;
-        total_y += d2;
-        total_z += d3;
+        dvec4 acc = MakeRotation(d1, d2, d3, theta * vangleHalf);
+        Rot8(qi, acc);
     }
     a = i * 4;
-
-    r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-    if (r <= 0.0)
-        return;
-
-    total_x /= r;
-    total_y /= r;
-    total_z /= r;
-    dvec4 acc = MakeRotation(total_x, total_y, total_z, r * vangleHalf);
 
     dvec4 va;
     va.x = velocity[a + 1];
@@ -126,7 +124,8 @@ void main()
     va.z = velocity[a + 3];
     va.w = velocity[a];
 
-    Rot8(va, acc);
+    Product(va, qi);
+    va = normalize(va);
 
     velocity[a + 1] = va.x;
     velocity[a + 2] = va.y;

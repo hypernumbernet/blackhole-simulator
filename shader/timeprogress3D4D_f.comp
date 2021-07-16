@@ -78,9 +78,8 @@ void main()
     uint i4 = i * 4;
 
     vec4 vq = vec4(velocity[i4 + 1], velocity[i4 + 2], velocity[i4 + 3], velocity[i4]);
-    vq = normalize(vq);
 
-    vec3 vv3 = LnV3Half(vq);
+    vec3 vv3 = LnV3(vq);
     vec3 add = vv3 * vangleInv * timePerFrame;
 
     coordinate[i3    ] += add.x;

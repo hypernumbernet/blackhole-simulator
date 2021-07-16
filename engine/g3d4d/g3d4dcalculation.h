@@ -30,7 +30,7 @@ public:
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             auto vq = Quaternion<T>(velocities, i * 4);
-            auto vv3 = vq.LnV3Half();
+            auto vv3 = vq.LnV3();
             m_engine->angleToVelocity(vv3);
             auto to_add = vv3 * timePerFrame;
 
@@ -60,9 +60,7 @@ public:
         {
             a = i * 3;
 
-            T total_x = 0.0;
-            T total_y = 0.0;
-            T total_z = 0.0;
+            auto qi = Quaternion<T>::Identity;
 
             for (quint64 j = 0; j < numberOfParticles; ++j)
             {
@@ -80,33 +78,19 @@ public:
                     continue;
 
                 inv = 1.0 / r;
-                theta = inv * inv * inv * timeG * masses[j];
+                d1 *= inv;
+                d2 *= inv;
+                d3 *= inv;
+                theta = inv * inv * timeG * masses[j];
 
-                d1 *= theta;
-                d2 *= theta;
-                d3 *= theta;
-
-                total_x += d1;
-                total_y += d2;
-                total_z += d3;
+                theta = m_engine->velocityToAngle(theta);
+                auto acc = Quaternion<T>::MakeRotation(d1, d2, d3, theta * T(0.5));
+                qi.Rotate8(acc);
             }
             a = i * 4;
 
-            r = sqrt(total_x * total_x + total_y * total_y + total_z * total_z);
-            if (r <= 0.0)
-                continue;
-
-            total_x /= r;
-            total_y /= r;
-            total_z /= r;
-
-            theta = m_engine->velocityToAngle(r);
-
-            auto acc = Quaternion<T>::MakeRotation(total_x, total_y, total_z, theta * T(0.5));
-
             auto va = Quaternion<T>(velocities, a);
-            va.Normalize();
-            va.Rotate8(acc);
+            va *= qi;
 
             velocities[a    ] = va.i0;
             velocities[a + 1] = va.i1;
