@@ -17,6 +17,7 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
+        , m_ct(AbstractNBodyEngine<T>::SPEED_OF_LIGHT / T(engine->sim().scale) * engine->timePerFrame())
     {
     }
 
@@ -31,9 +32,16 @@ public:
         {
             i4 = i * 4;
             i3 = i * 3;
-            coordinates[i3    ] += velocities[i4 + 1];
-            coordinates[i3 + 1] += velocities[i4 + 2];
-            coordinates[i3 + 2] += velocities[i4 + 3];
+            T tau = m_ct / velocities[i4];
+            tau *= tau;
+            if (!isfinite(tau))
+            {
+                //qDebug() << "tau: " << tau;
+                continue;
+            }
+            coordinates[i3    ] += velocities[i4 + 1] * tau;
+            coordinates[i3 + 1] += velocities[i4 + 2] * tau;
+            coordinates[i3 + 2] += velocities[i4 + 3] * tau;
         }
     }
 
@@ -50,26 +58,31 @@ public:
         const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         T d1, d2, d3, r, inv, theta;
-        quint64 a, b;
+        quint64 i3, j3, i4;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            a = i * 3;
+            i3 = i * 3;
+            i4 = i * 4;
 
-            T total_x = 0.0;
-            T total_y = 0.0;
-            T total_z = 0.0;
+            QGenericMatrix<1, 4, T> speed;
+            speed(0, 0) = velocities[i4    ];
+            speed(1, 0) = velocities[i4 + 1];
+            speed(2, 0) = velocities[i4 + 2];
+            speed(3, 0) = velocities[i4 + 3];
+
+            QGenericMatrix<4, 4, T> acc;
 
             for (quint64 j = 0; j < numberOfParticles; ++j)
             {
                 if (i == j)
                     continue;
 
-                b = j * 3;
+                j3 = j * 3;
 
-                d1 = coordinates[b    ] - coordinates[a    ];
-                d2 = coordinates[b + 1] - coordinates[a + 1];
-                d3 = coordinates[b + 2] - coordinates[a + 2];
+                d1 = coordinates[j3    ] - coordinates[i3    ];
+                d2 = coordinates[j3 + 1] - coordinates[i3 + 1];
+                d3 = coordinates[j3 + 2] - coordinates[i3 + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
                 if (r <= boundaryToInvalidate)
@@ -77,33 +90,18 @@ public:
 
                 inv = T(1.0) / r;
                 theta = inv * inv * inv * timeG * masses[j];
-
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
 
-                total_x += d1;
-                total_y += d2;
-                total_z += d3;
+                Vector3<T> g(-d1, -d2, -d3);
+                m_engine->LorentzTransformation(acc, g);
+                speed = acc * speed;
             }
-            a = i * 4;
-
-            QGenericMatrix<4, 4, T> acc;
-            Vector3<T> total(-total_x, -total_y, -total_z);
-            m_engine->LorentzTransformation(acc, total);
-
-            QGenericMatrix<1, 4, T> speed;
-            speed(0, 0) = velocities[a    ];
-            speed(1, 0) = velocities[a + 1];
-            speed(2, 0) = velocities[a + 2];
-            speed(3, 0) = velocities[a + 3];
-
-            auto trd = acc * speed;
-
-            velocities[a    ] = trd(0, 0);
-            velocities[a + 1] = trd(1, 0);
-            velocities[a + 2] = trd(2, 0);
-            velocities[a + 3] = trd(3, 0);
+            velocities[i4    ] = speed(0, 0);
+            velocities[i4 + 1] = speed(1, 0);
+            velocities[i4 + 2] = speed(2, 0);
+            velocities[i4 + 3] = speed(3, 0);
         }
     }
 
@@ -114,4 +112,6 @@ private:
     const quint64 m_timeProgresEnd;
     const quint64 m_interactionStart;
     const quint64 m_interactionEnd;
+
+    const T m_ct;
 };

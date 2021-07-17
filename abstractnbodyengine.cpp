@@ -191,37 +191,37 @@ template <typename T>
 void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const T vx, const T vy, const T vz) const
 {
     T vv = vx * vx + vy * vy + vz * vz;
-    if (vv == T(0))
+    if (vv == T(0.0))
     {
         lt.setToIdentity();
         return;
     }
     T ci = speedOfLightInv();
     T beta = sqrt(vv) * ci;
-    if (beta > T(1))
+    if (beta > T(1.0))
     {
-        beta += T(1);
-        beta = fmod(beta, T(2));
-        beta -= T(1);
+        //qDebug() << "beta > 1: " << beta;
+        beta = abs(fmod(beta - T(1.0), T(4.0)) - T(2.0));
     }
 
-    T gamma = T(1) / sqrt(T(1) - beta * beta);
+    T gamma = T(1.0) / sqrt(T(1) - beta * beta);
     if (!isfinite(gamma))
     {
-        lt.fill(INFINITY);
+        //qDebug() << "gamma INFINITY: " << gamma;
+        lt.setToIdentity();
         return;
     }
 
     T gxc = - gamma * vx * ci;
     T gyc = - gamma * vy * ci;
     T gzc = - gamma * vz * ci;
-    T g1 = gamma - T(1);
+    T g1 = gamma - T(1.0);
 
     T matrix[] = {
         gamma, gxc, gyc, gzc,
-        gxc  , T(1) + g1 * (vx * vx / vv),        g1 * (vx * vy / vv),        g1 * (vx * vz / vv),
-        gyc  ,        g1 * (vx * vy / vv), T(1) + g1 * (vy * vy / vv),        g1 * (vy * vz / vv),
-        gzc  ,        g1 * (vx * vz / vv),        g1 * (vy * vz / vv), T(1) + g1 * (vz * vz / vv),
+        gxc  , T(1.0) + g1 * (vx * vx / vv),          g1 * (vx * vy / vv),          g1 * (vx * vz / vv),
+        gyc  ,          g1 * (vx * vy / vv), T(1.0) + g1 * (vy * vy / vv),          g1 * (vy * vz / vv),
+        gzc  ,          g1 * (vx * vz / vv),          g1 * (vy * vz / vv), T(1.0) + g1 * (vz * vz / vv),
     };
     for (int i = 0; i < 16; ++i)
     {
