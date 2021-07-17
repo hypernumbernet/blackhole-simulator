@@ -27,7 +27,7 @@ protected:
 
 private:
 
-    inline void fromVector3(QGenericMatrix<1, 4, T>& vel4, const Vector3<T>& v3) const
+    inline QGenericMatrix<1, 4, T> fromVector3(const Vector3<T>& v3) const
     {
         QGenericMatrix<4, 4, T> lt;
         m_engine->LorentzTransformation(lt, -v3);
@@ -36,7 +36,7 @@ private:
         speed(1, 0) = T(0.0);
         speed(2, 0) = T(0.0);
         speed(3, 0) = T(0.0);
-        vel4 = lt * speed;
+        return lt * speed;
     }
 
     inline void fromInitializer3D()
@@ -50,8 +50,7 @@ private:
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
-            QGenericMatrix<1, 4, T> vel4;
-            fromVector3(vel4, {velocities, i3});
+            auto vel4 = fromVector3({velocities, i3});
             bhs::embedMatrix1x4ToArray<T>(vel4, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)

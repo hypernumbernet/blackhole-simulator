@@ -81,27 +81,47 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     m_timePerFrameEdit.setAlignment(Qt::AlignRight);
     secondLayout->addWidget(&m_timePerFrameEdit);
 
+    // For Random Preset
+    auto forRandomGroup = new QGroupBox(tr("For Random Preset"));
+    auto forRandomVbox = new QVBoxLayout;
+
     // Number of particles
-    auto particleNumLabel = new QLabel(tr("Number of particles (hint)"));
-    secondLayout->addWidget(particleNumLabel);
+    auto particleNumLabel = new QLabel(tr("Number of particles"));
+    forRandomVbox->addWidget(particleNumLabel);
 
     m_particleNumEdit.setAlignment(Qt::AlignRight);
-    secondLayout->addWidget(&m_particleNumEdit);
+    forRandomVbox->addWidget(&m_particleNumEdit);
+
+    // Scale
+
+    auto scaleLabel = new QLabel(tr("Scale (m)"));
+    forRandomVbox->addWidget(scaleLabel);
+
+    m_scaleEdit.setAlignment(Qt::AlignRight);
+    forRandomVbox->addWidget(&m_scaleEdit);
 
     // Mass
 
-    auto massGroup = new QGroupBox(tr("Mass (for random preset)"));
-    auto massVbox = new QVBoxLayout;
-
     auto massLabel = new QLabel(tr("Mass (Avg.) (kg)"));
-    massVbox->addWidget(massLabel);
+    forRandomVbox->addWidget(massLabel);
 
     m_massAvgEdit.setAlignment(Qt::AlignRight);
-    massVbox->addWidget(&m_massAvgEdit);
+    forRandomVbox->addWidget(&m_massAvgEdit);
 
     m_massRandomCheckBox.setText(tr("Random Mass"));
     m_massRandomCheckBox.setChecked(true);
-    massVbox->addWidget(&m_massRandomCheckBox);
+    forRandomVbox->addWidget(&m_massRandomCheckBox);
+
+    // Speed
+
+    auto speedLabel = new QLabel(tr("Initial Speed (Avg.) (m/s)"));
+    forRandomVbox->addWidget(speedLabel);
+
+    m_speedEdit.setAlignment(Qt::AlignRight);
+    forRandomVbox->addWidget(&m_speedEdit);
+
+    forRandomGroup->setLayout(forRandomVbox);
+    secondLayout->addWidget(forRandomGroup);
 
 //    auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
 //    massVbox->addWidget(massRangeLabel);
@@ -109,23 +129,6 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 //    auto massRangeValue = new QLineEdit("20");
 //    massRangeValue->setEnabled(false);
 //    massVbox->addWidget(massRangeValue);
-
-    massGroup->setLayout(massVbox);
-    secondLayout->addWidget(massGroup);
-
-    // Scale
-
-    auto scaleGroup = new QGroupBox(tr("Scale"));
-    auto scaleVbox = new QVBoxLayout;
-
-    auto scaleLabel = new QLabel(tr("Scale (m)"));
-    scaleVbox->addWidget(scaleLabel);
-
-    m_scaleEdit.setAlignment(Qt::AlignRight);
-    scaleVbox->addWidget(&m_scaleEdit);
-
-    scaleGroup->setLayout(scaleVbox);
-    secondLayout->addWidget(scaleGroup);
 
     //########################################################################
     auto thirdLayout = new QHBoxLayout;
@@ -221,6 +224,16 @@ bool InitializerDialog::validate()
         m_scaleEdit.setPalette(NGPal);
     }
 
+    auto speed = m_speedEdit.text().toDouble(&ok);
+    if (ok)
+    {
+        m_speedEdit.setPalette(normalPal);
+        m_simCondition.speed = speed;
+    } else {
+        allOk = false;
+        m_speedEdit.setPalette(NGPal);
+    }
+
     return allOk;
 }
 
@@ -248,4 +261,5 @@ void InitializerDialog::setValues(const bhs::SimCondition& sim)
     m_massAvgEdit.setText(QString::number(sim.massAvg));
     m_massRandomCheckBox.setChecked(sim.massRandom);
     m_scaleEdit.setText(QString::number(sim.scale));
+    m_speedEdit.setText(QString::number(sim.speed));
 }

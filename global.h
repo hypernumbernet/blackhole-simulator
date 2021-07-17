@@ -54,6 +54,7 @@ struct SimCondition
     double massAvg = 6.0e+29;
     bool massRandom = true;
     double scale = 1.0e+11;
+    double speed = 1.5e+4;
 };
 
 struct IntRange

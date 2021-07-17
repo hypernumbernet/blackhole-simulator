@@ -47,7 +47,7 @@ void Initializer3D<T>::initRandamCube()
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = (T)(bhs::rand0center1max() * 1.5e+4 * correct.m);
+        velocities[i] = (T)(bhs::rand0center1max() * m_sim.speed * correct.m);
     }
 }
 
@@ -96,7 +96,7 @@ void Initializer3D<T>::initRandamSphere(const double rate)
 
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = (T)(bhs::rand0center1max() * 1.5e+4 * correct.m);
+        velocities[i] = (T)(bhs::rand0center1max() * m_sim.speed * correct.m);
     }
 }
 

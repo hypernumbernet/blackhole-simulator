@@ -41,6 +41,7 @@ private:
     QLineEdit m_scaleEdit;
     QButtonGroup m_precisionButtonGroup;
     QButtonGroup m_computeButtonGroup;
+    QLineEdit m_speedEdit;
 
     bhs::SimCondition m_simCondition;
 };
