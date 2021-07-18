@@ -241,6 +241,30 @@ void Initializer3D<T>::initTestSamePosition()
 }
 
 template <typename T>
+void Initializer3D<T>::initSunMercury()
+{
+    Correct correct(5.0e+10);
+    m_engine->changeModelScale(correct.m);
+
+    T* masses = m_engine->masses();
+    T* coordinates = m_engine->coordinates();
+    T* velocities = m_engine->velocities();
+
+    masses[0] = T(1.9891e+30 * correct.kg);
+    coordinates[0] = coordinates[1] = coordinates[2] = 0.0;
+    velocities[0] = velocities[1] = velocities[2] = 0.0;
+
+    // https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html
+    masses[1] = T(3.3011e+23 * correct.kg);
+    coordinates[3] = 0.0;
+    coordinates[4] = 0.0;
+    coordinates[5] = T(4.6002e+10 * correct.m); // Perihelion
+    velocities[3] = T(58980.0 * correct.m); // Max. orbital velocity
+    velocities[4] = 0.0;
+    velocities[5] = 0.0;
+}
+
+template <typename T>
 void Initializer3D<T>::setRotation()
 {
     quint64 num = m_engine->numberOfParticle();

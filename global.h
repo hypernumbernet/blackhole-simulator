@@ -37,9 +37,10 @@ enum class Preset
     RandomSphere,
     RandomBall,
     SunEarth,
-    EarthSun,
     EarthMoon,
     SunEarthVenus,
+    SunMercury,
+    EarthSun,
     TestSamePosition,
 };
 

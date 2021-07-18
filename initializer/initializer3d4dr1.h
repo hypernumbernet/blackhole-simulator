@@ -6,7 +6,7 @@
 using namespace hnn;
 
 template <typename T>
-class Initializer3D4DR1 : public AbstractInitializer
+class Initializer3D4DR1 : protected AbstractInitializer
 {
 public:
     Initializer3D4DR1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
@@ -16,7 +16,7 @@ public:
     {
     }
 
-protected:
+private:
     void initRandamCube() override;
     void initRandamSphere(double) override;
     void initSunEarth() override;
@@ -24,8 +24,7 @@ protected:
     void initEarthMoon() override;
     void initSunEarthVenus() override;
     void initTestSamePosition() override;
-
-private:
+    void initSunMercury() override;
 
     inline QGenericMatrix<1, 4, T> fromVector3(const Vector3<T>& v3) const
     {

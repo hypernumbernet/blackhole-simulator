@@ -50,7 +50,7 @@ public:
     void LorentzTransformation(QGenericMatrix<4, 4, T>&, const Vector3<T>&) const;
 
 protected:
-    void setNumberOfParticles(quint64);
+    void setNumberOfParticles();
     void setTimeProgressRanges(int threadCount);
     void setInteractionRanges(int threadCount);
 

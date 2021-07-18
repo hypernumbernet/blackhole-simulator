@@ -60,10 +60,27 @@ void AbstractNBodyEngine<T>::setInteractionRanges(const int threadCount)
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::setNumberOfParticles(const quint64 num)
+void AbstractNBodyEngine<T>::setNumberOfParticles()
 {
-    m_numberOfParticles = num;
-    emit UpdateUi::it().displayNumberOfParticles(num);
+    switch (m_sim.preset)
+    {
+    case bhs::Preset::RandomCube:
+    case bhs::Preset::RandomSphere:
+    case bhs::Preset::RandomBall:
+        m_numberOfParticles = m_sim.numberOfParticles;
+        break;
+    case bhs::Preset::SunEarth:
+    case bhs::Preset::EarthSun:
+    case bhs::Preset::EarthMoon:
+    case bhs::Preset::TestSamePosition:
+    case bhs::Preset::SunMercury:
+        m_numberOfParticles = 2;
+        break;
+    case bhs::Preset::SunEarthVenus:
+        m_numberOfParticles = 3;
+        break;
+    }
+    emit UpdateUi::it().displayNumberOfParticles(m_numberOfParticles);
     int tcount = QThread::idealThreadCount();
     setTimeProgressRanges(tcount);
     setInteractionRanges(tcount);

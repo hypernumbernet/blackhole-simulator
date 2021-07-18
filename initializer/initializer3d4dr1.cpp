@@ -51,3 +51,10 @@ void Initializer3D4DR1<T>::initTestSamePosition()
     m_3d.initTestSamePosition();
     fromInitializer3D();
 }
+
+template <typename T>
+void Initializer3D4DR1<T>::initSunMercury()
+{
+    m_3d.initSunMercury();
+    fromInitializer3D();
+}

@@ -6,7 +6,7 @@
 using namespace hnn;
 
 template <typename T>
-class Initializer4D3D : public AbstractInitializer
+class Initializer4D3D : protected AbstractInitializer
 {
 public:
     Initializer4D3D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
@@ -16,7 +16,7 @@ public:
     {
     }
 
-protected:
+private:
     void initRandamCube() override;
     void initRandamSphere(double) override;
     void initSunEarth() override;
@@ -24,8 +24,7 @@ protected:
     void initEarthMoon() override;
     void initSunEarthVenus() override;
     void initTestSamePosition() override;
-
-private:
+    void initSunMercury() override;
 
     inline void fromInitializer3D()
     {

@@ -26,6 +26,40 @@ public:
 protected:
     const bhs::SimCondition& m_sim;
 
+    inline void init()
+    {
+        switch (m_sim.preset)
+        {
+        case bhs::Preset::RandomCube:
+            initRandamCube();
+            break;
+        case bhs::Preset::RandomSphere:
+            initRandamSphere(0.9);
+            break;
+        case bhs::Preset::RandomBall:
+            initRandamSphere(0.0);
+            break;
+        case bhs::Preset::SunEarth:
+            initSunEarth();
+            break;
+        case bhs::Preset::EarthSun:
+            initEarthSun();
+            break;
+        case bhs::Preset::EarthMoon:
+            initEarthMoon();
+            break;
+        case bhs::Preset::TestSamePosition:
+            initTestSamePosition();
+            break;
+        case bhs::Preset::SunEarthVenus:
+            initSunEarthVenus();
+            break;
+        case bhs::Preset::SunMercury:
+            initSunMercury();
+            break;
+        }
+    }
+
 private:
     virtual void initRandamCube() = 0;
     virtual void initRandamSphere(double) = 0;
@@ -34,4 +68,5 @@ private:
     virtual void initEarthMoon() = 0;
     virtual void initSunEarthVenus() = 0;
     virtual void initTestSamePosition() = 0;
+    virtual void initSunMercury() = 0;
 };
