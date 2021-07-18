@@ -40,6 +40,7 @@ public:
     void setModelScale(double);
     void setModelScaleRatio(double);
     void changeModelScale(double);
+    double scaleInv() const;
 
     QVector<bhs::IntRange> timeProgressRanges() const;
     QVector<bhs::IntRange> interactionRanges() const;
@@ -74,9 +75,8 @@ protected:
 
     quint64 m_numberOfParticles;
     double m_modelScale;
-    double m_scaleCenterValue;
+    double m_scaleInv;
     T m_gravitationalConstant;
-    const T m_speedOfLightInv;
     QVector<bhs::IntRange> m_timeProgressRanges;
     QVector<bhs::IntRange> m_interactionRanges;
 };

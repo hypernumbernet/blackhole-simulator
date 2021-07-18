@@ -8,7 +8,6 @@ AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
     : m_sim(sim)
     , m_modelScale(1.0)
     , m_gravitationalConstant(T(GRAVITATIONAL_CONSTANT))
-    , m_speedOfLightInv(T(sim.scale / SPEED_OF_LIGHT))
 {
 }
 
@@ -89,14 +88,14 @@ void AbstractNBodyEngine<T>::setNumberOfParticles()
 template <typename T>
 void AbstractNBodyEngine<T>::setModelScale(const double scale)
 {
-    m_modelScale = scale / m_scaleCenterValue;
+    m_modelScale = scale / m_scaleInv;
 }
 
 template <typename T>
 void AbstractNBodyEngine<T>::setModelScaleRatio(const double ratio)
 {
     m_modelScale = ratio;
-    emit UpdateUi::it().displayModelScale(m_modelScale * m_scaleCenterValue);
+    emit UpdateUi::it().displayModelScale(m_modelScale * m_scaleInv);
 }
 
 template <typename T>
@@ -109,8 +108,8 @@ void AbstractNBodyEngine<T>::setTimePerFrame(const double time)
 template <typename T>
 void AbstractNBodyEngine<T>::changeModelScale(const double scale)
 {
-    m_scaleCenterValue = scale;
-    m_modelScale = T(1.0);
+    m_scaleInv = scale;
+    m_modelScale = 1.0;
     emit UpdateUi::it().displayModelScale(scale);
 }
 
@@ -195,13 +194,13 @@ const bhs::SimCondition& AbstractNBodyEngine<T>::sim() const
 template <typename T>
 T AbstractNBodyEngine<T>::velocityToAngle(const T v) const
 {
-    return v * T(AbstractNBodyEngine<double>::VANGLE * m_sim.scale);
+    return v * T(AbstractNBodyEngine<double>::VANGLE / m_scaleInv);
 }
 
 template <typename T>
 void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a) const
 {
-    a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE * m_sim.scale));
+    a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE / m_scaleInv));
 }
 
 template <typename T>
@@ -255,5 +254,11 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
 template <typename T>
 const T AbstractNBodyEngine<T>::speedOfLightInv() const
 {
-    return m_speedOfLightInv;
+    return T(1.0 / (SPEED_OF_LIGHT * m_scaleInv));
+}
+
+template <typename T>
+double AbstractNBodyEngine<T>::scaleInv() const
+{
+    return m_scaleInv;
 }

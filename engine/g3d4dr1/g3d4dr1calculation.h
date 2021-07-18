@@ -17,7 +17,7 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_ct(T(SPEED_OF_LIGHT / engine->sim().scale) * engine->timePerFrame())
+        , m_ct(T(SPEED_OF_LIGHT * engine->scaleInv()) * engine->timePerFrame())
     {
     }
 

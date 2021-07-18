@@ -136,13 +136,13 @@ private:
     }
 
     template <typename T>
-    inline const bhs::SimCondition& sim() const
+    inline double scaleCenterValue() const
     {
         if constexpr (std::is_same_v<T, float>)
-            return m_NBodyEngineFloat->sim();
+            return m_NBodyEngineFloat->scaleInv();
 
         if constexpr (std::is_same_v<T, double>)
-            return m_NBodyEngineDouble->sim();
+            return m_NBodyEngineDouble->scaleInv();
     }
 
     template <typename T>
@@ -180,13 +180,13 @@ private:
             data[massOffset + i] = mss[i];
         }
 
-        double scale = sim<T>().scale;
+        double scale = scaleCenterValue<T>();
 
         data[paramOffset] = timePerFrame<T>();
         data[paramOffset + 1] = (T)numberOfParticle();
         data[paramOffset + 2] = gravitationalConstant<T>();
-        data[paramOffset + 3] = T(1.0 / (AbstractNBodyEngine<double>::VANGLE * scale));
-        data[paramOffset + 4] = T(0.5 * AbstractNBodyEngine<double>::VANGLE * scale);
+        data[paramOffset + 3] = T(scale / AbstractNBodyEngine<double>::VANGLE);
+        data[paramOffset + 4] = T(0.5 * AbstractNBodyEngine<double>::VANGLE / scale);
         data[paramOffset + 5] = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         result.coordinateSize = coordinateSize;
