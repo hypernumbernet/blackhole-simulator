@@ -32,7 +32,7 @@ private:
         QGenericMatrix<4, 4, T> lt;
         m_engine->LorentzTransformation(lt, -v3);
         QGenericMatrix<1, 4, T> speed;
-        speed(0, 0) = AbstractNBodyEngine<T>::SPEED_OF_LIGHT / T(m_sim.scale) * m_engine->timePerFrame();
+        speed(0, 0) = T(SPEED_OF_LIGHT / m_sim.scale) * m_engine->timePerFrame();
         speed(1, 0) = T(0.0);
         speed(2, 0) = T(0.0);
         speed(3, 0) = T(0.0);

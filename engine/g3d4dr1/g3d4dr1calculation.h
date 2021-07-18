@@ -17,7 +17,7 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_ct(AbstractNBodyEngine<T>::SPEED_OF_LIGHT / T(engine->sim().scale) * engine->timePerFrame())
+        , m_ct(T(SPEED_OF_LIGHT / engine->sim().scale) * engine->timePerFrame())
     {
     }
 
@@ -34,7 +34,7 @@ public:
             i3 = i * 3;
             T tau = m_ct / velocities[i4];
             tau *= tau;
-            if (!isfinite(tau))
+            if (!std::isfinite(tau))
             {
                 //qDebug() << "tau: " << tau;
                 continue;

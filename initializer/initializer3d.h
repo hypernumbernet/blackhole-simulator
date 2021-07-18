@@ -32,5 +32,6 @@ protected:
     void initTestSamePosition() override;
 
 private:
+    void setRotation();
     AbstractNBodyEngine<T>* const m_engine;
 };

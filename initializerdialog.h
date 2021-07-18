@@ -31,6 +31,11 @@ private:
     static constexpr QColor RE_ENTER_COLOR = {255, 200, 200};
 
     bool validate();
+    double toDouble(QLineEdit&, bool&);
+    int toInt(QLineEdit&, bool&);
+
+    const QPalette m_normalPal;
+    QPalette m_NGPal;
 
     QLineEdit m_timePerFrameEdit;
     QLineEdit m_particleNumEdit;
@@ -42,6 +47,7 @@ private:
     QButtonGroup m_precisionButtonGroup;
     QButtonGroup m_computeButtonGroup;
     QLineEdit m_speedEdit;
+    QLineEdit m_rotationEdit;
 
     bhs::SimCondition m_simCondition;
 };

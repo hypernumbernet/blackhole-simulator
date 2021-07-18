@@ -7,8 +7,8 @@ template <typename T>
 AbstractNBodyEngine<T>::AbstractNBodyEngine(const bhs::SimCondition& sim)
     : m_sim(sim)
     , m_modelScale(1.0)
-    , m_gravitationalConstant(GRAVITATIONAL_CONSTANT)
-    , m_speedOfLightInv(T(sim.scale) / SPEED_OF_LIGHT)
+    , m_gravitationalConstant(T(GRAVITATIONAL_CONSTANT))
+    , m_speedOfLightInv(T(sim.scale / SPEED_OF_LIGHT))
 {
 }
 
@@ -205,7 +205,7 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
     }
 
     T gamma = T(1.0) / sqrt(T(1) - beta * beta);
-    if (!isfinite(gamma))
+    if (!std::isfinite(gamma))
     {
         //qDebug() << "gamma INFINITY: " << gamma;
         lt.setToIdentity();

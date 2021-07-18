@@ -2,7 +2,11 @@
 
 InitializerDialog::InitializerDialog(QWidget* parent)
     : QDialog(parent)
+    , m_normalPal(palette())
+    , m_NGPal(palette())
 {
+    m_NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
+
     auto firstLayout = new QVBoxLayout;
     firstLayout->setAlignment(Qt::AlignTop);
 
@@ -83,7 +87,9 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 
     // For Random Preset
     auto forRandomGroup = new QGroupBox(tr("For Random Preset"));
+    secondLayout->addWidget(forRandomGroup);
     auto forRandomVbox = new QVBoxLayout;
+    forRandomGroup->setLayout(forRandomVbox);
 
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles"));
@@ -120,8 +126,13 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     m_speedEdit.setAlignment(Qt::AlignRight);
     forRandomVbox->addWidget(&m_speedEdit);
 
-    forRandomGroup->setLayout(forRandomVbox);
-    secondLayout->addWidget(forRandomGroup);
+    // Rotation
+
+    auto rotationLabel = new QLabel(tr("Z-X Rotation (degree/s)"));
+    forRandomVbox->addWidget(rotationLabel);
+
+    m_rotationEdit.setAlignment(Qt::AlignRight);
+    forRandomVbox->addWidget(&m_rotationEdit);
 
 //    auto massRangeLabel = new QLabel(tr("Mass Range (%)"));
 //    massVbox->addWidget(massRangeLabel);
@@ -166,9 +177,6 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 bool InitializerDialog::validate()
 {
     bool allOk = true;
-    QPalette normalPal(palette());
-    QPalette NGPal(palette());
-    NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
 
     m_simCondition.engine = static_cast<bhs::Engine>(m_engineButtonGroup.checkedId());
     m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
@@ -176,62 +184,18 @@ bool InitializerDialog::validate()
     m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
     m_simCondition.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
 
+    m_simCondition.timePerFrame = toDouble(m_timePerFrameEdit, allOk);
+    m_simCondition.numberOfParticles = toInt(m_particleNumEdit, allOk);
+    m_simCondition.massAvg = toDouble(m_massAvgEdit, allOk);
+    m_simCondition.scale = toDouble(m_scaleEdit, allOk);
+    m_simCondition.speed = toDouble(m_speedEdit, allOk);
+    m_simCondition.rotation = toDouble(m_rotationEdit, allOk);
+
     if ((m_simCondition.engine == bhs::Engine::G4D3D && m_simCondition.compute == bhs::Compute::GPU) ||
         (m_simCondition.engine == bhs::Engine::G3D4DR1 && m_simCondition.compute == bhs::Compute::GPU))
     {
-        QMessageBox::information(this, tr("Sorry"), tr("The Engine is not implemented"));
-        return false;
-    }
-
-    bool ok;
-    auto val = m_timePerFrameEdit.text().toDouble(&ok);
-    if (ok)
-    {
-        m_timePerFrameEdit.setPalette(normalPal);
-        m_simCondition.timePerFrame = val;
-    } else {
+        QMessageBox::information(this, tr("Information"), tr("The GPU Engine is not implemented"));
         allOk = false;
-        m_timePerFrameEdit.setPalette(NGPal);
-    }
-
-    auto num = m_particleNumEdit.text().toInt(&ok);
-    if (ok)
-    {
-        m_particleNumEdit.setPalette(normalPal);
-        m_simCondition.numberOfParticles = num;
-    } else {
-        allOk = false;
-        m_particleNumEdit.setPalette(NGPal);
-    }
-
-    auto massAvg = m_massAvgEdit.text().toDouble(&ok);
-    if (ok)
-    {
-        m_massAvgEdit.setPalette(normalPal);
-        m_simCondition.massAvg = massAvg;
-    } else {
-        allOk = false;
-        m_massAvgEdit.setPalette(NGPal);
-    }
-
-    auto scale = m_scaleEdit.text().toDouble(&ok);
-    if (ok)
-    {
-        m_scaleEdit.setPalette(normalPal);
-        m_simCondition.scale = scale;
-    } else {
-        allOk = false;
-        m_scaleEdit.setPalette(NGPal);
-    }
-
-    auto speed = m_speedEdit.text().toDouble(&ok);
-    if (ok)
-    {
-        m_speedEdit.setPalette(normalPal);
-        m_simCondition.speed = speed;
-    } else {
-        allOk = false;
-        m_speedEdit.setPalette(NGPal);
     }
 
     return allOk;
@@ -262,4 +226,33 @@ void InitializerDialog::setValues(const bhs::SimCondition& sim)
     m_massRandomCheckBox.setChecked(sim.massRandom);
     m_scaleEdit.setText(QString::number(sim.scale));
     m_speedEdit.setText(QString::number(sim.speed));
+    m_rotationEdit.setText(QString::number(sim.rotation));
+}
+
+double InitializerDialog::toDouble(QLineEdit& edit, bool& success)
+{
+    bool ok;
+    auto speed = edit.text().toDouble(&ok);
+    if (ok)
+    {
+        edit.setPalette(m_normalPal);
+    } else {
+        success = false;
+        edit.setPalette(m_NGPal);
+    }
+    return speed;
+}
+
+int InitializerDialog::toInt(QLineEdit& edit, bool& success)
+{
+    bool ok;
+    auto speed = edit.text().toInt(&ok);
+    if (ok)
+    {
+        edit.setPalette(m_normalPal);
+    } else {
+        success = false;
+        edit.setPalette(m_NGPal);
+    }
+    return speed;
 }

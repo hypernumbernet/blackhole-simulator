@@ -16,10 +16,7 @@ template <typename T>
 class AbstractNBodyEngine
 {
 public:
-    static constexpr T GRAVITATIONAL_CONSTANT = T(6.6743e-11); // 2018 CODATA
-    static constexpr T SPEED_OF_LIGHT = T(2.99792458e+8);
-    static constexpr T PI = T(3.141592653589793);
-    static constexpr T VANGLE = PI / SPEED_OF_LIGHT;
+    static constexpr T VANGLE = T(PI / SPEED_OF_LIGHT);
     static constexpr T BOUNDARY_TO_INVALIDATE = T(0.005);
 
     explicit AbstractNBodyEngine(const bhs::SimCondition&);

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
+#include "constants.h"
 
 namespace hnn // https://github.com/hypernumbernet
 {

@@ -33,7 +33,7 @@ void Initializer3D<T>::initRandamCube()
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = (T)(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
+            masses[i] = T(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
@@ -43,12 +43,13 @@ void Initializer3D<T>::initRandamCube()
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        coordinates[i] = (T)(bhs::rand0center1max() * m_sim.scale * correct.m);
+        coordinates[i] = T(bhs::rand0center1max() * m_sim.scale * correct.m);
     }
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = (T)(bhs::rand0center1max() * m_sim.speed * correct.m);
+        velocities[i] = T(bhs::rand0center1max() * m_sim.speed * correct.m);
     }
+    setRotation();
 }
 
 template <typename T>
@@ -66,7 +67,7 @@ void Initializer3D<T>::initRandamSphere(const double rate)
     {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = (T)(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
+            masses[i] = T(bhs::rand0to1() * m_sim.massAvg * 2.0 * correct.kg);
         }
     } else {
         for (quint64 i = 0; i < num; ++i)
@@ -96,8 +97,9 @@ void Initializer3D<T>::initRandamSphere(const double rate)
 
     for (quint64 i = 0; i < num * 3; ++i)
     {
-        velocities[i] = (T)(bhs::rand0center1max() * m_sim.speed * correct.m);
+        velocities[i] = T(bhs::rand0center1max() * m_sim.speed * correct.m);
     }
+    setRotation();
 }
 
 template <typename T>
@@ -110,16 +112,16 @@ void Initializer3D<T>::initSunEarth()
     T* coordinates = m_engine->coordinates();
     T* velocities = m_engine->velocities();
 
-    masses[0] = (T)(1.9891e+30 * correct.kg);
+    masses[0] = T(1.9891e+30 * correct.kg);
     coordinates[0] = coordinates[1] = coordinates[2] = 0.0;
     velocities[0] = velocities[1] = velocities[2] = 0.0;
 
-    masses[1] = (T)(5.972e+24 * correct.kg);
-    coordinates[3] = (T)(1.495978e+11 * correct.m);
+    masses[1] = T(5.972e+24 * correct.kg);
+    coordinates[3] = T(1.495978e+11 * correct.m);
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     velocities[3] = 0.0;
-    velocities[4] = (T)(29780.0 * correct.m);
+    velocities[4] = T(29780.0 * correct.m);
     velocities[5] = 0.0;
 }
 
@@ -133,16 +135,16 @@ void Initializer3D<T>::initEarthSun()
     T* coordinates = m_engine->coordinates();
     T* velocities = m_engine->velocities();
 
-    masses[0] = (T)(5.972e+24 * correct.kg);
+    masses[0] = T(5.972e+24 * correct.kg);
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
     velocities[0] = 0.0;
     velocities[1] = 0.0;
-    velocities[2] = (T)(29780.0 * correct.m);
+    velocities[2] = T(29780.0 * correct.m);
 
-    masses[1] = (T)(1.9891e+30 * correct.kg);
-    coordinates[3] = (T)(1.495978e+11 * correct.m);
+    masses[1] = T(1.9891e+30 * correct.kg);
+    coordinates[3] = T(1.495978e+11 * correct.m);
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     velocities[3] = 0.0;
@@ -160,20 +162,20 @@ void Initializer3D<T>::initEarthMoon()
     T* coordinates = m_engine->coordinates();
     T* velocities = m_engine->velocities();
 
-    masses[0] = (T)(5.972e+24 * correct.kg);
+    masses[0] = T(5.972e+24 * correct.kg);
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
     velocities[0] = 0.0;
-    velocities[1] = (T)(-12.5 * correct.m);;
+    velocities[1] = T(-12.5 * correct.m);;
     velocities[2] = 0.0;
 
-    masses[1] = (T)(7.347673e+22 * correct.kg);
-    coordinates[3] = (T)(3.844e+8 * correct.m);
+    masses[1] = T(7.347673e+22 * correct.kg);
+    coordinates[3] = T(3.844e+8 * correct.m);
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     velocities[3] = 0.0;
-    velocities[4] = (T)(1022.0 * correct.m);
+    velocities[4] = T(1022.0 * correct.m);
     velocities[5] = 0.0;
 }
 
@@ -187,7 +189,7 @@ void Initializer3D<T>::initSunEarthVenus()
     T* coordinates = m_engine->coordinates();
     T* velocities = m_engine->velocities();
 
-    masses[0] = (T)(1.9891e+30 * correct.kg);
+    masses[0] = T(1.9891e+30 * correct.kg);
     coordinates[0] = 0.0;
     coordinates[1] = 0.0;
     coordinates[2] = 0.0;
@@ -195,21 +197,21 @@ void Initializer3D<T>::initSunEarthVenus()
     velocities[1] = 0.0;
     velocities[2] = 0.0;
 
-    masses[1] = (T)(5.972e+24 * correct.kg);
-    coordinates[3] = (T)(1.495978e+11 * correct.m);
+    masses[1] = T(5.972e+24 * correct.kg);
+    coordinates[3] = T(1.495978e+11 * correct.m);
     coordinates[4] = 0.0;
     coordinates[5] = 0.0;
     velocities[3] = 0.0;
     velocities[4] = 0.0;
-    velocities[5] = (T)(29780.0 * correct.m);
+    velocities[5] = T(29780.0 * correct.m);
 
-    masses[2] = (T)(4.869e+24 * correct.kg);
-    coordinates[6] = (T)(1.0820893e+11 * correct.m);
+    masses[2] = T(4.869e+24 * correct.kg);
+    coordinates[6] = T(1.0820893e+11 * correct.m);
     coordinates[7] = 0.0;
     coordinates[8] = 0.0;
     velocities[6] = 0.0;
     velocities[7] = 0.0;
-    velocities[8] = (T)(35021.4 * correct.m);
+    velocities[8] = T(35021.4 * correct.m);
 }
 
 template <typename T>
@@ -236,4 +238,28 @@ void Initializer3D<T>::initTestSamePosition()
     velocities[3] = 0.0;
     velocities[4] = 0.0;
     velocities[5] = 0.0;
+}
+
+template <typename T>
+void Initializer3D<T>::setRotation()
+{
+    quint64 num = m_engine->numberOfParticle();
+    T* coordinates = m_engine->coordinates();
+    T* velocities = m_engine->velocities();
+    T time = m_engine->timePerFrame();
+    double radian = degreeToRadian(m_sim.rotation);
+    radian *= double(time);
+    T sn = T(sin(radian));
+    T cn = T(cos(radian));
+
+    for (quint64 i = 0; i < num; ++i)
+    {
+        quint64 i3 = i * 3;
+        T x1 = coordinates[i3    ];
+        T z1 = coordinates[i3 + 2];
+        T x2 = cn * x1 + sn * z1;
+        T z2 = -sn * x1 + cn * z1;
+        velocities[i3    ] += (x2 - x1) / time;
+        velocities[i3 + 2] += (z2 - z1) / time;
+    }
 }

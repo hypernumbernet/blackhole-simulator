@@ -46,7 +46,7 @@ HEADERS += \
     engine/g4d3d/g4d3dengine.h \
     global.h \
     graphicwindow.h \
-    hnn/matrix4x4.h \
+    hnn/constants.h \
     hnn/quaternion.h \
     hnn/vector3.h \
     initializer/initializer3d.h \

@@ -51,10 +51,11 @@ struct SimCondition
     Preset preset = Preset::RandomBall;
     double timePerFrame = 1000.0;
     int numberOfParticles = 2000;
-    double massAvg = 6.0e+29;
+    double massAvg = 1.0e+37;
     bool massRandom = true;
-    double scale = 1.0e+11;
+    double scale = 1.0e+14;
     double speed = 1.5e+4;
+    double rotation = 5e-5;
 };
 
 struct IntRange
@@ -78,8 +79,6 @@ inline double rand0center1max()
 }
 
 inline QRecursiveMutex interactionMutex;
-
-inline double m_max = 0.0;
 
 template <typename T>
 inline void embedQuaternionToArray(const Quaternion<T>& q, T* const a, const quint64 index)
