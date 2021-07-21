@@ -59,8 +59,13 @@ void ThreadAdmin::frameAdvance(int count)
 {
     if (!m_simulateTimer.isActive())
     {
-        m_endOfFrameAdvance = m_frameNum + count;
-        m_frameAdvanceTimer.start(0, this);
+        if (!m_frameAdvanceTimer.isActive())
+        {
+            m_endOfFrameAdvance = m_frameNum + count;
+            m_frameAdvanceTimer.start(0, this);
+        } else {
+            m_frameAdvanceTimer.stop();
+        }
     }
 }
 
