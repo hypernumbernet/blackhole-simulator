@@ -3,6 +3,7 @@
 #include "graphicwindow.h"
 #include "updateui.h"
 #include "initializerdialog.h"
+#include "monitoringdialog.h"
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -28,20 +29,19 @@ public slots:
     void displayModelScale(double);
     void resetScaleSlider();
     void displayTimePerFrame(double);
-    void showInitializerDialog();
-    void acceptInitializerDialog();
     void resetInitial();
     void displayNumberOfParticles(int);
     void displayEngineName(bhs::Engine);
     void displayPrecision(bhs::Precision);
     void displayPresetName(bhs::Preset);
 
+    void showInitializerDialog();
+    void acceptInitializerDialog();
+    void showMonitoringDialog();
+
 private:
     void initUi();
     void reset(const bhs::SimCondition&);
-
-    void displayStyle(QLCDNumber&);
-    void displayStyle(QLabel&);
 
     bhs::SimCondition m_simCondition;
     GraphicWindow m_graphicWindows;
@@ -64,4 +64,5 @@ private:
     QLabel m_precisionValue;
 
     InitializerDialog* m_initializerDialog = nullptr;
+    MonitoringDialog* m_monitoringDialog = nullptr;
 };

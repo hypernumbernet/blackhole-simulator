@@ -16,6 +16,7 @@ SOURCES += \
     lineshaders.cpp \
     main.cpp \
     mainwidget.cpp \
+    monitoringdialog.cpp \
     particleshaders.cpp \
     threadadmin.cpp \
     threadcontroller.cpp
@@ -56,6 +57,7 @@ HEADERS += \
     initializerdialog.h \
     lineshaders.h \
     mainwidget.h \
+    monitoringdialog.h \
     particleshaders.h \
     threadadmin.h \
     threadcontroller.h \

@@ -6,137 +6,155 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-template <typename TYPE>
+template <typename T>
 class Vector3
 {
-    using T = TYPE;
-
 public:
-    union
-    {
-        struct
-        {
-            T x;
-            T y;
-            T z;
-        };
-        T array[3];
-    };
-
-    inline Vector3(){}
-
-    inline Vector3(T x_in, T y_in, T z_in)
-        : x(x_in), y(y_in), z(z_in){}
-
-    inline explicit Vector3(const T* const a)
-        : x(a[0]), y(a[1]), z(a[2]){}
+    constexpr Vector3() : m_x(0), m_y(0), m_z(0) {}
+    constexpr Vector3(const T ax, const T ay, const T az)
+        : m_x(ax), m_y(ay), m_z(az) {}
+    constexpr explicit Vector3(const T* const a)
+        : m_x(a[0]), m_y(a[1]), m_z(a[2]) {}
 
     template <class E>
-    inline Vector3(const T* const a, const E index)
-        : x(a[index]), y(a[index + 1]), z(a[index + 2]){}
+    constexpr Vector3(const T* const a, const E index)
+        : m_x(a[index]), m_y(a[index + 1]), m_z(a[index + 2]) {}
 
-    inline void set(T x_in, T y_in, T z_in)
+    constexpr T x() const { return m_x; }
+    constexpr T y() const { return m_y; }
+    constexpr T z() const { return m_z; }
+
+    void setX(T ax) { m_x = ax; }
+    void setY(T ay) { m_y = ay; }
+    void setZ(T az) { m_z = az; }
+
+    void set(T ax, T ay, T az)
     {
-        x = x_in;
-        y = y_in;
-        z = z_in;
+        m_x = ax;
+        m_y = ay;
+        m_z = az;
     }
 
-    inline Vector3 operator +(const Vector3& a) const
+    constexpr const Vector3 operator+(const Vector3& a) const
     {
-        return Vector3(x + a.x, y + a.y, z + a.z);
+        return Vector3(m_x + a.m_x, m_y + a.m_y, m_z + a.m_z);
     }
 
-    inline Vector3 operator -(const Vector3& a) const
+    constexpr const Vector3 operator-(const Vector3& a) const
     {
-        return Vector3(x - a.x, y - a.y, z - a.z);
+        return Vector3(m_x - a.m_x, m_y - a.m_y, m_z - a.m_z);
     }
 
-    inline Vector3 operator +() const{ return *this; }
-    inline Vector3 operator -() const{ return Vector3( - x, - y, - z); }
+    constexpr const Vector3 operator+() const { return *this; }
 
-    template <typename X>
-    inline Vector3 operator *(X a) const
-    {
-        return Vector3(x * a, y * a, z * a);
-    }
+    constexpr const Vector3 operator-() const { return Vector3( - m_x, - m_y, - m_z); }
 
-    template <typename X>
-    inline friend Vector3 operator *(X a, const Vector3& b)
+    constexpr Vector3& operator+=(const Vector3& a)
     {
-        return Vector3(a * b.x, a * b.y, a * b.z);
-    }
-
-    inline Vector3& operator +=(const Vector3& a)
-    {
-        x += a.x;
-        y += a.y;
-        z += a.z;
+        m_x += a.m_x;
+        m_y += a.m_y;
+        m_z += a.m_z;
         return *this;
     }
 
-    template <typename X>
-    inline Vector3& operator *=(X a)
+    constexpr Vector3& operator-=(const Vector3& a)
     {
-        x *= a;
-        y *= a;
-        z *= a;
+        m_x -= a.m_x;
+        m_y -= a.m_y;
+        m_z -= a.m_z;
         return *this;
     }
 
-    template <typename X>
-    inline Vector3& operator /=(X a)
+    template <typename E>
+    constexpr const Vector3 operator*(E a) const
     {
-        x /= a;
-        y /= a;
-        z /= a;
+        return Vector3(m_x * a, m_y * a, m_z * a);
+    }
+
+    template <typename E>
+    constexpr friend inline const Vector3 operator*(E a, const Vector3& b)
+    {
+        return Vector3(a * b.x(), a * b.y(), a * b.z());
+    }
+
+    template <typename E>
+    constexpr Vector3& operator*=(E a)
+    {
+        m_x *= a;
+        m_y *= a;
+        m_z *= a;
         return *this;
     }
 
-    inline bool operator ==(const Vector3& a) const
+    template <typename E>
+    constexpr Vector3& operator/=(E a)
     {
-        return ((x == a.x) && (y == a.y) && (z == a.z));
+        m_x /= a;
+        m_y /= a;
+        m_z /= a;
+        return *this;
     }
 
-    inline T Norm() const
+    constexpr bool operator==(const Vector3& a) const
     {
-        return x * x + y * y + z * z;
+        return m_x == a.m_x && m_y == a.m_y && m_z == a.m_z;
     }
 
-    inline T Abs() const
+    constexpr bool operator!=(const Vector3& a) const
     {
-        return sqrt(x * x + y * y + z * z);
+        return m_x != a.m_x || m_y != a.m_y || m_z != a.m_z;
     }
 
-    inline Vector3& Normalize()
+    constexpr T norm() const
     {
-        T r = sqrt(x * x + y * y + z * z);
+        return m_x * m_x + m_y * m_y + m_z * m_z;
+    }
+
+    constexpr T abs() const
+    {
+        return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+    }
+
+    Vector3& normalize()
+    {
+        T r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r != 0.0)
         {
-            x /= r;
-            y /= r;
-            z /= r;
+            m_x /= r;
+            m_y /= r;
+            m_z /= r;
         }
         return *this;
     }
 
-    inline T Dot(const Vector3& a) const
+    Vector3 normalized() const
     {
-        return x * a.x + y * a.y + z * a.z;
+        T r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+        if (r == 0.0)
+            return Vector3(m_x, m_y, m_z);
+        return Vector3(m_x / r, m_y / r, m_z / r);
     }
 
-    inline T Distance(const Vector3& a) const
+    constexpr T dot(const Vector3& a) const
     {
-        T d1 = x - a.x;
-        T d2 = y - a.y;
-        T d3 = z - a.z;
+        return m_x * a.m_x + m_y * a.m_y + m_z * a.m_z;
+    }
+
+    constexpr T distance(const Vector3& a) const
+    {
+        T d1 = m_x - a.m_x;
+        T d2 = m_y - a.m_y;
+        T d3 = m_z - a.m_z;
         return sqrt(d1 * d1 + d2 * d2 + d3 * d3);
     }
 
-    inline Vector3 Cross(const Vector3& v) const
+    constexpr Vector3 cross(const Vector3& a) const
     {
-        return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+        return Vector3(m_y * a.m_z - m_z * a.m_y, m_z * a.m_x - m_x * a.m_z, m_x * a.m_y - m_y * a.m_x);
     }
+
+private:
+    T m_x, m_y, m_z;
 };
 
 } // namespace

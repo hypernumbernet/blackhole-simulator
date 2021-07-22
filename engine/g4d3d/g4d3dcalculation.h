@@ -1,8 +1,8 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
-
 #include <QObject>
+
+#include "abstractnbodyengine.h"
 
 using namespace hnn;
 
@@ -101,9 +101,9 @@ public:
         {
             i3 = i * 3;
             auto speed = vels[i].LnV3();
-            velocities[i3    ] += speed.x;
-            velocities[i3 + 1] += speed.y;
-            velocities[i3 + 2] += speed.z;
+            velocities[i3    ] += speed.x();
+            velocities[i3 + 1] += speed.y();
+            velocities[i3 + 2] += speed.z();
         }
         bhs::interactionMutex.unlock();
 

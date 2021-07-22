@@ -248,7 +248,7 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
 template <typename T>
 void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const Vector3<T>& v) const
 {
-    LorentzTransformation(lt, v.x, v.y, v.z);
+    LorentzTransformation(lt, v.x(), v.y(), v.z());
 }
 
 template <typename T>

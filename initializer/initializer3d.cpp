@@ -88,11 +88,11 @@ void Initializer3D<T>::initRandamSphere(const double rate)
                 bhs::rand0center1max(),
                 bhs::rand0center1max());
         }
-        while (coord.Norm() > (T)1.0 || coord.Norm() < (T)rate);
+        while (coord.norm() > (T)1.0 || coord.norm() < (T)rate);
 
-        coordinates[i3    ] = coord.x;
-        coordinates[i3 + 1] = coord.y;
-        coordinates[i3 + 2] = coord.z;
+        coordinates[i3    ] = coord.x();
+        coordinates[i3 + 1] = coord.y();
+        coordinates[i3 + 2] = coord.z();
     }
 
     for (quint64 i = 0; i < num * 3; ++i)

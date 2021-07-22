@@ -1,9 +1,9 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
-
 #include <QObject>
 #include <QDebug>
+
+#include "abstractnbodyengine.h"
 
 using namespace hnn;
 
@@ -35,9 +35,9 @@ public:
             auto to_add = vv3 * timePerFrame;
 
             quint64 j = i * 3;
-            coordinates[j] += to_add.x; ++j;
-            coordinates[j] += to_add.y; ++j;
-            coordinates[j] += to_add.z;
+            coordinates[j] += to_add.x(); ++j;
+            coordinates[j] += to_add.y(); ++j;
+            coordinates[j] += to_add.z();
         }
     }
 

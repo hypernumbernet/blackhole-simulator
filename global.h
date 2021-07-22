@@ -93,9 +93,9 @@ inline void embedQuaternionToArray(const Quaternion<T>& q, T* const a, const qui
 template <typename T>
 inline void embedVector3ToArray(const Vector3<T>& v, T* const a, const quint64 index)
 {
-    a[index    ] = v.x;
-    a[index + 1] = v.y;
-    a[index + 2] = v.z;
+    a[index    ] = v.x();
+    a[index + 1] = v.y();
+    a[index + 2] = v.z();
 }
 
 template <typename T>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
-
 #include <QObject>
+
+#include "abstractnbodyengine.h"
 
 template <typename T>
 class G3DCalculation
@@ -41,7 +41,7 @@ public:
         const T timePerFrame = m_engine->timePerFrame();
         const T gravitationalConstant = m_engine->gravitationalConstant();
         const T timeG = timePerFrame * gravitationalConstant;
-        quint64 numberOfParticles = m_engine->numberOfParticle();
+        const quint64 numberOfParticles = m_engine->numberOfParticle();
         const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         T d1, d2, d3, r, inv, theta;

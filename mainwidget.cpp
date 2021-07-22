@@ -30,7 +30,7 @@ void MainWidget::initUi()
     auto fpsLayout = new QHBoxLayout;
     auto fpsLabel = new QLabel(tr("FPS"));
     fpsLayout->addWidget(fpsLabel);
-    displayStyle(m_fpsLCD);
+    UpdateUi::style(m_fpsLCD);
     fpsLayout->addWidget(&m_fpsLCD);
     m_vLayout.addLayout(fpsLayout);
     connect(&UpdateUi::it(), &UpdateUi::displayFps, this, &MainWidget::displayFPS);
@@ -39,7 +39,7 @@ void MainWidget::initUi()
     auto frameNumberLayout = new QHBoxLayout;
     auto frameNumberLabel = new QLabel(tr("Frames"));
     frameNumberLayout->addWidget(frameNumberLabel);
-    displayStyle(m_frameNumberLCD);
+    UpdateUi::style(m_frameNumberLCD);
     frameNumberLayout->addWidget(&m_frameNumberLCD);
     m_vLayout.addLayout(frameNumberLayout);
     connect(&UpdateUi::it(), &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
@@ -48,7 +48,7 @@ void MainWidget::initUi()
     auto timePerFrameLayout = new QHBoxLayout;
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
     timePerFrameLayout->addWidget(timePerFrameLabel);
-    displayStyle(m_timePerFrameValue);
+    UpdateUi::style(m_timePerFrameValue);
     timePerFrameLayout->addWidget(&m_timePerFrameValue);
     m_vLayout.addLayout(timePerFrameLayout);
     connect(&UpdateUi::it(), &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
@@ -57,7 +57,7 @@ void MainWidget::initUi()
     auto simTimeLayout = new QHBoxLayout;
     auto simTimeLabel = new QLabel(tr("Time"));
     simTimeLayout->addWidget(simTimeLabel);
-    displayStyle(m_simTimeValue);
+    UpdateUi::style(m_simTimeValue);
     simTimeLayout->addWidget(&m_simTimeValue);
     m_vLayout.addLayout(simTimeLayout);
 
@@ -142,37 +142,36 @@ void MainWidget::initUi()
     // Number of particles
     auto particleNumLabel = new QLabel(tr("Number of particles"));
     m_vLayout.addWidget(particleNumLabel);
-    displayStyle(m_particleNumValue);
+    UpdateUi::style(m_particleNumValue);
     m_vLayout.addWidget(&m_particleNumValue);
     connect(&UpdateUi::it(), &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
 
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     m_vLayout.addWidget(engineLabel);
-    displayStyle(m_engineValue);
+    UpdateUi::style(m_engineValue);
     m_vLayout.addWidget(&m_engineValue);
     connect(&UpdateUi::it(), &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
     // Precision
     auto precisionLabel = new QLabel(tr("Precision"));
     m_vLayout.addWidget(precisionLabel);
-    displayStyle(m_precisionValue);
+    UpdateUi::style(m_precisionValue);
     m_vLayout.addWidget(&m_precisionValue);
     connect(&UpdateUi::it(), &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
 
     // Initial Condition Preset
     auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
     m_vLayout.addWidget(presetLabel);
-    displayStyle(m_presetValue);
+    UpdateUi::style(m_presetValue);
     m_vLayout.addWidget(&m_presetValue);
     connect(&UpdateUi::it(), &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
 
-    // Graph
-    auto graphButton = new QPushButton(tr("Graph..."));
-    graphButton->setEnabled(false);
+    // Monitoring
+    auto graphButton = new QPushButton(tr("Monitoring..."));
     graphButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(graphButton);
-    //connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
+    connect(graphButton, &QPushButton::clicked, this, &MainWidget::showMonitoringDialog);
 
     updateStartButtonText(false);
 }
@@ -210,18 +209,6 @@ void MainWidget::updateStartButtonText(const bool setStop)
     m_frameAdvance1.setDisabled(setStop);
     m_frameAdvance10.setDisabled(setStop);
     m_frameAdvance100.setDisabled(setStop);
-}
-
-void MainWidget::displayStyle(QLCDNumber& lcd)
-{
-    lcd.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    lcd.setSegmentStyle(QLCDNumber::Flat);
-}
-
-void MainWidget::displayStyle(QLabel& lbl)
-{
-    lbl.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
-    lbl.setAlignment(Qt::AlignRight);
 }
 
 void MainWidget::displayModelScale(const double val)
@@ -299,4 +286,15 @@ void MainWidget::displayPrecision(bhs::Precision precision)
 {
     QString s = UpdateUi::precision().value(precision);
     m_precisionValue.setText(s);
+}
+
+void MainWidget::showMonitoringDialog()
+{
+    if (!m_monitoringDialog)
+    {
+        m_monitoringDialog = new MonitoringDialog(this);
+    }
+    m_monitoringDialog->show();
+    m_monitoringDialog->raise();
+    m_monitoringDialog->activateWindow();
 }

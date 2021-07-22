@@ -1,12 +1,14 @@
 #pragma once
 
-#include "global.h"
-
 #include <QMap>
 #include <QListWidget>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QRadioButton>
+#include <QLCDNumber>
+#include <QLabel>
+
+#include "global.h"
 
 class UpdateUi : public QObject
 {
@@ -64,6 +66,19 @@ public:
             {bhs::Preset::TestSamePosition, tr("Test Same Position")},
         };
         return map;
+    }
+
+    static void style(QLCDNumber& lcd)
+    {
+        lcd.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        lcd.setSegmentStyle(QLCDNumber::Flat);
+    }
+
+    static void style(QLabel& lbl)
+    {
+        lbl.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+        lbl.setAlignment(Qt::AlignRight);
+        lbl.setMargin(2);
     }
 
 private:

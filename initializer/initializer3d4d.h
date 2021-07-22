@@ -32,15 +32,15 @@ private:
             ) const
     {
         Vector3<T> dr(x, y, z);
-        dr.Normalize();
+        dr.normalize();
         const auto angle = m_engine->velocityToAngle(speed);
         return Quaternion<T>::Exp(dr * angle);
     }
 
     inline Quaternion<T> fromVector3(Vector3<T> v3) const
     {
-        const auto speed = v3.Abs();
-        return fromDirectionAndSpeed(v3.x, v3.y, v3.z, speed);
+        const auto speed = v3.abs();
+        return fromDirectionAndSpeed(v3.x(), v3.y(), v3.z(), speed);
     }
 
     inline void fromInitializer3D()

@@ -10,8 +10,6 @@ class Quaternion
 {
     using T = TYPE;
 
-    static constexpr T PI = T(3.141592653589793);
-
 public:
     union
     {
@@ -25,7 +23,7 @@ public:
         T array[4];
     };
 
-    inline Quaternion(){}
+    constexpr Quaternion(){}
 
     //inline Quaternion(T real)
     //    : i0(real){}
@@ -258,7 +256,7 @@ public:
     // Exponential - only imaginary part
     inline static Quaternion Exp(const Vector3<T>& v)
     {
-        T n = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        T n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         T a;
 
         if (n == 0)
@@ -266,7 +264,7 @@ public:
         else
             a = sin(n) / n;
 
-        return Quaternion(cos(n), v.x * a, v.y * a, v.z * a);
+        return Quaternion(cos(n), v.x() * a, v.y() * a, v.z() * a);
     }
 
     // Exponential - Hyperbolic
@@ -486,7 +484,7 @@ public:
     {
         T c = cos(theta);
         T s = sin(theta);
-        return Quaternion(c, v.x * s, v.y * s, v.z * s);
+        return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
     inline static Quaternion MakeRotation(T x, T y, T z, T theta)
@@ -503,10 +501,10 @@ public:
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(
-            i0 * c - (v.x * i1 + v.y * i2 + v.z * i3) * s,
-            i1 * c + (v.x * i0 + v.y * i3 - v.z * i2) * s,
-            i2 * c + (v.y * i0 + v.z * i1 - v.x * i3) * s,
-            i3 * c + (v.z * i0 - v.y * i1 + v.x * i2) * s
+            i0 * c - (v.x() * i1 + v.y() * i2 + v.z() * i3) * s,
+            i1 * c + (v.x() * i0 + v.y() * i3 - v.z() * i2) * s,
+            i2 * c + (v.y() * i0 + v.z() * i1 - v.x() * i3) * s,
+            i3 * c + (v.z() * i0 - v.y() * i1 + v.x() * i2) * s
         );
     }
 };
