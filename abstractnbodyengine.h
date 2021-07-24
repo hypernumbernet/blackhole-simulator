@@ -1,14 +1,14 @@
 #pragma once
 
-#include "updateui.h"
-#include "hnn/quaternion.h"
-
 #include <QtGlobal>
 #include <QDebug>
 #include <QMutex>
 #include <QThread>
 #include <QVector4D>
 #include <QGenericMatrix>
+
+#include "hnn/quaternion.h"
+#include "updateui.h"
 
 using namespace hnn;
 

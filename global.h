@@ -1,10 +1,10 @@
 #pragma once
 
-#include "hnn/quaternion.h"
-
 #include <QObject>
 #include <QMutex>
 #include <QGenericMatrix>
+
+#include "hnn/quaternion.h"
 
 using namespace hnn;
 

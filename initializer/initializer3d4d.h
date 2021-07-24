@@ -1,7 +1,7 @@
 #pragma once
 
-#include "initializer3d.h"
 #include "hnn/quaternion.h"
+#include "initializer3d.h"
 
 using namespace hnn;
 

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
-
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
+
+#include "abstractnbodyengine.h"
 
 class ComputeShaders : private QOpenGLFunctions_4_5_Core
 {

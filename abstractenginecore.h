@@ -1,8 +1,8 @@
 #pragma once
 
-#include "updateui.h"
-
 #include <QObject>
+
+#include "updateui.h"
 
 class AbstractEngineCore : public QObject
 {

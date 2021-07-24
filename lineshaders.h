@@ -1,14 +1,12 @@
 #pragma once
 
-#include "camera.h"
-
-#include <math.h>
-
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QVector>
+
+#include "camera.h"
 
 class LineShaders : private QOpenGLFunctions_4_5_Core
 {

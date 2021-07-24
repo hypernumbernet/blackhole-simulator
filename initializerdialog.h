@@ -1,7 +1,5 @@
 #pragma once
 
-#include "updateui.h"
-
 #include <QDialog>
 #include <QLabel>
 #include <QComboBox>
@@ -12,6 +10,8 @@
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QMessageBox>
+
+#include "updateui.h"
 
 class InitializerDialog : public QDialog
 {

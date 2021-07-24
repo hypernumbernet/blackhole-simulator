@@ -1,9 +1,9 @@
 #pragma once
 
+#include <QObject>
+
 #include "abstractenginecore.h"
 #include "abstractnbodyengine.h"
-
-#include <QObject>
 
 class AbstractEngineCoreFloat : public AbstractEngineCore
 {

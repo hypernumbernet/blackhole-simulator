@@ -1,10 +1,5 @@
 #pragma once
 
-#include "graphicwindow.h"
-#include "updateui.h"
-#include "initializerdialog.h"
-#include "monitoringdialog.h"
-
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QCheckBox>
@@ -14,6 +9,11 @@
 #include <QLCDNumber>
 #include <QComboBox>
 #include <QLineEdit>
+
+#include "graphicwindow.h"
+#include "updateui.h"
+#include "initializerdialog.h"
+#include "monitoringdialog.h"
 
 class MainWidget : public QWidget
 {

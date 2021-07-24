@@ -1,11 +1,5 @@
 #pragma once
 
-#include "camera.h"
-#include "lineshaders.h"
-#include "particleshaders.h"
-#include "updateui.h"
-#include "threadadmin.h"
-
 #include <QOpenGLWindow>
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
@@ -15,6 +9,12 @@
 #include <QVector>
 #include <QBasicTimer>
 #include <QCursor>
+
+#include "camera.h"
+#include "lineshaders.h"
+#include "particleshaders.h"
+#include "updateui.h"
+#include "threadadmin.h"
 
 class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {
