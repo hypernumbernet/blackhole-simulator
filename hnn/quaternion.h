@@ -5,216 +5,233 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-template <typename TYPE>
+template <typename T>
 class Quaternion
 {
-    using T = TYPE;
-
 public:
-    union
+    Quaternion() {}
+
+    constexpr Quaternion(const T real, const T imaginary1, const T imaginary2, const T imaginary3)
+        : m_re(real), m_i1(imaginary1), m_i2(imaginary2), m_i3(imaginary3) {}
+
+    constexpr explicit Quaternion(const T a)
+        : m_re(T(a)), m_i1(T(0)), m_i2(T(0)), m_i3(T(0)) {}
+
+    constexpr explicit Quaternion(Vector3<T> v)
+        : m_re(T(0)), m_i1(v.x()), m_i2(v.y()), m_i3(v.z()) {}
+
+    template <typename E>
+    constexpr Quaternion(const T* const a, const E index)
+        : m_re(a[index]), m_i1(a[index + 1]), m_i2(a[index + 2]), m_i3(a[index + 3]) {}
+
+    constexpr T re() const { return m_re; }
+    constexpr T i1() const { return m_i1; }
+    constexpr T i2() const { return m_i2; }
+    constexpr T i3() const { return m_i3; }
+
+    void setRe(T re) { m_re = re; }
+    void setI1(T i1) { m_i1 = i1; }
+    void setI2(T i2) { m_i2 = i2; }
+    void setI3(T i3) { m_i3 = i3; }
+
+    void set(T real, T imaginary1, T imaginary2, T imaginary3)
     {
-        struct
-        {
-            T i0;
-            T i1;
-            T i2;
-            T i3;
-        };
-        T array[4];
-    };
-
-    constexpr Quaternion(){}
-
-    //inline Quaternion(T real)
-    //    : i0(real){}
-
-    inline Quaternion(T real, T imaginary1, T imaginary2, T imaginary3)
-        : i0(real), i1(imaginary1), i2(imaginary2), i3(imaginary3){}
-
-    inline explicit Quaternion(const T* const a)
-        : i0(a[0]), i1(a[1]), i2(a[2]), i3(a[3]){}
-
-    inline explicit Quaternion(Vector3<T> v)
-        : i0(0), i1(v.x), i2(v.y), i3(v.z){}
-
-    template <class E>
-    inline Quaternion(const T* const a, const E index)
-        : i0(a[index]), i1(a[index + 1]), i2(a[index + 2]), i3(a[index + 3]){}
-
-    static const Quaternion<T> Zero;
-    static const Quaternion<T> Identity;
-
-    inline void set(T real, T imaginary1, T imaginary2, T imaginary3)
-    {
-        i0 = real;
-        i1 = imaginary1;
-        i2 = imaginary2;
-        i3 = imaginary3;
+        m_re = real;
+        m_i1 = imaginary1;
+        m_i2 = imaginary2;
+        m_i3 = imaginary3;
     }
 
-    inline void set(const T* const a)
+    void set(const T* const a)
     {
-        i0 = a[0];
-        i1 = a[1];
-        i2 = a[2];
-        i3 = a[3];
+        m_re = a[0];
+        m_i1 = a[1];
+        m_i2 = a[2];
+        m_i3 = a[3];
     }
 
-    inline Quaternion operator +(const Quaternion& a) const
+    template <typename E>
+    void set(const T* const a, const E index)
     {
-        return Quaternion(i0 + a.i0, i1 + a.i1, i2 + a.i2, i3 + a.i3);
+        m_re = a[index];
+        m_i1 = a[index + 1];
+        m_i2 = a[index + 2];
+        m_i3 = a[index + 3];
     }
 
-    inline Quaternion operator -(const Quaternion& a) const
+    static constexpr Quaternion<T> zero()
     {
-        return Quaternion(i0 - a.i0, i1 - a.i1, i2 - a.i2, i3 - a.i3);
+        return Quaternion<T>(T(0), T(0), T(0), T(0));
+    }
+    static constexpr Quaternion<T> identity()
+    {
+        return Quaternion<T>(T(1), T(0), T(0), T(0));
     }
 
-    inline Quaternion operator *(const Quaternion& a) const
+    constexpr const Quaternion operator+(const Quaternion& a) const
+    {
+        return Quaternion(m_re + a.m_re, m_i1 + a.m_i1, m_i2 + a.m_i2, m_i3 + a.m_i3);
+    }
+
+    constexpr const Quaternion operator-(const Quaternion& a) const
+    {
+        return Quaternion(m_re - a.m_re, m_i1 - a.m_i1, m_i2 - a.m_i2, m_i3 - a.m_i3);
+    }
+
+    constexpr const Quaternion operator+() const { return *this; }
+
+    constexpr const Quaternion operator-() const { return Quaternion(-m_re, -m_i1, -m_i2, -m_i3); }
+
+    Quaternion& operator+=(const Quaternion& a)
+    {
+        m_re += a.m_re;
+        m_i1 += a.m_i1;
+        m_i2 += a.m_i2;
+        m_i3 += a.m_i3;
+        return *this;
+    }
+
+    Quaternion& operator-=(const Quaternion& a)
+    {
+        m_re -= a.m_re;
+        m_i1 -= a.m_i1;
+        m_i2 -= a.m_i2;
+        m_i3 -= a.m_i3;
+        return *this;
+    }
+
+    constexpr const Quaternion operator*(const Quaternion& a) const
     {
         return Quaternion(
-            i0 * a.i0 - i1 * a.i1 - i2 * a.i2 - i3 * a.i3,
-            i0 * a.i1 + i1 * a.i0 + i2 * a.i3 - i3 * a.i2,
-            i0 * a.i2 - i1 * a.i3 + i2 * a.i0 + i3 * a.i1,
-            i0 * a.i3 + i1 * a.i2 - i2 * a.i1 + i3 * a.i0
+            m_re * a.m_re - m_i1 * a.m_i1 - m_i2 * a.m_i2 - m_i3 * a.m_i3,
+            m_re * a.m_i1 + m_i1 * a.m_re + m_i2 * a.m_i3 - m_i3 * a.m_i2,
+            m_re * a.m_i2 - m_i1 * a.m_i3 + m_i2 * a.m_re + m_i3 * a.m_i1,
+            m_re * a.m_i3 + m_i1 * a.m_i2 - m_i2 * a.m_i1 + m_i3 * a.m_re
         );
     }
 
-    template <typename X>
-    inline Quaternion operator *(X a) const
+    template <typename E>
+    constexpr const Quaternion operator*(E a) const
     {
-        return Quaternion(i0 * a, i1 * a, i2 * a, i3 * a);
+        return Quaternion(m_re * a, m_i1 * a, m_i2 * a, m_i3 * a);
+    }
+
+    template <typename E>
+    constexpr friend inline const Quaternion operator*(E a, const Quaternion& b)
+    {
+        return Quaternion(a * b.m_re, a * b.m_i1, a * b.m_i2, a * b.m_i3);
+    }
+
+    constexpr const Quaternion operator/(const Quaternion& a) const
+    {
+        return (*this) * a.inverse();
+    }
+
+    template <typename E>
+    constexpr friend inline const Quaternion operator/(E a, const Quaternion& b)
+    {
+        return a * b.inverse();
     }
 
     template <typename X>
-    inline friend Quaternion operator *(X a, const Quaternion& b)
+    constexpr const Quaternion operator/(X a) const
     {
-        return Quaternion(a * b.i0, a * b.i1, a * b.i2, a * b.i3);
+        return Quaternion(m_re / a, m_i1 / a, m_i2 / a, m_i3 / a);
     }
 
-    inline Quaternion operator /(const Quaternion& a) const
-    {
-        return (*this) * a.Inverse();
-    }
-
-    template <typename X>
-    inline Quaternion operator /(X a) const
-    {
-        return Quaternion(i0 / a, i1 / a, i2 / a, i3 / a);
-    }
-
-    template <typename X>
-    inline friend Quaternion operator /(X a, const Quaternion& b)
-    {
-        return a * b.Inverse();
-    }
-
-    inline Quaternion operator +() const{ return *this; }
-    inline Quaternion operator -() const{ return Quaternion(-i0, -i1, -i2, -i3); }
-
-    inline Quaternion& operator +=(const Quaternion& a)
-    {
-        i0 += a.i0;
-        i1 += a.i1;
-        i2 += a.i2;
-        i3 += a.i3;
-        return *this;
-    }
-
-    inline Quaternion& operator -=(const Quaternion& a)
-    {
-        i0 -= a.i0;
-        i1 -= a.i1;
-        i2 -= a.i2;
-        i3 -= a.i3;
-        return *this;
-    }
-
-    inline Quaternion& operator *=(const Quaternion& a)
+    Quaternion& operator*=(const Quaternion& a)
     {
         set(
-            i0 * a.i0 - i1 * a.i1 - i2 * a.i2 - i3 * a.i3,
-            i0 * a.i1 + i1 * a.i0 + i2 * a.i3 - i3 * a.i2,
-            i0 * a.i2 - i1 * a.i3 + i2 * a.i0 + i3 * a.i1,
-            i0 * a.i3 + i1 * a.i2 - i2 * a.i1 + i3 * a.i0
+            m_re * a.m_re - m_i1 * a.m_i1 - m_i2 * a.m_i2 - m_i3 * a.m_i3,
+            m_re * a.m_i1 + m_i1 * a.m_re + m_i2 * a.m_i3 - m_i3 * a.m_i2,
+            m_re * a.m_i2 - m_i1 * a.m_i3 + m_i2 * a.m_re + m_i3 * a.m_i1,
+            m_re * a.m_i3 + m_i1 * a.m_i2 - m_i2 * a.m_i1 + m_i3 * a.m_re
         );
         return *this;
     }
 
-    template <typename X>
-    inline Quaternion& operator *=(X a)
+    template <typename E>
+    Quaternion& operator*=(E a)
     {
-        i0 *= a;
-        i1 *= a;
-        i2 *= a;
-        i3 *= a;
+        m_re *= a;
+        m_i1 *= a;
+        m_i2 *= a;
+        m_i3 *= a;
         return *this;
     }
 
-    inline Quaternion& operator /=(const Quaternion& a)
+    Quaternion& operator/=(const Quaternion& a)
     {
-        Quaternion ans = (*this) * a.Inverse();
-        set(ans.i0, ans.i1, ans.i2, ans.i3);
+        Quaternion ans = (*this) * a.inverse();
+        set(ans.m_re, ans.m_i1, ans.m_i2, ans.m_i3);
         return *this;
     }
 
-    template <typename X>
-    inline Quaternion& operator /=(X a)
+    template <typename E>
+    Quaternion& operator/=(E a)
     {
-        i0 /= a;
-        i1 /= a;
-        i2 /= a;
-        i3 /= a;
+        m_re /= a;
+        m_i1 /= a;
+        m_i2 /= a;
+        m_i3 /= a;
         return *this;
     }
 
-    inline bool operator ==(const Quaternion& a) const
+    constexpr bool operator==(const Quaternion& a) const
     {
-        return ((i0 == a.i0) && (i1 == a.i1) && (i2 == a.i2) && (i3 == a.i3));
+        return m_re == a.m_re && m_i1 == a.m_i1 && m_i2 == a.m_i2 && m_i3 == a.m_i3;
     }
 
-    inline bool operator !=(const Quaternion& a) const
+    constexpr bool operator!=(const Quaternion& a) const
     {
-        return ((i0 != a.i1) || (i1 != a.i1) || (i2 != a.i2) || (i3 != a.i3));
+        return m_re != a.m_i1 || m_i1 != a.m_i1 || m_i2 != a.m_i2 || m_i3 != a.m_i3;
     }
 
-    inline T Norm() const
+    constexpr bool fuzzyCompare(const Quaternion& a) const
     {
-        return i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3;
+        return hnn::fuzzyCompare(m_re, a.m_re) &&
+               hnn::fuzzyCompare(m_i1, a.m_i1) &&
+               hnn::fuzzyCompare(m_i2, a.m_i2) &&
+               hnn::fuzzyCompare(m_i3, a.m_i3);
     }
 
-    inline T Abs() const
+    constexpr T norm() const
     {
-        return sqrt(i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3);
+        return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
     }
 
-    inline Quaternion& Normalize()
+    T abs() const
     {
-        return (*this) /= sqrt(i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3);
+        return sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
     }
 
-    inline Quaternion Conjugated() const
+    Quaternion& normalize()
     {
-        return Quaternion(i0, -i1, -i2, -i3);
+        return (*this) /= sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
     }
 
-    inline Quaternion& Inverse() const
+    constexpr Quaternion conjugated() const
     {
-        T norm = i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3;
-        return Quaternion(i0 / norm, -i1 / norm, -i2 / norm, -i3 / norm);
+        return Quaternion(m_re, -m_i1, -m_i2, -m_i3);
+    }
+
+    constexpr Quaternion inverse() const
+    {
+        T norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
+        return Quaternion(m_re / norm, -m_i1 / norm, -m_i2 / norm, -m_i3 / norm);
     }
 
     // Argument of complex
-    inline T Arg() const
+    constexpr T arg() const
     {
-        return acos(i0 / sqrt(i0 * i0 + i1 * i1 + i2 * i2 + i3 * i3));
+        return acos(m_re / sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3));
     }
 
     // Exponential
-    inline Quaternion Exp() const
+    Quaternion exp() const
     {
-        T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
-        T e = exp(i0);
+        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        T e = exp(m_re);
         T a;
 
         if (n == 0)
@@ -222,13 +239,13 @@ public:
         else
             a = e * sin(n) / n;
 
-        return Quaternion(e * cos(n), i1 * a, i2 * a, i3 * a);
+        return Quaternion(e * cos(n), m_i1 * a, m_i2 * a, m_i3 * a);
     }
 
     // Exponential - only imaginary part
-    inline Quaternion ExpIm() const
+    Quaternion expIm() const
     {
-        T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         T a;
 
         if (n == 0)
@@ -236,11 +253,11 @@ public:
         else
             a = sin(n) / n;
 
-        return Quaternion(cos(n), i1 * a, i2 * a, i3 * a);
+        return Quaternion(cos(n), m_i1 * a, m_i2 * a, m_i3 * a);
     }
 
     // Exponential - only imaginary part
-    inline static Quaternion Exp(T x, T y, T z)
+    static inline Quaternion exp(T x, T y, T z)
     {
         T n = sqrt(x * x + y * y + z * z);
         T a;
@@ -254,7 +271,7 @@ public:
     }
 
     // Exponential - only imaginary part
-    inline static Quaternion Exp(const Vector3<T>& v)
+    static inline Quaternion exp(const Vector3<T>& v)
     {
         T n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         T a;
@@ -268,7 +285,7 @@ public:
     }
 
     // Exponential - Hyperbolic
-    inline static Quaternion Exph(T x, T y, T z)
+    static inline Quaternion exph(T x, T y, T z)
     {
         T n = sqrt(x * x + y * y + z * z);
         T a;
@@ -283,61 +300,61 @@ public:
 
     // Logarithm
     // Use after normalizing.
-    inline Quaternion Ln() const
+    Quaternion ln() const
     {
-        T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (n == 0)
-            return Quaternion::Zero;
+            return Quaternion::zero;
 
-        n = atan2(n, i0) / n;
+        n = atan2(n, m_re) / n;
         //scalar part
-        //0.5 * log(a.i0 * a.i0 + a.i1 * a.i1 + a.i2 * a.i2 + a.i3 * a.i3)
-        return Quaternion(0, i1 * n, i2 * n, i3 * n);
+        //0.5 * log(a.m_re * a.m_re + a.i1 * a.i1 + a.i2 * a.i2 + a.i3 * a.i3)
+        return Quaternion(0, m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
     // Logarithm - Vector3
-    inline Vector3<T> LnV3() const
+    Vector3<T> lnV3() const
     {
-        T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (n == 0)
             return Vector3<T>(0, 0, 0);
 
-        n = atan2(n, i0) / n;
-        return Vector3<T>(i1 * n, i2 * n, i3 * n);
+        n = atan2(n, m_re) / n;
+        return Vector3<T>(m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
-    inline Vector3<T> LnhV3() const
+    Vector3<T> lnhV3() const
     {
-        T n = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (n == 0)
             return Vector3<T>(0, 0, 0);
 
         n = atanh(n) / n;
-        return Vector3<T>(i1 * n, i2 * n, i3 * n);
+        return Vector3<T>(m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
-    inline Vector3<T> LnV3Half() const
+    Vector3<T> lnV3Half() const
     {
-        T v = sqrt(i1 * i1 + i2 * i2 + i3 * i3);
+        T v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (v == 0)
             return Vector3<T>(0, 0, 0);
 
         T a;
-        if (i0 == 0) // v == 1
+        if (m_re == 0) // v == 1
             a = PI / (T)2;
         else
-            a = atan(v / i0) / v;
-        return Vector3<T>(i1 * a, i2 * a, i3 * a);
+            a = atan(v / m_re) / v;
+        return Vector3<T>(m_i1 * a, m_i2 * a, m_i3 * a);
     }
 
-    inline Quaternion Rot() const
+    Quaternion rot() const
     {
-        T c1 = cos(i1);
-        T c2 = cos(i2);
-        T c3 = cos(i3);
-        T s1 = sin(i1);
-        T s2 = sin(i2);
-        T s3 = sin(i3);
+        T c1 = cos(m_i1);
+        T c2 = cos(m_i2);
+        T c3 = cos(m_i3);
+        T s1 = sin(m_i1);
+        T s2 = sin(m_i2);
+        T s3 = sin(m_i3);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -346,7 +363,7 @@ public:
         );
     }
 
-    inline static Quaternion Rot(T x, T y, T z)
+    static inline Quaternion rot(T x, T y, T z)
     {
         T c1 = cos(x);
         T c2 = cos(y);
@@ -362,7 +379,7 @@ public:
         );
     }
 
-    inline static Quaternion Roth(T x, T y, T z)
+    static inline Quaternion roth(T x, T y, T z)
     {
         T c1 = cosh(x);
         T c2 = cosh(y);
@@ -379,28 +396,28 @@ public:
     }
 
     // Dot product
-    inline T Dot(const Quaternion& a) const
+    constexpr T dot(const Quaternion& a) const
     {
-        return i0 * a.i0 + i1 * a.i1 + i2 * a.i2 + i3 * a.i3;
+        return m_re * a.m_re + m_i1 * a.m_i1 + m_i2 * a.m_i2 + m_i3 * a.m_i3;
     }
 
     // Three left calculated from four right of the seven-dimensional cross product
-    inline Quaternion Cross7(const Quaternion& a) const
+    constexpr Quaternion cross7(const Quaternion& a) const
     {
         return Quaternion(
             0,
-            -i0 * a.i1 + i1 * a.i0 - i2 * a.i3 + i3 * a.i2,
-            -i0 * a.i2 + i1 * a.i3 + i2 * a.i0 - i3 * a.i1,
-            -i0 * a.i3 - i1 * a.i2 + i2 * a.i1 + i3 * a.i0
+            -m_re * a.m_i1 + m_i1 * a.m_re - m_i2 * a.m_i3 + m_i3 * a.m_i2,
+            -m_re * a.m_i2 + m_i1 * a.m_i3 + m_i2 * a.m_re - m_i3 * a.m_i1,
+            -m_re * a.m_i3 - m_i1 * a.m_i2 + m_i2 * a.m_i1 + m_i3 * a.m_re
         );
     }
 
-    inline Vector3<T> Cross7V3(const Quaternion& a) const
+    constexpr Vector3<T> cross7V3(const Quaternion& a) const
     {
         return Vector3<T>(
-            -i0 * a.i1 + i1 * a.i0 - i2 * a.i3 + i3 * a.i2,
-            -i0 * a.i2 + i1 * a.i3 + i2 * a.i0 - i3 * a.i1,
-            -i0 * a.i3 - i1 * a.i2 + i2 * a.i1 + i3 * a.i0
+            -m_re * a.m_i1 + m_i1 * a.m_re - m_i2 * a.m_i3 + m_i3 * a.m_i2,
+            -m_re * a.m_i2 + m_i1 * a.m_i3 + m_i2 * a.m_re - m_i3 * a.m_i1,
+            -m_re * a.m_i3 - m_i1 * a.m_i2 + m_i2 * a.m_i1 + m_i3 * a.m_re
         );
     }
 
@@ -408,111 +425,108 @@ public:
     // The right four of the result of conjugate producting
     // the right four of the octonion with the left four of the octonion.
     // It has been omitted a lot from the octonion's 8 * 8 * 8 products.
-    inline Quaternion Rotated8(const Quaternion& rot) const
+    constexpr Quaternion rotated8(const Quaternion& rot) const
     {
         return Quaternion(
-              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i0
-            - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i1
-            - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i2
-            - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i3
+              (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_re
+            - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i1
+            - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i2
+            - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i3
             ,
-              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i1
-            + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i0
-            - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i3
-            + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i2
+              (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i1
+            + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_re
+            - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i3
+            + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i2
             ,
-              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i2
-            + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i3
-            + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i0
-            - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i1
+              (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i2
+            + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i3
+            + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_re
+            - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i1
             ,
-              (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i3
-            - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i2
-            + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i1
-            + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i0
+              (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i3
+            - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i2
+            + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i1
+            + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_re
         );
     }
 
-    inline void Rotate8(const Quaternion& rot)
+    void rotate8(const Quaternion& rot)
     {
-        T q0 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i0
-             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i1
-             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i2
-             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i3;
-        T q1 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i1
-             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i0
-             - (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i3
-             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i2;
-        T q2 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i2
-             + (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i3
-             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i0
-             - (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i1;
-        T q3 = (rot.i0 * i0 - rot.i1 * i1 - rot.i2 * i2 - rot.i3 * i3) * rot.i3
-             - (rot.i0 * i1 + rot.i1 * i0 + rot.i2 * i3 - rot.i3 * i2) * rot.i2
-             + (rot.i0 * i2 - rot.i1 * i3 + rot.i2 * i0 + rot.i3 * i1) * rot.i1
-             + (rot.i0 * i3 + rot.i1 * i2 - rot.i2 * i1 + rot.i3 * i0) * rot.i0;
-        i0 = q0;
-        i1 = q1;
-        i2 = q2;
-        i3 = q3;
+        T q0 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_re
+             - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i1
+             - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i2
+             - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i3;
+        T q1 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i1
+             + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_re
+             - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i3
+             + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i2;
+        T q2 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i2
+             + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i3
+             + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_re
+             - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i1;
+        T q3 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i3
+             - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i2
+             + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i1
+             + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_re;
+        m_re = q0;
+        m_i1 = q1;
+        m_i2 = q2;
+        m_i3 = q3;
     }
 
     // Slerp on 3-sphere from identity
-    inline Quaternion Rot8Identity() const
+    constexpr Quaternion rot8Identity() const
     {
         return Quaternion(
-            i0 * i0 - i1 * i1 - i2 * i2 - i3 * i3,
-            i0 * i1 + i1 * i0 - i2 * i3 + i3 * i2,
-            i0 * i2 + i1 * i3 + i2 * i0 - i3 * i1,
-            i0 * i3 - i1 * i2 + i2 * i1 + i3 * i0
+            m_re * m_re - m_i1 * m_i1 - m_i2 * m_i2 - m_i3 * m_i3,
+            m_re * m_i1 + m_i1 * m_re - m_i2 * m_i3 + m_i3 * m_i2,
+            m_re * m_i2 + m_i1 * m_i3 + m_i2 * m_re - m_i3 * m_i1,
+            m_re * m_i3 - m_i1 * m_i2 + m_i2 * m_i1 + m_i3 * m_re
         );
     }
 
-    // Calculate a rotating quaternion from a normalized quaternion of Cross7
-    template <typename X>
-    inline Quaternion& MakeRotation(X theta)
+    // Calculate a rotating quaternion from a normalized quaternion of cross7()
+    template <typename E>
+    Quaternion& makeRotation(E theta)
     {
-        X s = sin(theta);
-        i0 = cos(theta);
-        i1 *= s;
-        i2 *= s;
-        i3 *= s;
+        E s = sin(theta);
+        m_re = cos(theta);
+        m_i1 *= s;
+        m_i2 *= s;
+        m_i3 *= s;
         return *this;
     }
 
-    inline static Quaternion MakeRotation(Vector3<T> v, T theta)
+    static inline Quaternion makeRotation(Vector3<T> v, T theta)
     {
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
-    inline static Quaternion MakeRotation(T x, T y, T z, T theta)
+    static inline Quaternion makeRotation(T x, T y, T z, T theta)
     {
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(c, x * s, y * s, z * s);
     }
 
-    // The function that combines MakeRotation and Rot8.
+    // The function that combines makeRotation() and rot8().
     // v should be normalized
-    inline Quaternion RotMove(const T theta, const Vector3<T>& v) const
+    Quaternion rotMove(const Vector3<T>& v, const T theta) const
     {
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(
-            i0 * c - (v.x() * i1 + v.y() * i2 + v.z() * i3) * s,
-            i1 * c + (v.x() * i0 + v.y() * i3 - v.z() * i2) * s,
-            i2 * c + (v.y() * i0 + v.z() * i1 - v.x() * i3) * s,
-            i3 * c + (v.z() * i0 - v.y() * i1 + v.x() * i2) * s
+            m_re * c - (v.x() * m_i1 + v.y() * m_i2 + v.z() * m_i3) * s,
+            m_i1 * c + (v.x() * m_re + v.y() * m_i3 - v.z() * m_i2) * s,
+            m_i2 * c + (v.y() * m_re + v.z() * m_i1 - v.x() * m_i3) * s,
+            m_i3 * c + (v.z() * m_re - v.y() * m_i1 + v.x() * m_i2) * s
         );
     }
+
+private:
+    T m_re, m_i1, m_i2, m_i3;
 };
-
-template <typename T>
-const Quaternion<T> Quaternion<T>::Zero(0, 0, 0, 0);
-
-template <typename T>
-const Quaternion<T> Quaternion<T>::Identity(1, 0, 0, 0);
 
 } // namespace

@@ -217,7 +217,7 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
     if (beta > T(1.0))
     {
         //qDebug() << "beta > 1: " << beta;
-        beta = abs(fmod(beta - T(1.0), T(4.0)) - T(2.0));
+        beta = hAbs(fmod(beta - T(1.0), T(4.0)) - T(2.0));
     }
 
     T gamma = T(1.0) / sqrt(T(1) - beta * beta);

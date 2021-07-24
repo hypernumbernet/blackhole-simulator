@@ -29,12 +29,12 @@ public:
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
-            auto vq = Quaternion<T>::Exp({velocities, i3});
+            auto vq = Quaternion<T>::exp({velocities, i3});
             auto lq = Quaternion<T>(locations, i4);
             lq = vq * lq;
             //lq = lq * vq;
             bhs::embedQuaternionToArray<T>(lq, locations, i4);
-            auto ln = lq.LnV3();
+            auto ln = lq.lnV3();
             bhs::embedVector3ToArray<T>(ln, coordinates, i3);
         }
     }
@@ -87,8 +87,8 @@ public:
                     d1 *= theta;
                     d2 *= theta;
                     d3 *= theta;
-                    vels[i] *= Quaternion<T>::Exp(d1, d2, d3);
-                    vels[j] *= Quaternion<T>::Exp(-d1, -d2, -d3);
+                    vels[i] *= Quaternion<T>::exp(d1, d2, d3);
+                    vels[j] *= Quaternion<T>::exp(-d1, -d2, -d3);
                 } else {
                     distanceInv[k] = std::numeric_limits<T>::max();
                 }
@@ -100,7 +100,7 @@ public:
         for (quint64 i = 0; i < numberOfParticles; ++i)
         {
             i3 = i * 3;
-            auto speed = vels[i].LnV3();
+            auto speed = vels[i].lnV3();
             velocities[i3    ] += speed.x();
             velocities[i3 + 1] += speed.y();
             velocities[i3 + 2] += speed.z();

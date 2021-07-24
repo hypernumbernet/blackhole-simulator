@@ -34,7 +34,7 @@ private:
         Vector3<T> dr(x, y, z);
         dr.normalize();
         const auto angle = m_engine->velocityToAngle(speed);
-        return Quaternion<T>::Exp(dr * angle);
+        return Quaternion<T>::exp(dr * angle);
     }
 
     inline Quaternion<T> fromVector3(Vector3<T> v3) const

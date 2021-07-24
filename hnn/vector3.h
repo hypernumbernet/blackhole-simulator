@@ -10,13 +10,15 @@ template <typename T>
 class Vector3
 {
 public:
-    constexpr Vector3() : m_x(0), m_y(0), m_z(0) {}
+    Vector3() {}
+
     constexpr Vector3(const T ax, const T ay, const T az)
         : m_x(ax), m_y(ay), m_z(az) {}
+
     constexpr explicit Vector3(const T* const a)
         : m_x(a[0]), m_y(a[1]), m_z(a[2]) {}
 
-    template <class E>
+    template <typename E>
     constexpr Vector3(const T* const a, const E index)
         : m_x(a[index]), m_y(a[index + 1]), m_z(a[index + 2]) {}
 
@@ -49,7 +51,7 @@ public:
 
     constexpr const Vector3 operator-() const { return Vector3( - m_x, - m_y, - m_z); }
 
-    constexpr Vector3& operator+=(const Vector3& a)
+    Vector3& operator+=(const Vector3& a)
     {
         m_x += a.m_x;
         m_y += a.m_y;
@@ -57,7 +59,7 @@ public:
         return *this;
     }
 
-    constexpr Vector3& operator-=(const Vector3& a)
+    Vector3& operator-=(const Vector3& a)
     {
         m_x -= a.m_x;
         m_y -= a.m_y;
@@ -78,7 +80,7 @@ public:
     }
 
     template <typename E>
-    constexpr Vector3& operator*=(E a)
+    Vector3& operator*=(E a)
     {
         m_x *= a;
         m_y *= a;
@@ -87,7 +89,7 @@ public:
     }
 
     template <typename E>
-    constexpr Vector3& operator/=(E a)
+    Vector3& operator/=(E a)
     {
         m_x /= a;
         m_y /= a;

@@ -84,10 +84,10 @@ inline QRecursiveMutex interactionMutex;
 template <typename T>
 inline void embedQuaternionToArray(const Quaternion<T>& q, T* const a, const quint64 index)
 {
-    a[index    ] = q.i0;
-    a[index + 1] = q.i1;
-    a[index + 2] = q.i2;
-    a[index + 3] = q.i3;
+    a[index    ] = q.re();
+    a[index + 1] = q.i1();
+    a[index + 2] = q.i2();
+    a[index + 3] = q.i3();
 }
 
 template <typename T>

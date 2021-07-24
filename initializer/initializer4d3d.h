@@ -39,7 +39,7 @@ private:
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
 
-            auto q = Quaternion<T>::Exp({coordinates, i3});
+            auto q = Quaternion<T>::exp({coordinates, i3});
             bhs::embedQuaternionToArray<T>(q, locations, i4);
         }
 
