@@ -1,12 +1,12 @@
 #pragma once
 
-#include "abstractenginecore.h"
-#include "abstractenginecorefloat.h"
-#include "abstractenginecoredouble.h"
-
 #include <QObject>
 #include <QThread>
 #include <QMutex>
+
+#include "abstractenginecore.h"
+#include "abstractenginecorefloat.h"
+#include "abstractenginecoredouble.h"
 
 class ThreadController : public QObject
 {

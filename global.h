@@ -44,6 +44,14 @@ enum class Preset
     TestSamePosition,
 };
 
+enum class LineType
+{
+    XZMeshes,
+    Axis,
+    CubeMeshes,
+    LongitudeAndLatitude,
+};
+
 struct SimCondition
 {
     Engine engine = Engine::G3D;

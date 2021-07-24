@@ -258,9 +258,9 @@ void GraphicWindow::startSim()
     m_threadAdmin.startSim(msec);
 }
 
-void GraphicWindow::changeLinePosition()
+void GraphicWindow::setLineType(const int index)
 {
-    m_lineShaders->changeLineType();
+    m_lineShaders->setLineType(index);
 }
 
 void GraphicWindow::frameAdvance1()

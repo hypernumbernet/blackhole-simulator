@@ -26,7 +26,7 @@ public:
 
 public slots:
     void enableGridLines(bool);
-    void changeLinePosition();
+    void setLineType(int);
     void startSim();
     void frameAdvance1();
     void frameAdvance10();

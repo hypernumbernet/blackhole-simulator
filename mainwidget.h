@@ -1,14 +1,7 @@
 #pragma once
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QLabel>
 #include <QScreen>
-#include <QLCDNumber>
 #include <QComboBox>
-#include <QLineEdit>
 
 #include "graphicwindow.h"
 #include "updateui.h"

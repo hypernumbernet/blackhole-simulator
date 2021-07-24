@@ -2,7 +2,6 @@
 
 LineShaders::LineShaders()
     : m_enableGridLines(true)
-    , m_lineType(0)
 {
     linesXZMeshes();
 }
@@ -82,25 +81,22 @@ void LineShaders::enableGridLines(const bool enabled)
     m_enableGridLines = enabled;
 }
 
-void LineShaders::changeLineType()
+void LineShaders::setLineType(const int index)
 {
     m_vertex.clear();
-    ++m_lineType;
-    if (m_lineType > 3)
-        m_lineType = 0;
 
-    switch (m_lineType)
+    switch (static_cast<bhs::LineType>(index))
     {
-    case 0:
+    case bhs::LineType::XZMeshes:
         linesXZMeshes();
         break;
-    case 1:
+    case bhs::LineType::Axis:
         linesAxis();
         break;
-    case 2:
+    case bhs::LineType::CubeMeshes:
         lines2Meshes();
         break;
-    case 3:
+    case bhs::LineType::LongitudeAndLatitude:
         linesCubeMeshes();
         break;
     }

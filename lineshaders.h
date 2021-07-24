@@ -6,6 +6,7 @@
 #include <QOpenGLBuffer>
 #include <QVector>
 
+#include "global.h"
 #include "camera.h"
 
 class LineShaders : private QOpenGLFunctions_4_5_Core
@@ -17,7 +18,7 @@ public:
     bool initialize();
     void paint(const QMatrix4x4& viewProjection);
     void enableGridLines(bool);
-    void changeLineType();
+    void setLineType(int);
 
 private:
     QOpenGLShaderProgram m_program;
@@ -25,8 +26,6 @@ private:
 
     void initGridLines();
     bool m_enableGridLines;
-
-    int m_lineType;
 
     void appendLine(const QVector3D&, const QVector3D&, const QVector3D& color);
     QVector<QVector3D> m_vertex;

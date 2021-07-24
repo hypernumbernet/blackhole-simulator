@@ -117,10 +117,12 @@ void MainWidget::initUi()
     connect(gridLinesCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::enableGridLines);
 
     // Line Type
-    auto btnLineType = new QPushButton(tr("Line Type"));
-    btnLineType->setFocusPolicy(Qt::NoFocus);
-    m_vLayout.addWidget(btnLineType);
-    connect(btnLineType, &QPushButton::clicked, &m_graphicWindows, &GraphicWindow::changeLinePosition);
+    auto lineTypeCombo = new QComboBox();
+    lineTypeCombo->setFocusPolicy(Qt::NoFocus);
+    lineTypeCombo->setInsertPolicy(QComboBox::NoInsert);
+    lineTypeCombo->addItems(UpdateUi::it().lineType().values());
+    m_vLayout.addWidget(lineTypeCombo);
+    connect(lineTypeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), &m_graphicWindows, &GraphicWindow::setLineType);
 
     // Scale
     auto scaleLabel = new QLabel(tr("Scale (m):"));

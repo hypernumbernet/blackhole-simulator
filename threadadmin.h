@@ -1,5 +1,10 @@
 #pragma once
 
+#include <QObject>
+#include <QBasicTimer>
+#include <QThread>
+#include <QTimerEvent>
+
 #include "updateui.h"
 #include "threadcontroller.h"
 #include "abstractnbodyengine.h"
@@ -11,11 +16,6 @@
 #include "engine/g3d4d/g3d4dengine.h"
 #include "engine/g3d4d/g3d4dcorefloat.h"
 #include "engine/g3d4d/g3d4dcoredouble.h"
-
-#include <QObject>
-#include <QBasicTimer>
-#include <QThread>
-#include <QTimerEvent>
 
 class ThreadAdmin : public QThread
 {

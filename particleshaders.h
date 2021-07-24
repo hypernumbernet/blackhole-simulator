@@ -1,5 +1,12 @@
 #pragma once
 
+#include <cmath>
+
+#include <QOpenGLFunctions_4_5_Core>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLBuffer>
+
 #include "engine/g3d/g3dengine.h"
 #include "engine/g3d/g3dcorefloat.h"
 #include "engine/g3d/g3dcoredouble.h"
@@ -13,13 +20,6 @@
 #include "engine/g4d3d/g4d3dcorefloat.h"
 #include "engine/g4d3d/g4d3dcoredouble.h"
 #include "computeshaders.h"
-
-#include <math.h>
-
-#include <QOpenGLFunctions_4_5_Core>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
 
 class ParticleShaders : private QOpenGLFunctions_4_5_Core
 {

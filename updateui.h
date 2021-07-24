@@ -68,6 +68,17 @@ public:
         return map;
     }
 
+    static QMap<bhs::LineType, QString>& lineType()
+    {
+        static QMap<bhs::LineType, QString> map = {
+            {bhs::LineType::XZMeshes, tr("XZ Meshes")},
+            {bhs::LineType::Axis, tr("Basic Axis")},
+            {bhs::LineType::CubeMeshes, tr("Cube")},
+            {bhs::LineType::LongitudeAndLatitude, tr("Lon. and Lat.")},
+        };
+        return map;
+    }
+
     static void style(QLCDNumber& lcd)
     {
         lcd.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);

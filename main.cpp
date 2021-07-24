@@ -1,7 +1,7 @@
-#include "mainwidget.h"
-
 #include <QApplication>
 #include <QGLFormat>
+
+#include "mainwidget.h"
 
 int main(int argc, char **argv)
 {

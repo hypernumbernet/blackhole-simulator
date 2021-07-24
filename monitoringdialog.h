@@ -1,9 +1,9 @@
 #pragma once
 
-#include "updateui.h"
-
 #include <QDialog>
 #include <QLabel>
+
+#include "updateui.h"
 
 class MonitoringDialog : public QDialog
 {

@@ -1,6 +1,5 @@
 #include "initializer4d3d.h"
 
-
 template class Initializer4D3D<float>;
 template class Initializer4D3D<double>;
 
