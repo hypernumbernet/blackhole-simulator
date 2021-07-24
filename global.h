@@ -50,6 +50,7 @@ enum class LineType
     Axis,
     CubeMeshes,
     LongitudeAndLatitude,
+    QuaternionLogarithm,
 };
 
 struct SimCondition

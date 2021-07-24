@@ -74,7 +74,8 @@ public:
             {bhs::LineType::XZMeshes, tr("XZ Meshes")},
             {bhs::LineType::Axis, tr("Basic Axis")},
             {bhs::LineType::CubeMeshes, tr("Cube")},
-            {bhs::LineType::LongitudeAndLatitude, tr("Lon. and Lat.")},
+            {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
+            {bhs::LineType::QuaternionLogarithm, tr("Quaternion Logarithm")},
         };
         return map;
     }

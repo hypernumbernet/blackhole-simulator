@@ -81,6 +81,12 @@ public:
     }
 
     template <typename E>
+    constexpr const Vector3 operator/(E a) const
+    {
+        return Vector3(m_x / a, m_y / a, m_z / a);
+    }
+
+    template <typename E>
     Vector3& operator*=(E a)
     {
         m_x *= a;

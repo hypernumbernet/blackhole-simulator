@@ -28,6 +28,7 @@ private:
     bool m_enableGridLines;
 
     void appendLine(const QVector3D&, const QVector3D&, const QVector3D& color);
+    void appendLineHnn(const Vector3<float>&, const Vector3<float>&, const QVector3D& color);
     QVector<QVector3D> m_vertex;
 
     static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};
@@ -35,8 +36,9 @@ private:
     static constexpr QVector3D BLUE = {0.0f, 0.0f, 1.0f};
 
     void linesAxis();
-    void lines2Meshes();
-    void linesXZMeshes();
     void linesCubeMeshes();
+    void linesXZMeshes();
+    void linesLongitudeAndLatitude();
+    void linesQuaternionLogarithm();
     void drawCircle(int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color);
 };

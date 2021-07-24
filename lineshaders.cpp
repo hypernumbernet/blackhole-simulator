@@ -14,6 +14,14 @@ void LineShaders::appendLine(const QVector3D& start, const QVector3D& end, const
     m_vertex.append(color);
 }
 
+void LineShaders::appendLineHnn(const Vector3<float>& start, const Vector3<float>& end, const QVector3D& color)
+{
+    m_vertex.append(QVector3D(start.x(), start.y(), start.z()));
+    m_vertex.append(color);
+    m_vertex.append(QVector3D(end.x(), end.y(), end.z()));
+    m_vertex.append(color);
+}
+
 LineShaders::~LineShaders()
 {
     m_vao.destroy();
@@ -94,10 +102,13 @@ void LineShaders::setLineType(const int index)
         linesAxis();
         break;
     case bhs::LineType::CubeMeshes:
-        lines2Meshes();
+        linesCubeMeshes();
         break;
     case bhs::LineType::LongitudeAndLatitude:
-        linesCubeMeshes();
+        linesLongitudeAndLatitude();
+        break;
+    case bhs::LineType::QuaternionLogarithm:
+        linesQuaternionLogarithm();
         break;
     }
     initGridLines();
@@ -110,7 +121,7 @@ void LineShaders::linesAxis()
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
 }
 
-void LineShaders::lines2Meshes()
+void LineShaders::linesCubeMeshes()
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -151,10 +162,10 @@ void LineShaders::drawCircle(const int resolution, const QVector3D& axis, const 
     }
 }
 
-void LineShaders::linesCubeMeshes()
+void LineShaders::linesLongitudeAndLatitude()
 {
-    int resolution = 36;
-    float angle = 10.0f;
+    static const int resolution = 36;
+    static const float angle = 360.0f / float(resolution);
 
     const QVector3D axis_y(0.0f, 1.0f, 0.0f);
     const QVector3D axis_x(1.0f, 0.0f, 0.0f);
@@ -187,4 +198,25 @@ void LineShaders::linesCubeMeshes()
     appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
     appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
+}
+
+void LineShaders::linesQuaternionLogarithm()
+{
+    static const int resolution = 72;
+    static const float angle = degreeToRadian(360.0f / float(resolution));
+
+    const auto origin = Quaternion<float>::identity();
+    const auto angleX = Quaternion<float>::exp(angle, 0.0f, 0.0f);
+
+    for (int j = -16; j <= 16; j += 2)
+    {
+        auto start = Quaternion<float>::exp(0.0f, 0.0f, angle * j);
+        auto end = angleX * start;
+        for (int i = 0; i < resolution; ++i)
+        {
+            appendLineHnn(start.lnV3(), end.lnV3(), {1,1,1});
+            start = end;
+            end = angleX * start;
+        }
+    }
 }
