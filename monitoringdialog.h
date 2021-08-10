@@ -2,16 +2,22 @@
 
 #include <QDialog>
 #include <QLabel>
+#include <QPushButton>
+#include <QPlainTextEdit>
 
 #include "updateui.h"
+#include "graphicwindow.h"
 
 class MonitoringDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit MonitoringDialog(QWidget* parent);
+    MonitoringDialog(QWidget* parent, GraphicWindow*);
+    void update();
 
 private:
-    QLabel m_coordinateValue;
+    GraphicWindow* const m_graphicWindow;
 
+    QLabel m_frameValue;
+    QPlainTextEdit m_dataTextEdit;
 };

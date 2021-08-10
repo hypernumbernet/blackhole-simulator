@@ -294,9 +294,10 @@ void MainWidget::showMonitoringDialog()
 {
     if (!m_monitoringDialog)
     {
-        m_monitoringDialog = new MonitoringDialog(this);
+        m_monitoringDialog = new MonitoringDialog(this, &m_graphicWindows);
     }
     m_monitoringDialog->show();
     m_monitoringDialog->raise();
     m_monitoringDialog->activateWindow();
+    m_monitoringDialog->update();
 }

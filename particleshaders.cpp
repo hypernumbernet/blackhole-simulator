@@ -250,3 +250,11 @@ void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVector
     result.paramSize = ssboDataStruct.paramSize * result.dataSize;
     result.total = ssboDataStruct.total * result.dataSize;
 }
+
+QString ParticleShaders::particleData()
+{
+    if (m_precision == bhs::Precision::Float)
+        return particleDataToString<float>();
+    else
+        return particleDataToString<double>();
+}

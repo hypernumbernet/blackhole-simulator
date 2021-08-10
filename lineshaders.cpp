@@ -205,7 +205,7 @@ void LineShaders::linesQuaternionLogarithm()
     static const int resolution = 72;
     static const float angle = degreeToRadian(360.0f / float(resolution));
 
-    const auto origin = Quaternion<float>::identity();
+    //const auto origin = Quaternion<float>::identity();
     const auto angleX = Quaternion<float>::exp(angle, 0.0f, 0.0f);
 
     for (int j = -16; j <= 16; j += 2)
@@ -219,4 +219,31 @@ void LineShaders::linesQuaternionLogarithm()
             end = angleX * start;
         }
     }
+
+    //    const auto rotX = Quaternion<float>::makeRotation(1.0f, 0.0f, 0.0f, angle * 0.5f);
+    //    for (int j = 0; j < 3; ++j)
+    //    {
+    //        auto start = Quaternion<float>::exp(0.0f, angle * j, 0.0f);
+    //        auto end = start.rotated8(rotX);
+    //        for (int i = 0; i < resolution; ++i)
+    //        {
+    //            appendLineHnn(start.lnV3() / pi, end.lnV3() / pi, GREEN);
+    //            start = end;
+    //            end = start.rotated8(rotX);
+    //        }
+    //    }
+
+    //    auto cross = origin.cross7V3(angleX);
+    //    cross.normalize();
+    //    for (int j = 0; j < 2; ++j)
+    //    {
+    //        auto start = Quaternion<float>::exp(0.0f, angle * j, 0.0f);
+    //        auto end = start.rotMove(cross, angle);
+    //        for (int i = 0; i < resolution; ++i)
+    //        {
+    //            appendLineHnn(start.lnV3() / pi, end.lnV3() / pi, BLUE);
+    //            start = end;
+    //            end = start.rotMove(cross, angle);
+    //        }
+    //    }
 }

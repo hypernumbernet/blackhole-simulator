@@ -36,6 +36,8 @@ public slots:
     void resetParticles();
     void setModelScale(const QString&);
     void setModelScaleInt(int);
+    QString particleData();
+    int frameNumber();
 
 protected:
     void initializeGL() override;

@@ -36,6 +36,7 @@ public:
     void setModelScaleRatio(double);
     void reset(const bhs::SimCondition&);
     quint64 numberOfParticle() const;
+    QString particleData();
 
 private:
 
@@ -77,7 +78,7 @@ private:
     bhs::Precision m_precision;
 
     template <typename T>
-    inline const T* coordinates() const
+    const T* coordinates() const
     {
         const T* ret = nullptr;
         if constexpr (std::is_same_v<T, float>)
@@ -90,7 +91,7 @@ private:
     }
 
     template <typename T>
-    inline const T* velocities() const
+    const T* velocities() const
     {
         const T* ret = nullptr;
         if constexpr (std::is_same_v<T, float>)
@@ -103,7 +104,7 @@ private:
     }
 
     template <typename T>
-    inline const T* masses() const
+    const T* masses() const
     {
         const T* ret = nullptr;
         if constexpr (std::is_same_v<T, float>)
@@ -116,7 +117,7 @@ private:
     }
 
     template <typename T>
-    inline T timePerFrame() const
+    T timePerFrame() const
     {
         if constexpr (std::is_same_v<T, float>)
             return m_NBodyEngineFloat->timePerFrame();
@@ -126,7 +127,7 @@ private:
     }
 
     template <typename T>
-    inline T gravitationalConstant() const
+    T gravitationalConstant() const
     {
         if constexpr (std::is_same_v<T, float>)
             return m_NBodyEngineFloat->gravitationalConstant();
@@ -136,7 +137,7 @@ private:
     }
 
     template <typename T>
-    inline double scaleCenterValue() const
+    double scaleCenterValue() const
     {
         if constexpr (std::is_same_v<T, float>)
             return m_NBodyEngineFloat->scaleInv();
@@ -146,7 +147,7 @@ private:
     }
 
     template <typename T>
-    inline const void* makeSSBOData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
+    const void* makeSSBOData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
     {
         quint64 num = numberOfParticle();
         quint64 ssboNum = num % 4 ? num / 4 * 4 + 4 : num;
@@ -199,5 +200,34 @@ private:
         result.total = total;
 
         return data;
+    }
+
+    template <typename T>
+    const QString particleDataToString() const
+    {
+        QString ret;
+        quint64 num = numberOfParticle();
+        const T* cs = nullptr;
+        if constexpr (std::is_same_v<T, float>)
+        {
+            cs = m_NBodyEngineFloat->coordinates();
+        }
+        if constexpr (std::is_same_v<T, double>)
+        {
+            cs = m_NBodyEngineDouble->coordinates();
+        }
+        for (quint64 i = 0; i < num; ++i)
+        {
+            quint64 i3 = i * 3;
+            ret.append(QString::number(i));
+            ret.append("\t");
+            ret.append(QString::number(cs[i3], 'E', 15));
+            ret.append("\t");
+            ret.append(QString::number(cs[i3 + 1], 'E', 15));
+            ret.append("\t");
+            ret.append(QString::number(cs[i3 + 2], 'E', 15));
+            ret.append("\n");
+        }
+        return ret;
     }
 };

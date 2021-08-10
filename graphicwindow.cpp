@@ -312,3 +312,13 @@ void GraphicWindow::setModelScaleInt(int val)
     double r1 = (double)val / (double)UpdateUi::SCALE_SLIDER_CENTER;
     m_particleShaders->setModelScaleRatio(pow(r1, 10.0));
 }
+
+QString GraphicWindow::particleData()
+{
+    return m_particleShaders->particleData();
+}
+
+int GraphicWindow::frameNumber()
+{
+    return m_threadAdmin.frameNum();
+}
