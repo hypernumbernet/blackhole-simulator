@@ -103,7 +103,7 @@ void MainWidget::initUi()
     connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);
 
     // Circle strafing
-    auto circleStrafingCB = new QCheckBox(tr("Circle strafing"));
+    auto circleStrafingCB = new QCheckBox(tr("Moving in a circle"));
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
     m_vLayout.addWidget(circleStrafingCB);
