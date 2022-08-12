@@ -7,6 +7,7 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     , m_threadAdmin(this, m_computeShaders)
     , m_walkSpeed(0.1f)
     , m_lookAroundSpeed(1.0f)
+    , m_mousePressing(false)
     , m_camera(CAMERA_INI_POS)
     , m_fpsPreFrame(0)
     , m_isCircleStrafing(false)
@@ -116,7 +117,10 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     setCursor(Qt::BlankCursor);
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton))
+    {
+        m_camera.standXZ(false, 1.0f);
         m_camera.lookAtZero(1.0f);
+    }
 }
 
 void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
@@ -127,20 +131,20 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
         QPointF diff = pos - m_mouseLastPosition;
         if (ev->buttons() == Qt::LeftButton)
         {
-            diff *= 0.15f;
-            m_camera.yaw(diff.x());
-            m_camera.pitch(diff.y());
+            diff *= 0.01f;
+            m_camera.circleStrafing(diff.x());
+            m_camera.roundUp(-diff.y());
         }
         else if (ev->buttons() == Qt::RightButton)
         {
-            diff *= 0.03f;
-            m_camera.strafe(-diff.x());
-            m_camera.jump(diff.y());
+            diff *= 0.005f;
+            m_camera.strafe(diff.x());
+            m_camera.jump(-diff.y());
         }
         else if (ev->buttons() == (Qt::LeftButton | Qt::RightButton))
         {
             diff *= 0.1f;
-            m_camera.roll(-diff.x());
+            m_camera.roll(diff.x());
         }
         m_mouseLastPosition = pos;
     }
@@ -207,7 +211,7 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.standXZ();
 
         if (m_keyPressing.indexOf(Qt::Key_Tab) >= 0)
-            m_camera.lookAtZero();
+            m_camera.lookAtZero(0.2f);
 
         if (m_keyPressing.indexOf(Qt::Key_Escape) >= 0)
             m_camera.setPosition(CAMERA_INI_POS, 0.1f);

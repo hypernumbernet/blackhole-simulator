@@ -27,6 +27,7 @@ public:
     bool lookAt(const QVector3D& point, float rate = 0.6f);
     bool setPosition(const QVector3D&, float rate = 0.6f);
     void circleStrafing(float amount);
+    void roundUp(float amount);
     void reset(const QVector3D& position);
 
     QMatrix4x4 viewMatrix() const;

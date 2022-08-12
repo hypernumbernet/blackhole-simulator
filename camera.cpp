@@ -2,7 +2,7 @@
 
 void Camera::rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
 {
-    // The following calculation does not work.
+    // The following calculation did not work.
     //axis = rot.rotatedVector(axis);
 
     auto conjugateRot = rot.conjugated();
@@ -33,7 +33,7 @@ QMatrix4x4 Camera::viewMatrix() const
 
 void Camera::pitch(const float degrees)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_right, degrees);
     multiplyRotation(rot);
     rotateV3ByQuaternion(m_forward, rot);
@@ -42,7 +42,7 @@ void Camera::pitch(const float degrees)
 
 void Camera::yaw(const float degrees)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_up, degrees);
     multiplyRotation(rot);
     rotateV3ByQuaternion(m_forward, rot);
@@ -51,7 +51,7 @@ void Camera::yaw(const float degrees)
 
 void Camera::roll(const float degrees)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_forward, degrees);
     multiplyRotation(rot);
     rotateV3ByQuaternion(m_up, rot);
@@ -75,13 +75,13 @@ void Camera::jump(const float amount)
 
 bool Camera::standXZ(const bool resetY, const float rate)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     if (resetY)
         m_position.setY(-1.0f);
 
     auto direction = QVector3D(0.0f, 1.0f, 0.0f);
     auto cosVal = QVector3D::dotProduct(direction, m_up);
-    if (cosVal > 0.999f)
+    if (cosVal >= 1.0f)
         return false;
     auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_up);
@@ -99,11 +99,14 @@ bool Camera::standXZ(const bool resetY, const float rate)
 
 bool Camera::lookAtZero(const float rate)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     auto direction = m_position.normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
-    if (cosVal > 0.999f)
+
+    // Occurs rarely with vigorous operation. Always be careful when using dot products.
+    if (cosVal >= 1.0f)
         return false;
+
     auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_forward);
     cross.normalize();
@@ -120,10 +123,10 @@ bool Camera::lookAtZero(const float rate)
 
 bool Camera::lookAt(const QVector3D& point, const float rate)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
     auto cosVal = QVector3D::dotProduct(direction, m_forward);
-    if (cosVal > 0.999f)
+    if (cosVal >= 1.0f)
         return false;
     auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(direction, m_forward);
@@ -141,7 +144,7 @@ bool Camera::lookAt(const QVector3D& point, const float rate)
 
 bool Camera::setPosition(const QVector3D& pos, const float rate)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     if (rate >= 1.0f)
     {
         m_position = pos;
@@ -157,30 +160,19 @@ bool Camera::setPosition(const QVector3D& pos, const float rate)
 
 void Camera::circleStrafing(const float amount)
 {
-    QMutexLocker  locker(&m_mutex);
     m_position += amount * m_right;
-    auto direction = m_position.normalized();
-    auto cosVal = QVector3D::dotProduct(direction, m_forward);
+    lookAtZero(1.0f);
+}
 
-    // Occurs rarely with vigorous operation. Always be careful when using inner products.
-    if (cosVal > 1.0f)
-        cosVal = 1.0f;
-
-    auto angle = acos(cosVal) * 0.5f;
-    auto cross = QVector3D::crossProduct(direction, m_forward);
-    cross.normalize();
-    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
-    rot.normalize();
-
-    multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
-    rotateV3ByQuaternion(m_up, rot);
+void Camera::roundUp(const float amount)
+{
+    m_position += amount * m_up;
+    lookAtZero(1.0f);
 }
 
 void Camera::reset(const QVector3D& position)
 {
-    QMutexLocker  locker(&m_mutex);
+    QMutexLocker locker(&m_mutex);
     m_position = position;
     m_rotation = QQuaternion();
     m_forward = QVector3D(0.0f, 0.0f, -1.0f);
