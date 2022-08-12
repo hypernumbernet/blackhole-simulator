@@ -131,13 +131,13 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
         QPointF diff = pos - m_mouseLastPosition;
         if (ev->buttons() == Qt::LeftButton)
         {
-            diff *= 0.01f;
+            diff *= 0.02f;
             m_camera.circleStrafing(diff.x());
             m_camera.roundUp(-diff.y());
         }
         else if (ev->buttons() == Qt::RightButton)
         {
-            diff *= 0.005f;
+            diff *= 0.002f;
             m_camera.strafe(diff.x());
             m_camera.jump(-diff.y());
         }
