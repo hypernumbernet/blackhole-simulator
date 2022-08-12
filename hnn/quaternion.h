@@ -59,6 +59,14 @@ public:
         m_i3 = a[index + 3];
     }
 
+    void set(const Quaternion& a)
+    {
+        m_re = a.m_re;
+        m_i1 = a.m_i1;
+        m_i2 = a.m_i2;
+        m_i3 = a.m_i3;
+    }
+
     static constexpr Quaternion<T> zero()
     {
         return Quaternion<T>(T(0), T(0), T(0), T(0));
@@ -124,13 +132,13 @@ public:
 
     constexpr const Quaternion operator/(const Quaternion& a) const
     {
-        return (*this) * a.inverse();
+        return (*this) * a.inversed();
     }
 
     template <typename E>
     constexpr friend inline const Quaternion operator/(E a, const Quaternion& b)
     {
-        return a * b.inverse();
+        return a * b.inversed();
     }
 
     template <typename X>
@@ -162,7 +170,7 @@ public:
 
     Quaternion& operator/=(const Quaternion& a)
     {
-        Quaternion ans = (*this) * a.inverse();
+        Quaternion ans = (*this) * a.inversed();
         set(ans.m_re, ans.m_i1, ans.m_i2, ans.m_i3);
         return *this;
     }
@@ -200,7 +208,7 @@ public:
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
     }
 
-    T abs() const
+    constexpr T abs() const
     {
         return sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
     }
@@ -215,7 +223,7 @@ public:
         return Quaternion(m_re, -m_i1, -m_i2, -m_i3);
     }
 
-    constexpr Quaternion inverse() const
+    constexpr Quaternion inversed() const
     {
         T norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
         return Quaternion(m_re / norm, -m_i1 / norm, -m_i2 / norm, -m_i3 / norm);

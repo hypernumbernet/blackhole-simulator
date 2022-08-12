@@ -4,7 +4,7 @@
 #include <QMutex>
 #include <QGenericMatrix>
 
-#include "hnn/quaternion.h"
+#include "hnn/octonion.h"
 
 using namespace hnn;
 

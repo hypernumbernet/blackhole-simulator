@@ -48,6 +48,7 @@ HEADERS += \
     global.h \
     graphicwindow.h \
     hnn/constants.h \
+    hnn/octonion.h \
     hnn/quaternion.h \
     hnn/vector3.h \
     initializer/initializer3d.h \

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <string>
+#include <ostream>
 
 #include "constants.h"
 

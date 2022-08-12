@@ -41,4 +41,5 @@ private:
     void linesLongitudeAndLatitude();
     void linesQuaternionLogarithm();
     void drawCircle(int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color);
+
 };

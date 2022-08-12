@@ -205,20 +205,18 @@ void LineShaders::linesQuaternionLogarithm()
     static const int resolution = 72;
     static const float angle = degreeToRadian(360.0f / float(resolution));
 
-    //const auto origin = Quaternion<float>::identity();
-    const auto angleX = Quaternion<float>::exp(angle, 0.0f, 0.0f);
-
-    for (int j = -16; j <= 16; j += 2)
-    {
-        auto start = Quaternion<float>::exp(0.0f, 0.0f, angle * j);
-        auto end = angleX * start;
-        for (int i = 0; i < resolution; ++i)
-        {
-            appendLineHnn(start.lnV3(), end.lnV3(), {1,1,1});
-            start = end;
-            end = angleX * start;
-        }
-    }
+//    const auto angleX = Quaternion<float>::exp(angle, 0.0f, 0.0f);
+//    for (int j = -16; j <= 16; j += 2)
+//    {
+//        auto start = Quaternion<float>::exp(0.0f, 0.0f, angle * j);
+//        auto end = angleX * start;
+//        for (int i = 0; i < resolution; ++i)
+//        {
+//            appendLineHnn(start.lnV3(), end.lnV3(), {1,1,1});
+//            start = end;
+//            end = angleX * start;
+//        }
+//    }
 
     //    const auto rotX = Quaternion<float>::makeRotation(1.0f, 0.0f, 0.0f, angle * 0.5f);
     //    for (int j = 0; j < 3; ++j)
@@ -246,4 +244,81 @@ void LineShaders::linesQuaternionLogarithm()
     //            end = start.rotMove(cross, angle);
     //        }
     //    }
+
+    Octonion<float> origin(0,0,0,0,1,0,0,0);
+    Octonion<float> x90(0,0,0,0,0,1,0,0);
+    Octonion<float> y90(0,0,0,0,0,0,1,0);
+    Octonion<float> z90(0,0,0,0,0,0,0,1);
+    auto poleX(x90 * origin);
+    auto poleY(y90 * origin);
+    auto poleZ(z90 * origin);
+    qDebug(poleX.toString().c_str());
+    qDebug(poleY.toString().c_str());
+    qDebug(poleZ.toString().c_str());
+
+    auto rotationX(poleX * sin(angle));
+    rotationX.setRe(cos(angle));
+    auto rotationY(poleY * sin(angle));
+    rotationY.setRe(cos(angle));
+
+    auto startX(origin);
+    //startX = rotationX.conjugated() * startX * rotationX;
+    for (int j = 0; j < (resolution * 0.5); ++j)
+    {
+        auto startY(startX);
+        Quaternion<float> start(startY.i4(),startY.i5(),startY.i6(),startY.i7());
+        auto endY = rotationY.conjugated() * startY * rotationY;
+        Quaternion<float> end(endY.i4(),endY.i5(),endY.i6(),endY.i7());
+        for (int i = 0; i < (resolution * 0.1); ++i)
+        {
+            appendLineHnn(start.lnV3(), end.lnV3(), {0,1,0});
+            startY = endY;
+            start = end;
+            endY = rotationY.conjugated() * startY * rotationY;
+            end = {endY.i4(),endY.i5(),endY.i6(),endY.i7()};
+        }
+        startX = rotationX.conjugated() * startX * rotationX;
+    }
+
+    Octonion<double> originL(0,0,0,0,1,0,0,0);
+    Octonion<double> x90L(0,1,0,0,0,0,0,0);
+    Octonion<double> y90L(0,0,1,0,0,0,0,0);
+    Octonion<double> z90L(0,0,0,1,0,0,0,0);
+    auto poleXL(x90L * originL);
+    auto poleYL(y90L * originL);
+    auto poleZL(z90L * originL);
+    qDebug(poleXL.toString().c_str());
+    qDebug(poleYL.toString().c_str());
+    qDebug(poleZL.toString().c_str());
+
+    auto rotationXL(poleXL * sin(angle));
+    rotationXL.setRe(cos(angle));
+    auto rotationYL(poleYL * sin(angle));
+    rotationYL.setRe(cos(angle));
+    auto rotationZL(poleZL * sin(angle));
+    rotationZL.setRe(cos(angle));
+
+    auto startXL(originL);
+    startXL = rotationXL.conjugated() * startXL * rotationXL;
+    for (int j = 0; j <= 8; j += 2)
+    {
+        auto startY(startXL);
+        Quaternion<double> start(startY.i4(),startY.i1(),startY.i2(),startY.i3());
+        auto endY = rotationYL.conjugated() * startY * rotationYL;
+        Quaternion<double> end(endY.i4(),endY.i1(),endY.i2(),endY.i3());
+        for (int i = 0; i < (resolution * 0.6); ++i)
+        {
+            //appendLineHnn(start.lnV3(), end.lnV3(), {1,0,0});
+            Vector3<double> startLn(start.lnV3());
+            Vector3<double> endLn(end.lnV3());
+            //appendLineHnn({float(startLn.x()),float(startLn.y()),float(startLn.z())},{float(endLn.x()),float(endLn.y()),float(endLn.z())}, {1,0,0});
+            startY.set(endY);
+            start.set(end);
+            //startY = {0,start.i1(),start.i2(),start.i3(),start.re(),0,0,0};
+            endY = rotationYL.conjugated() * startY * rotationYL;
+            end = {endY.i4(),endY.i1(),endY.i2(),endY.i3()};
+        }
+        startXL = rotationXL.conjugated() * startXL * rotationXL;
+    }
+
 }
