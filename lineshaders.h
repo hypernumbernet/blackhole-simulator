@@ -39,7 +39,8 @@ private:
     void linesCubeMeshes();
     void linesXZMeshes();
     void linesLongitudeAndLatitude();
-    void linesQuaternionLogarithm();
+    void linesQuaternionS3Rotation();
+    void linesOctonionS3Rotation();
     void drawCircle(int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color);
 
 };

@@ -75,7 +75,8 @@ public:
             {bhs::LineType::Axis, tr("Basic Axis")},
             {bhs::LineType::CubeMeshes, tr("Cube")},
             {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
-            {bhs::LineType::QuaternionLogarithm, tr("Quaternion Logarithm")},
+            {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rot.")},
+            {bhs::LineType::OctonionS3Rotation, tr("Octonion S3 Rot.")},
         };
         return map;
     }
