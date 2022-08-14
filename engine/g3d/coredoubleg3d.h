@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/abstractenginecoredouble.h"
-#include "g3dcalculation.h"
+#include "calculationg3d.h"
 
-class G3DCoreDouble : public AbstractEngineCoreDouble
+class CoreDoubleG3D : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    explicit G3DCoreDouble(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    explicit CoreDoubleG3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,7 +15,7 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new G3DCoreDouble(engine, threadNumber);
+        return new CoreDoubleG3D(engine, threadNumber);
     }
 
 public slots:
@@ -32,5 +32,5 @@ public slots:
     }
 
 private:
-    G3DCalculation<double> m_calc;
+    CalculationG3D<double> m_calc;
 };

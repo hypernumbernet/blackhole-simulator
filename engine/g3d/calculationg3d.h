@@ -5,10 +5,10 @@
 #include "engine/abstractnbodyengine.h"
 
 template <typename T>
-class G3DCalculation
+class CalculationG3D
 {
 public:
-    G3DCalculation(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    CalculationG3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
