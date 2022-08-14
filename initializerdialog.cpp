@@ -167,19 +167,19 @@ InitializerDialog::InitializerDialog(QWidget* parent)
 bool InitializerDialog::validate()
 {
     bool allOk = true;
-    m_simCondition.engine = static_cast<bhs::Engine>(m_engineButtonGroup.checkedId());
-    m_simCondition.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
-    m_simCondition.massRandom = m_massRandomCheckBox.isChecked();
-    m_simCondition.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
-    m_simCondition.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
-    m_simCondition.timePerFrame = toDouble(m_timePerFrameEdit, allOk);
-    m_simCondition.numberOfParticles = toInt(m_particleNumEdit, allOk);
-    m_simCondition.massAvg = toDouble(m_massAvgEdit, allOk);
-    m_simCondition.scale = toDouble(m_scaleEdit, allOk);
-    m_simCondition.speed = toDouble(m_speedEdit, allOk);
-    m_simCondition.rotation = toDouble(m_rotationEdit, allOk);
-    if ((m_simCondition.engine == bhs::Engine::G4D3D && m_simCondition.compute == bhs::Compute::GPU) ||
-        (m_simCondition.engine == bhs::Engine::G3D4DR1 && m_simCondition.compute == bhs::Compute::GPU))
+    m_sim.engine = static_cast<bhs::Engine>(m_engineButtonGroup.checkedId());
+    m_sim.precision = static_cast<bhs::Precision>(m_precisionButtonGroup.checkedId());
+    m_sim.compute = static_cast<bhs::Compute>(m_computeButtonGroup.checkedId());
+    m_sim.preset = static_cast<bhs::Preset>(m_presetButtonGroup.checkedId());
+    m_sim.timePerFrame = toDouble(m_timePerFrameEdit, allOk);
+    m_sim.numberOfParticles = toInt(m_particleNumEdit, allOk);
+    m_sim.scale = toDouble(m_scaleEdit, allOk);
+    m_sim.massAvg = toDouble(m_massAvgEdit, allOk);
+    m_sim.massRandom = m_massRandomCheckBox.isChecked();
+    m_sim.speed = toDouble(m_speedEdit, allOk);
+    m_sim.rotation = toDouble(m_rotationEdit, allOk);
+    if ((m_sim.engine == bhs::Engine::G4D3D && m_sim.compute == bhs::Compute::GPU) ||
+        (m_sim.engine == bhs::Engine::G3D4DR1 && m_sim.compute == bhs::Compute::GPU))
     {
         QMessageBox::information(this, tr("Information"), tr("The GPU Engine is not implemented"));
         allOk = false;
@@ -201,16 +201,28 @@ void InitializerDialog::applyButtonClicked()
 
 const bhs::SimCondition& InitializerDialog::simCondition() const
 {
-    return m_simCondition;
+    return m_sim;
 }
 
 void InitializerDialog::setValues(const bhs::SimCondition& sim)
 {
+    QAbstractButton* engine = m_engineButtonGroup.button(static_cast<int>(sim.engine));
+    if (engine != nullptr)
+        engine->setChecked(true);
+    QAbstractButton* precision = m_precisionButtonGroup.button(static_cast<int>(sim.precision));
+    if (precision != nullptr)
+        precision->setChecked(true);
+    QAbstractButton* compute = m_computeButtonGroup.button(static_cast<int>(sim.compute));
+    if (compute != nullptr)
+        compute->setChecked(true);
+    QAbstractButton* preset = m_presetButtonGroup.button(static_cast<int>(sim.preset));
+    if (preset != nullptr)
+        preset->setChecked(true);
     m_timePerFrameEdit.setText(QString::number(sim.timePerFrame));
     m_particleNumEdit.setText(QString::number(sim.numberOfParticles));
+    m_scaleEdit.setText(QString::number(sim.scale));
     m_massAvgEdit.setText(QString::number(sim.massAvg));
     m_massRandomCheckBox.setChecked(sim.massRandom);
-    m_scaleEdit.setText(QString::number(sim.scale));
     m_speedEdit.setText(QString::number(sim.speed));
     m_rotationEdit.setText(QString::number(sim.rotation));
 }
@@ -266,29 +278,37 @@ void InitializerDialog::save()
         fileName += ".ini";
     }
     QSettings stg(fileName, QSettings::IniFormat);
+    stg.setValue("Name", INI_NAME);
     stg.setValue("SettingsVersion", 1);
     stg.setValue("Description", "Blackhole-Simulator Settings");
 
     stg.beginGroup("SimCondition");
-    stg.setValue("Engine", static_cast<int>(m_simCondition.engine));
-    stg.setValue("Precision", static_cast<int>(m_simCondition.precision));
-    stg.setValue("Compute", static_cast<int>(m_simCondition.compute));
-    stg.setValue("Preset", static_cast<int>(m_simCondition.preset));
-    stg.setValue("TimePerFrame", m_simCondition.timePerFrame);
-    stg.setValue("NumberOfParticles", m_simCondition.numberOfParticles);
-    stg.setValue("Scale", m_simCondition.scale);
-    stg.setValue("MassAvg", m_simCondition.massAvg);
-    stg.setValue("MassRandom", m_simCondition.massRandom);
-    stg.setValue("Speed", m_simCondition.speed);
-    stg.setValue("Rotation", m_simCondition.rotation);
+    stg.setValue("Engine", static_cast<int>(m_sim.engine));
+    stg.setValue("Precision", static_cast<int>(m_sim.precision));
+    stg.setValue("Compute", static_cast<int>(m_sim.compute));
+    stg.setValue("Preset", static_cast<int>(m_sim.preset));
+    stg.setValue("TimePerFrame", m_sim.timePerFrame);
+    stg.setValue("NumberOfParticles", m_sim.numberOfParticles);
+    stg.setValue("Scale", m_sim.scale);
+    stg.setValue("MassAvg", m_sim.massAvg);
+    stg.setValue("MassRandom", m_sim.massRandom);
+    stg.setValue("Speed", m_sim.speed);
+    stg.setValue("Rotation", m_sim.rotation);
     stg.endGroup();
 
-    stg.beginWriteArray("arra");
-    for (int i = 0; i < 10; ++i)
+    stg.beginWriteArray("CustomData");
+    int i = 0;
+    for (bhs::Particle& e : m_sim.custom.particles)
     {
         stg.setArrayIndex(i);
-        stg.setValue("userName", 0);
-        stg.setValue("password", 4);
+        stg.setValue("Mass", e.mass);
+        stg.setValue("CoordinateX", e.coordinate.x());
+        stg.setValue("CoordinateY", e.coordinate.y());
+        stg.setValue("CoordinateZ", e.coordinate.z());
+        stg.setValue("VelocityX", e.velocity.x());
+        stg.setValue("VelocityY", e.velocity.y());
+        stg.setValue("VelocityZ", e.velocity.z());
+        ++i;
     }
     stg.endArray();
     QMessageBox::information(this, tr("Information"), tr("Saved a setting file."));
@@ -296,7 +316,47 @@ void InitializerDialog::save()
 
 void InitializerDialog::load()
 {
+    QFileDialog dlg(this, tr("Save Settings"));
+    QStringList fileNames;
+    if (dlg.exec())
+    {
+        fileNames = dlg.selectedFiles();
+    }
+    if (fileNames.size() == 0)
+    {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QSettings stg(fileName, QSettings::IniFormat);
 
+    if (stg.value("Name", "").toString() != INI_NAME)
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("This file format cannot be read."));
+        return;
+    }
+
+    int settingsVersion = stg.value("SettingsVersion", 0).toInt();
+    if (settingsVersion == 1)
+    {
+        bhs::SimCondition sim;
+        stg.beginGroup("SimCondition");
+        sim.engine = static_cast<bhs::Engine>(stg.value("Engine", 0).toInt());
+        sim.precision = static_cast<bhs::Precision>(stg.value("Precision", 0).toInt());
+        sim.compute = static_cast<bhs::Compute>(stg.value("Compute", 0).toInt());
+        sim.preset = static_cast<bhs::Preset>(stg.value("Preset", 0).toInt());
+        sim.timePerFrame = stg.value("TimePerFrame", sim.timePerFrame).toDouble();
+        sim.numberOfParticles = stg.value("NumberOfParticles", sim.numberOfParticles).toInt();
+        sim.scale = stg.value("Scale", sim.scale).toDouble();
+        sim.massAvg = stg.value("MassAvg", sim.massAvg).toDouble();
+        sim.massRandom = stg.value("MassRandom", sim.massRandom).toBool();
+        sim.speed = stg.value("Speed", sim.speed).toDouble();
+        sim.rotation = stg.value("Rotation", sim.rotation).toDouble();
+        stg.endGroup();
+
+        setValues(sim);
+    } else {
+        QMessageBox::warning(this, tr("Warning"), tr("This file format cannot be read."));
+    }
 }
 
 void InitializerDialog::customCondition()

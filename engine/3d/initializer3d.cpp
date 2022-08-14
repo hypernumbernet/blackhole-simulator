@@ -106,6 +106,26 @@ void Initializer3D<T>::initRandomSphere(const double rate)
 template <typename T>
 void Initializer3D<T>::initCustom()
 {
+    Correct correct(m_sim.custom.scale);
+    m_engine->changeModelScale(correct.m);
+
+    T* masses = m_engine->masses();
+    T* coordinates = m_engine->coordinates();
+    T* velocities = m_engine->velocities();
+
+    int i = 0;
+    for (const bhs::Particle& e : m_sim.custom.particles)
+    {
+        masses[i] = T(e.mass * correct.kg);
+        int i3 = i * 3;
+        coordinates[i3    ] = T(e.coordinate.x() * correct.m);
+        coordinates[i3 + 1] = T(e.coordinate.y() * correct.m);
+        coordinates[i3 + 2] = T(e.coordinate.z() * correct.m);
+        velocities[i3    ] = T(e.velocity.x() * correct.m);
+        velocities[i3 + 1] = T(e.velocity.y() * correct.m);
+        velocities[i3 + 2] = T(e.velocity.z() * correct.m);
+        ++i;
+    }
 }
 
 template <typename T>

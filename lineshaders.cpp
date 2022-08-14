@@ -55,15 +55,15 @@ void LineShaders::initGridLines()
     QOpenGLBuffer glBuf;
     glBuf.create();
     glBuf.bind();
-    glBuf.allocate(m_vertex.constData(), m_vertex.length() * sizeof(QVector3D));
+    glBuf.allocate(m_vertex.constData(), m_vertex.length() * int(sizeof(QVector3D)));
 
     quintptr offset = 0;
     m_program.enableAttributeArray(0);
-    m_program.setAttributeBuffer(0, GL_FLOAT, offset, 3, sizeof(QVector3D) * 2);
+    m_program.setAttributeBuffer(0, GL_FLOAT, offset, 3, int(sizeof(QVector3D)) * 2);
 
     offset += sizeof(QVector3D);
     m_program.enableAttributeArray(1);
-    m_program.setAttributeBuffer(1, GL_FLOAT, offset, 3, sizeof(QVector3D) * 2);
+    m_program.setAttributeBuffer(1, GL_FLOAT, offset, 3, int(sizeof(QVector3D)) * 2);
 
     m_vao.release();
 }
@@ -77,7 +77,7 @@ void LineShaders::paint(const QMatrix4x4& viewProjection)
         m_vao.bind();
 
         //glLineWidth(5.0f);
-        glDrawArrays(GL_LINES, 0, m_vertex.length() * sizeof(QVector3D));
+        glDrawArrays(GL_LINES, 0, m_vertex.length() * int(sizeof(QVector3D)));
 
         m_vao.release();
         m_program.release();

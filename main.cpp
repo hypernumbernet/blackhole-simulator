@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QGLFormat>
 
 #include "mainwidget.h"
 

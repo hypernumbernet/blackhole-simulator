@@ -45,14 +45,18 @@ enum class Preset
     TestSamePosition,
 };
 
-enum class LineType
+struct Particle
 {
-    XZMeshes,
-    Axis,
-    CubeMeshes,
-    LongitudeAndLatitude,
-    QuaternionS3Rotation,
-    OctonionS3Rotation,
+    hnn::Vector3<double> coordinate;
+    hnn::Vector3<double> velocity;
+    double mass;
+};
+
+struct CustomData
+{
+    int numberOfParticles = 0;
+    double scale = 1.0e+14;
+    QVector<Particle> particles;
 };
 
 struct SimCondition
@@ -62,18 +66,34 @@ struct SimCondition
     Compute compute = Compute::GPU;
     Preset preset = Preset::RandomBall;
     double timePerFrame = 1000.0;
+
+    //##############################################################
+    // For Random Preset
     int numberOfParticles = 2000;
     double scale = 1.0e+14;
     double massAvg = 1.0e+37;
     bool massRandom = true;
     double speed = 1.5e+4;
     double rotation = 5e-5;
+    //##############################################################
+
+    CustomData custom;
 };
 
 struct IntRange
 {
     quint64 start;
     quint64 end;
+};
+
+enum class LineType
+{
+    XZMeshes,
+    Axis,
+    CubeMeshes,
+    LongitudeAndLatitude,
+    QuaternionS3Rotation,
+    OctonionS3Rotation,
 };
 
 inline double rand0to1()

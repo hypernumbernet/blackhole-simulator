@@ -67,6 +67,6 @@ HEADERS += \
 RESOURCES += \
     shaders.qrc
 
-win32-msvc*{
+if(win32-msvc*):lessThan(QT_VERSION, 6){
     QMAKE_CXXFLAGS += /source-charset:utf-8
 }

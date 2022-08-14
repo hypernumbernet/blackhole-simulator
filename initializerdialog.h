@@ -31,6 +31,7 @@ public slots:
 
 private:
     static constexpr QColor RE_ENTER_COLOR = {255, 200, 200};
+    inline static const QString INI_NAME = "Blackhole-Simulator-2";
 
     bool validate();
     double toDouble(QLineEdit&, bool&);
@@ -54,5 +55,5 @@ private:
     QLineEdit m_speedEdit;
     QLineEdit m_rotationEdit;
 
-    bhs::SimCondition m_simCondition;
+    bhs::SimCondition m_sim;
 };

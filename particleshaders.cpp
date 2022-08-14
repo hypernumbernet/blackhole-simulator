@@ -124,7 +124,7 @@ void ParticleShaders::updateGL()
     if (numberOfParticle() == 0)
         return;
 
-    const int VECTOR_SIZE = 3;
+    const quint64 VECTOR_SIZE = 3;
     if (m_precision == bhs::Precision::Float)
     {
         quint64 size = numberOfParticle() * VECTOR_SIZE * sizeof(float);
