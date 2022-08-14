@@ -7,10 +7,10 @@
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
 template <typename T>
-class EngineG4D3D : public AbstractNBodyEngine<T>, private Initializer4D3D<T>
+class Engine4D3D : public AbstractNBodyEngine<T>, private Initializer4D3D<T>
 {
 public:
-    explicit EngineG4D3D(const bhs::SimCondition& sim)
+    explicit Engine4D3D(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
         , Initializer4D3D<T>(sim, this)
     {
@@ -47,7 +47,7 @@ public:
         }
     }
 
-    ~EngineG4D3D()
+    ~Engine4D3D()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

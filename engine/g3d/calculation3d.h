@@ -1,24 +1,20 @@
 #pragma once
 
 #include <QObject>
-#include <QDebug>
 
 #include "engine/abstractnbodyengine.h"
 
-using namespace hnn;
-
 template <typename T>
-class CalculationG3D4D
+class Calculation3D
 {
 public:
-    CalculationG3D4D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    Calculation3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-    {
-    }
+    {}
 
     inline void calculateTimeProgress() const
     {
@@ -29,15 +25,10 @@ public:
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            auto vq = Quaternion<T>(velocities, i * 4);
-            auto vv3 = vq.lnV3();
-            m_engine->angleToVelocity(vv3);
-            auto to_add = vv3 * timePerFrame;
-
             quint64 j = i * 3;
-            coordinates[j] += to_add.x(); ++j;
-            coordinates[j] += to_add.y(); ++j;
-            coordinates[j] += to_add.z();
+            coordinates[j] += velocities[j] * timePerFrame; ++j;
+            coordinates[j] += velocities[j] * timePerFrame; ++j;
+            coordinates[j] += velocities[j] * timePerFrame;
         }
     }
 
@@ -50,23 +41,19 @@ public:
         const T timePerFrame = m_engine->timePerFrame();
         const T gravitationalConstant = m_engine->gravitationalConstant();
         const T timeG = timePerFrame * gravitationalConstant;
-        quint64 numberOfParticles = m_engine->numberOfParticle();
+        const quint64 numberOfParticles = m_engine->numberOfParticle();
         const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         T d1, d2, d3, r, inv, theta;
         quint64 a, b;
 
-        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
+        T* vels = new T[numberOfParticles * 3]();
+
+        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             a = i * 3;
-
-            auto qi = Quaternion<T>::identity();
-
-            for (quint64 j = 0; j < numberOfParticles; ++j)
+            for (quint64 j = i + 1; j < numberOfParticles; ++j)
             {
-                if (i == j)
-                    continue;
-
                 b = j * 3;
 
                 d1 = coordinates[b    ] - coordinates[a    ];
@@ -78,25 +65,29 @@ public:
                     continue;
 
                 inv = 1.0 / r;
-                d1 *= inv;
-                d2 *= inv;
-                d3 *= inv;
-                theta = inv * inv * timeG * masses[j];
+                theta = inv * inv * inv * timeG;
 
-                theta = m_engine->velocityToAngle(theta);
-                auto acc = Quaternion<T>::makeRotation(d1, d2, d3, theta * T(0.5));
-                qi.rotate8(acc);
+                d1 *= theta;
+                d2 *= theta;
+                d3 *= theta;
+
+                vels[a    ] += d1 * masses[j];
+                vels[a + 1] += d2 * masses[j];
+                vels[a + 2] += d3 * masses[j];
+                vels[b    ] -= d1 * masses[i];
+                vels[b + 1] -= d2 * masses[i];
+                vels[b + 2] -= d3 * masses[i];
             }
-            a = i * 4;
-
-            auto va = Quaternion<T>(velocities, a);
-            va *= qi;
-
-            velocities[a    ] = va.re();
-            velocities[a + 1] = va.i1();
-            velocities[a + 2] = va.i2();
-            velocities[a + 3] = va.i3();
         }
+        bhs::interactionMutex.lock();
+        quint64 end = numberOfParticles * 3;
+        for (quint64 i = 0; i < end; ++i)
+        {
+            velocities[i] += vels[i];
+        }
+        bhs::interactionMutex.unlock();
+
+        delete[] vels;
     }
 
 private:

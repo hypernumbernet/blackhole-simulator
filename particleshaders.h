@@ -7,18 +7,18 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
-#include "engine/g3d/engineg3d.h"
-#include "engine/g3d/corefloatg3d.h"
-#include "engine/g3d/coredoubleg3d.h"
-#include "engine/g3d4d/engineg3d4d.h"
-#include "engine/g3d4d/corefloatg3d4d.h"
-#include "engine/g3d4d/coredoubleg3d4d.h"
-#include "engine/g3d4dr1/engineg3d4dr1.h"
-#include "engine/g3d4dr1/corefloatg3d4dr1.h"
-#include "engine/g3d4dr1/coredoubleg3d4dr1.h"
-#include "engine/g4d3d/engineg4d3d.h"
-#include "engine/g4d3d/corefloatg4d3d.h"
-#include "engine/g4d3d/coredoubleg4d3d.h"
+#include "engine/g3d/engine3d.h"
+#include "engine/g3d/corefloat3d.h"
+#include "engine/g3d/coredouble3d.h"
+#include "engine/g3d4d/engine3d4d.h"
+#include "engine/g3d4d/corefloat3d4d.h"
+#include "engine/g3d4d/coredouble3d4d.h"
+#include "engine/g3d4dr1/engine3d4dr1.h"
+#include "engine/g3d4dr1/corefloat3d4dr1.h"
+#include "engine/g3d4dr1/coredouble3d4dr1.h"
+#include "engine/g4d3d/engine4d3d.h"
+#include "engine/g4d3d/corefloat4d3d.h"
+#include "engine/g4d3d/coredouble4d3d.h"
 #include "computeshaders.h"
 
 class ParticleShaders : private QOpenGLFunctions_4_5_Core

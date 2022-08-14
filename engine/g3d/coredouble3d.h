@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/abstractenginecoredouble.h"
-#include "calculationg4d3d.h"
+#include "calculation3d.h"
 
-class CoreDoubleG4D3D : public AbstractEngineCoreDouble
+class CoreDouble3D : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    CoreDoubleG4D3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    explicit CoreDouble3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,22 +15,22 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new CoreDoubleG4D3D(engine, threadNumber);
+        return new CoreDouble3D(engine, threadNumber);
     }
 
 public slots:
-    inline void calculateTimeProgress() const
+    void calculateTimeProgress() const
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    inline void calculateInteraction() const
+    void calculateInteraction() const
     {
         m_calc.calculateInteraction();
         resultReady();
     }
 
 private:
-    CalculationG4D3D<double> m_calc;
+    Calculation3D<double> m_calc;
 };

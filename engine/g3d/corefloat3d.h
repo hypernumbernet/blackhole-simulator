@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/abstractenginecorefloat.h"
-#include "calculationg3d4dr1.h"
+#include "calculation3d.h"
 
-class CoreFloatG3D4DR1 : public AbstractEngineCoreFloat
+class CoreFloat3D : public AbstractEngineCoreFloat
 {
     Q_OBJECT
 public:
-    CoreFloatG3D4DR1(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    explicit CoreFloat3D(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,27 +15,22 @@ public:
 
     static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
-        return new CoreFloatG3D4DR1(engine, threadNumber);
-    }
-
-    bool hasRangeInteraction() const override
-    {
-        return m_hasRangeTimeProgress;
+        return new CoreFloat3D(engine, threadNumber);
     }
 
 public slots:
-    inline void calculateTimeProgress() const override
+    void calculateTimeProgress() const
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    inline void calculateInteraction() const override
+    void calculateInteraction() const
     {
         m_calc.calculateInteraction();
         resultReady();
     }
 
 private:
-    CalculationG3D4DR1<float> m_calc;
+    Calculation3D<float> m_calc;
 };

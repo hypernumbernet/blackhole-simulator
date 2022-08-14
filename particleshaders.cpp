@@ -49,22 +49,22 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         {
         case bhs::Engine::G3D:
         default:
-            m_NBodyEngineFloat = new EngineG3D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatG3D::factory);
+            m_NBodyEngineFloat = new Engine3D<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D::factory);
             break;
         case bhs::Engine::G3D4D:
-            m_NBodyEngineFloat = new EngineG3D4D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatG3D4D::factory);
+            m_NBodyEngineFloat = new Engine3D4D<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4D::factory);
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G3D4DR1:
-            m_NBodyEngineFloat = new EngineG3D4DR1<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatG3D4DR1::factory);
+            m_NBodyEngineFloat = new Engine3D4DR1<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4DR1::factory);
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G4D3D:
-            m_NBodyEngineFloat = new EngineG4D3D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatG4D3D::factory);
+            m_NBodyEngineFloat = new Engine4D3D<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat4D3D::factory);
             break;
         }
     } else {
@@ -72,22 +72,22 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         {
         case bhs::Engine::G3D:
         default:
-            m_NBodyEngineDouble = new EngineG3D<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleG3D::factory);
+            m_NBodyEngineDouble = new Engine3D<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D::factory);
             break;
         case bhs::Engine::G3D4D:
-            m_NBodyEngineDouble = new EngineG3D4D<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleG3D4D::factory);
+            m_NBodyEngineDouble = new Engine3D4D<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D4D::factory);
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G3D4DR1:
-            m_NBodyEngineDouble = new EngineG3D4DR1<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleG3D4DR1::factory);
+            m_NBodyEngineDouble = new Engine3D4DR1<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D4DR1::factory);
             velocityVectorSize = 4;
             break;
         case bhs::Engine::G4D3D:
-            m_NBodyEngineDouble = new EngineG4D3D<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleG4D3D::factory);
+            m_NBodyEngineDouble = new Engine4D3D<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble4D3D::factory);
             break;
         }
     }

@@ -7,10 +7,10 @@
 using namespace hnn;
 
 template <typename T>
-class CalculationG4D3D
+class Calculation4D3D
 {
 public:
-    CalculationG4D3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    Calculation4D3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)

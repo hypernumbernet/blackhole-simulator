@@ -29,25 +29,25 @@ HEADERS += \
     engine/abstractenginecorefloat.h \
     engine/abstractinitializer.h \
     engine/abstractnbodyengine.h \
-    engine/g3d/calculationg3d.h \
-    engine/g3d/coredoubleg3d.h \
-    engine/g3d/corefloatg3d.h \
-    engine/g3d/engineg3d.h \
+    engine/g3d/calculation3d.h \
+    engine/g3d/coredouble3d.h \
+    engine/g3d/corefloat3d.h \
+    engine/g3d/engine3d.h \
     engine/g3d/initializer3d.h \
-    engine/g3d4d/calculationg3d4d.h \
-    engine/g3d4d/coredoubleg3d4d.h \
-    engine/g3d4d/corefloatg3d4d.h \
-    engine/g3d4d/engineg3d4d.h \
+    engine/g3d4d/calculation3d4d.h \
+    engine/g3d4d/coredouble3d4d.h \
+    engine/g3d4d/corefloat3d4d.h \
+    engine/g3d4d/engine3d4d.h \
     engine/g3d4d/initializer3d4d.h \
-    engine/g3d4dr1/calculationg3d4dr1.h \
-    engine/g3d4dr1/coredoubleg3d4dr1.h \
-    engine/g3d4dr1/corefloatg3d4dr1.h \
-    engine/g3d4dr1/engineg3d4dr1.h \
+    engine/g3d4dr1/calculation3d4dr1.h \
+    engine/g3d4dr1/coredouble3d4dr1.h \
+    engine/g3d4dr1/corefloat3d4dr1.h \
+    engine/g3d4dr1/engine3d4dr1.h \
     engine/g3d4dr1/initializer3d4dr1.h \
-    engine/g4d3d/calculationg4d3d.h \
-    engine/g4d3d/coredoubleg4d3d.h \
-    engine/g4d3d/corefloatg4d3d.h \
-    engine/g4d3d/engineg4d3d.h \
+    engine/g4d3d/calculation4d3d.h \
+    engine/g4d3d/coredouble4d3d.h \
+    engine/g4d3d/corefloat4d3d.h \
+    engine/g4d3d/engine4d3d.h \
     engine/g4d3d/initializer4d3d.h \
     global.h \
     graphicwindow.h \

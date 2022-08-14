@@ -2,17 +2,17 @@
 
 #include "engine/abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer3d4dr1.h"
+#include "initializer3d4d.h"
 
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
 template <typename T>
-class EngineG3D4DR1 : public AbstractNBodyEngine<T>, private Initializer3D4DR1<T>
+class Engine3D4D : public AbstractNBodyEngine<T>, private Initializer3D4D<T>
 {
 public:
-    explicit EngineG3D4DR1(const bhs::SimCondition& sim)
+    explicit Engine3D4D(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
-        , Initializer3D4DR1<T>(sim, this)
+        , Initializer3D4D<T>(sim, this)
     {
         this->setNumberOfParticles();
 
@@ -25,7 +25,7 @@ public:
         this->init();
     }
 
-    ~EngineG3D4DR1()
+    ~Engine3D4D()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;
