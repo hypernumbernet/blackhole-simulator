@@ -37,7 +37,7 @@ And also simulate anomalous gravitational fields by simulating distorted virtual
 
 ## Developping Environment
 
-### Qt 5.15, Qt Creator 4, C++17
+### Qt 6.2.4, Qt Creator 4, C++17
 
 * Compiler : MSVC2019 or MinGW8.1 or GCC (64bit for all)
 
