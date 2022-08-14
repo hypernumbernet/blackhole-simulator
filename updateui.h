@@ -58,6 +58,7 @@ public:
             {bhs::Preset::RandomCube, tr("Random Cube")},
             {bhs::Preset::RandomSphere, tr("Random Sphere")},
             {bhs::Preset::RandomBall, tr("Random Ball")},
+            {bhs::Preset::Custom, tr("Custom")},
             {bhs::Preset::SunEarth, tr("Sun Earth")},
             {bhs::Preset::EarthMoon, tr("Earth Moon")},
             {bhs::Preset::SunEarthVenus, tr("Sun Earth Venus")},

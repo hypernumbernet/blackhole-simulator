@@ -4,9 +4,9 @@
 #include <QThread>
 #include <QMutex>
 
-#include "abstractenginecore.h"
-#include "abstractenginecorefloat.h"
-#include "abstractenginecoredouble.h"
+#include "engine/abstractenginecore.h"
+#include "engine/abstractenginecorefloat.h"
+#include "engine/abstractenginecoredouble.h"
 
 class ThreadController : public QObject
 {

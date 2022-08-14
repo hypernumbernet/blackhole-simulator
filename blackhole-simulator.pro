@@ -4,9 +4,9 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
-    abstractnbodyengine.cpp \
     camera.cpp \
     computeshaders.cpp \
+    engine/abstractnbodyengine.cpp \
     graphicwindow.cpp \
     initializer/initializer3d.cpp \
     initializer/initializer3d4d.cpp \
@@ -22,13 +22,12 @@ SOURCES += \
     threadcontroller.cpp
 
 HEADERS += \
-    abstractenginecore.h \
-    abstractenginecoredouble.h \
-    abstractenginecorefloat.h \
-    abstractinitializer.h \
-    abstractnbodyengine.h \
     camera.h \
     computeshaders.h \
+    engine/abstractnbodyengine.h \
+    engine/abstractenginecore.h \
+    engine/abstractenginecoredouble.h \
+    engine/abstractenginecorefloat.h \
     engine/g3d/g3dcalculation.h \
     engine/g3d/g3dcoredouble.h \
     engine/g3d/g3dcorefloat.h \
@@ -51,6 +50,7 @@ HEADERS += \
     hnn/octonion.h \
     hnn/quaternion.h \
     hnn/vector3.h \
+    initializer/abstractinitializer.h \
     initializer/initializer3d.h \
     initializer/initializer3d4d.h \
     initializer/initializer3d4dr1.h \

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 #include "updateui.h"
 #include "initializer/initializer3d4d.h"
 

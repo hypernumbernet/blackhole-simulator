@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 
 class AbstractInitializer
 {
@@ -39,6 +39,9 @@ protected:
         case bhs::Preset::RandomBall:
             initRandamSphere(0.0);
             break;
+        case bhs::Preset::Custom:
+            initCustom();
+            break;
         case bhs::Preset::SunEarth:
             initSunEarth();
             break;
@@ -63,6 +66,7 @@ protected:
 private:
     virtual void initRandamCube() = 0;
     virtual void initRandamSphere(double) = 0;
+    virtual void initCustom() = 0;
     virtual void initSunEarth() = 0;
     virtual void initEarthSun() = 0;
     virtual void initEarthMoon() = 0;

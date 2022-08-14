@@ -38,18 +38,6 @@ public:
     void setI6(T i6) { m_i6 = i6; }
     void setI7(T i7) { m_i7 = i7; }
 
-    void set(const Octonion& a)
-    {
-        m_re = a.m_re;
-        m_i1 = a.m_i1;
-        m_i2 = a.m_i2;
-        m_i3 = a.m_i3;
-        m_i4 = a.m_i4;
-        m_i5 = a.m_i5;
-        m_i6 = a.m_i6;
-        m_i7 = a.m_i7;
-    }
-
     constexpr const Octonion operator+(const Octonion& a) const
     {
         return Octonion(m_re + a.m_re, m_i1 + a.m_i1, m_i2 + a.m_i2, m_i3 + a.m_i3,

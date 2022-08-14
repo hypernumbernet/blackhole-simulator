@@ -36,6 +36,7 @@ enum class Preset
     RandomCube,
     RandomSphere,
     RandomBall,
+    Custom,
     SunEarth,
     EarthMoon,
     SunEarthVenus,
@@ -62,9 +63,9 @@ struct SimCondition
     Preset preset = Preset::RandomBall;
     double timePerFrame = 1000.0;
     int numberOfParticles = 2000;
+    double scale = 1.0e+14;
     double massAvg = 1.0e+37;
     bool massRandom = true;
-    double scale = 1.0e+14;
     double speed = 1.5e+4;
     double rotation = 5e-5;
 };

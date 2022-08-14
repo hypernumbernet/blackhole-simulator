@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 
 template <typename T>
 class G3DCalculation

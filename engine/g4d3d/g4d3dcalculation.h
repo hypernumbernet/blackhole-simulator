@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 
 using namespace hnn;
 

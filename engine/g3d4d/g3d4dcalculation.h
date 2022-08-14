@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QDebug>
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 
 using namespace hnn;
 

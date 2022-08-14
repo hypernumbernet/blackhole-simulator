@@ -2,16 +2,16 @@
 
 //####################################################################
 //
-// To avoid float overflow and(or) speed up the calculations.
+// To avoid float overflow and speed up the calculations.
 //
 // Convert
 //
 // 10^10 (m) = 10000000000 (m) = 1 (length here)
-// 10^30 (kg) = 1000...00 (kg) = 1 (mass here)
+// 10^30 (kg) = 1 (mass here)
 //
-// g constant : -10-10-10+30 = 0 (not change)
+// g constant (m^3 kg^-1 s^-2) : -10-10-10+30 = 0 (not change)
 //
-// Or you should choose the right scale for your calculations like this.
+// Or you should choose the right scale for your calculations.
 //
 //####################################################################
 
@@ -100,6 +100,11 @@ void Initializer3D<T>::initRandamSphere(const double rate)
         velocities[i] = T(bhs::rand0center1max() * m_sim.speed * correct.m);
     }
     setRotation();
+}
+
+template <typename T>
+void Initializer3D<T>::initCustom()
+{
 }
 
 template <typename T>

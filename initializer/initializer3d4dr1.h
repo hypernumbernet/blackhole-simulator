@@ -19,6 +19,7 @@ public:
 private:
     void initRandamCube() override;
     void initRandamSphere(double) override;
+    void initCustom() override;
     void initSunEarth() override;
     void initEarthSun() override;
     void initEarthMoon() override;

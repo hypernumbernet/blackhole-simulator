@@ -18,6 +18,11 @@ void Initializer4D3D<T>::initRandamSphere(const double rate)
 }
 
 template <typename T>
+void Initializer4D3D<T>::initCustom()
+{
+}
+
+template <typename T>
 void Initializer4D3D<T>::initSunEarth()
 {
     m_3d.initSunEarth();

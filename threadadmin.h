@@ -7,7 +7,7 @@
 
 #include "updateui.h"
 #include "threadcontroller.h"
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 #include "computeshaders.h"
 
 #include "engine/g3d/g3dengine.h"

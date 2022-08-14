@@ -59,14 +59,6 @@ public:
         m_i3 = a[index + 3];
     }
 
-    void set(const Quaternion& a)
-    {
-        m_re = a.m_re;
-        m_i1 = a.m_i1;
-        m_i2 = a.m_i2;
-        m_i3 = a.m_i3;
-    }
-
     static constexpr Quaternion<T> zero()
     {
         return Quaternion<T>(T(0), T(0), T(0), T(0));

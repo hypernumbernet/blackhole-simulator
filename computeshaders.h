@@ -4,7 +4,7 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLBuffer>
 
-#include "abstractnbodyengine.h"
+#include "engine/abstractnbodyengine.h"
 
 class ComputeShaders : private QOpenGLFunctions_4_5_Core
 {

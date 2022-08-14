@@ -96,8 +96,8 @@ void MainWidget::initUi()
     m_vLayout.addWidget(resetBtn);
     connect(resetBtn, &QPushButton::clicked, this, &MainWidget::resetInitial);
 
-    // New
-    auto newButton = new QPushButton(tr("New..."));
+    // Settings
+    auto newButton = new QPushButton(tr("Settings..."));
     newButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(newButton);
     connect(newButton, &QPushButton::clicked, this, &MainWidget::showInitializerDialog);

@@ -10,6 +10,8 @@
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QSettings>
 
 #include "updateui.h"
 
@@ -33,6 +35,9 @@ private:
     bool validate();
     double toDouble(QLineEdit&, bool&);
     int toInt(QLineEdit&, bool&);
+    void save();
+    void load();
+    void customCondition();
 
     const QPalette m_normalPal;
     QPalette m_NGPal;
