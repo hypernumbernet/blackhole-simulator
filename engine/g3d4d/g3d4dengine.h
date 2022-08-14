@@ -2,7 +2,7 @@
 
 #include "engine/abstractnbodyengine.h"
 #include "updateui.h"
-#include "initializer/initializer3d4d.h"
+#include "initializer3d4d.h"
 
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 
