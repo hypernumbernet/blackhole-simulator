@@ -4,16 +4,16 @@ template class Initializer4D3D<float>;
 template class Initializer4D3D<double>;
 
 template <typename T>
-void Initializer4D3D<T>::initRandamCube()
+void Initializer4D3D<T>::initRandomCube()
 {
-    m_3d.initRandamCube();
+    m_3d.initRandomCube();
     fromInitializer3D();
 }
 
 template <typename T>
-void Initializer4D3D<T>::initRandamSphere(const double rate)
+void Initializer4D3D<T>::initRandomSphere(const double rate)
 {
-    m_3d.initRandamSphere(rate);
+    m_3d.initRandomSphere(rate);
     fromInitializer3D();
 }
 

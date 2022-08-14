@@ -7,10 +7,10 @@ SOURCES += \
     camera.cpp \
     computeshaders.cpp \
     engine/abstractnbodyengine.cpp \
-    engine/g3d/initializer3d.cpp \
-    engine/g3d4d/initializer3d4d.cpp \
-    engine/g3d4dr1/initializer3d4dr1.cpp \
-    engine/g4d3d/initializer4d3d.cpp \
+    engine/3d/initializer3d.cpp \
+    engine/3d4d/initializer3d4d.cpp \
+    engine/3d4dr1/initializer3d4dr1.cpp \
+    engine/4d3d/initializer4d3d.cpp \
     graphicwindow.cpp \
     initializerdialog.cpp \
     lineshaders.cpp \
@@ -29,26 +29,26 @@ HEADERS += \
     engine/abstractenginecorefloat.h \
     engine/abstractinitializer.h \
     engine/abstractnbodyengine.h \
-    engine/g3d/calculation3d.h \
-    engine/g3d/coredouble3d.h \
-    engine/g3d/corefloat3d.h \
-    engine/g3d/engine3d.h \
-    engine/g3d/initializer3d.h \
-    engine/g3d4d/calculation3d4d.h \
-    engine/g3d4d/coredouble3d4d.h \
-    engine/g3d4d/corefloat3d4d.h \
-    engine/g3d4d/engine3d4d.h \
-    engine/g3d4d/initializer3d4d.h \
-    engine/g3d4dr1/calculation3d4dr1.h \
-    engine/g3d4dr1/coredouble3d4dr1.h \
-    engine/g3d4dr1/corefloat3d4dr1.h \
-    engine/g3d4dr1/engine3d4dr1.h \
-    engine/g3d4dr1/initializer3d4dr1.h \
-    engine/g4d3d/calculation4d3d.h \
-    engine/g4d3d/coredouble4d3d.h \
-    engine/g4d3d/corefloat4d3d.h \
-    engine/g4d3d/engine4d3d.h \
-    engine/g4d3d/initializer4d3d.h \
+    engine/3d/calculation3d.h \
+    engine/3d/coredouble3d.h \
+    engine/3d/corefloat3d.h \
+    engine/3d/engine3d.h \
+    engine/3d/initializer3d.h \
+    engine/3d4d/calculation3d4d.h \
+    engine/3d4d/coredouble3d4d.h \
+    engine/3d4d/corefloat3d4d.h \
+    engine/3d4d/engine3d4d.h \
+    engine/3d4d/initializer3d4d.h \
+    engine/3d4dr1/calculation3d4dr1.h \
+    engine/3d4dr1/coredouble3d4dr1.h \
+    engine/3d4dr1/corefloat3d4dr1.h \
+    engine/3d4dr1/engine3d4dr1.h \
+    engine/3d4dr1/initializer3d4dr1.h \
+    engine/4d3d/calculation4d3d.h \
+    engine/4d3d/coredouble4d3d.h \
+    engine/4d3d/corefloat4d3d.h \
+    engine/4d3d/engine4d3d.h \
+    engine/4d3d/initializer4d3d.h \
     global.h \
     graphicwindow.h \
     hnn/constants.h \

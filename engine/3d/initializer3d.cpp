@@ -2,16 +2,17 @@
 
 //####################################################################
 //
-// To avoid float overflow and speed up the calculations.
+// To avoid a float overflow and speed up the calculations.
 //
 // Convert
 //
 // 10^10 (m) = 10000000000 (m) = 1 (length here)
 // 10^30 (kg) = 1 (mass here)
 //
-// g constant (m^3 kg^-1 s^-2) : -10-10-10+30 = 0 (not change)
+// G constant (m^3 kg^-1 s^-2) : -10-10-10+30 = 0 (not change)
 //
-// Or you should choose the right scale for your calculations.
+// You should choose the right scale for your calculations.
+// The "Correct" class help this Conversions.
 //
 //####################################################################
 
@@ -19,7 +20,7 @@ template class Initializer3D<float>;
 template class Initializer3D<double>;
 
 template <typename T>
-void Initializer3D<T>::initRandamCube()
+void Initializer3D<T>::initRandomCube()
 {
     Correct correct(m_sim.scale);
     m_engine->changeModelScale(correct.m);
@@ -53,7 +54,7 @@ void Initializer3D<T>::initRandamCube()
 }
 
 template <typename T>
-void Initializer3D<T>::initRandamSphere(const double rate)
+void Initializer3D<T>::initRandomSphere(const double rate)
 {
     Correct correct(m_sim.scale);
     m_engine->changeModelScale(correct.m);

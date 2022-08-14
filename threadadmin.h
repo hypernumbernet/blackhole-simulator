@@ -10,12 +10,12 @@
 #include "engine/abstractnbodyengine.h"
 #include "computeshaders.h"
 
-#include "engine/g3d/engine3d.h"
-#include "engine/g3d/corefloat3d.h"
-#include "engine/g3d/coredouble3d.h"
-#include "engine/g3d4d/engine3d4d.h"
-#include "engine/g3d4d/corefloat3d4d.h"
-#include "engine/g3d4d/coredouble3d4d.h"
+#include "engine/3d/engine3d.h"
+#include "engine/3d/corefloat3d.h"
+#include "engine/3d/coredouble3d.h"
+#include "engine/3d4d/engine3d4d.h"
+#include "engine/3d4d/corefloat3d4d.h"
+#include "engine/3d4d/coredouble3d4d.h"
 
 class ThreadAdmin : public QThread
 {
