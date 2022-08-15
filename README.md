@@ -25,15 +25,16 @@ And also simulate anomalous gravitational fields by simulating distorted virtual
   - Mouse Left Drag : Rotation
   - Mouse Right Drag : Translate
   - Mouse Left-Right Drag : Rolling
-  - Mouse Center Click : Look at the origin
+  - Mouse Center Click : Look at the origin & y axis top
   - W-S-A-D Keys : Translate
   - Q-E Keys : Rolling
   - Allow Keys : Look around
   - Space-Ctrl Keys : Moving up and down
-  - Tab Key : Look at the origin
+  - Tab Key : Look at the origin & y axis top
   - Shift Key : Stand XZ plane
   - Esc Key : Refresh the position
   - Home-End Keys : Approaching or moving away from the origin
+  - Back Space Key : Look at the origin
 
 ## Developping Environment
 
