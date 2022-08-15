@@ -127,7 +127,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     auto loadButton = new QPushButton(tr("Load..."));
     secondLayout->addWidget(loadButton);
     connect(loadButton, &QPushButton::clicked, this, &InitializerDialog::load);
-    auto viewCustomButton = new QPushButton(tr("Custom Condition..."));
+    auto viewCustomButton = new QPushButton(tr("Custom Data..."));
     secondLayout->addWidget(viewCustomButton);
     connect(viewCustomButton, &QPushButton::clicked, this, &InitializerDialog::customCondition);
 
@@ -296,27 +296,36 @@ void InitializerDialog::save()
     stg.setValue("Rotation", m_sim.rotation);
     stg.endGroup();
 
-    stg.beginWriteArray("CustomData");
+    m_sim.custom.scale = 1e+11;
+    m_sim.custom.particles.append({{1,2,3}, {4,5,6}, 7});
+    m_sim.custom.particles.append({{8,9,10}, {11,12,13}, 14});
+
+    stg.beginGroup("Custom");
+    stg.setValue("Scale", m_sim.custom.scale);
+    stg.endGroup();
+
+    stg.beginWriteArray("Particles");
     int i = 0;
     for (bhs::Particle& e : m_sim.custom.particles)
     {
         stg.setArrayIndex(i);
-        stg.setValue("Mass", e.mass);
-        stg.setValue("CoordinateX", e.coordinate.x());
-        stg.setValue("CoordinateY", e.coordinate.y());
-        stg.setValue("CoordinateZ", e.coordinate.z());
-        stg.setValue("VelocityX", e.velocity.x());
-        stg.setValue("VelocityY", e.velocity.y());
-        stg.setValue("VelocityZ", e.velocity.z());
+        stg.setValue("M", e.mass);
+        stg.setValue("CX", e.coordinate.x());
+        stg.setValue("CY", e.coordinate.y());
+        stg.setValue("CZ", e.coordinate.z());
+        stg.setValue("VX", e.velocity.x());
+        stg.setValue("VY", e.velocity.y());
+        stg.setValue("VZ", e.velocity.z());
         ++i;
     }
     stg.endArray();
+
     QMessageBox::information(this, tr("Information"), tr("Saved a setting file."));
 }
 
 void InitializerDialog::load()
 {
-    QFileDialog dlg(this, tr("Save Settings"));
+    QFileDialog dlg(this, tr("Load Settings"));
     QStringList fileNames;
     if (dlg.exec())
     {
@@ -352,6 +361,27 @@ void InitializerDialog::load()
         sim.speed = stg.value("Speed", sim.speed).toDouble();
         sim.rotation = stg.value("Rotation", sim.rotation).toDouble();
         stg.endGroup();
+
+        stg.beginGroup("Custom");
+        m_sim.custom.scale = stg.value("Scale", sim.custom.scale).toDouble();
+        stg.endGroup();
+
+        int size = stg.beginReadArray("Particles");
+        m_sim.custom.numberOfParticles = size;
+        for (int i = 0; i < size; ++i)
+        {
+            bhs::Particle p;
+            stg.setArrayIndex(i);
+            p.mass = stg.value("M").toDouble();
+            p.coordinate.setX(stg.value("CX").toDouble());
+            p.coordinate.setY(stg.value("CY").toDouble());
+            p.coordinate.setZ(stg.value("CZ").toDouble());
+            p.velocity.setX(stg.value("VX").toDouble());
+            p.velocity.setY(stg.value("VY").toDouble());
+            p.velocity.setZ(stg.value("VZ").toDouble());
+            m_sim.custom.particles.append(p);
+        }
+        stg.endArray();
 
         setValues(sim);
     } else {

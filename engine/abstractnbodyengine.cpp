@@ -78,6 +78,9 @@ void AbstractNBodyEngine<T>::setNumberOfParticles()
     case bhs::Preset::SunEarthVenus:
         m_numberOfParticles = 3;
         break;
+    case bhs::Preset::Custom:
+        m_numberOfParticles = m_sim.custom.numberOfParticles;
+        break;
     }
     emit UpdateUi::it().displayNumberOfParticles(m_numberOfParticles);
     int tcount = QThread::idealThreadCount();
