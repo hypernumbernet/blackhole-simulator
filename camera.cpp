@@ -15,6 +15,21 @@ void Camera::rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
     axis.normalize();
 }
 
+QQuaternion Camera::slerp(const QVector3D& from, const QVector3D& to, float rate, float threshold)
+{
+    // QQuaternion::slerp did not work well.
+
+    auto cosVal = QVector3D::dotProduct(from, to);
+    if (cosVal >= threshold || cosVal <= -threshold)
+        return QQuaternion(1.0f, 0.0f, 0.0f, 0.0f);
+    auto angle = acos(cosVal) * rate * 0.5f;
+    auto cross = QVector3D::crossProduct(from, to);
+    cross.normalize();
+    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
+    rot.normalize();
+    return rot;
+}
+
 Camera::Camera(const QVector3D &pos)
     : m_position(pos)
     , m_forward(0.0f, 0.0f, -1.0f)
@@ -77,17 +92,12 @@ bool Camera::standXZ(const bool resetY, const float rate)
 {
     QMutexLocker locker(&m_mutex);
     if (resetY)
-        m_position.setY(-1.0f);
+        m_position.setY(m_position.y() + rate * (-1.0f - m_position.y()));
 
     auto direction = QVector3D(0.0f, 1.0f, 0.0f);
-    auto cosVal = QVector3D::dotProduct(direction, m_up);
-    if (cosVal >= 1.0f)
+    auto rot = slerp(direction, m_up, rate, 0.999f);
+    if (rot.scalar() == 1.0f)
         return false;
-    auto angle = acos(cosVal) * rate * 0.5f;
-    auto cross = QVector3D::crossProduct(direction, m_up);
-    cross.normalize();
-    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
-    rot.normalize();
 
     multiplyRotation(rot);
     rotateV3ByQuaternion(m_forward, rot);
@@ -97,49 +107,56 @@ bool Camera::standXZ(const bool resetY, const float rate)
     return true;
 }
 
-bool Camera::lookAtZero(const float rate)
+void Camera::topY(const float rate)
 {
     QMutexLocker locker(&m_mutex);
-    auto direction = m_position.normalized();
-    auto cosVal = QVector3D::dotProduct(direction, m_forward);
+    auto position = m_position.normalized();
 
-    // Occurs rarely with vigorous operation. Always be careful when using dot products.
-    if (cosVal >= 1.0f)
-        return false;
+    auto rot = slerp(position, m_forward, rate, 0.99999f);
+    if (rot.scalar() < 1.0f)
+    {
+        multiplyRotation(rot);
+        rotateV3ByQuaternion(m_forward, rot);
+        rotateV3ByQuaternion(m_right, rot);
+        rotateV3ByQuaternion(m_up, rot);
+    }
 
-    auto angle = acos(cosVal) * rate * 0.5f;
-    auto cross = QVector3D::crossProduct(direction, m_forward);
-    cross.normalize();
-    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
-    rot.normalize();
-
-    multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
-    rotateV3ByQuaternion(m_up, rot);
-
-    return true;
+    auto direction = QVector3D(0.0f, 1.0f, 0.0f);
+    auto cosY = QVector3D::dotProduct(position, direction);
+    if (cosY < 0.99f && cosY > -0.99f)
+    {
+        auto angleY = (acos(cosY) - float(hnn::PI * 0.5)) * 0.5;
+        auto crossY = QVector3D::crossProduct(position, direction);
+        crossY.normalize();
+        auto rotY = QQuaternion(cos(angleY), sin(angleY) * crossY);
+        rotY.normalize();
+        rotateV3ByQuaternion(direction, rotY);
+        auto rotU = slerp(direction, m_up, rate, 1.0f);
+        if (rotU.scalar() < 1.0f)
+        {
+            multiplyRotation(rotU);
+            rotateV3ByQuaternion(m_forward, rotU);
+            rotateV3ByQuaternion(m_right, rotU);
+            rotateV3ByQuaternion(m_up, rotU);
+        }
+    }
 }
 
-bool Camera::lookAt(const QVector3D& point, const float rate)
+void Camera::lookAtZero(const float rate)
+{
+    lookAt({0.0f, 0.0f, 0.0f}, rate);
+}
+
+void Camera::lookAt(const QVector3D& point, const float rate)
 {
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
-    auto cosVal = QVector3D::dotProduct(direction, m_forward);
-    if (cosVal >= 1.0f)
-        return false;
-    auto angle = acos(cosVal) * rate * 0.5f;
-    auto cross = QVector3D::crossProduct(direction, m_forward);
-    cross.normalize();
-    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
-    rot.normalize();
+    auto rot = slerp(direction, m_forward, rate);
 
     multiplyRotation(rot);
     rotateV3ByQuaternion(m_forward, rot);
     rotateV3ByQuaternion(m_right, rot);
     rotateV3ByQuaternion(m_up, rot);
-
-    return true;
 }
 
 bool Camera::setPosition(const QVector3D& pos, const float rate)

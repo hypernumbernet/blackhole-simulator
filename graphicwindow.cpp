@@ -6,7 +6,7 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     , m_computeShaders(new ComputeShaders)
     , m_threadAdmin(this, m_computeShaders)
     , m_walkSpeed(0.1f)
-    , m_lookAroundSpeed(1.0f)
+    , m_lookAroundSpeed(2.0f)
     , m_mousePressing(false)
     , m_camera(CAMERA_INI_POS)
     , m_fpsPreFrame(0)
@@ -14,9 +14,7 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     , m_circleStrafingSpeed(1.0f)
     , m_simCondition(&simCondition)
 {
-    m_camera.lookAtZero(1.0f);
-    m_camera.standXZ(false, 1.0f);
-    m_camera.lookAtZero(1.0f);
+    m_camera.topY(1.0f);
 
     connect(&UpdateUi::it(), &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
     connect(&UpdateUi::it(), &UpdateUi::resultReady, &m_threadAdmin, &ThreadAdmin::handleResults);
@@ -94,9 +92,7 @@ void GraphicWindow::keyPressEvent(QKeyEvent *ev)
     if (ev->key() == Qt::Key_Escape)
     {
         m_camera.reset(CAMERA_INI_POS * 10.0f);
-        m_camera.lookAt(CAMERA_INI_POS, 1.0f);
-        m_camera.standXZ(false, 1.0f);
-        m_camera.lookAt(CAMERA_INI_POS, 1.0f);
+        m_camera.topY(1.0f);
     }
 
     m_keyPressing.append(static_cast<Qt::Key>(ev->key()));
@@ -118,8 +114,7 @@ void GraphicWindow::mousePressEvent(QMouseEvent* ev)
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
     if (ev->buttons() == (Qt::MiddleButton))
     {
-        m_camera.standXZ(false, 1.0f);
-        m_camera.lookAtZero(1.0f);
+        m_camera.topY(1.0f);
     }
 }
 
@@ -208,10 +203,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.roll(m_lookAroundSpeed);
 
         if (m_keyPressing.indexOf(Qt::Key_Shift) >= 0)
-            m_camera.standXZ();
+            m_camera.standXZ(true, 0.2f);
 
         if (m_keyPressing.indexOf(Qt::Key_Tab) >= 0)
-            m_camera.lookAtZero(0.2f);
+            m_camera.topY(0.2f);
 
         if (m_keyPressing.indexOf(Qt::Key_Escape) >= 0)
             m_camera.setPosition(CAMERA_INI_POS, 0.1f);
@@ -221,6 +216,9 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
 
         if (m_keyPressing.indexOf(Qt::Key_End) >= 0)
             m_camera.setPosition(QVector3D(), -0.1f);
+
+        if (m_keyPressing.indexOf(Qt::Key_Backspace) >= 0)
+            m_camera.lookAtZero(0.2f);
 
         if (m_isCircleStrafing)
             m_camera.circleStrafing(m_circleStrafingSpeed * m_walkSpeed);

@@ -1,11 +1,13 @@
 #pragma once
 
-#include<cmath>
+#include <cmath>
 
 #include <QVector3D>
 #include <QQuaternion>
 #include <QMatrix4x4>
 #include <QMutex>
+
+#include "hnn/constants.h"
 
 class Camera
 {
@@ -23,8 +25,9 @@ public:
     void jump(float amount);
 
     bool standXZ(bool resetY = true, float rate = 0.6f);
-    bool lookAtZero(float rate = 0.6f);
-    bool lookAt(const QVector3D& point, float rate = 0.6f);
+    void topY(float rate = 0.6f);
+    void lookAtZero(float rate = 0.6f);
+    void lookAt(const QVector3D& point, float rate = 0.6f);
     bool setPosition(const QVector3D&, float rate = 0.6f);
     void circleStrafing(float amount);
     void roundUp(float amount);
@@ -34,6 +37,7 @@ public:
 
 private:
     void multiplyRotation(const QQuaternion&);
+    QQuaternion slerp(const QVector3D&, const QVector3D&, float rate = 1.0f, float threshold = 1.0f);
 
     QVector3D m_position;
     QVector3D m_forward;
