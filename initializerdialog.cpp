@@ -68,9 +68,9 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     m_presetCustomName.setAlignment(Qt::AlignLeft);
     presetVbox->addWidget(&m_presetCustomName);
 
-    auto viewCustomButton = new QPushButton(tr("Custom Data..."));
-    presetVbox->addWidget(viewCustomButton);
-    connect(viewCustomButton, &QPushButton::clicked, this, &InitializerDialog::customCondition);
+//    auto viewCustomButton = new QPushButton(tr("Custom Data..."));
+//    presetVbox->addWidget(viewCustomButton);
+//    connect(viewCustomButton, &QPushButton::clicked, this, &InitializerDialog::customCondition);
 
     //########################################################################
     auto secondLayout = new QVBoxLayout;
