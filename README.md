@@ -6,6 +6,8 @@ N-Body gravity simulation Qt GUI Edition
 
 OpenGL 4.5 with Qt Framework
 
+[日本語説明](https://github.com/hypernumbernet/blackhole-simulator/blob/version2qt/README-jp.md)
+
 ## Download
 https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
