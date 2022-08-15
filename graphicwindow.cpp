@@ -112,7 +112,7 @@ void GraphicWindow::keyReleaseEvent(QKeyEvent* ev)
 
 void GraphicWindow::mousePressEvent(QMouseEvent* ev)
 {
-    m_mouseLastPosition = ev->localPos();
+    m_mouseLastPosition = ev->position();
     m_mousePressing = true;
     setCursor(Qt::BlankCursor);
     m_mousePressPosition = QPoint(m_mouseLastPosition.x(), m_mouseLastPosition.y());
@@ -127,7 +127,7 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent* ev)
 {
     if (m_mousePressing)
     {
-        QPointF pos = ev->localPos();
+        QPointF pos = ev->position();
         QPointF diff = pos - m_mouseLastPosition;
         if (ev->buttons() == Qt::LeftButton)
         {

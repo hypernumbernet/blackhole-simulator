@@ -1,8 +1,5 @@
 #pragma once
 
-#include <QObject>
-#include <QDebug>
-
 #include "engine/abstractnbodyengine.h"
 
 using namespace hnn;

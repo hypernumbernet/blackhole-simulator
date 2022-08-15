@@ -261,7 +261,7 @@ void InitializerDialog::save()
     {
         return;
     }
-    QFileDialog saveDlg(this, tr("Save Settings"));
+    QFileDialog saveDlg(this, tr("Save Settings"), "./settings/", tr("Ini Files (*.ini)"));
     saveDlg.setAcceptMode(QFileDialog::AcceptSave);
     QStringList fileNames;
     if (saveDlg.exec())
@@ -296,11 +296,8 @@ void InitializerDialog::save()
     stg.setValue("Rotation", m_sim.rotation);
     stg.endGroup();
 
-    m_sim.custom.scale = 1e+11;
-    m_sim.custom.particles.append({{1,2,3}, {4,5,6}, 7});
-    m_sim.custom.particles.append({{8,9,10}, {11,12,13}, 14});
-
     stg.beginGroup("Custom");
+    stg.setValue("Name", m_sim.custom.name);
     stg.setValue("Scale", m_sim.custom.scale);
     stg.endGroup();
 
@@ -309,6 +306,7 @@ void InitializerDialog::save()
     for (bhs::Particle& e : m_sim.custom.particles)
     {
         stg.setArrayIndex(i);
+        stg.setValue("Name", e.name);
         stg.setValue("M", e.mass);
         stg.setValue("CX", e.coordinate.x());
         stg.setValue("CY", e.coordinate.y());
@@ -325,7 +323,7 @@ void InitializerDialog::save()
 
 void InitializerDialog::load()
 {
-    QFileDialog dlg(this, tr("Load Settings"));
+    QFileDialog dlg(this, tr("Load Settings"), "./settings/", tr("Ini Files (*.ini)"));
     QStringList fileNames;
     if (dlg.exec())
     {
@@ -363,15 +361,17 @@ void InitializerDialog::load()
         stg.endGroup();
 
         stg.beginGroup("Custom");
+        m_sim.custom.name = stg.value("Name", sim.custom.name).toString();
         m_sim.custom.scale = stg.value("Scale", sim.custom.scale).toDouble();
         stg.endGroup();
 
+        m_sim.custom.particles.clear();
         int size = stg.beginReadArray("Particles");
-        m_sim.custom.numberOfParticles = size;
         for (int i = 0; i < size; ++i)
         {
             bhs::Particle p;
             stg.setArrayIndex(i);
+            p.name = stg.value("Name").toString();
             p.mass = stg.value("M").toDouble();
             p.coordinate.setX(stg.value("CX").toDouble());
             p.coordinate.setY(stg.value("CY").toDouble());

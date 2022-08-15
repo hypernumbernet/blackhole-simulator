@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QObject>
-
 #include "abstractenginecore.h"
 #include "abstractnbodyengine.h"
 

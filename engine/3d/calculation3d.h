@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QObject>
-
 #include "engine/abstractnbodyengine.h"
 
 template <typename T>

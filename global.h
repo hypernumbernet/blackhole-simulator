@@ -44,13 +44,14 @@ struct Particle
     hnn::Vector3<double> coordinate;
     hnn::Vector3<double> velocity;
     double mass;
+    QString name;
 };
 
 struct CustomData
 {
-    int numberOfParticles = 0;
     double scale = 1.0e+14;
     QVector<Particle> particles;
+    QString name;
 };
 
 struct SimCondition

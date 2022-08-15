@@ -69,7 +69,7 @@ void AbstractNBodyEngine<T>::setNumberOfParticles()
         m_numberOfParticles = m_sim.numberOfParticles;
         break;
     case bhs::Preset::Custom:
-        m_numberOfParticles = m_sim.custom.numberOfParticles;
+        m_numberOfParticles = m_sim.custom.particles.size();
         break;
     }
     emit UpdateUi::it().displayNumberOfParticles(m_numberOfParticles);
