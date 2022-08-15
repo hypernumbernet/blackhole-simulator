@@ -64,6 +64,13 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         if (e.first == bhs::Preset::RandomBall)
             radio->setChecked(true);
     }
+    UpdateUi::style(m_presetCustomName);
+    m_presetCustomName.setAlignment(Qt::AlignLeft);
+    presetVbox->addWidget(&m_presetCustomName);
+
+    auto viewCustomButton = new QPushButton(tr("Custom Data..."));
+    presetVbox->addWidget(viewCustomButton);
+    connect(viewCustomButton, &QPushButton::clicked, this, &InitializerDialog::customCondition);
 
     //########################################################################
     auto secondLayout = new QVBoxLayout;
@@ -127,9 +134,6 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     auto loadButton = new QPushButton(tr("Load..."));
     secondLayout->addWidget(loadButton);
     connect(loadButton, &QPushButton::clicked, this, &InitializerDialog::load);
-    auto viewCustomButton = new QPushButton(tr("Custom Data..."));
-    secondLayout->addWidget(viewCustomButton);
-    connect(viewCustomButton, &QPushButton::clicked, this, &InitializerDialog::customCondition);
 
     //########################################################################
     auto thirdLayout = new QHBoxLayout;
@@ -225,6 +229,7 @@ void InitializerDialog::setValues(const bhs::SimCondition& sim)
     m_massRandomCheckBox.setChecked(sim.massRandom);
     m_speedEdit.setText(QString::number(sim.speed));
     m_rotationEdit.setText(QString::number(sim.rotation));
+    m_presetCustomName.setText(m_sim.custom.name);
 }
 
 double InitializerDialog::toDouble(QLineEdit& edit, bool& success)
@@ -261,7 +266,7 @@ void InitializerDialog::save()
     {
         return;
     }
-    QFileDialog saveDlg(this, tr("Save Settings"), "./settings/", tr("Ini Files (*.ini)"));
+    QFileDialog saveDlg(this, tr("Save Settings"), "settings/", tr("Ini Files (*.ini)"));
     saveDlg.setAcceptMode(QFileDialog::AcceptSave);
     QStringList fileNames;
     if (saveDlg.exec())
@@ -323,7 +328,7 @@ void InitializerDialog::save()
 
 void InitializerDialog::load()
 {
-    QFileDialog dlg(this, tr("Load Settings"), "./settings/", tr("Ini Files (*.ini)"));
+    QFileDialog dlg(this, tr("Load Settings"), "settings/", tr("Ini Files (*.ini)"));
     QStringList fileNames;
     if (dlg.exec())
     {

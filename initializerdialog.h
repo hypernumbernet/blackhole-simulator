@@ -54,6 +54,7 @@ private:
     QButtonGroup m_computeButtonGroup;
     QLineEdit m_speedEdit;
     QLineEdit m_rotationEdit;
+    QLabel m_presetCustomName;
 
     bhs::SimCondition m_sim;
 };
