@@ -59,12 +59,6 @@ public:
             {bhs::Preset::RandomSphere, tr("Random Sphere")},
             {bhs::Preset::RandomBall, tr("Random Ball")},
             {bhs::Preset::Custom, tr("Custom")},
-            {bhs::Preset::SunEarth, tr("Sun Earth")},
-            {bhs::Preset::EarthMoon, tr("Earth Moon")},
-            {bhs::Preset::SunEarthVenus, tr("Sun Earth Venus")},
-            {bhs::Preset::SunMercury, tr("Sun Mercury")},
-            {bhs::Preset::EarthSun, tr("Test Earth Sun swap")},
-            {bhs::Preset::TestSamePosition, tr("Test Same Position")},
         };
         return map;
     }

@@ -68,16 +68,6 @@ void AbstractNBodyEngine<T>::setNumberOfParticles()
     case bhs::Preset::RandomBall:
         m_numberOfParticles = m_sim.numberOfParticles;
         break;
-    case bhs::Preset::SunEarth:
-    case bhs::Preset::EarthSun:
-    case bhs::Preset::EarthMoon:
-    case bhs::Preset::TestSamePosition:
-    case bhs::Preset::SunMercury:
-        m_numberOfParticles = 2;
-        break;
-    case bhs::Preset::SunEarthVenus:
-        m_numberOfParticles = 3;
-        break;
     case bhs::Preset::Custom:
         m_numberOfParticles = m_sim.custom.numberOfParticles;
         break;

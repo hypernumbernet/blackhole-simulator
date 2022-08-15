@@ -20,12 +20,6 @@ private:
     void initRandomCube() override;
     void initRandomSphere(double) override;
     void initCustom() override;
-    void initSunEarth() override;
-    void initEarthSun() override;
-    void initEarthMoon() override;
-    void initSunEarthVenus() override;
-    void initTestSamePosition() override;
-    void initSunMercury() override;
 
     inline Quaternion<T> fromDirectionAndSpeed(
             const T x, const T y, const T z,

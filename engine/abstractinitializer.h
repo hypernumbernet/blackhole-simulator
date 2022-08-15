@@ -42,24 +42,6 @@ protected:
         case bhs::Preset::Custom:
             initCustom();
             break;
-        case bhs::Preset::SunEarth:
-            initSunEarth();
-            break;
-        case bhs::Preset::EarthSun:
-            initEarthSun();
-            break;
-        case bhs::Preset::EarthMoon:
-            initEarthMoon();
-            break;
-        case bhs::Preset::TestSamePosition:
-            initTestSamePosition();
-            break;
-        case bhs::Preset::SunEarthVenus:
-            initSunEarthVenus();
-            break;
-        case bhs::Preset::SunMercury:
-            initSunMercury();
-            break;
         }
     }
 
@@ -67,10 +49,4 @@ private:
     virtual void initRandomCube() = 0;
     virtual void initRandomSphere(double) = 0;
     virtual void initCustom() = 0;
-    virtual void initSunEarth() = 0;
-    virtual void initEarthSun() = 0;
-    virtual void initEarthMoon() = 0;
-    virtual void initSunEarthVenus() = 0;
-    virtual void initTestSamePosition() = 0;
-    virtual void initSunMercury() = 0;
 };

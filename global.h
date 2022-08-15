@@ -37,12 +37,6 @@ enum class Preset
     RandomSphere,
     RandomBall,
     Custom,
-    SunEarth,
-    EarthMoon,
-    SunEarthVenus,
-    SunMercury,
-    EarthSun,
-    TestSamePosition,
 };
 
 struct Particle

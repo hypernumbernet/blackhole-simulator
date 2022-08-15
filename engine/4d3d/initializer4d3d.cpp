@@ -20,46 +20,6 @@ void Initializer4D3D<T>::initRandomSphere(const double rate)
 template <typename T>
 void Initializer4D3D<T>::initCustom()
 {
-}
-
-template <typename T>
-void Initializer4D3D<T>::initSunEarth()
-{
-    m_3d.initSunEarth();
-    fromInitializer3D();
-}
-
-template <typename T>
-void Initializer4D3D<T>::initEarthSun()
-{
-    m_3d.initEarthSun();
-    fromInitializer3D();
-}
-
-template <typename T>
-void Initializer4D3D<T>::initEarthMoon()
-{
-    m_3d.initEarthMoon();
-    fromInitializer3D();
-}
-
-template <typename T>
-void Initializer4D3D<T>::initSunEarthVenus()
-{
-    m_3d.initSunEarthVenus();
-    fromInitializer3D();
-}
-
-template <typename T>
-void Initializer4D3D<T>::initTestSamePosition()
-{
-    m_3d.initTestSamePosition();
-    fromInitializer3D();
-}
-
-template <typename T>
-void Initializer4D3D<T>::initSunMercury()
-{
-    m_3d.initSunMercury();
+    m_3d.initCustom();
     fromInitializer3D();
 }
