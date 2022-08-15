@@ -51,8 +51,6 @@ void Camera::pitch(const float degrees)
     QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_right, degrees);
     multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_up, rot);
 }
 
 void Camera::yaw(const float degrees)
@@ -60,8 +58,6 @@ void Camera::yaw(const float degrees)
     QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_up, degrees);
     multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
 }
 
 void Camera::roll(const float degrees)
@@ -69,8 +65,6 @@ void Camera::roll(const float degrees)
     QMutexLocker locker(&m_mutex);
     auto rot = QQuaternion::fromAxisAndAngle(m_forward, degrees);
     multiplyRotation(rot);
-    rotateV3ByQuaternion(m_up, rot);
-    rotateV3ByQuaternion(m_right, rot);
 }
 
 void Camera::walk(const float amount)
@@ -100,9 +94,6 @@ bool Camera::standXZ(const bool resetY, const float rate)
         return false;
 
     multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
-    rotateV3ByQuaternion(m_up, rot);
 
     return true;
 }
@@ -114,12 +105,7 @@ void Camera::topY(const float rate)
 
     auto rot = slerp(position, m_forward, rate, 0.99999f);
     if (rot.scalar() < 1.0f)
-    {
         multiplyRotation(rot);
-        rotateV3ByQuaternion(m_forward, rot);
-        rotateV3ByQuaternion(m_right, rot);
-        rotateV3ByQuaternion(m_up, rot);
-    }
 
     auto direction = QVector3D(0.0f, 1.0f, 0.0f);
     auto cosY = QVector3D::dotProduct(position, direction);
@@ -133,12 +119,7 @@ void Camera::topY(const float rate)
         rotateV3ByQuaternion(direction, rotY);
         auto rotU = slerp(direction, m_up, rate, 1.0f);
         if (rotU.scalar() < 1.0f)
-        {
             multiplyRotation(rotU);
-            rotateV3ByQuaternion(m_forward, rotU);
-            rotateV3ByQuaternion(m_right, rotU);
-            rotateV3ByQuaternion(m_up, rotU);
-        }
     }
 }
 
@@ -152,11 +133,7 @@ void Camera::lookAt(const QVector3D& point, const float rate)
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
     auto rot = slerp(direction, m_forward, rate);
-
     multiplyRotation(rot);
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
-    rotateV3ByQuaternion(m_up, rot);
 }
 
 bool Camera::setPosition(const QVector3D& pos, const float rate)
@@ -201,4 +178,7 @@ void Camera::multiplyRotation(const QQuaternion& rot)
 {
     m_rotation *= rot;
     m_rotation.normalize();
+    rotateV3ByQuaternion(m_forward, rot);
+    rotateV3ByQuaternion(m_right, rot);
+    rotateV3ByQuaternion(m_up, rot);
 }
