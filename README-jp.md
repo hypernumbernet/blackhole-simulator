@@ -78,7 +78,7 @@ https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
 * a と b の内積から算出した角度を2で割った角度 v と、a と b の外積を正規化した回転軸 e (ex, ey, ez) を算出します。
 * 回転の割合 t を v にかけて、回転を表す四元数を計算します。 q = cos(vt) + i ex sin(vt) + j ey sin(vt) + k ez sin(vt)
-* q の共役四元数 p を準備します。
+* q の共役四元数 p = cos(vt) - i ex sin(vt) - j ey sin(vt) - k ez sin(vt) を準備します。
 * f を四元数化します。 F = i fx + j fy + k fz
 * 四元数の掛け算で p * F * q を計算します。この結果の四元数の虚部3つが回転結果の3次元ベクトルとなります。
 
