@@ -1,16 +1,63 @@
 #include "camera.h"
 
+/*
+
+  To shorten Quaternion rotation effecting axis calculation
+
+  rot.conjugated() * axis * rot
+  = (a - ib - jc - kd) * (ix + jy + kz) * (a + ib + jc + kd)
+  = (iax + jay + kaz - iibx - ijby - ikbz - jicx - jjcy - jkcz - kidx - kjdy - kkdz) * (a + ib + jc + kd)
+  = (iax + jay + kaz +   bx -  kby +  jbz +  kcx +   cy -  icz -  jdx +  idy +   dz) * (a + ib + jc + kd)
+  = (bx + cy + dz + i(ax - cz + dy) + j(ay + bz - dx) + k(az - by + cx)) * (a + ib + jc + kd)
+  = (bx + cy + dz)a - (ax - cz + dy)b - (ay + bz - dx)c - (az - by + cx)d
+    + i((bx + cy + dz)b + (ax - cz + dy)a + (ay + bz - dx)d - (az - by + cx)c)
+    + j((bx + cy + dz)c - (ax - cz + dy)d + (ay + bz - dx)a + (az - by + cx)b)
+    + k((bx + cy + dz)d + (ax - cz + dy)c - (ay + bz - dx)b + (az - by + cx)a)
+  = abx + acy + adz - abx + bcz - bdy - acy - bcz + cdx - adz + bdy - cdx
+    + i(bbx + bcy + bdz + aax - acz + ady + ady + bdz - ddx - acz + bcy - ccx)
+    + j(bcx + ccy + cdz - adx + cdz - ddy + aay + abz - adx + abz - bby + bcx)
+    + k(bdx + cdy + ddz + acx - ccz + cdy - aby - bbz + bdx + aaz - aby + acx)
+  =   i(bbx + 2bcy + 2bdz + aax - 2acz + 2ady - ddx - ccx)
+    + j(2bcx + ccy + 2cdz - 2adx - ddy + aay + 2abz - bby)
+    + k(2bdx + 2cdy + ddz + 2acx - ccz - 2aby - bbz + aaz)
+  =   i((aa + bb - cc - dd)x + 2(bcy + bdz - acz + ady))
+    + j((aa - bb + cc - dd)y + 2(bcx + cdz - adx + abz))
+    + k((aa - bb - cc + dd)z + 2(bdx + cdy + acx - aby))
+  =   i((aa + bb - cc - dd)x + 2((bc + ad)y + (bd - ac)z))
+    + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
+    + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
+
+*/
+
 void Camera::rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
 {
     // The following calculation did not work.
     //axis = rot.rotatedVector(axis);
 
-    auto conjugateRot = rot.conjugated();
-    QQuaternion quaAxis(0.0f, axis);
-    auto result = conjugateRot * quaAxis * rot;
-    axis.setX(result.x());
-    axis.setY(result.y());
-    axis.setZ(result.z());
+    // The following calculation shortened.
+    //    auto conjugateRot = rot.conjugated();
+    //    QQuaternion quaAxis(0.0f, axis);
+    //    auto result = conjugateRot * quaAxis * rot;
+    //    axis.setX(result.x());
+    //    axis.setY(result.y());
+    //    axis.setZ(result.z());
+
+    float a = rot.scalar();
+    float b = rot.x();
+    float c = rot.y();
+    float d = rot.z();
+    float x = axis.x();
+    float y = axis.y();
+    float z = axis.z();
+
+    float aa = a*a, bb = b*b, cc = c*c, dd = d*d;
+    float rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
+    float ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
+    float rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
+
+    axis.setX(rx);
+    axis.setY(ry);
+    axis.setZ(rz);
 
     axis.normalize();
 }
@@ -20,10 +67,23 @@ QQuaternion Camera::slerp(const QVector3D& from, const QVector3D& to, float rate
     // QQuaternion::slerp did not work well.
 
     auto cosVal = QVector3D::dotProduct(from, to);
-    if (cosVal >= threshold || cosVal <= -threshold)
+    if (cosVal >= threshold) // same direction
+    {
         return QQuaternion(1.0f, 0.0f, 0.0f, 0.0f);
+    }
     auto angle = acos(cosVal) * rate * 0.5f;
     auto cross = QVector3D::crossProduct(from, to);
+    if (cosVal <= -threshold) // opposite direction
+    {
+        QVector3D tmp(1.0f, 0.0f, 0.0f);
+        cosVal = QVector3D::dotProduct(from, tmp);
+        if (cosVal >= threshold || cosVal <= -threshold)
+        {
+            cross = QVector3D::crossProduct(from, {0.0f, 0.0f, 1.0f});
+        } else {
+            cross = QVector3D::crossProduct(from, tmp);
+        }
+    }
     cross.normalize();
     auto rot = QQuaternion(cos(angle), sin(angle) * cross);
     rot.normalize();
