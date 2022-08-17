@@ -6,6 +6,8 @@ N-Body gravity simulation Qt GUI Edition
 
 OpenGL 4.5 with Qt Framework
 
+[日本語説明](https://github.com/hypernumbernet/blackhole-simulator/blob/version2qt/README-jp.md)
+
 ## Download
 https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
@@ -25,15 +27,16 @@ And also simulate anomalous gravitational fields by simulating distorted virtual
   - Mouse Left Drag : Rotation
   - Mouse Right Drag : Translate
   - Mouse Left-Right Drag : Rolling
-  - Mouse Center Click : Look at the origin
+  - Mouse Center Click : Look at the origin & y axis top
   - W-S-A-D Keys : Translate
   - Q-E Keys : Rolling
   - Allow Keys : Look around
   - Space-Ctrl Keys : Moving up and down
-  - Tab Key : Look at the origin
+  - Tab Key : Look at the origin & y axis top
   - Shift Key : Stand XZ plane
   - Esc Key : Refresh the position
   - Home-End Keys : Approaching or moving away from the origin
+  - Back Space Key : Look at the origin
 
 ## Developping Environment
 
