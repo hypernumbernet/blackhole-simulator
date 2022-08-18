@@ -3,7 +3,6 @@
 #include "engine/abstractnbodyengine.h"
 #include "updateui.h"
 #include "initializer3d.h"
-#include "threadadmin.h"
 
 // Gravity 3D with Mass Euler method N-Body Engine
 

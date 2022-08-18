@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QMap>
-#include <QListWidget>
 #include <QGroupBox>
-#include <QVBoxLayout>
-#include <QRadioButton>
 #include <QLCDNumber>
 #include <QLabel>
+#include <QListWidget>
+#include <QMap>
+#include <QRadioButton>
+#include <QVBoxLayout>
 
 #include "global.h"
 

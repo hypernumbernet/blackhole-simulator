@@ -1,12 +1,11 @@
 #pragma once
 
-#include <cmath>
-
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
+#include "threadadmin.h"
 #include "engine/3d/engine3d.h"
 #include "engine/3d/corefloat3d.h"
 #include "engine/3d/coredouble3d.h"

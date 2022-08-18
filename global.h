@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QDebug>
 #include <QMutex>
 #include <QGenericMatrix>
 

@@ -1,8 +1,6 @@
 #pragma once
 
-#include <QObject>
 #include <QBasicTimer>
-#include <QThread>
 #include <QTimerEvent>
 
 #include "updateui.h"

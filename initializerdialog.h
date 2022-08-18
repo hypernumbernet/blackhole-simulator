@@ -1,16 +1,13 @@
 #pragma once
 
-#include <QDialog>
-#include <QLabel>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QGroupBox>
 #include <QButtonGroup>
-#include <QMessageBox>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
 #include <QFileDialog>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QSettings>
 
 #include "updateui.h"

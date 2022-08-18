@@ -5,8 +5,6 @@
 #include <QMutex>
 
 #include "engine/abstractenginecore.h"
-#include "engine/abstractenginecorefloat.h"
-#include "engine/abstractenginecoredouble.h"
 
 class ThreadController : public QObject
 {

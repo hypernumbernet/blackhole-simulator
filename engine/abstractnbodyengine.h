@@ -1,8 +1,5 @@
 #pragma once
 
-#include <QtGlobal>
-#include <QDebug>
-#include <QMutex>
 #include <QThread>
 #include <QVector4D>
 #include <QGenericMatrix>
