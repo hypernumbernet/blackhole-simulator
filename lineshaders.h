@@ -27,8 +27,7 @@ private:
     void initGridLines();
     bool m_enableGridLines;
 
-    void appendLine(const QVector3D&, const QVector3D&, const QVector3D& color);
-    void appendLineHnn(const Vector3<float>&, const Vector3<float>&, const QVector3D& color);
+    void appendLine(const Vector3<double>&, const Vector3<double>&, const QVector3D& color);
     QVector<QVector3D> m_vertex;
 
     static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};
@@ -41,6 +40,8 @@ private:
     void linesLongitudeAndLatitude();
     void linesQuaternionS3Rotation();
     void linesOctonionS3Rotation();
-    void drawCircle(int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color);
+    void linesOctonionRotationAt(int, int, int, int);
+    int m_ScreenX = 0;
+    void drawCircle(int resolution, const Vector3<double>& axis, const Vector3<double>& startPoint, const QVector3D color);
 
 };

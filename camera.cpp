@@ -1,156 +1,95 @@
 #include "camera.h"
 
-/*
-
-  To shorten Quaternion rotation effecting axis calculation
-
-  rot.conjugated() * axis * rot
-  = (a - ib - jc - kd) * (ix + jy + kz) * (a + ib + jc + kd)
-  = (iax + jay + kaz - iibx - ijby - ikbz - jicx - jjcy - jkcz - kidx - kjdy - kkdz) * (a + ib + jc + kd)
-  = (iax + jay + kaz +   bx -  kby +  jbz +  kcx +   cy -  icz -  jdx +  idy +   dz) * (a + ib + jc + kd)
-  = (bx + cy + dz + i(ax - cz + dy) + j(ay + bz - dx) + k(az - by + cx)) * (a + ib + jc + kd)
-  = (bx + cy + dz)a - (ax - cz + dy)b - (ay + bz - dx)c - (az - by + cx)d
-    + i((bx + cy + dz)b + (ax - cz + dy)a + (ay + bz - dx)d - (az - by + cx)c)
-    + j((bx + cy + dz)c - (ax - cz + dy)d + (ay + bz - dx)a + (az - by + cx)b)
-    + k((bx + cy + dz)d + (ax - cz + dy)c - (ay + bz - dx)b + (az - by + cx)a)
-  = abx + acy + adz - abx + bcz - bdy - acy - bcz + cdx - adz + bdy - cdx
-    + i(bbx + bcy + bdz + aax - acz + ady + ady + bdz - ddx - acz + bcy - ccx)
-    + j(bcx + ccy + cdz - adx + cdz - ddy + aay + abz - adx + abz - bby + bcx)
-    + k(bdx + cdy + ddz + acx - ccz + cdy - aby - bbz + bdx + aaz - aby + acx)
-  =   i(bbx + 2bcy + 2bdz + aax - 2acz + 2ady - ddx - ccx)
-    + j(2bcx + ccy + 2cdz - 2adx - ddy + aay + 2abz - bby)
-    + k(2bdx + 2cdy + ddz + 2acx - ccz - 2aby - bbz + aaz)
-  =   i((aa + bb - cc - dd)x + 2(bcy + bdz - acz + ady))
-    + j((aa - bb + cc - dd)y + 2(bcx + cdz - adx + abz))
-    + k((aa - bb - cc + dd)z + 2(bdx + cdy + acx - aby))
-  =   i((aa + bb - cc - dd)x + 2((bc + ad)y + (bd - ac)z))
-    + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
-    + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
-
-*/
-
-void Camera::rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot)
-{
-    // The following calculation did not work.
-    //axis = rot.rotatedVector(axis);
-
-    // The following calculation shortened.
-    //    auto conjugateRot = rot.conjugated();
-    //    QQuaternion quaAxis(0.0f, axis);
-    //    auto result = conjugateRot * quaAxis * rot;
-    //    axis.setX(result.x());
-    //    axis.setY(result.y());
-    //    axis.setZ(result.z());
-
-    float a = rot.scalar();
-    float b = rot.x();
-    float c = rot.y();
-    float d = rot.z();
-    float x = axis.x();
-    float y = axis.y();
-    float z = axis.z();
-
-    float aa = a*a, bb = b*b, cc = c*c, dd = d*d;
-    float rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
-    float ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
-    float rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
-
-    axis.setX(rx);
-    axis.setY(ry);
-    axis.setZ(rz);
-
-    axis.normalize();
-}
-
-QQuaternion Camera::slerp(const QVector3D& from, const QVector3D& to, float rate, float threshold)
+Quaternion<double> Camera::slerp(const Vector3<double>& from, const Vector3<double>& to,
+                          double rate, double threshold)
 {
     // QQuaternion::slerp did not work well.
 
-    auto cosVal = QVector3D::dotProduct(from, to);
+    auto cosVal = from.dot(to);
     if (cosVal >= threshold) // same direction
     {
-        return QQuaternion(1.0f, 0.0f, 0.0f, 0.0f);
+        return Quaternion<double>(1.0);
     }
-    auto angle = acos(cosVal) * rate * 0.5f;
-    auto cross = QVector3D::crossProduct(from, to);
+    auto angle = acos(cosVal) * rate * 0.5;
+    auto cross = from.cross(to);
     if (cosVal <= -threshold) // opposite direction
     {
-        QVector3D tmp(1.0f, 0.0f, 0.0f);
-        cosVal = QVector3D::dotProduct(from, tmp);
+        Vector3<double> tmp(1.0, 0.0, 0.0);
+        cosVal = from.dot(to);
         if (cosVal >= threshold || cosVal <= -threshold)
         {
-            cross = QVector3D::crossProduct(from, {0.0f, 0.0f, 1.0f});
+            cross = from.cross({0.0, 0.0, 1.0});
         } else {
-            cross = QVector3D::crossProduct(from, tmp);
+            cross = from.cross(tmp);
         }
     }
     cross.normalize();
-    auto rot = QQuaternion(cos(angle), sin(angle) * cross);
-    rot.normalize();
-    return rot;
+    return Quaternion<double>::rotation(cross, angle);
 }
 
-Camera::Camera(const QVector3D &pos)
+Camera::Camera(const Vector3<double>& pos)
     : m_position(pos)
-    , m_forward(0.0f, 0.0f, -1.0f)
-    , m_right(1.0f, 0.0f, 0.0f)
-    , m_up(0.0f, 1.0f, 0.0f)
+    , m_forward(0.0, 0.0, -1.0)
+    , m_right(1.0, 0.0, 0.0)
+    , m_up(0.0, 1.0, 0.0)
+    , m_rotation(1.0)
 {
 }
 
 QMatrix4x4 Camera::viewMatrix() const
 {
     QMatrix4x4 matrix;
-    matrix.rotate(m_rotation);
-    matrix.translate(m_position);
+    matrix.rotate(QQuaternion((float)m_rotation.re(), (float)m_rotation.i1(),
+                              (float)m_rotation.i2(), (float)m_rotation.i3()));
+    matrix.translate(QVector3D((float)m_position.x(), (float)m_position.y(), (float)m_position.z()));
     return matrix;
 }
 
-void Camera::pitch(const float degrees)
+void Camera::pitch(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = QQuaternion::fromAxisAndAngle(m_right, degrees);
+    auto rot = Quaternion<double>::rotation(m_right, degrees);
     multiplyRotation(rot);
 }
 
-void Camera::yaw(const float degrees)
+void Camera::yaw(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = QQuaternion::fromAxisAndAngle(m_up, degrees);
+    auto rot = Quaternion<double>::rotation(m_up, degrees);
     multiplyRotation(rot);
 }
 
-void Camera::roll(const float degrees)
+void Camera::roll(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = QQuaternion::fromAxisAndAngle(m_forward, degrees);
+    auto rot = Quaternion<double>::rotation(m_forward, degrees);
     multiplyRotation(rot);
 }
 
-void Camera::walk(const float amount)
+void Camera::walk(const double amount)
 {
     m_position += amount * m_forward;
 }
 
-void Camera::strafe(const float amount)
+void Camera::strafe(const double amount)
 {
     m_position += amount * m_right;
 }
 
-void Camera::jump(const float amount)
+void Camera::jump(const double amount)
 {
     m_position += amount * m_up;
 }
 
-bool Camera::standXZ(const bool resetY, const float rate)
+bool Camera::standXZ(const bool resetY, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     if (resetY)
-        m_position.setY(m_position.y() + rate * (-1.0f - m_position.y()));
+        m_position.setY(m_position.y() + rate * (-1.0 - m_position.y()));
 
-    auto direction = QVector3D(0.0f, 1.0f, 0.0f);
-    auto rot = slerp(direction, m_up, rate, 0.999f);
-    if (rot.scalar() == 1.0f)
+    auto direction = Vector3<double>(0.0, 1.0, 0.0);
+    auto rot = slerp(direction, m_up, rate, 0.999);
+    if (rot.re() == 1.0)
         return false;
 
     multiplyRotation(rot);
@@ -158,37 +97,36 @@ bool Camera::standXZ(const bool resetY, const float rate)
     return true;
 }
 
-void Camera::topY(const float rate)
+void Camera::topY(const double rate)
 {
     QMutexLocker locker(&m_mutex);
     auto position = m_position.normalized();
 
-    auto rot = slerp(position, m_forward, rate, 0.99999f);
-    if (rot.scalar() < 1.0f)
+    auto rot = slerp(position, m_forward, rate, 0.99999);
+    if (rot.re() < 1.0)
         multiplyRotation(rot);
 
-    auto direction = QVector3D(0.0f, 1.0f, 0.0f);
-    auto cosY = QVector3D::dotProduct(position, direction);
-    if (cosY < 0.99f && cosY > -0.99f)
+    auto direction = Vector3<double>(0.0, 1.0, 0.0);
+    auto cosY = position.dot(direction);
+    if (cosY < 0.99 && cosY > -0.99)
     {
-        auto angleY = (acos(cosY) - float(hnn::PI * 0.5)) * 0.5;
-        auto crossY = QVector3D::crossProduct(position, direction);
+        auto angleY = (acos(cosY) - hnn::PI * 0.5) * 0.5;
+        auto crossY = position.cross(direction);
         crossY.normalize();
-        auto rotY = QQuaternion(cos(angleY), sin(angleY) * crossY);
-        rotY.normalize();
-        rotateV3ByQuaternion(direction, rotY);
-        auto rotU = slerp(direction, m_up, rate, 1.0f);
-        if (rotU.scalar() < 1.0f)
+        auto rotY = Quaternion<double>::rotation(crossY, angleY);
+        Quaternion<double>::rotate(direction, rotY);
+        auto rotU = slerp(direction, m_up, rate);
+        if (rotU.re() < 1.0)
             multiplyRotation(rotU);
     }
 }
 
-void Camera::lookAtZero(const float rate)
+void Camera::lookAtZero(const double rate)
 {
-    lookAt({0.0f, 0.0f, 0.0f}, rate);
+    lookAt({0.0, 0.0, 0.0}, rate);
 }
 
-void Camera::lookAt(const QVector3D& point, const float rate)
+void Camera::lookAt(const Vector3<double>& point, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
@@ -196,49 +134,49 @@ void Camera::lookAt(const QVector3D& point, const float rate)
     multiplyRotation(rot);
 }
 
-bool Camera::setPosition(const QVector3D& pos, const float rate)
+bool Camera::setPosition(const Vector3<double>& pos, const double rate)
 {
     QMutexLocker locker(&m_mutex);
-    if (rate >= 1.0f)
+    if (rate >= 1.0)
     {
         m_position = pos;
         return true;
     }
-    float norm = m_position.distanceToPoint(pos);
-    if (norm < 0.01f)
+    double norm = m_position.distance(pos);
+    if (norm < 0.01)
         return false;
-    QVector3D r = (pos - m_position).normalized();
+    Vector3<double> r = (pos - m_position).normalized();
     m_position += rate * norm * r;
     return true;
 }
 
-void Camera::circleStrafing(const float amount)
+void Camera::circleStrafing(const double amount)
 {
     m_position += amount * m_right;
-    lookAtZero(1.0f);
+    lookAtZero(1.0);
 }
 
-void Camera::roundUp(const float amount)
+void Camera::roundUp(const double amount)
 {
     m_position += amount * m_up;
-    lookAtZero(1.0f);
+    lookAtZero(1.0);
 }
 
-void Camera::reset(const QVector3D& position)
+void Camera::reset(const Vector3<double>& position)
 {
     QMutexLocker locker(&m_mutex);
     m_position = position;
-    m_rotation = QQuaternion();
-    m_forward = QVector3D(0.0f, 0.0f, -1.0f);
-    m_right = QVector3D(1.0f, 0.0f, 0.0f);
-    m_up = QVector3D(0.0f, 1.0f, 0.0f);
+    m_rotation = Quaternion<double>(1.0);
+    m_forward = Vector3<double>(0.0, 0.0, -1.0);
+    m_right = Vector3<double>(1.0, 0.0, 0.0);
+    m_up = Vector3<double>(0.0, 1.0, 0.0);
 }
 
-void Camera::multiplyRotation(const QQuaternion& rot)
+void Camera::multiplyRotation(const Quaternion<double>& rot)
 {
     m_rotation *= rot;
     m_rotation.normalize();
-    rotateV3ByQuaternion(m_forward, rot);
-    rotateV3ByQuaternion(m_right, rot);
-    rotateV3ByQuaternion(m_up, rot);
+    Quaternion<double>::rotate(m_forward, rot);
+    Quaternion<double>::rotate(m_right, rot);
+    Quaternion<double>::rotate(m_up, rot);
 }

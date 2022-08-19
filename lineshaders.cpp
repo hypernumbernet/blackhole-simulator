@@ -6,19 +6,11 @@ LineShaders::LineShaders()
     linesXZMeshes();
 }
 
-void LineShaders::appendLine(const QVector3D& start, const QVector3D& end, const QVector3D& color)
+void LineShaders::appendLine(const Vector3<double>& start, const Vector3<double>& end, const QVector3D& color)
 {
-    m_vertex.append(start);
+    m_vertex.append(QVector3D(float(start.x()), float(start.y()), float(start.z())));
     m_vertex.append(color);
-    m_vertex.append(end);
-    m_vertex.append(color);
-}
-
-void LineShaders::appendLineHnn(const Vector3<float>& start, const Vector3<float>& end, const QVector3D& color)
-{
-    m_vertex.append(QVector3D(start.x(), start.y(), start.z()));
-    m_vertex.append(color);
-    m_vertex.append(QVector3D(end.x(), end.y(), end.z()));
+    m_vertex.append(QVector3D(float(end.x()), float(end.y()), float(end.z())));
     m_vertex.append(color);
 }
 
@@ -119,24 +111,24 @@ void LineShaders::setLineType(const int index)
 
 void LineShaders::linesAxis()
 {
-    appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
-    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
-    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
 void LineShaders::linesCubeMeshes()
 {
     for (int i = 0; i < 3; ++i)
     {
-        appendLine({-1.0f, -1.0f, i - 1.0f}, {1.0f, -1.0f, i - 1.0f}, RED);
-        appendLine({i - 1.0f, -1.0f, -1.0f}, {i - 1.0f, 1.0f, -1.0f}, GREEN);
-        appendLine({-1.0f, i - 1.0f, -1.0f}, {-1.0f, i - 1.0f, 1.0f}, BLUE);
+        appendLine({-1.0, -1.0, i - 1.0}, {1.0, -1.0, i - 1.0}, RED);
+        appendLine({i - 1.0, -1.0, -1.0}, {i - 1.0, 1.0, -1.0}, GREEN);
+        appendLine({-1.0, i - 1.0, -1.0}, {-1.0, i - 1.0, 1.0}, BLUE);
     }
     for (int i = 1; i < 3; ++i)
     {
-        appendLine({i - 1.0f, -1.0f, -1.0f}, {i - 1.0f, -1.0f, 1.0f}, RED);
-        appendLine({-1.0f, i - 1.0f, -1.0f}, {1.0f, i - 1.0f, -1.0f}, GREEN);
-        appendLine({-1.0f, -1.0f, i - 1.0f}, {-1.0f, 1.0f, i - 1.0f}, BLUE);
+        appendLine({i - 1.0, -1.0, -1.0}, {i - 1.0, -1.0, 1.0}, RED);
+        appendLine({-1.0, i - 1.0, -1.0}, {1.0, i - 1.0, -1.0}, GREEN);
+        appendLine({-1.0, -1.0, i - 1.0}, {-1.0, 1.0, i - 1.0}, BLUE);
     }
 }
 
@@ -144,21 +136,22 @@ void LineShaders::linesXZMeshes()
 {
     for (int i = -10; i <= 10; ++i)
     {
-        appendLine({-10, 0.0f, (float)i}, {10, 0.0f, (float)i}, RED);
-        appendLine({(float)i, 0.0f, -10}, {(float)i, 0.0f, 10}, BLUE);
+        appendLine({-10.0, 0.0, double(i)}, {10.0, 0.0, double(i)}, RED);
+        appendLine({double(i), 0.0, -10.0}, {double(i), 0.0, 10.0}, BLUE);
     }
-    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
 }
 
-void LineShaders::drawCircle(const int resolution, const QVector3D& axis, const QVector3D& startPoint, const QVector3D color)
+void LineShaders::drawCircle(const int resolution, const Vector3<double>& axis,
+                             const Vector3<double>& startPoint, const QVector3D color)
 {
-    float degree = 360.0f / (float)resolution;
-    QVector3D prev = startPoint;
+    double angle = hnn::PI * 2.0 / (double)resolution;
+    Vector3<double> prev = startPoint;
     for (int i = 0; i <= resolution; ++i)
     {
-        QQuaternion rot = QQuaternion::fromAxisAndAngle(axis, degree * (float)i);
-        QVector3D v = startPoint;
-        Camera::rotateV3ByQuaternion(v, rot);
+        auto rot = Quaternion<double>::rotation(axis, angle * (double)i * 0.5);
+        Vector3<double> v = startPoint;
+        Quaternion<double>::rotate(v, rot);
         if (i > 0)
             appendLine(prev, v, color);
         prev = v;
@@ -168,54 +161,54 @@ void LineShaders::drawCircle(const int resolution, const QVector3D& axis, const 
 void LineShaders::linesLongitudeAndLatitude()
 {
     static const int resolution = 36;
-    static const float angle = 360.0f / float(resolution);
+    static const double angle = hnn::PI / double(resolution);
 
-    const QVector3D axis_y(0.0f, 1.0f, 0.0f);
-    const QVector3D axis_x(1.0f, 0.0f, 0.0f);
+    const Vector3<double> axis_y(0.0, 1.0, 0.0);
+    const Vector3<double> axis_x(1.0, 0.0, 0.0);
 
     int jmax = floor(resolution / 2) - 1;
-    QQuaternion rot_y = QQuaternion::fromAxisAndAngle(axis_y, angle);
-    QVector3D meridian_start = axis_x;
+    auto rot_y = Quaternion<double>::rotation(axis_y, angle);
+    Vector3<double> meridian_start = axis_x;
     drawCircle(resolution, meridian_start, axis_y, RED);
     for (int j = 0; j < jmax; ++j)
     {
-        Camera::rotateV3ByQuaternion(meridian_start, rot_y);
+        Quaternion<double>::rotate(meridian_start, rot_y);
         drawCircle(resolution, meridian_start, axis_y, RED);
     }
 
-    const QVector3D axis_z(0.0f, 0.0f, 1.0f);
+    const Vector3<double> axis_z(0.0, 0.0, 1.0);
     int xzmax = floor(resolution / 4);
     for (int j = 0; j < xzmax; ++j)
     {
-        QVector3D v = axis_z;
+        Vector3<double> v = axis_z;
         if (j > 0)
         {
-            QQuaternion rot_zy = QQuaternion::fromAxisAndAngle(axis_x, angle * (float)j);
+            Quaternion<double> rot_zy = Quaternion<double>::rotation(axis_x, angle * (double)j);
             v = axis_z;
-            Camera::rotateV3ByQuaternion(v, rot_zy);
+            Quaternion<double>::rotate(v, rot_zy);
         }
         drawCircle(resolution, axis_y, v, BLUE);
         drawCircle(resolution, axis_y, {v.x(), -v.y(), v.z()}, BLUE);
     }
 
-    appendLine({0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, RED);
-    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, GREEN);
-    appendLine({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, BLUE);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
 void LineShaders::linesQuaternionS3Rotation()
 {
     static const int resolution = 72;
-    static const float angle = degreeToRadian(360.0f / float(resolution));
+    static const double angle = degreeToRadian(360.0 / double(resolution));
 
-    const auto rotationY = Quaternion<float>::exp(0.0f, angle, 0.0f);
+    const auto rotationY = Quaternion<double>::rotation({0,1,0}, angle);
     for (int j = -8; j <= 8; j += 2)
     {
-        auto start = Quaternion<float>::exp(angle * j, 0.0f, 0.0f);
+        auto start = Quaternion<double>::rotation({1,0,0}, angle * j);
         auto end = rotationY * start;
         for (int i = 0; i < (resolution * 1.0); ++i)
         {
-            appendLineHnn(start.lnV3(), end.lnV3(), {0,1,0});
+            appendLine(start.lnV3(), end.lnV3(), GREEN);
             start = end;
             end = rotationY * start;
         }
@@ -224,37 +217,15 @@ void LineShaders::linesQuaternionS3Rotation()
 
 void LineShaders::linesOctonionS3Rotation()
 {
-    static const int resolution = 72;
-    static const float angle = degreeToRadian(360.0f / float(resolution));
-
-    Octonion<float> origin(0,0,0,0,1,0,0,0);
-    Octonion<float> x90(0,0,0,0,0,1,0,0);
-    Octonion<float> y90(0,0,0,0,0,0,0,1);
-    auto poleX(x90 * origin);
-    auto poleY(y90 * origin);
-    qDebug(poleX.toString().c_str());
-    qDebug(poleY.toString().c_str());
-    auto rotationY = poleY * sin(angle * 0.5);
-    rotationY.setRe(cos(angle * 0.5));
-
-    for (int j = -8; j <= 8; j += 2)
-    {
-        auto rotationX = poleX * sin(angle * j * 0.5);
-        rotationX.setRe(cos(angle * j * 0.5));
-        auto startX = rotationX.conjugated() * origin * rotationX;
-        Quaternion<float> start(startX.i4(),startX.i5(),startX.i7(),startX.i6());
-        auto startY = startX;
-        auto endY = rotationY.conjugated() * startX * rotationY;
-        Quaternion<float> end(endY.i4(),endY.i5(),endY.i7(),endY.i6());
-        for (int i = 0; i < (resolution * 1.0); ++i)
-        {
-            appendLineHnn(start.lnV3(), end.lnV3(), {0,1,0});
-            startY = endY;
-            start = end;
-            endY = rotationY.conjugated() * startY * rotationY;
-            end = {endY.i4(),endY.i5(),endY.i7(),endY.i6()};
-        }
-    }
+    m_ScreenX = 0;
+    for (int i1 = 1; i1 <= 4; ++i1)
+        for (int i2 = i1 + 1; i2 <= 5; ++i2)
+            for (int i3 = i2 + 1; i3 <= 6; ++i3)
+                for (int i4 = i3 + 1; i4 <= 7; ++i4)
+                {
+                    linesOctonionRotationAt(i1,i2,i3,i4);
+                    //qDebug() << i1 << i2 << i3 << i4;
+                }
 
     //    const auto rotX = Quaternion<float>::makeRotation(1.0f, 0.0f, 0.0f, angle * 0.5f);
     //    for (int j = 0; j < 3; ++j)
@@ -283,4 +254,53 @@ void LineShaders::linesOctonionS3Rotation()
     //        }
     //    }
 
+}
+
+void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z)
+{
+    static const int resolution = 72;
+    static const double angle = degreeToRadian(360.0 / double(resolution));
+    static const double scale = 0.1;
+    static const double slideScale = 1.0;
+    double slideX = (double(m_ScreenX) / 5.0 - 3.5) * slideScale;
+    double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
+    QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
+    color.normalize();
+
+    Octonion<double> origin(0);
+    Octonion<double> x90(0);
+    Octonion<double> y90(0);
+    origin[w] = 1;
+    x90[x] = 1;
+    y90[y] = 1;
+    auto poleX(x90 * origin);
+    auto poleY(y90 * origin);
+    auto rotationY = poleY * sin(angle * 0.5);
+    rotationY.setRe(cos(angle * 0.5));
+
+    for (int j = -8; j <= 8; j += 2)
+    {
+        auto rotationX = poleX * sin(angle * j * 0.5);
+        rotationX.setRe(cos(angle * j * 0.5));
+        auto startX = rotationX.conjugated() * origin * rotationX;
+        Quaternion<double> start(startX[w],startX[x],startX[y],startX[z]);
+        auto startY = startX;
+        auto endY = rotationY.conjugated() * startX * rotationY;
+        Quaternion<double> end(endY[w],endY[x],endY[y],endY[z]);
+        for (int i = 0; i < (resolution * 1.0); ++i)
+        {
+            auto st = start.lnV3() * scale;
+            st.setX(st.x() + slideX);
+            st.setZ(st.z() + slideZ);
+            auto ed = end.lnV3() * scale;
+            ed.setX(ed.x() + slideX);
+            ed.setZ(ed.z() + slideZ);
+            appendLine(st, ed, color);
+            startY = endY;
+            start = end;
+            endY = rotationY.conjugated() * startY * rotationY;
+            end = {endY[w],endY[x],endY[y],endY[z]};
+        }
+    }
+    ++m_ScreenX;
 }

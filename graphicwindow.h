@@ -47,7 +47,7 @@ protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private:
-    static constexpr QVector3D CAMERA_INI_POS = {-1.5f, -1.0f, -5.0f};
+    static constexpr Vector3<double> CAMERA_INI_POS = {-1.5, -1, -5};
 
     void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;
@@ -60,13 +60,13 @@ private:
     ParticleShaders* const m_particleShaders;
     ComputeShaders* const m_computeShaders;
     ThreadAdmin m_threadAdmin;
-    float m_walkSpeed;
-    float m_lookAroundSpeed;
+    double m_walkSpeed;
+    double m_lookAroundSpeed;
     bool m_mousePressing;
     Camera m_camera;
     int m_fpsPreFrame;
     bool m_isCircleStrafing;
-    float m_circleStrafingSpeed;
+    double m_circleStrafingSpeed;
     const bhs::SimCondition* m_simCondition;
 
     QVector<Qt::Key> m_keyPressing;

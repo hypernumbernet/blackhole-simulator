@@ -7,42 +7,42 @@
 #include <QMatrix4x4>
 #include <QMutex>
 
-#include "hnn/constants.h"
+#include "hnn/quaternion.h"
+
+using namespace hnn;
 
 class Camera
 {
 public:
-    explicit Camera(const QVector3D& pos);
+    explicit Camera(const Vector3<double>& pos);
 
-    static void rotateV3ByQuaternion(QVector3D& axis, const QQuaternion& rot);
+    void pitch(double degrees);
+    void yaw(double degrees);
+    void roll(double degrees);
 
-    void pitch(float degrees);
-    void yaw(float degrees);
-    void roll(float degrees);
+    void walk(double amount);
+    void strafe(double amount);
+    void jump(double amount);
 
-    void walk(float amount);
-    void strafe(float amount);
-    void jump(float amount);
-
-    bool standXZ(bool resetY = true, float rate = 0.6f);
-    void topY(float rate = 0.6f);
-    void lookAtZero(float rate = 0.6f);
-    void lookAt(const QVector3D& point, float rate = 0.6f);
-    bool setPosition(const QVector3D&, float rate = 0.6f);
-    void circleStrafing(float amount);
-    void roundUp(float amount);
-    void reset(const QVector3D& position);
+    bool standXZ(bool resetY = true, double rate = 0.6);
+    void topY(double rate = 0.6);
+    void lookAtZero(double rate = 0.6);
+    void lookAt(const Vector3<double>& point, double rate = 0.6);
+    bool setPosition(const Vector3<double>&, double rate = 0.6);
+    void circleStrafing(double amount);
+    void roundUp(double amount);
+    void reset(const Vector3<double>& position);
 
     QMatrix4x4 viewMatrix() const;
 
 private:
-    void multiplyRotation(const QQuaternion&);
-    QQuaternion slerp(const QVector3D&, const QVector3D&, float rate = 1.0f, float threshold = 1.0f);
-
-    QVector3D m_position;
-    QVector3D m_forward;
-    QVector3D m_right;
-    QVector3D m_up;
-    QQuaternion m_rotation;
+    void multiplyRotation(const Quaternion<double>&);
+    Quaternion<double> slerp(const Vector3<double>&, const Vector3<double>&,
+                             double rate = 1.0, double threshold = 1.0);
+    Vector3<double> m_position;
+    Vector3<double> m_forward;
+    Vector3<double> m_right;
+    Vector3<double> m_up;
+    Quaternion<double> m_rotation;
     QMutex m_mutex;
 };

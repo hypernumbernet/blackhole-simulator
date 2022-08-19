@@ -204,6 +204,16 @@ public:
                 hnn::fuzzyCompare(m_i7, a.m_i7);
     }
 
+    const T& operator[](int index) const
+    {
+        return array[index];
+    }
+
+    T& operator[](int index)
+    {
+        return array[index];
+    }
+
     constexpr T norm() const
     {
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3 +
@@ -241,7 +251,21 @@ public:
     }
 
 private:
-    T m_re, m_i1, m_i2, m_i3, m_i4, m_i5, m_i6, m_i7;
+    union
+        {
+            struct
+            {
+                T m_re;
+                T m_i1;
+                T m_i2;
+                T m_i3;
+                T m_i4;
+                T m_i5;
+                T m_i6;
+                T m_i7;
+            };
+            T array[8];
+        };
 };
 
 } // namespace

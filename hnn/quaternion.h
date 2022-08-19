@@ -195,6 +195,16 @@ public:
                hnn::fuzzyCompare(m_i3, a.m_i3);
     }
 
+    const T& operator[](int index) const
+    {
+        return array[index];
+    }
+
+    T& operator[](int index)
+    {
+        return array[index];
+    }
+
     constexpr T norm() const
     {
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
@@ -323,6 +333,13 @@ public:
         return Vector3<T>(m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
+    Vector3<T> lnAcos() const
+    {
+        T n = acos(m_re);
+        T s = sin(n);
+        return Vector3<T>(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
+    }
+
     Vector3<T> lnhV3() const
     {
         T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
@@ -345,6 +362,54 @@ public:
         else
             a = atan(v / m_re) / v;
         return Vector3<T>(m_i1 * a, m_i2 * a, m_i3 * a);
+    }
+
+    /*
+      To shorten Quaternion rotation effecting axis calculation
+
+      rot.conjugated() * axis * rot
+      = (a - ib - jc - kd) * (ix + jy + kz) * (a + ib + jc + kd)
+      = (iax + jay + kaz - iibx - ijby - ikbz - jicx - jjcy - jkcz - kidx - kjdy - kkdz) * (a + ib + jc + kd)
+      = (iax + jay + kaz +   bx -  kby +  jbz +  kcx +   cy -  icz -  jdx +  idy +   dz) * (a + ib + jc + kd)
+      = (bx + cy + dz + i(ax - cz + dy) + j(ay + bz - dx) + k(az - by + cx)) * (a + ib + jc + kd)
+      = (bx + cy + dz)a - (ax - cz + dy)b - (ay + bz - dx)c - (az - by + cx)d
+        + i((bx + cy + dz)b + (ax - cz + dy)a + (ay + bz - dx)d - (az - by + cx)c)
+        + j((bx + cy + dz)c - (ax - cz + dy)d + (ay + bz - dx)a + (az - by + cx)b)
+        + k((bx + cy + dz)d + (ax - cz + dy)c - (ay + bz - dx)b + (az - by + cx)a)
+      = abx + acy + adz - abx + bcz - bdy - acy - bcz + cdx - adz + bdy - cdx
+        + i(bbx + bcy + bdz + aax - acz + ady + ady + bdz - ddx - acz + bcy - ccx)
+        + j(bcx + ccy + cdz - adx + cdz - ddy + aay + abz - adx + abz - bby + bcx)
+        + k(bdx + cdy + ddz + acx - ccz + cdy - aby - bbz + bdx + aaz - aby + acx)
+      =   i(bbx + 2bcy + 2bdz + aax - 2acz + 2ady - ddx - ccx)
+        + j(2bcx + ccy + 2cdz - 2adx - ddy + aay + 2abz - bby)
+        + k(2bdx + 2cdy + ddz + 2acx - ccz - 2aby - bbz + aaz)
+      =   i((aa + bb - cc - dd)x + 2(bcy + bdz - acz + ady))
+        + j((aa - bb + cc - dd)y + 2(bcx + cdz - adx + abz))
+        + k((aa - bb - cc + dd)z + 2(bdx + cdy + acx - aby))
+      =   i((aa + bb - cc - dd)x + 2((bc + ad)y + (bd - ac)z))
+        + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
+        + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
+    */
+    static inline void rotate(Vector3<T>& axis, const Quaternion<T>& rot)
+    {
+        T a = rot.re();
+        T b = rot.i1();
+        T c = rot.i2();
+        T d = rot.i3();
+        T x = axis.x();
+        T y = axis.y();
+        T z = axis.z();
+
+        T aa = a*a, bb = b*b, cc = c*c, dd = d*d;
+        T rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
+        T ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
+        T rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
+
+        axis.setX(rx);
+        axis.setY(ry);
+        axis.setZ(rz);
+
+        axis.normalize();
     }
 
     Quaternion rot() const
@@ -497,14 +562,14 @@ public:
         return *this;
     }
 
-    static inline Quaternion makeRotation(Vector3<T> v, T theta)
+    static inline Quaternion rotation(Vector3<T> v, T theta)
     {
         T c = cos(theta);
         T s = sin(theta);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
-    static inline Quaternion makeRotation(T x, T y, T z, T theta)
+    static inline Quaternion rotation(T x, T y, T z, T theta)
     {
         T c = cos(theta);
         T s = sin(theta);
@@ -526,7 +591,17 @@ public:
     }
 
 private:
-    T m_re, m_i1, m_i2, m_i3;
+    union
+        {
+            struct
+            {
+                T m_re;
+                T m_i1;
+                T m_i2;
+                T m_i3;
+            };
+            T array[4];
+        };
 };
 
 } // namespace

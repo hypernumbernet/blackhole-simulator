@@ -81,7 +81,7 @@ public:
                 theta = inv * inv * timeG * masses[j];
 
                 theta = m_engine->velocityToAngle(theta);
-                auto acc = Quaternion<T>::makeRotation(d1, d2, d3, theta * T(0.5));
+                auto acc = Quaternion<T>::rotation(d1, d2, d3, theta * T(0.5));
                 qi.rotate8(acc);
             }
             a = i * 4;
