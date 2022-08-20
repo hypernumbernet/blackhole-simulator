@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/abstractinitializer.h"
+#include "engine/abstractnbodyengine.h"
 
 template <typename T> class Initializer3D4D;
 template <typename T> class Initializer3D4DR1;

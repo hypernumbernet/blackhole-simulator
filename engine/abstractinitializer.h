@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractnbodyengine.h"
+#include "global.h"
 
 class AbstractInitializer
 {
@@ -26,7 +26,7 @@ public:
 protected:
     const bhs::SimCondition& m_sim;
 
-    inline void init()
+    void init()
     {
         switch (m_sim.preset)
         {

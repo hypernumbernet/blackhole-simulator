@@ -21,7 +21,7 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    inline QGenericMatrix<1, 4, T> fromVector3(const Vector3<T>& v3) const
+    QGenericMatrix<1, 4, T> fromVector3(const Vector3<T>& v3) const
     {
         QGenericMatrix<4, 4, T> lt;
         m_engine->LorentzTransformation(lt, -v3);
@@ -33,7 +33,7 @@ private:
         return lt * speed;
     }
 
-    inline void fromInitializer3D()
+    void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
         T* const velocities = m_engine->velocities();

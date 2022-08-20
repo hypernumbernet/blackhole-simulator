@@ -21,7 +21,7 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    inline Quaternion<T> fromDirectionAndSpeed(
+    Quaternion<T> fromDirectionAndSpeed(
             const T x, const T y, const T z,
             const T speed
             ) const
@@ -32,13 +32,13 @@ private:
         return Quaternion<T>::exp(dr * angle);
     }
 
-    inline Quaternion<T> fromVector3(Vector3<T> v3) const
+    Quaternion<T> fromVector3(Vector3<T> v3) const
     {
         const auto speed = v3.abs();
         return fromDirectionAndSpeed(v3.x(), v3.y(), v3.z(), speed);
     }
 
-    inline void fromInitializer3D()
+    void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
         T* const velocities = m_engine->velocities();

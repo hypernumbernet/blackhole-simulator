@@ -19,13 +19,13 @@ public:
     }
 
 public slots:
-    inline void calculateTimeProgress() const
+    void calculateTimeProgress() const
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    inline void calculateInteraction() const
+    void calculateInteraction() const
     {
         m_calc.calculateInteraction();
         resultReady();

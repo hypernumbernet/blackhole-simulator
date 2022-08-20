@@ -18,7 +18,7 @@ public:
     {
     }
 
-    inline void calculateTimeProgress() const
+    void calculateTimeProgress() const
     {
         T* const coordinates = m_engine->coordinates();
         const T* const velocities = m_engine->velocities();
@@ -42,7 +42,7 @@ public:
         }
     }
 
-    inline void calculateInteraction() const
+    void calculateInteraction() const
     {
         const T* const coordinates = m_engine->coordinates();
         T* const velocities = m_engine->velocities();

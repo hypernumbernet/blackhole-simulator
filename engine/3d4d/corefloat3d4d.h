@@ -24,13 +24,13 @@ public:
     }
 
 public slots:
-    inline void calculateTimeProgress() const override
+    void calculateTimeProgress() const override
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    inline void calculateInteraction() const override
+    void calculateInteraction() const override
     {
         m_calc.calculateInteraction();
         resultReady();

@@ -21,7 +21,7 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    inline void fromInitializer3D()
+    void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
         const T* const coordinates = m_engine->coordinates();

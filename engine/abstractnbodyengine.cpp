@@ -194,7 +194,7 @@ T AbstractNBodyEngine<T>::velocityToAngle(const T v) const
 template <typename T>
 void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a) const
 {
-    a *= T(1.0 / (AbstractNBodyEngine<double>::VANGLE / m_scaleInv));
+    a *= T(m_scaleInv / AbstractNBodyEngine<double>::VANGLE);
 }
 
 template <typename T>

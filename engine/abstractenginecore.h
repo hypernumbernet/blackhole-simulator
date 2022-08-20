@@ -12,7 +12,7 @@ public:
     virtual bool hasRangeInteraction() const = 0;
 
 protected:
-    inline void resultReady() const
+    void resultReady() const
     {
         emit UpdateUi::it().resultReady();
     }
