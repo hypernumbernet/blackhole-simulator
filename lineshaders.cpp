@@ -303,9 +303,9 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     case 4: x90[y] = 1; y90[x] = 1; break;
     case 5: x90[z] = 1; y90[x] = 1; break;
     }
-    auto poleX(x90 * origin);
-    auto poleY(y90 * origin);
-    auto rotationY = poleY * sin(angle * 0.5);
+    auto poleX(x90.cross(origin));
+    auto poleY(y90.cross(origin));
+    auto rotationY = sin(angle * 0.5) * poleY;
     rotationY.setRe(cos(angle * 0.5));
 
     for (int j = -8; j <= 8; j += 2)

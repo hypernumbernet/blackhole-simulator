@@ -393,7 +393,7 @@ public:
         + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
         + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
     */
-    static constexpr void rotate(Vector3<T>& axis, const Quaternion<T>& rot)
+    static constexpr void rotate(Vector3<T>& axis, const Quaternion& rot)
     {
         T a = rot.re();
         T b = rot.i1();
@@ -595,7 +595,7 @@ public:
 
     static constexpr Quaternion slerp(
             const Vector3<T>& from, const Vector3<T>& to,
-            T rate = 1.0, T threshold = 1.0)
+            T rate = 1, T threshold = 1)
     {
         auto cosVal = from.dot(to);
         if (cosVal >= threshold) // same direction
