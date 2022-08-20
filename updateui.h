@@ -1,14 +1,8 @@
 #pragma once
 
-#include <QGroupBox>
-#include <QLCDNumber>
-#include <QLabel>
-#include <QListWidget>
-#include <QMap>
-#include <QRadioButton>
-#include <QVBoxLayout>
-
 #include "global.h"
+#include <QLabel>
+#include <QLCDNumber>
 
 class UpdateUi : public QObject
 {
@@ -70,8 +64,8 @@ public:
             {bhs::LineType::Axis, tr("Basic Axis")},
             {bhs::LineType::CubeMeshes, tr("Cube")},
             {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
-            {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rot.")},
-            {bhs::LineType::OctonionS3Rotation, tr("Octonion S3 Rot.")},
+            {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rotation")},
+            {bhs::LineType::OctonionS3Rotation, tr("Octonion S3 Rotation")},
         };
         return map;
     }

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QOpenGLFunctions_4_5_Core>
-#include <QOpenGLShaderProgram>
+#include "hnn/vector3.h"
 #include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
-#include <QVector>
+#include <QOpenGLWindow>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLFunctions_4_5_Core>
+#include <QVector3D>
 
-#include "global.h"
-#include "camera.h"
+using namespace hnn;
 
 class LineShaders : private QOpenGLFunctions_4_5_Core
 {
@@ -27,7 +27,7 @@ private:
     void initGridLines();
     bool m_enableGridLines;
 
-    void appendLine(const Vector3<double>&, const Vector3<double>&, const QVector3D& color);
+    void appendLine(const hnn::Vector3<double>&, const Vector3<double>&, const QVector3D& color);
     QVector<QVector3D> m_vertex;
 
     static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};
@@ -40,7 +40,8 @@ private:
     void linesLongitudeAndLatitude();
     void linesQuaternionS3Rotation();
     void linesOctonionS3Rotation();
-    void linesOctonionRotationAt(int, int, int, int);
+    void linesOctonionRotationAt(int, int, int, int, int pole);
+    void linesOctonionRotationY(int, int, int, int);
     int m_ScreenX = 0;
     void drawCircle(int resolution, const Vector3<double>& axis, const Vector3<double>& startPoint, const QVector3D color);
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QScreen>
-#include <QComboBox>
-
 #include "graphicwindow.h"
-#include "updateui.h"
 #include "initializerdialog.h"
 #include "monitoringdialog.h"
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QSlider>
 
 class MainWidget : public QWidget
 {

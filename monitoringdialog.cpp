@@ -1,4 +1,6 @@
 #include "monitoringdialog.h"
+#include <QPushButton>
+#include <QVBoxLayout>
 
 MonitoringDialog::MonitoringDialog(QWidget* parent, GraphicWindow* graphicWindow)
     : QDialog(parent)

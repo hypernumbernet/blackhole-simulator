@@ -1,16 +1,11 @@
 #pragma once
 
+#include "global.h"
 #include <QButtonGroup>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QDialog>
-#include <QFileDialog>
+#include <QLabel>
 #include <QLineEdit>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QSettings>
-
-#include "updateui.h"
 
 class InitializerDialog : public QDialog
 {

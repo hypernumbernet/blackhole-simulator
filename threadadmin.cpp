@@ -1,4 +1,5 @@
 #include "threadadmin.h"
+#include <QTimerEvent>
 
 ThreadAdmin::ThreadAdmin(QObject* parent, ComputeShaders* cs)
     : QThread(parent)

@@ -1,20 +1,14 @@
 #pragma once
 
-#include <QOpenGLWindow>
-#include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions_4_5_Core>
-#include <QKeyEvent>
-#include <QTime>
-#include <QVector>
-#include <QBasicTimer>
-#include <QCursor>
-
+#include "global.h"
 #include "camera.h"
 #include "lineshaders.h"
 #include "particleshaders.h"
-#include "updateui.h"
 #include "threadadmin.h"
+#include <QOpenGLWindow>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLFunctions_4_5_Core>
+#include <QKeyEvent>
 
 class GraphicWindow : public QOpenGLWindow, private QOpenGLFunctions_4_5_Core
 {

@@ -1,4 +1,16 @@
 #include "particleshaders.h"
+#include "engine/3d/engine3d.h"
+#include "engine/3d/corefloat3d.h"
+#include "engine/3d/coredouble3d.h"
+#include "engine/3d4d/engine3d4d.h"
+#include "engine/3d4d/corefloat3d4d.h"
+#include "engine/3d4d/coredouble3d4d.h"
+#include "engine/3d4dr1/engine3d4dr1.h"
+#include "engine/3d4dr1/corefloat3d4dr1.h"
+#include "engine/3d4dr1/coredouble3d4dr1.h"
+#include "engine/4d3d/engine4d3d.h"
+#include "engine/4d3d/corefloat4d3d.h"
+#include "engine/4d3d/coredouble4d3d.h"
 
 ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)

@@ -1,10 +1,7 @@
 #pragma once
 
-#include <QObject>
-#include <QThread>
-#include <QMutex>
-
 #include "engine/abstractenginecore.h"
+#include <QThread>
 
 class ThreadController : public QObject
 {

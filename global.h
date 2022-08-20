@@ -1,11 +1,9 @@
 #pragma once
 
-#include <QObject>
+#include "hnn/quaternion.h"
 #include <QDebug>
 #include <QMutex>
 #include <QGenericMatrix>
-
-#include "hnn/octonion.h"
 
 using namespace hnn;
 

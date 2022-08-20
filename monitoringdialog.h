@@ -1,11 +1,8 @@
 #pragma once
 
-#include <QDialog>
-#include <QPushButton>
-#include <QPlainTextEdit>
-
-#include "updateui.h"
 #include "graphicwindow.h"
+#include <QDialog>
+#include <QPlainTextEdit>
 
 class MonitoringDialog : public QDialog
 {

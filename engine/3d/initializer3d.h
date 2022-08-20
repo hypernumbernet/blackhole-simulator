@@ -1,6 +1,5 @@
 #pragma once
 
-#include "hnn/quaternion.h"
 #include "engine/abstractinitializer.h"
 
 template <typename T> class Initializer3D4D;

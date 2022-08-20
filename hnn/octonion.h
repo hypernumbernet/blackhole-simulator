@@ -1,6 +1,7 @@
 #pragma once
 
-#include "quaternion.h"
+#include "constants.h"
+#include <string>
 
 namespace hnn // https://github.com/hypernumbernet
 {

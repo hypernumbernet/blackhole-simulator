@@ -1,4 +1,12 @@
 #include "initializerdialog.h"
+#include "updateui.h"
+#include <QRadioButton>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QSettings>
+#include <QVBoxLayout>
 
 InitializerDialog::InitializerDialog(QWidget* parent)
     : QDialog(parent)

@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include <QComboBox>
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)

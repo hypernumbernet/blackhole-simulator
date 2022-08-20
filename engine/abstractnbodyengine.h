@@ -1,11 +1,10 @@
 #pragma once
 
+#include "global.h"
+#include "hnn/vector3.h"
 #include <QThread>
 #include <QVector4D>
 #include <QGenericMatrix>
-
-#include "hnn/quaternion.h"
-#include "updateui.h"
 
 using namespace hnn;
 

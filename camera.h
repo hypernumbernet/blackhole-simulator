@@ -1,13 +1,8 @@
 #pragma once
 
-#include <cmath>
-
-#include <QVector3D>
-#include <QQuaternion>
+#include "hnn/quaternion.h"
 #include <QMatrix4x4>
 #include <QMutex>
-
-#include "hnn/quaternion.h"
 
 using namespace hnn;
 

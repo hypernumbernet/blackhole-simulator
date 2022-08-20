@@ -1,12 +1,8 @@
 #pragma once
 
-#include <QBasicTimer>
-#include <QTimerEvent>
-
-#include "updateui.h"
-#include "threadcontroller.h"
-#include "engine/abstractnbodyengine.h"
 #include "computeshaders.h"
+#include "threadcontroller.h"
+#include <QBasicTimer>
 
 class ThreadAdmin : public QThread
 {
