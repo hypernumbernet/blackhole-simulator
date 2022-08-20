@@ -39,8 +39,9 @@ private:
     void linesXZMeshes();
     void linesLongitudeAndLatitude();
     void linesQuaternionS3Rotation();
-    void linesOctonionS3Rotation();
-    void linesOctonionRotationAt(int, int, int, int, int pole);
+    void linesOctonionS3RotationXY();
+    void linesOctonionS3RotationAll();
+    void linesOctonionRotationAt(int, int, int, int, int pole, double y0 = 2.5);
     void linesOctonionRotationY(int, int, int, int);
     int m_ScreenX = 0;
     void drawCircle(int resolution, const Vector3<double>& axis, const Vector3<double>& startPoint, const QVector3D color);

@@ -105,8 +105,11 @@ void LineShaders::setLineType(const int index)
     case bhs::LineType::QuaternionS3Rotation:
         linesQuaternionS3Rotation();
         break;
-    case bhs::LineType::OctonionS3Rotation:
-        linesOctonionS3Rotation();
+    case bhs::LineType::OctonionS3RotationXY:
+        linesOctonionS3RotationXY();
+        break;
+    case bhs::LineType::OctonionS3RotationAll:
+        linesOctonionS3RotationAll();
         break;
     }
     initGridLines();
@@ -218,7 +221,20 @@ void LineShaders::linesQuaternionS3Rotation()
     }
 }
 
-void LineShaders::linesOctonionS3Rotation()
+void LineShaders::linesOctonionS3RotationXY()
+{
+    m_ScreenX = 0;
+    for (int i1 = 1; i1 <= 4; ++i1)
+        for (int i2 = i1 + 1; i2 <= 5; ++i2)
+            for (int i3 = i2 + 1; i3 <= 6; ++i3)
+                for (int i4 = i3 + 1; i4 <= 7; ++i4)
+                {
+                    qDebug() << i1 << i2 << i3 << i4;
+                    linesOctonionRotationAt(i1, i2, i3, i4, 0, 0.0);
+                }
+}
+
+void LineShaders::linesOctonionS3RotationAll()
 {
     for (int i5 = 0; i5 < 6; ++i5)
     {
@@ -262,14 +278,14 @@ void LineShaders::linesOctonionS3Rotation()
 
 }
 
-void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole)
+void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, double y0)
 {
     static const int resolution = 72;
     static const double angle = degreeToRadian(360.0 / double(resolution));
     static const double scale = 0.1;
     static const double slideScale = 1.0;
     double slideX = (double(m_ScreenX / 5) - 3.5) * slideScale;
-    double slideY = (double(pole) - 2.5) * slideScale;
+    double slideY = (double(pole) - y0) * slideScale;
     double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
     QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
     color.normalize();

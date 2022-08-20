@@ -87,7 +87,8 @@ enum class LineType
     CubeMeshes,
     LongitudeAndLatitude,
     QuaternionS3Rotation,
-    OctonionS3Rotation,
+    OctonionS3RotationXY,
+    OctonionS3RotationAll,
 };
 
 inline double rand0to1()

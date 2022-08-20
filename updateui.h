@@ -65,7 +65,8 @@ public:
             {bhs::LineType::CubeMeshes, tr("Cube")},
             {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
             {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rotation")},
-            {bhs::LineType::OctonionS3Rotation, tr("Octonion S3 Rotation")},
+            {bhs::LineType::OctonionS3RotationXY, tr("Octonion S3 Rotation XY")},
+            {bhs::LineType::OctonionS3RotationAll, tr("Octonion S3 Rotation All")},
         };
         return map;
     }
