@@ -1,32 +1,5 @@
 #include "camera.h"
 
-Quaternion<double> Camera::slerp(const Vector3<double>& from, const Vector3<double>& to,
-                          double rate, double threshold)
-{
-    // QQuaternion::slerp did not work well.
-
-    auto cosVal = from.dot(to);
-    if (cosVal >= threshold) // same direction
-    {
-        return Quaternion<double>(1.0);
-    }
-    auto angle = acos(cosVal) * rate * 0.5;
-    auto cross = from.cross(to);
-    if (cosVal <= -threshold) // opposite direction
-    {
-        Vector3<double> tmp(1.0, 0.0, 0.0);
-        cosVal = from.dot(to);
-        if (cosVal >= threshold || cosVal <= -threshold)
-        {
-            cross = from.cross({0.0, 0.0, 1.0});
-        } else {
-            cross = from.cross(tmp);
-        }
-    }
-    cross.normalize();
-    return Quaternion<double>::rotation(cross, angle);
-}
-
 Camera::Camera(const Vector3<double>& pos)
     : m_position(pos)
     , m_forward(0.0, 0.0, -1.0)
@@ -88,7 +61,7 @@ bool Camera::standXZ(const bool resetY, const double rate)
         m_position.setY(m_position.y() + rate * (-1.0 - m_position.y()));
 
     auto direction = Vector3<double>(0.0, 1.0, 0.0);
-    auto rot = slerp(direction, m_up, rate, 0.999);
+    auto rot = Quaternion<double>::slerp(direction, m_up, rate, 0.999);
     if (rot.re() == 1.0)
         return false;
 
@@ -102,7 +75,7 @@ void Camera::topY(const double rate)
     QMutexLocker locker(&m_mutex);
     auto position = m_position.normalized();
 
-    auto rot = slerp(position, m_forward, rate, 0.99999);
+    auto rot = Quaternion<double>::slerp(position, m_forward, rate, 0.99999);
     if (rot.re() < 1.0)
         multiplyRotation(rot);
 
@@ -115,7 +88,7 @@ void Camera::topY(const double rate)
         crossY.normalize();
         auto rotY = Quaternion<double>::rotation(crossY, angleY);
         Quaternion<double>::rotate(direction, rotY);
-        auto rotU = slerp(direction, m_up, rate);
+        auto rotU = Quaternion<double>::slerp(direction, m_up, rate);
         if (rotU.re() < 1.0)
             multiplyRotation(rotU);
     }
@@ -130,7 +103,7 @@ void Camera::lookAt(const Vector3<double>& point, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
-    auto rot = slerp(direction, m_forward, rate);
+    auto rot = Quaternion<double>::slerp(direction, m_forward, rate);
     multiplyRotation(rot);
 }
 

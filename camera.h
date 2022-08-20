@@ -32,8 +32,6 @@ public:
 
 private:
     void multiplyRotation(const Quaternion<double>&);
-    Quaternion<double> slerp(const Vector3<double>&, const Vector3<double>&,
-                             double rate = 1.0, double threshold = 1.0);
     Vector3<double> m_position;
     Vector3<double> m_forward;
     Vector3<double> m_right;

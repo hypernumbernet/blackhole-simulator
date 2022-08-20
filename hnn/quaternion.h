@@ -593,6 +593,32 @@ public:
         );
     }
 
+    static constexpr Quaternion slerp(
+            const Vector3<T>& from, const Vector3<T>& to,
+            T rate = 1.0, T threshold = 1.0)
+    {
+        auto cosVal = from.dot(to);
+        if (cosVal >= threshold) // same direction
+        {
+            return Quaternion(1);
+        }
+        auto angle = acos(cosVal) * rate * 0.5;
+        auto cross = from.cross(to);
+        if (cosVal <= -threshold) // opposite direction
+        {
+            Vector3<T> tmp(1, 0, 0);
+            cosVal = from.dot(to);
+            if (cosVal >= threshold || cosVal <= -threshold)
+            {
+                cross = from.cross({0, 0, 1});
+            } else {
+                cross = from.cross(tmp);
+            }
+        }
+        cross.normalize();
+        return rotation(cross, angle);
+    }
+
 private:
     union
         {
