@@ -11,19 +11,19 @@ class Vector3
 public:
     Vector3() {}
 
-    constexpr Vector3(const T ax, const T ay, const T az)
+    Vector3(const T ax, const T ay, const T az)
         : m_x(ax), m_y(ay), m_z(az) {}
 
-    constexpr explicit Vector3(const T* const a)
+    explicit Vector3(const T* const a)
         : m_x(a[0]), m_y(a[1]), m_z(a[2]) {}
 
     template <typename E>
-    constexpr Vector3(const T* const a, const E index)
+    Vector3(const T* const a, const E index)
         : m_x(a[index]), m_y(a[index + 1]), m_z(a[index + 2]) {}
 
-    constexpr T x() const { return m_x; }
-    constexpr T y() const { return m_y; }
-    constexpr T z() const { return m_z; }
+    T x() const { return m_x; }
+    T y() const { return m_y; }
+    T z() const { return m_z; }
 
     void setX(T ax) { m_x = ax; }
     void setY(T ay) { m_y = ay; }
@@ -36,19 +36,19 @@ public:
         m_z = az;
     }
 
-    constexpr const Vector3 operator+(const Vector3& a) const
+    const Vector3 operator+(const Vector3& a) const
     {
         return Vector3(m_x + a.m_x, m_y + a.m_y, m_z + a.m_z);
     }
 
-    constexpr const Vector3 operator-(const Vector3& a) const
+    const Vector3 operator-(const Vector3& a) const
     {
         return Vector3(m_x - a.m_x, m_y - a.m_y, m_z - a.m_z);
     }
 
-    constexpr const Vector3 operator+() const { return *this; }
+    const Vector3 operator+() const { return *this; }
 
-    constexpr const Vector3 operator-() const { return Vector3( - m_x, - m_y, - m_z); }
+    const Vector3 operator-() const { return Vector3( - m_x, - m_y, - m_z); }
 
     Vector3& operator+=(const Vector3& a)
     {
@@ -67,19 +67,19 @@ public:
     }
 
     template <typename E>
-    constexpr const Vector3 operator*(E a) const
+    const Vector3 operator*(E a) const
     {
         return Vector3(m_x * a, m_y * a, m_z * a);
     }
 
     template <typename E>
-    constexpr friend inline const Vector3 operator*(E a, const Vector3& b)
+    friend inline const Vector3 operator*(E a, const Vector3& b)
     {
         return Vector3(a * b.x(), a * b.y(), a * b.z());
     }
 
     template <typename E>
-    constexpr const Vector3 operator/(E a) const
+    const Vector3 operator/(E a) const
     {
         return Vector3(m_x / a, m_y / a, m_z / a);
     }
@@ -102,22 +102,22 @@ public:
         return *this;
     }
 
-    constexpr bool operator==(const Vector3& a) const
+    bool operator==(const Vector3& a) const
     {
         return m_x == a.m_x && m_y == a.m_y && m_z == a.m_z;
     }
 
-    constexpr bool operator!=(const Vector3& a) const
+    bool operator!=(const Vector3& a) const
     {
         return m_x != a.m_x || m_y != a.m_y || m_z != a.m_z;
     }
 
-    constexpr T norm() const
+    T norm() const
     {
         return m_x * m_x + m_y * m_y + m_z * m_z;
     }
 
-    constexpr T abs() const
+    T abs() const
     {
         return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
     }
@@ -142,12 +142,12 @@ public:
         return Vector3(m_x / r, m_y / r, m_z / r);
     }
 
-    constexpr T dot(const Vector3& a) const
+    T dot(const Vector3& a) const
     {
         return m_x * a.m_x + m_y * a.m_y + m_z * a.m_z;
     }
 
-    constexpr T distance(const Vector3& a) const
+    T distance(const Vector3& a) const
     {
         T d1 = m_x - a.m_x;
         T d2 = m_y - a.m_y;
@@ -155,7 +155,7 @@ public:
         return sqrt(d1 * d1 + d2 * d2 + d3 * d3);
     }
 
-    constexpr Vector3 cross(const Vector3& a) const
+    Vector3 cross(const Vector3& a) const
     {
         return Vector3(m_y * a.m_z - m_z * a.m_y, m_z * a.m_x - m_x * a.m_z, m_x * a.m_y - m_y * a.m_x);
     }

@@ -3,13 +3,13 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-inline constexpr double PI = 3.141592653589793;
-inline constexpr double GRAVITATIONAL_CONSTANT = 6.6743e-11; // 2018 CODATA
-inline constexpr double SPEED_OF_LIGHT = 2.99792458e+8;
+constexpr inline double PI = 3.141592653589793;
+constexpr inline double GRAVITATIONAL_CONSTANT = 6.6743e-11; // 2018 CODATA
+constexpr inline double SPEED_OF_LIGHT = 2.99792458e+8;
 
 constexpr double degreeToRadian(const double degree)
 {
-    return degree / 180.0 * PI;
+    return degree / 180. * PI;
 }
 
 template <typename T>

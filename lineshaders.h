@@ -30,9 +30,9 @@ private:
     void appendLine(const hnn::Vector3<double>&, const Vector3<double>&, const QVector3D& color);
     QVector<QVector3D> m_vertex;
 
-    static constexpr QVector3D RED = {1.0f, 0.0f, 0.0f};
-    static constexpr QVector3D GREEN = {0.0f, 1.0f, 0.0f};
-    static constexpr QVector3D BLUE = {0.0f, 0.0f, 1.0f};
+    static constexpr QVector3D RED = {1, 0, 0};
+    static constexpr QVector3D GREEN = {0, 1, 0};
+    static constexpr QVector3D BLUE = {0, 0, 1};
 
     void linesAxis();
     void linesCubeMeshes();
