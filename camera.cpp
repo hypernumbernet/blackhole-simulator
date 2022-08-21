@@ -1,6 +1,6 @@
 #include "camera.h"
 
-Camera::Camera(const Vector3<double>& pos)
+Camera::Camera(const Vector3& pos)
     : m_position(pos)
     , m_forward(0.0, 0.0, -1.0)
     , m_right(1.0, 0.0, 0.0)
@@ -60,7 +60,7 @@ bool Camera::standXZ(const bool resetY, const double rate)
     if (resetY)
         m_position.setY(m_position.y() + rate * (-1.0 - m_position.y()));
 
-    auto direction = Vector3<double>(0.0, 1.0, 0.0);
+    auto direction = Vector3(0.0, 1.0, 0.0);
     auto rot = Quaternion<double>::slerp(direction, m_up, rate, 0.999);
     if (rot.re() == 1.0)
         return false;
@@ -79,7 +79,7 @@ void Camera::topY(const double rate)
     if (rot.re() < 1.0)
         multiplyRotation(rot);
 
-    auto direction = Vector3<double>(0.0, 1.0, 0.0);
+    auto direction = Vector3(0.0, 1.0, 0.0);
     auto cosY = position.dot(direction);
     if (cosY < 0.99 && cosY > -0.99)
     {
@@ -99,7 +99,7 @@ void Camera::lookAtZero(const double rate)
     lookAt({0.0, 0.0, 0.0}, rate);
 }
 
-void Camera::lookAt(const Vector3<double>& point, const double rate)
+void Camera::lookAt(const Vector3& point, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
@@ -107,7 +107,7 @@ void Camera::lookAt(const Vector3<double>& point, const double rate)
     multiplyRotation(rot);
 }
 
-bool Camera::setPosition(const Vector3<double>& pos, const double rate)
+bool Camera::setPosition(const Vector3& pos, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     if (rate >= 1.0)
@@ -118,7 +118,7 @@ bool Camera::setPosition(const Vector3<double>& pos, const double rate)
     double norm = m_position.distance(pos);
     if (norm < 0.01)
         return false;
-    Vector3<double> r = (pos - m_position).normalized();
+    Vector3 r = (pos - m_position).normalized();
     m_position += rate * norm * r;
     return true;
 }
@@ -135,14 +135,14 @@ void Camera::roundUp(const double amount)
     lookAtZero(1.0);
 }
 
-void Camera::reset(const Vector3<double>& position)
+void Camera::reset(const Vector3& position)
 {
     QMutexLocker locker(&m_mutex);
     m_position = position;
     m_rotation = Quaternion<double>(1.0);
-    m_forward = Vector3<double>(0.0, 0.0, -1.0);
-    m_right = Vector3<double>(1.0, 0.0, 0.0);
-    m_up = Vector3<double>(0.0, 1.0, 0.0);
+    m_forward = Vector3(0.0, 0.0, -1.0);
+    m_right = Vector3(1.0, 0.0, 0.0);
+    m_up = Vector3(0.0, 1.0, 0.0);
 }
 
 void Camera::multiplyRotation(const Quaternion<double>& rot)

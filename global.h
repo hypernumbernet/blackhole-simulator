@@ -40,8 +40,8 @@ enum class Preset
 
 struct Particle
 {
-    hnn::Vector3<double> coordinate;
-    hnn::Vector3<double> velocity;
+    hnn::Vector3 coordinate;
+    hnn::Vector3 velocity;
     double mass;
     QString name;
 };
@@ -108,29 +108,29 @@ inline double rand0center1max()
 inline QRecursiveMutex interactionMutex;
 
 template <typename T>
-inline void embedQuaternionToArray(const Quaternion<T>& q, T* const a, const quint64 index)
+inline void embedQuaternionToArray(const Quaternion<double>& q, T* const a, const quint64 index)
 {
-    a[index    ] = q.re();
-    a[index + 1] = q.i1();
-    a[index + 2] = q.i2();
-    a[index + 3] = q.i3();
+    a[index    ] = T(q.re());
+    a[index + 1] = T(q.i1());
+    a[index + 2] = T(q.i2());
+    a[index + 3] = T(q.i3());
 }
 
 template <typename T>
-inline void embedVector3ToArray(const Vector3<T>& v, T* const a, const quint64 index)
+inline void embedVector3ToArray(const Vector3& v, T* const a, const quint64 index)
 {
-    a[index    ] = v.x();
-    a[index + 1] = v.y();
-    a[index + 2] = v.z();
+    a[index    ] = T(v.x());
+    a[index + 1] = T(v.y());
+    a[index + 2] = T(v.z());
 }
 
 template <typename T>
-inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, T>& m, T* const a, const quint64 index)
+inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* const a, const quint64 index)
 {
-    a[index    ] = m(0, 0);
-    a[index + 1] = m(1, 0);
-    a[index + 2] = m(2, 0);
-    a[index + 3] = m(3, 0);
+    a[index    ] = T(m(0, 0));
+    a[index + 1] = T(m(1, 0));
+    a[index + 2] = T(m(2, 0));
+    a[index + 3] = T(m(3, 0));
 }
 
 }

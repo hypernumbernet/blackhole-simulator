@@ -19,7 +19,7 @@ public:
     explicit Quaternion(const T a)
         : m_re(T(a)), m_i1(T(0)), m_i2(T(0)), m_i3(T(0)) {}
 
-    explicit Quaternion(Vector3<T> v)
+    explicit Quaternion(Vector3 v)
         : m_re(T(0)), m_i1(v.x()), m_i2(v.y()), m_i3(v.z()) {}
 
     template <typename E>
@@ -284,7 +284,7 @@ public:
     }
 
     // Exponential - only imaginary part
-    static constexpr Quaternion exp(const Vector3<T>& v)
+    static constexpr Quaternion exp(const Vector3& v)
     {
         T n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         T a;
@@ -326,45 +326,45 @@ public:
     }
 
     // Logarithm - Vector3
-    Vector3<T> lnV3() const
+    Vector3 lnV3() const
     {
         T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (n == 0)
-            return Vector3<T>(0, 0, 0);
+            return Vector3(0, 0, 0);
 
         n = atan2(n, m_re) / n;
-        return Vector3<T>(m_i1 * n, m_i2 * n, m_i3 * n);
+        return Vector3(m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
-    Vector3<T> lnAcos() const
+    Vector3 lnAcos() const
     {
         T n = acos(m_re);
         T s = sin(n);
-        return Vector3<T>(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
+        return Vector3(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
     }
 
-    Vector3<T> lnhV3() const
+    Vector3 lnhV3() const
     {
         T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (n == 0)
-            return Vector3<T>(0, 0, 0);
+            return Vector3(0, 0, 0);
 
         n = atanh(n) / n;
-        return Vector3<T>(m_i1 * n, m_i2 * n, m_i3 * n);
+        return Vector3(m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
-    Vector3<T> lnV3Half() const
+    Vector3 lnV3Half() const
     {
         T v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (v == 0)
-            return Vector3<T>(0, 0, 0);
+            return Vector3(0, 0, 0);
 
         T a;
         if (m_re == 0) // v == 1
             a = PI / (T)2;
         else
             a = atan(v / m_re) / v;
-        return Vector3<T>(m_i1 * a, m_i2 * a, m_i3 * a);
+        return Vector3(m_i1 * a, m_i2 * a, m_i3 * a);
     }
 
     /*
@@ -393,7 +393,7 @@ public:
         + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
         + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
     */
-    static constexpr void rotate(Vector3<T>& axis, const Quaternion& rot)
+    static constexpr void rotate(Vector3& axis, const Quaternion& rot)
     {
         T a = rot.re();
         T b = rot.i1();
@@ -480,9 +480,9 @@ public:
         );
     }
 
-    Vector3<T> cross7V3(const Quaternion& a) const
+    Vector3 cross7V3(const Quaternion& a) const
     {
-        return Vector3<T>(
+        return Vector3(
             -m_re * a.m_i1 + m_i1 * a.m_re - m_i2 * a.m_i3 + m_i3 * a.m_i2,
             -m_re * a.m_i2 + m_i1 * a.m_i3 + m_i2 * a.m_re - m_i3 * a.m_i1,
             -m_re * a.m_i3 - m_i1 * a.m_i2 + m_i2 * a.m_i1 + m_i3 * a.m_re
@@ -565,7 +565,7 @@ public:
         return *this;
     }
 
-    static constexpr Quaternion rotation(Vector3<T> v, T theta)
+    static constexpr Quaternion rotation(Vector3 v, T theta)
     {
         T c = cos(theta);
         T s = sin(theta);
@@ -581,7 +581,7 @@ public:
 
     // The function that combines makeRotation() and rot8().
     // v should be normalized
-    Quaternion rotMove(const Vector3<T>& v, const T theta) const
+    Quaternion rotMove(const Vector3& v, const T theta) const
     {
         T c = cos(theta);
         T s = sin(theta);
@@ -594,7 +594,7 @@ public:
     }
 
     static constexpr Quaternion slerp(
-            const Vector3<T>& from, const Vector3<T>& to,
+            const Vector3& from, const Vector3& to,
             T rate = 1, T threshold = 1)
     {
         auto cosVal = from.dot(to);
@@ -606,7 +606,7 @@ public:
         auto cross = from.cross(to);
         if (cosVal <= -threshold) // opposite direction
         {
-            Vector3<T> tmp(1, 0, 0);
+            Vector3 tmp(1, 0, 0);
             cosVal = from.dot(to);
             if (cosVal >= threshold || cosVal <= -threshold)
             {

@@ -90,7 +90,7 @@ public:
                 d2 *= theta;
                 d3 *= theta;
 
-                Vector3<double> g(-d1, -d2, -d3);
+                Vector3 g(-d1, -d2, -d3);
                 m_engine->LorentzTransformation(acc, g);
                 speed = acc * speed;
             }

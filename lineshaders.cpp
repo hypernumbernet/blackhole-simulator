@@ -9,7 +9,7 @@ LineShaders::LineShaders()
     linesXZMeshes();
 }
 
-void LineShaders::appendLine(const Vector3<double>& start, const Vector3<double>& end, const QVector3D& color)
+void LineShaders::appendLine(const Vector3& start, const Vector3& end, const QVector3D& color)
 {
     m_vertex.append(QVector3D(float(start.x()), float(start.y()), float(start.z())));
     m_vertex.append(color);
@@ -148,15 +148,16 @@ void LineShaders::linesXZMeshes()
     appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
 }
 
-void LineShaders::drawCircle(const int resolution, const Vector3<double>& axis,
-                             const Vector3<double>& startPoint, const QVector3D color)
+void LineShaders::drawCircle(
+        const int resolution, const Vector3& axis,
+        const Vector3& startPoint, const QVector3D color)
 {
     double angle = hnn::PI * 2.0 / (double)resolution;
-    Vector3<double> prev = startPoint;
+    Vector3 prev = startPoint;
     for (int i = 0; i <= resolution; ++i)
     {
         auto rot = Quaternion<double>::rotation(axis, angle * (double)i * 0.5);
-        Vector3<double> v = startPoint;
+        Vector3 v = startPoint;
         Quaternion<double>::rotate(v, rot);
         if (i > 0)
             appendLine(prev, v, color);
@@ -169,12 +170,12 @@ void LineShaders::linesLongitudeAndLatitude()
     static const int resolution = 36;
     static const double angle = hnn::PI / double(resolution);
 
-    const Vector3<double> axis_y(0.0, 1.0, 0.0);
-    const Vector3<double> axis_x(1.0, 0.0, 0.0);
+    const Vector3 axis_y(0.0, 1.0, 0.0);
+    const Vector3 axis_x(1.0, 0.0, 0.0);
 
     int jmax = floor(resolution / 2) - 1;
     auto rot_y = Quaternion<double>::rotation(axis_y, angle);
-    Vector3<double> meridian_start = axis_x;
+    Vector3 meridian_start = axis_x;
     drawCircle(resolution, meridian_start, axis_y, RED);
     for (int j = 0; j < jmax; ++j)
     {
@@ -182,11 +183,11 @@ void LineShaders::linesLongitudeAndLatitude()
         drawCircle(resolution, meridian_start, axis_y, RED);
     }
 
-    const Vector3<double> axis_z(0.0, 0.0, 1.0);
+    const Vector3 axis_z(0.0, 0.0, 1.0);
     int xzmax = floor(resolution / 4);
     for (int j = 0; j < xzmax; ++j)
     {
-        Vector3<double> v = axis_z;
+        Vector3 v = axis_z;
         if (j > 0)
         {
             Quaternion<double> rot_zy = Quaternion<double>::rotation(axis_x, angle * (double)j);

@@ -21,18 +21,18 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    Quaternion<T> fromDirectionAndSpeed(
-            const T x, const T y, const T z,
-            const T speed
+    Quaternion<double> fromDirectionAndSpeed(
+            const double x, const double y, const double z,
+            const double speed
             ) const
     {
-        Vector3<T> dr(x, y, z);
+        Vector3 dr(x, y, z);
         dr.normalize();
         const auto angle = m_engine->velocityToAngle(speed);
-        return Quaternion<T>::exp(dr * angle);
+        return Quaternion<double>::exp(dr * angle);
     }
 
-    Quaternion<T> fromVector3(Vector3<T> v3) const
+    Quaternion<double> fromVector3(Vector3 v3) const
     {
         const auto speed = v3.abs();
         return fromDirectionAndSpeed(v3.x(), v3.y(), v3.z(), speed);
@@ -50,7 +50,7 @@ private:
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
 
-            auto q = fromVector3({velocities, i3});
+            auto q = fromVector3({velocities[i3], velocities[i3+1], velocities[i3+2]});
             bhs::embedQuaternionToArray<T>(q, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)

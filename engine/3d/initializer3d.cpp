@@ -78,7 +78,7 @@ void Initializer3D<T>::initRandomSphere(const double rate)
     }
 
     quint64 i3;
-    Vector3<T> coord;
+    Vector3 coord;
     for (quint64 i = 0; i < num; ++i)
     {
         i3 = i * 3;
@@ -91,9 +91,9 @@ void Initializer3D<T>::initRandomSphere(const double rate)
         }
         while (coord.norm() > (T)1.0 || coord.norm() < (T)rate);
 
-        coordinates[i3    ] = coord.x();
-        coordinates[i3 + 1] = coord.y();
-        coordinates[i3 + 2] = coord.z();
+        coordinates[i3    ] = T(coord.x());
+        coordinates[i3 + 1] = T(coord.y());
+        coordinates[i3 + 2] = T(coord.z());
     }
 
     for (quint64 i = 0; i < num * 3; ++i)

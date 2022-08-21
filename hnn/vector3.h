@@ -5,31 +5,30 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-template <typename T>
 class Vector3
 {
 public:
     Vector3() {}
 
-    Vector3(const T ax, const T ay, const T az)
+    constexpr Vector3(const double ax, const double ay, const double az)
         : m_x(ax), m_y(ay), m_z(az) {}
 
-    explicit Vector3(const T* const a)
+    explicit constexpr Vector3(const double* const a)
         : m_x(a[0]), m_y(a[1]), m_z(a[2]) {}
 
     template <typename E>
-    Vector3(const T* const a, const E index)
+    constexpr Vector3(const double* const a, const E index)
         : m_x(a[index]), m_y(a[index + 1]), m_z(a[index + 2]) {}
 
-    T x() const { return m_x; }
-    T y() const { return m_y; }
-    T z() const { return m_z; }
+    double x() const { return m_x; }
+    double y() const { return m_y; }
+    double z() const { return m_z; }
 
-    void setX(T ax) { m_x = ax; }
-    void setY(T ay) { m_y = ay; }
-    void setZ(T az) { m_z = az; }
+    void setX(double ax) { m_x = ax; }
+    void setY(double ay) { m_y = ay; }
+    void setZ(double az) { m_z = az; }
 
-    void set(T ax, T ay, T az)
+    void set(double ax, double ay, double az)
     {
         m_x = ax;
         m_y = ay;
@@ -112,19 +111,19 @@ public:
         return m_x != a.m_x || m_y != a.m_y || m_z != a.m_z;
     }
 
-    T norm() const
+    double norm() const
     {
         return m_x * m_x + m_y * m_y + m_z * m_z;
     }
 
-    T abs() const
+    double abs() const
     {
         return sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
     }
 
     Vector3& normalize()
     {
-        T r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+        double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r != 0.0)
         {
             m_x /= r;
@@ -136,22 +135,22 @@ public:
 
     Vector3 normalized() const
     {
-        T r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+        double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r == 0.0)
             return Vector3(m_x, m_y, m_z);
         return Vector3(m_x / r, m_y / r, m_z / r);
     }
 
-    T dot(const Vector3& a) const
+    double dot(const Vector3& a) const
     {
         return m_x * a.m_x + m_y * a.m_y + m_z * a.m_z;
     }
 
-    T distance(const Vector3& a) const
+    double distance(const Vector3& a) const
     {
-        T d1 = m_x - a.m_x;
-        T d2 = m_y - a.m_y;
-        T d3 = m_z - a.m_z;
+        double d1 = m_x - a.m_x;
+        double d2 = m_y - a.m_y;
+        double d3 = m_z - a.m_z;
         return sqrt(d1 * d1 + d2 * d2 + d3 * d3);
     }
 
@@ -161,7 +160,7 @@ public:
     }
 
 private:
-    T m_x, m_y, m_z;
+    double m_x, m_y, m_z;
 };
 
 } // namespace

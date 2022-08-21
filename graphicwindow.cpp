@@ -213,10 +213,10 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.setPosition(CAMERA_INI_POS, 0.1);
 
         if (m_keyPressing.indexOf(Qt::Key_Home) >= 0)
-            m_camera.setPosition(Vector3<double>(0,0,0), 0.1);
+            m_camera.setPosition(Vector3(0,0,0), 0.1);
 
         if (m_keyPressing.indexOf(Qt::Key_End) >= 0)
-            m_camera.setPosition(Vector3<double>(0,0,0), -0.1);
+            m_camera.setPosition(Vector3(0,0,0), -0.1);
 
         if (m_keyPressing.indexOf(Qt::Key_Backspace) >= 0)
             m_camera.lookAtZero(0.2);

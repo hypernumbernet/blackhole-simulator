@@ -186,35 +186,37 @@ const bhs::SimCondition& AbstractNBodyEngine<T>::sim() const
 }
 
 template <typename T>
-T AbstractNBodyEngine<T>::velocityToAngle(const T v) const
+double AbstractNBodyEngine<T>::velocityToAngle(const double v) const
 {
-    return v * T(AbstractNBodyEngine<double>::VANGLE / m_scaleInv);
+    return v * AbstractNBodyEngine<double>::VANGLE / m_scaleInv;
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::angleToVelocity(Vector3<T>& a) const
+void AbstractNBodyEngine<T>::angleToVelocity(Vector3& a) const
 {
     a *= T(m_scaleInv / AbstractNBodyEngine<double>::VANGLE);
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const T vx, const T vy, const T vz) const
+void AbstractNBodyEngine<T>::LorentzTransformation(
+        QGenericMatrix<4, 4, double>& lt,
+        const double vx, const double vy, const double vz) const
 {
-    T vv = vx * vx + vy * vy + vz * vz;
-    if (vv == T(0.0))
+    double vv = vx * vx + vy * vy + vz * vz;
+    if (vv == 0.0)
     {
         lt.setToIdentity();
         return;
     }
-    T ci = speedOfLightInv();
-    T beta = sqrt(vv) * ci;
-    if (beta > T(1.0))
+    double ci = speedOfLightInv();
+    double beta = sqrt(vv) * ci;
+    if (beta > 1.0)
     {
         //qDebug() << "beta > 1: " << beta;
-        beta = hAbs(fmod(beta - T(1.0), T(4.0)) - T(2.0));
+        beta = hAbs(fmod(beta - 1.0, 4.0) - 2.0);
     }
 
-    T gamma = T(1.0) / sqrt(T(1) - beta * beta);
+    double gamma = 1.0 / sqrt(1.0 - beta * beta);
     if (!std::isfinite(gamma))
     {
         //qDebug() << "gamma INFINITY: " << gamma;
@@ -222,16 +224,16 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
         return;
     }
 
-    T gxc = - gamma * vx * ci;
-    T gyc = - gamma * vy * ci;
-    T gzc = - gamma * vz * ci;
-    T g1 = gamma - T(1.0);
+    double gxc = - gamma * vx * ci;
+    double gyc = - gamma * vy * ci;
+    double gzc = - gamma * vz * ci;
+    double g1 = gamma - 1.0;
 
-    T matrix[] = {
+    double matrix[] = {
         gamma, gxc, gyc, gzc,
-        gxc  , T(1.0) + g1 * (vx * vx / vv),          g1 * (vx * vy / vv),          g1 * (vx * vz / vv),
-        gyc  ,          g1 * (vx * vy / vv), T(1.0) + g1 * (vy * vy / vv),          g1 * (vy * vz / vv),
-        gzc  ,          g1 * (vx * vz / vv),          g1 * (vy * vz / vv), T(1.0) + g1 * (vz * vz / vv),
+        gxc  , 1.0 + g1 * (vx * vx / vv),       g1 * (vx * vy / vv),       g1 * (vx * vz / vv),
+        gyc  ,       g1 * (vx * vy / vv), 1.0 + g1 * (vy * vy / vv),       g1 * (vy * vz / vv),
+        gzc  ,       g1 * (vx * vz / vv),       g1 * (vy * vz / vv), 1.0 + g1 * (vz * vz / vv),
     };
     for (int i = 0; i < 16; ++i)
     {
@@ -240,7 +242,8 @@ void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, 
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::LorentzTransformation(QGenericMatrix<4, 4, T>& lt, const Vector3<T>& v) const
+void AbstractNBodyEngine<T>::LorentzTransformation(
+        QGenericMatrix<4, 4, double>& lt, const Vector3& v) const
 {
     LorentzTransformation(lt, v.x(), v.y(), v.z());
 }

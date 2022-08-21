@@ -21,15 +21,15 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    QGenericMatrix<1, 4, T> fromVector3(const Vector3<T>& v3) const
+    QGenericMatrix<1, 4, double> fromVector3(const Vector3& v3) const
     {
-        QGenericMatrix<4, 4, T> lt;
+        QGenericMatrix<4, 4, double> lt;
         m_engine->LorentzTransformation(lt, -v3);
-        QGenericMatrix<1, 4, T> speed;
-        speed(0, 0) = T(SPEED_OF_LIGHT * m_engine->scaleInv()) * m_engine->timePerFrame();
-        speed(1, 0) = T(0.0);
-        speed(2, 0) = T(0.0);
-        speed(3, 0) = T(0.0);
+        QGenericMatrix<1, 4, double> speed;
+        speed(0, 0) = SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame();
+        speed(1, 0) = 0.0;
+        speed(2, 0) = 0.0;
+        speed(3, 0) = 0.0;
         return lt * speed;
     }
 
@@ -44,7 +44,7 @@ private:
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
-            auto vel4 = fromVector3({velocities, i3});
+            auto vel4 = fromVector3({velocities[i3],velocities[i3+1],velocities[i3+2]});
             bhs::embedMatrix1x4ToArray<T>(vel4, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)
