@@ -29,7 +29,7 @@ public:
             i4 = i * 4;
             i3 = i * 3;
             double tau = m_ct / velocities[i4];
-            tau *= tau;
+            //tau *= tau;
             if (!std::isfinite(tau))
             {
                 //qDebug() << "tau: " << tau;

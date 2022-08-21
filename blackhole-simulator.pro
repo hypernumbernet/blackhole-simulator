@@ -4,8 +4,10 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
+    UpdateUi.cpp \
     camera.cpp \
     computeshaders.cpp \
+    engine/GravityCollision/InitializerGravityCollision.cpp \
     engine/abstractnbodyengine.cpp \
     engine/3d/initializer3d.cpp \
     engine/3d4d/initializer3d4d.cpp \
@@ -24,6 +26,11 @@ SOURCES += \
 HEADERS += \
     camera.h \
     computeshaders.h \
+    engine/GravityCollision/CalculationGravityCollision.h \
+    engine/GravityCollision/CoreDoubleGravityCollision.h \
+    engine/GravityCollision/CoreFloatGravityCollision.h \
+    engine/GravityCollision/EngineGravityCollision.h \
+    engine/GravityCollision/InitializerGravityCollision.h \
     engine/abstractenginecore.h \
     engine/abstractenginecoredouble.h \
     engine/abstractenginecorefloat.h \

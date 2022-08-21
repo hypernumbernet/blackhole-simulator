@@ -11,6 +11,9 @@
 #include "engine/4d3d/engine4d3d.h"
 #include "engine/4d3d/corefloat4d3d.h"
 #include "engine/4d3d/coredouble4d3d.h"
+#include "engine/GravityCollision/EngineGravityCollision.h"
+#include "engine/GravityCollision/CoreFloatGravityCollision.h"
+#include "engine/GravityCollision/CoreDoubleGravityCollision.h"
 
 ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)
@@ -60,7 +63,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         switch (sim.engine)
         {
         case bhs::Engine::G3D:
-        default:
             m_NBodyEngineFloat = new Engine3D<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D::factory);
             break;
@@ -78,12 +80,15 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_NBodyEngineFloat = new Engine4D3D<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat4D3D::factory);
             break;
+        case bhs::Engine::GravityCollision:
+            m_NBodyEngineFloat = new EngineGravityCollision<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatGravityCollision::factory);
+            break;
         }
     } else {
         switch (sim.engine)
         {
         case bhs::Engine::G3D:
-        default:
             m_NBodyEngineDouble = new Engine3D<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D::factory);
             break;
@@ -100,6 +105,10 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::G4D3D:
             m_NBodyEngineDouble = new Engine4D3D<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble4D3D::factory);
+            break;
+        case bhs::Engine::GravityCollision:
+            m_NBodyEngineDouble = new EngineGravityCollision<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleGravityCollision::factory);
             break;
         }
     }

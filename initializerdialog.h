@@ -13,7 +13,7 @@ class InitializerDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit InitializerDialog(QWidget* parent);
+    explicit InitializerDialog(QWidget*);
 
     void setValues(const bhs::SimCondition&);
     const bhs::SimCondition& simCondition() const;
@@ -24,7 +24,7 @@ public slots:
 
 private:
     static constexpr QColor RE_ENTER_COLOR = {255, 200, 200};
-    inline static const QString INI_NAME = "Blackhole-Simulator-2";
+    static const inline QString INI_NAME = "Blackhole-Simulator-2";
 
     bool validate();
     double toDouble(QLineEdit&, bool&);
@@ -50,8 +50,8 @@ private:
     QLineEdit m_speedEdit;
     QLineEdit m_rotationEdit;
     QLabel m_presetCustomName;
-    QRadioButton* m_floatRadio = nullptr;
-    QRadioButton* m_doubleRadio = nullptr;
+    QRadioButton* m_floatRadio;
+    QRadioButton* m_doubleRadio;
 
     bhs::SimCondition m_sim;
 };

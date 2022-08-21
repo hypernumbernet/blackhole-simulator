@@ -23,6 +23,7 @@ MainWidget::MainWidget(QWidget* parent)
     m_hLayout.addLayout(&m_vLayout);
 
     initUi();
+    //qDebug() << "GraphicWindow" << UpdateUi::debugString((quintptr)&UpdateUi::engineUse);
 }
 
 void MainWidget::initUi()

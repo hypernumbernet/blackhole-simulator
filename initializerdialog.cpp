@@ -12,6 +12,8 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     : QDialog(parent)
     , m_normalPal(palette())
     , m_NGPal(palette())
+    , m_floatRadio(nullptr)
+    , m_doubleRadio(nullptr)
 {
     m_NGPal.setColor(QPalette::Base, RE_ENTER_COLOR);
     auto firstLayout = new QVBoxLayout;
@@ -22,12 +24,15 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     auto engineVbox = new QVBoxLayout;
     engineGroup->setLayout(engineVbox);
     firstLayout->addWidget(engineGroup);
-    for (const auto& e : UpdateUi::engine().toStdMap())
+    QListIterator<bhs::Engine> i(UpdateUi::engineUse());
+    while (i.hasNext())
     {
-        auto radio = new QRadioButton(e.second);
-        m_engineButtonGroup.addButton(radio, static_cast<int>(e.first));
+        auto p = i.next();
+        QString s = UpdateUi::engine().find(p).value();
+        auto radio = new QRadioButton(s);
+        m_engineButtonGroup.addButton(radio, static_cast<int>(p));
         engineVbox->addWidget(radio);
-        if (e.first == bhs::Engine::G3D)
+        if (p == bhs::Engine::G3D)
             radio->setChecked(true);
     }
 
@@ -200,8 +205,11 @@ bool InitializerDialog::validate()
     m_sim.massRandom = m_massRandomCheckBox.isChecked();
     m_sim.speed = toDouble(m_speedEdit, allOk);
     m_sim.rotation = toDouble(m_rotationEdit, allOk);
-    if ((m_sim.engine == bhs::Engine::G4D3D && m_sim.compute == bhs::Compute::GPU) ||
-        (m_sim.engine == bhs::Engine::G3D4DR1 && m_sim.compute == bhs::Compute::GPU))
+    if (m_sim.compute == bhs::Compute::GPU &&
+            (m_sim.engine == bhs::Engine::G4D3D
+             || m_sim.engine == bhs::Engine::G3D4DR1
+             || m_sim.engine == bhs::Engine::GravityCollision
+             ))
     {
         QMessageBox::information(this, tr("Information"), tr("The GPU Engine is not implemented"));
         allOk = false;
@@ -430,4 +438,5 @@ void InitializerDialog::onGpuClicked()
     if (m_floatRadio == nullptr || m_doubleRadio == nullptr)
         return;
     m_floatRadio->setEnabled(true);
+    m_floatRadio->click();
 }

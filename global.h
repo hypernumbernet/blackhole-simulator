@@ -10,12 +10,14 @@ using namespace hnn;
 namespace bhs // Black Hole Simulator
 {
 
+// Not sort or delete
 enum class Engine
 {
     G3D,
     G3D4D,
     G3D4DR1,
     G4D3D,
+    GravityCollision,
 };
 
 enum class Precision
@@ -40,8 +42,8 @@ enum class Preset
 
 struct Particle
 {
-    hnn::Vector3 coordinate;
-    hnn::Vector3 velocity;
+    Vector3 coordinate;
+    Vector3 velocity;
     double mass;
     QString name;
 };

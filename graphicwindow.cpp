@@ -22,6 +22,7 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     connect(&UpdateUi::it(), &UpdateUi::resetParticles, this, &GraphicWindow::resetParticles);
 
     m_threadAdmin.start();
+    //qDebug() << "GraphicWindow" << UpdateUi::debugString((quintptr)&UpdateUi::engineUse);
 }
 
 GraphicWindow::~GraphicWindow()

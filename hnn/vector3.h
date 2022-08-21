@@ -30,9 +30,7 @@ public:
 
     void set(double ax, double ay, double az)
     {
-        m_x = ax;
-        m_y = ay;
-        m_z = az;
+        m_x = ax; m_y = ay; m_z = az;
     }
 
     const Vector3 operator+(const Vector3& a) const
@@ -51,17 +49,13 @@ public:
 
     Vector3& operator+=(const Vector3& a)
     {
-        m_x += a.m_x;
-        m_y += a.m_y;
-        m_z += a.m_z;
+        m_x += a.m_x; m_y += a.m_y; m_z += a.m_z;
         return *this;
     }
 
     Vector3& operator-=(const Vector3& a)
     {
-        m_x -= a.m_x;
-        m_y -= a.m_y;
-        m_z -= a.m_z;
+        m_x -= a.m_x; m_y -= a.m_y; m_z -= a.m_z;
         return *this;
     }
 
@@ -86,18 +80,14 @@ public:
     template <typename E>
     Vector3& operator*=(E a)
     {
-        m_x *= a;
-        m_y *= a;
-        m_z *= a;
+        m_x *= a; m_y *= a; m_z *= a;
         return *this;
     }
 
     template <typename E>
     Vector3& operator/=(E a)
     {
-        m_x /= a;
-        m_y /= a;
-        m_z /= a;
+        m_x /= a; m_y /= a; m_z /= a;
         return *this;
     }
 
@@ -126,9 +116,7 @@ public:
         double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r != 0.0)
         {
-            m_x /= r;
-            m_y /= r;
-            m_z /= r;
+            m_x /= r; m_y /= r; m_z /= r;
         }
         return *this;
     }
@@ -137,7 +125,9 @@ public:
     {
         double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r == 0.0)
+        {
             return Vector3(m_x, m_y, m_z);
+        }
         return Vector3(m_x / r, m_y / r, m_z / r);
     }
 

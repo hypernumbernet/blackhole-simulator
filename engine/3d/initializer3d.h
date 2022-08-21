@@ -6,6 +6,7 @@
 template <typename T> class Initializer3D4D;
 template <typename T> class Initializer3D4DR1;
 template <typename T> class Initializer4D3D;
+template <typename T> class InitializerGravityCollision;
 
 template <typename T>
 class Initializer3D : protected AbstractInitializer
@@ -13,6 +14,7 @@ class Initializer3D : protected AbstractInitializer
     friend Initializer3D4D<T>;
     friend Initializer3D4DR1<T>;
     friend Initializer4D3D<T>;
+    friend InitializerGravityCollision<T>;
 
 public:
 
