@@ -4,11 +4,10 @@
 
 using namespace hnn;
 
-template <typename T>
 class Calculation4D3D
 {
 public:
-    Calculation4D3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    Calculation4D3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
@@ -19,41 +18,41 @@ public:
 
     void calculateTimeProgress() const
     {
-        T* const coordinates = m_engine->coordinates();
-        T* const locations = m_engine->locations();
-        const T* const velocities = m_engine->velocities();
+        double* const coordinates = m_engine->coordinates();
+        double* const locations = m_engine->locations();
+        const double* const velocities = m_engine->velocities();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
-            auto vq = Quaternion<T>::exp({velocities, i3});
-            auto lq = Quaternion<T>(locations, i4);
+            auto vq = Quaternion<double>::exp({velocities, i3});
+            auto lq = Quaternion<double>(locations, i4);
             lq = vq * lq;
             //lq = lq * vq;
-            bhs::embedQuaternionToArray<T>(lq, locations, i4);
+            bhs::embedQuaternionToArray<double>(lq, locations, i4);
             auto ln = lq.lnV3();
-            bhs::embedVector3ToArray<T>(ln, coordinates, i3);
+            bhs::embedVector3ToArray<double>(ln, coordinates, i3);
         }
     }
 
     void calculateInteraction() const
     {
-        const T* const coordinates = m_engine->coordinates();
-        T* const velocities = m_engine->velocities();
-        T* const distanceInv = m_engine->distanceInv();
+        const double* const coordinates = m_engine->coordinates();
+        double* const velocities = m_engine->velocities();
+        double* const distanceInv = m_engine->distanceInv();
         const quint64 numberOfParticles = m_engine->numberOfParticle();
-        const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->gravitationalConstant();
-        const T timeG = timePerFrame * gravitationalConstant;
+        const double timePerFrame = m_engine->timePerFrame();
+        const double gravitationalConstant = m_engine->gravitationalConstant();
+        const double timeG = timePerFrame * gravitationalConstant;
         //const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
 
         quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
 
-        T d1, d2, d3, r, theta;
+        double d1, d2, d3, r, theta;
         quint64 i3, j3;
 
-        Quaternion<T>* vels = new Quaternion<T>[numberOfParticles]();
+        Quaternion<double>* vels = new Quaternion<double>[numberOfParticles]();
         for (quint64 i = 0; i < numberOfParticles; ++i)
         {
             vels[i].set(1.0, 0.0, 0.0, 0.0);
@@ -85,10 +84,10 @@ public:
                     d1 *= theta;
                     d2 *= theta;
                     d3 *= theta;
-                    vels[i] *= Quaternion<T>::exp(d1, d2, d3);
-                    vels[j] *= Quaternion<T>::exp(-d1, -d2, -d3);
+                    vels[i] *= Quaternion<double>::exp(d1, d2, d3);
+                    vels[j] *= Quaternion<double>::exp(-d1, -d2, -d3);
                 } else {
-                    distanceInv[k] = std::numeric_limits<T>::max();
+                    distanceInv[k] = std::numeric_limits<double>::max();
                 }
                 ++k;
             }
@@ -109,7 +108,7 @@ public:
     }
 
 private:
-    AbstractNBodyEngine<T>* const m_engine;
+    AbstractNBodyEngine<double>* const m_engine;
 
     const quint64 m_timeProgresStart;
     const quint64 m_timeProgresEnd;

@@ -32,5 +32,5 @@ public slots:
     }
 
 private:
-    Calculation3D<double> m_calc;
+    Calculation3D m_calc;
 };

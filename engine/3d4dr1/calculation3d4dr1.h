@@ -4,24 +4,23 @@
 
 using namespace hnn;
 
-template <typename T>
 class Calculation3D4DR1
 {
 public:
-    Calculation3D4DR1(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    Calculation3D4DR1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_ct(T(SPEED_OF_LIGHT * engine->scaleInv()) * engine->timePerFrame())
+        , m_ct(SPEED_OF_LIGHT * engine->scaleInv() * engine->timePerFrame())
     {
     }
 
     void calculateTimeProgress() const
     {
-        T* const coordinates = m_engine->coordinates();
-        const T* const velocities = m_engine->velocities();
+        double* const coordinates = m_engine->coordinates();
+        const double* const velocities = m_engine->velocities();
 
         quint64 i4, i3;
 
@@ -29,7 +28,7 @@ public:
         {
             i4 = i * 4;
             i3 = i * 3;
-            T tau = m_ct / velocities[i4];
+            double tau = m_ct / velocities[i4];
             tau *= tau;
             if (!std::isfinite(tau))
             {
@@ -44,17 +43,17 @@ public:
 
     void calculateInteraction() const
     {
-        const T* const coordinates = m_engine->coordinates();
-        T* const velocities = m_engine->velocities();
-        const T* const masses = m_engine->masses();
+        const double* const coordinates = m_engine->coordinates();
+        double* const velocities = m_engine->velocities();
+        const double* const masses = m_engine->masses();
 
-        const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->gravitationalConstant();
-        const T timeG = timePerFrame * gravitationalConstant;
+        const double timePerFrame = m_engine->timePerFrame();
+        const double gravitationalConstant = m_engine->gravitationalConstant();
+        const double timeG = timePerFrame * gravitationalConstant;
         quint64 numberOfParticles = m_engine->numberOfParticle();
-        const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
+        const double boundaryToInvalidate = AbstractNBodyEngine<double>::BOUNDARY_TO_INVALIDATE;
 
-        T d1, d2, d3, r, inv, theta;
+        double d1, d2, d3, r, inv, theta;
         quint64 i3, j3, i4;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
@@ -62,13 +61,13 @@ public:
             i3 = i * 3;
             i4 = i * 4;
 
-            QGenericMatrix<1, 4, T> speed;
+            QGenericMatrix<1, 4, double> speed;
             speed(0, 0) = velocities[i4    ];
             speed(1, 0) = velocities[i4 + 1];
             speed(2, 0) = velocities[i4 + 2];
             speed(3, 0) = velocities[i4 + 3];
 
-            QGenericMatrix<4, 4, T> acc;
+            QGenericMatrix<4, 4, double> acc;
 
             for (quint64 j = 0; j < numberOfParticles; ++j)
             {
@@ -85,13 +84,13 @@ public:
                 if (r <= boundaryToInvalidate)
                     continue;
 
-                inv = T(1.0) / r;
+                inv = 1.0 / r;
                 theta = inv * inv * inv * timeG * masses[j];
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
 
-                Vector3<T> g(-d1, -d2, -d3);
+                Vector3<double> g(-d1, -d2, -d3);
                 m_engine->LorentzTransformation(acc, g);
                 speed = acc * speed;
             }
@@ -103,12 +102,12 @@ public:
     }
 
 private:
-    AbstractNBodyEngine<T>* const m_engine;
+    AbstractNBodyEngine<double>* const m_engine;
 
     const quint64 m_timeProgresStart;
     const quint64 m_timeProgresEnd;
     const quint64 m_interactionStart;
     const quint64 m_interactionEnd;
 
-    const T m_ct;
+    const double m_ct;
 };

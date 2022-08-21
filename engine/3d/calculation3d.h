@@ -2,11 +2,10 @@
 
 #include "engine/abstractnbodyengine.h"
 
-template <typename T>
 class Calculation3D
 {
 public:
-    Calculation3D(AbstractNBodyEngine<T>* const engine, const int threadNumber)
+    Calculation3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
@@ -16,10 +15,10 @@ public:
 
     void calculateTimeProgress() const
     {
-        T* const coordinates = m_engine->coordinates();
-        const T* const velocities = m_engine->velocities();
+        double* const coordinates = m_engine->coordinates();
+        const double* const velocities = m_engine->velocities();
 
-        const T timePerFrame = m_engine->timePerFrame();
+        const double timePerFrame = m_engine->timePerFrame();
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
@@ -32,20 +31,20 @@ public:
 
     void calculateInteraction() const
     {
-        const T* const coordinates = m_engine->coordinates();
-        T* const velocities = m_engine->velocities();
-        const T* const masses = m_engine->masses();
+        const double* const coordinates = m_engine->coordinates();
+        double* const velocities = m_engine->velocities();
+        const double* const masses = m_engine->masses();
 
-        const T timePerFrame = m_engine->timePerFrame();
-        const T gravitationalConstant = m_engine->gravitationalConstant();
-        const T timeG = timePerFrame * gravitationalConstant;
+        const double timePerFrame = m_engine->timePerFrame();
+        const double gravitationalConstant = m_engine->gravitationalConstant();
+        const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
-        const T boundaryToInvalidate = AbstractNBodyEngine<T>::BOUNDARY_TO_INVALIDATE;
+        const double boundaryToInvalidate = AbstractNBodyEngine<double>::BOUNDARY_TO_INVALIDATE;
 
-        T d1, d2, d3, r, inv, theta;
+        double d1, d2, d3, r, inv, theta;
         quint64 a, b;
 
-        T* vels = new T[numberOfParticles * 3]();
+        double* vels = new double[numberOfParticles * 3]();
 
         for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
@@ -89,7 +88,7 @@ public:
     }
 
 private:
-    AbstractNBodyEngine<T>* const m_engine;
+    AbstractNBodyEngine<double>* const m_engine;
 
     const quint64 m_timeProgresStart;
     const quint64 m_timeProgresEnd;

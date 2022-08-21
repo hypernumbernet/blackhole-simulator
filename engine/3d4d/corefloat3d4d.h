@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/abstractenginecorefloat.h"
-#include "calculation3d4d.h"
 
 class CoreFloat3D4D : public AbstractEngineCoreFloat
 {
@@ -9,7 +8,6 @@ class CoreFloat3D4D : public AbstractEngineCoreFloat
 public:
     CoreFloat3D4D(AbstractNBodyEngine<float>* const engine, const int threadNumber)
         : AbstractEngineCoreFloat(engine, threadNumber)
-        , m_calc(engine, threadNumber)
     {
     }
 
@@ -26,16 +24,11 @@ public:
 public slots:
     void calculateTimeProgress() const override
     {
-        m_calc.calculateTimeProgress();
         resultReady();
     }
 
     void calculateInteraction() const override
     {
-        m_calc.calculateInteraction();
         resultReady();
     }
-
-private:
-    Calculation3D4D<float> m_calc;
 };

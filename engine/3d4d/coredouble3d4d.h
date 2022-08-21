@@ -37,5 +37,5 @@ public slots:
     }
 
 private:
-    Calculation3D4D<double> m_calc;
+    Calculation3D4D m_calc;
 };
