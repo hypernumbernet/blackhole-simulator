@@ -6,6 +6,7 @@
 #include <QDialog>
 #include <QLabel>
 #include <QLineEdit>
+#include <QRadioButton>
 
 class InitializerDialog : public QDialog
 {
@@ -31,6 +32,8 @@ private:
     void save();
     void load();
     void customCondition();
+    void onCpuClicked();
+    void onGpuClicked();
 
     const QPalette m_normalPal;
     QPalette m_NGPal;
@@ -47,6 +50,8 @@ private:
     QLineEdit m_speedEdit;
     QLineEdit m_rotationEdit;
     QLabel m_presetCustomName;
+    QRadioButton* m_floatRadio = nullptr;
+    QRadioButton* m_doubleRadio = nullptr;
 
     bhs::SimCondition m_sim;
 };

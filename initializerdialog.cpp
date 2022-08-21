@@ -31,20 +31,6 @@ InitializerDialog::InitializerDialog(QWidget* parent)
             radio->setChecked(true);
     }
 
-    // Precision
-    auto precisionGroup = new QGroupBox(tr("Precision"));
-    auto precisionHbox = new QHBoxLayout;
-    precisionGroup->setLayout(precisionHbox);
-    firstLayout->addWidget(precisionGroup);
-    for (const auto& e : UpdateUi::precision().toStdMap())
-    {
-        auto radio = new QRadioButton(e.second);
-        m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
-        precisionHbox->addWidget(radio);
-        if (e.first == bhs::Precision::Float)
-            radio->setChecked(true);
-    }
-
     // Compute Device
     auto computeGroup = new QGroupBox(tr("Compute Device"));
     auto computeHbox = new QHBoxLayout;
@@ -56,7 +42,31 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         m_computeButtonGroup.addButton(radio, static_cast<int>(e.first));
         computeHbox->addWidget(radio);
         if (e.first == bhs::Compute::GPU)
+        {
             radio->setChecked(true);
+            connect(radio, &QRadioButton::clicked, this, &InitializerDialog::onGpuClicked);
+        }
+        else
+            connect(radio, &QRadioButton::clicked, this, &InitializerDialog::onCpuClicked);
+    }
+
+    // Precision
+    auto precisionGroup = new QGroupBox(tr("Precision"));
+    auto precisionHbox = new QHBoxLayout;
+    precisionGroup->setLayout(precisionHbox);
+    firstLayout->addWidget(precisionGroup);
+    for (const auto& e : UpdateUi::precision().toStdMap())
+    {
+        auto radio = new QRadioButton(e.second);
+        m_precisionButtonGroup.addButton(radio, static_cast<int>(e.first));
+        precisionHbox->addWidget(radio);
+        if (e.first == bhs::Precision::Float)
+        {
+            radio->setChecked(true);
+            m_floatRadio = radio;
+        }
+        else
+            m_doubleRadio = radio;
     }
 
     // Initial Conditions
@@ -405,4 +415,19 @@ void InitializerDialog::load()
 void InitializerDialog::customCondition()
 {
 
+}
+
+void InitializerDialog::onCpuClicked()
+{
+    if (m_floatRadio == nullptr || m_doubleRadio == nullptr)
+        return;
+    m_doubleRadio->click();
+    m_floatRadio->setEnabled(false);
+}
+
+void InitializerDialog::onGpuClicked()
+{
+    if (m_floatRadio == nullptr || m_doubleRadio == nullptr)
+        return;
+    m_floatRadio->setEnabled(true);
 }
