@@ -21,7 +21,7 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    Quaternion<double> fromDirectionAndSpeed(
+    Quaternion fromDirectionAndSpeed(
             const double x, const double y, const double z,
             const double speed
             ) const
@@ -29,10 +29,10 @@ private:
         Vector3 dr(x, y, z);
         dr.normalize();
         const auto angle = m_engine->velocityToAngle(speed);
-        return Quaternion<double>::exp(dr * angle);
+        return Quaternion::exp(dr * angle);
     }
 
-    Quaternion<double> fromVector3(Vector3 v3) const
+    Quaternion fromVector3(Vector3 v3) const
     {
         const auto speed = v3.abs();
         return fromDirectionAndSpeed(v3.x(), v3.y(), v3.z(), speed);

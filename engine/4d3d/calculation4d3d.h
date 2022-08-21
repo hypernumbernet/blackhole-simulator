@@ -26,8 +26,8 @@ public:
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
-            auto vq = Quaternion<double>::exp({velocities, i3});
-            auto lq = Quaternion<double>(locations, i4);
+            auto vq = Quaternion::exp({velocities, i3});
+            auto lq = Quaternion(locations, i4);
             lq = vq * lq;
             //lq = lq * vq;
             bhs::embedQuaternionToArray<double>(lq, locations, i4);
@@ -52,7 +52,7 @@ public:
         double d1, d2, d3, r, theta;
         quint64 i3, j3;
 
-        Quaternion<double>* vels = new Quaternion<double>[numberOfParticles]();
+        Quaternion* vels = new Quaternion[numberOfParticles]();
         for (quint64 i = 0; i < numberOfParticles; ++i)
         {
             vels[i].set(1.0, 0.0, 0.0, 0.0);
@@ -84,8 +84,8 @@ public:
                     d1 *= theta;
                     d2 *= theta;
                     d3 *= theta;
-                    vels[i] *= Quaternion<double>::exp(d1, d2, d3);
-                    vels[j] *= Quaternion<double>::exp(-d1, -d2, -d3);
+                    vels[i] *= Quaternion::exp(d1, d2, d3);
+                    vels[j] *= Quaternion::exp(-d1, -d2, -d3);
                 } else {
                     distanceInv[k] = std::numeric_limits<double>::max();
                 }

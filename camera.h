@@ -31,11 +31,11 @@ public:
     QMatrix4x4 viewMatrix() const;
 
 private:
-    void multiplyRotation(const Quaternion<double>&);
+    void multiplyRotation(const Quaternion&);
     Vector3 m_position;
     Vector3 m_forward;
     Vector3 m_right;
     Vector3 m_up;
-    Quaternion<double> m_rotation;
+    Quaternion m_rotation;
     QMutex m_mutex;
 };

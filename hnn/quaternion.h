@@ -7,36 +7,35 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-template <typename T>
 class Quaternion
 {
 public:
     Quaternion() {}
 
-    Quaternion(const T real, const T imaginary1, const T imaginary2, const T imaginary3)
+    constexpr Quaternion(const double real, const double imaginary1, const double imaginary2, const double imaginary3)
         : m_re(real), m_i1(imaginary1), m_i2(imaginary2), m_i3(imaginary3) {}
 
-    explicit Quaternion(const T a)
-        : m_re(T(a)), m_i1(T(0)), m_i2(T(0)), m_i3(T(0)) {}
+    explicit Quaternion(const double a)
+        : m_re(a), m_i1(0.0), m_i2(0.0), m_i3(0.0) {}
 
-    explicit Quaternion(Vector3 v)
-        : m_re(T(0)), m_i1(v.x()), m_i2(v.y()), m_i3(v.z()) {}
+    explicit Quaternion(const Vector3 v)
+        : m_re(0.0), m_i1(v.x()), m_i2(v.y()), m_i3(v.z()) {}
 
     template <typename E>
-    Quaternion(const T* const a, const E index)
+    Quaternion(const double* const a, const E index)
         : m_re(a[index]), m_i1(a[index + 1]), m_i2(a[index + 2]), m_i3(a[index + 3]) {}
 
-    T re() const { return m_re; }
-    T i1() const { return m_i1; }
-    T i2() const { return m_i2; }
-    T i3() const { return m_i3; }
+    double re() const { return m_re; }
+    double i1() const { return m_i1; }
+    double i2() const { return m_i2; }
+    double i3() const { return m_i3; }
 
-    void setRe(T re) { m_re = re; }
-    void setI1(T i1) { m_i1 = i1; }
-    void setI2(T i2) { m_i2 = i2; }
-    void setI3(T i3) { m_i3 = i3; }
+    void setRe(const double re) { m_re = re; }
+    void setI1(const double i1) { m_i1 = i1; }
+    void setI2(const double i2) { m_i2 = i2; }
+    void setI3(const double i3) { m_i3 = i3; }
 
-    void set(T real, T imaginary1, T imaginary2, T imaginary3)
+    void set(const double real, const double imaginary1, double imaginary2, double imaginary3)
     {
         m_re = real;
         m_i1 = imaginary1;
@@ -44,7 +43,7 @@ public:
         m_i3 = imaginary3;
     }
 
-    void set(const T* const a)
+    void set(const double* const a)
     {
         m_re = a[0];
         m_i1 = a[1];
@@ -53,7 +52,7 @@ public:
     }
 
     template <typename E>
-    void set(const T* const a, const E index)
+    void set(const double* const a, const E index)
     {
         m_re = a[index];
         m_i1 = a[index + 1];
@@ -61,14 +60,14 @@ public:
         m_i3 = a[index + 3];
     }
 
-    static constexpr Quaternion<T> zero()
+    static constexpr Quaternion zero()
     {
-        return Quaternion<T>(T(0), T(0), T(0), T(0));
+        return Quaternion(0.0, 0.0, 0.0, 0.0);
     }
 
-    static constexpr Quaternion<T> identity()
+    static constexpr Quaternion identity()
     {
-        return Quaternion<T>(T(1), T(0), T(0), T(0));
+        return Quaternion(1.0, 0.0, 0.0, 0.0);
     }
 
     const Quaternion operator+(const Quaternion& a) const
@@ -198,22 +197,22 @@ public:
                hnn::fuzzyCompare(m_i3, a.m_i3);
     }
 
-    const T& operator[](int index) const
+    const double& operator[](int index) const
     {
         return array[index];
     }
 
-    T& operator[](int index)
+    double& operator[](int index)
     {
         return array[index];
     }
 
-    T norm() const
+    double norm() const
     {
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
     }
 
-    T abs() const
+    double abs() const
     {
         return sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
     }
@@ -230,12 +229,12 @@ public:
 
     Quaternion inversed() const
     {
-        T norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
+        double norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
         return Quaternion(m_re / norm, -m_i1 / norm, -m_i2 / norm, -m_i3 / norm);
     }
 
     // Argument of complex
-    T arg() const
+    double arg() const
     {
         return acos(m_re / sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3));
     }
@@ -243,9 +242,9 @@ public:
     // Exponential
     Quaternion exp() const
     {
-        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        T e = exp(m_re);
-        T a;
+        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        double e = std::exp(m_re);
+        double a;
 
         if (n == 0)
             a = e;
@@ -258,8 +257,8 @@ public:
     // Exponential - only imaginary part
     Quaternion expIm() const
     {
-        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        T a;
+        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        double a;
 
         if (n == 0)
             a = 0;
@@ -270,13 +269,13 @@ public:
     }
 
     // Exponential - only imaginary part
-    static constexpr Quaternion exp(T x, T y, T z)
+    static inline Quaternion exp(double x, double y, double z)
     {
-        T n = sqrt(x * x + y * y + z * z);
-        T a;
+        double n = sqrt(x * x + y * y + z * z);
+        double a;
 
-        if (n == 0)
-            a = 0;
+        if (n == 0.0)
+            a = 0.0;
         else
             a = sin(n) / n;
 
@@ -284,13 +283,13 @@ public:
     }
 
     // Exponential - only imaginary part
-    static constexpr Quaternion exp(const Vector3& v)
+    static inline Quaternion exp(const Vector3& v)
     {
-        T n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
-        T a;
+        double n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
+        double a = 0.0;
 
-        if (n == 0)
-            a = 0;
+        if (n == 0.0)
+            a = 0.0;
         else
             a = sin(n) / n;
 
@@ -298,13 +297,13 @@ public:
     }
 
     // Exponential - Hyperbolic
-    static constexpr Quaternion exph(T x, T y, T z)
+    static inline Quaternion exph(double x, double y, double z)
     {
-        T n = sqrt(x * x + y * y + z * z);
-        T a;
+        double n = sqrt(x * x + y * y + z * z);
+        double a = 0.0;
 
-        if (n == 0)
-            a = 0;
+        if (n == 0.0)
+            a = 0.0;
         else
             a = sinh(n) / n;
 
@@ -312,25 +311,22 @@ public:
     }
 
     // Logarithm
-    // Use after normalizing.
     Quaternion ln() const
     {
-        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        if (n == 0)
-            return Quaternion::zero;
+        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        if (n == 0.0)
+            return Quaternion::zero();
 
         n = atan2(n, m_re) / n;
-        //scalar part
-        //0.5 * log(a.m_re * a.m_re + a.i1 * a.i1 + a.i2 * a.i2 + a.i3 * a.i3)
-        return Quaternion(0, m_i1 * n, m_i2 * n, m_i3 * n);
+        return Quaternion(log(norm()), m_i1 * n, m_i2 * n, m_i3 * n);
     }
 
     // Logarithm - Vector3
     Vector3 lnV3() const
     {
-        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        if (n == 0)
-            return Vector3(0, 0, 0);
+        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        if (n == 0.0)
+            return Vector3(0.0, 0.0, 0.0);
 
         n = atan2(n, m_re) / n;
         return Vector3(m_i1 * n, m_i2 * n, m_i3 * n);
@@ -338,16 +334,16 @@ public:
 
     Vector3 lnAcos() const
     {
-        T n = acos(m_re);
-        T s = sin(n);
+        double n = acos(m_re);
+        double s = sin(n);
         return Vector3(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
     }
 
     Vector3 lnhV3() const
     {
-        T n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        if (n == 0)
-            return Vector3(0, 0, 0);
+        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        if (n == 0.0)
+            return Vector3(0.0, 0.0, 0.0);
 
         n = atanh(n) / n;
         return Vector3(m_i1 * n, m_i2 * n, m_i3 * n);
@@ -355,13 +351,13 @@ public:
 
     Vector3 lnV3Half() const
     {
-        T v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        if (v == 0)
-            return Vector3(0, 0, 0);
+        double v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        if (v == 0.0)
+            return Vector3(0.0, 0.0, 0.0);
 
-        T a;
-        if (m_re == 0) // v == 1
-            a = PI / (T)2;
+        double a;
+        if (m_re == 0.0) // v == 1
+            a = PI / (double)2;
         else
             a = atan(v / m_re) / v;
         return Vector3(m_i1 * a, m_i2 * a, m_i3 * a);
@@ -393,20 +389,20 @@ public:
         + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
         + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
     */
-    static constexpr void rotate(Vector3& axis, const Quaternion& rot)
+    static inline void rotate(Vector3& axis, const Quaternion& rot)
     {
-        T a = rot.re();
-        T b = rot.i1();
-        T c = rot.i2();
-        T d = rot.i3();
-        T x = axis.x();
-        T y = axis.y();
-        T z = axis.z();
+        double a = rot.re();
+        double b = rot.i1();
+        double c = rot.i2();
+        double d = rot.i3();
+        double x = axis.x();
+        double y = axis.y();
+        double z = axis.z();
 
-        T aa = a*a, bb = b*b, cc = c*c, dd = d*d;
-        T rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
-        T ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
-        T rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
+        double aa = a*a, bb = b*b, cc = c*c, dd = d*d;
+        double rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
+        double ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
+        double rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
 
         axis.setX(rx);
         axis.setY(ry);
@@ -417,12 +413,12 @@ public:
 
     Quaternion rot() const
     {
-        T c1 = cos(m_i1);
-        T c2 = cos(m_i2);
-        T c3 = cos(m_i3);
-        T s1 = sin(m_i1);
-        T s2 = sin(m_i2);
-        T s3 = sin(m_i3);
+        double c1 = cos(m_i1);
+        double c2 = cos(m_i2);
+        double c3 = cos(m_i3);
+        double s1 = sin(m_i1);
+        double s2 = sin(m_i2);
+        double s3 = sin(m_i3);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -431,14 +427,14 @@ public:
         );
     }
 
-    static constexpr Quaternion rot(T x, T y, T z)
+    static inline Quaternion rot(double x, double y, double z)
     {
-        T c1 = cos(x);
-        T c2 = cos(y);
-        T c3 = cos(z);
-        T s1 = sin(x);
-        T s2 = sin(y);
-        T s3 = sin(z);
+        double c1 = cos(x);
+        double c2 = cos(y);
+        double c3 = cos(z);
+        double s1 = sin(x);
+        double s2 = sin(y);
+        double s3 = sin(z);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -447,14 +443,14 @@ public:
         );
     }
 
-    static constexpr Quaternion roth(T x, T y, T z)
+    static inline Quaternion roth(double x, double y, double z)
     {
-        T c1 = cosh(x);
-        T c2 = cosh(y);
-        T c3 = cosh(z);
-        T s1 = sinh(x);
-        T s2 = sinh(y);
-        T s3 = sinh(z);
+        double c1 = cosh(x);
+        double c2 = cosh(y);
+        double c3 = cosh(z);
+        double s1 = sinh(x);
+        double s2 = sinh(y);
+        double s3 = sinh(z);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -464,7 +460,7 @@ public:
     }
 
     // Dot product
-    T dot(const Quaternion& a) const
+    double dot(const Quaternion& a) const
     {
         return m_re * a.m_re + m_i1 * a.m_i1 + m_i2 * a.m_i2 + m_i3 * a.m_i3;
     }
@@ -473,7 +469,7 @@ public:
     Quaternion cross7(const Quaternion& a) const
     {
         return Quaternion(
-            0,
+            0.0,
             -m_re * a.m_i1 + m_i1 * a.m_re - m_i2 * a.m_i3 + m_i3 * a.m_i2,
             -m_re * a.m_i2 + m_i1 * a.m_i3 + m_i2 * a.m_re - m_i3 * a.m_i1,
             -m_re * a.m_i3 - m_i1 * a.m_i2 + m_i2 * a.m_i1 + m_i3 * a.m_re
@@ -520,19 +516,19 @@ public:
 
     void rotate8(const Quaternion& rot)
     {
-        T q0 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_re
+        double q0 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_re
              - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i1
              - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i2
              - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i3;
-        T q1 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i1
+        double q1 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i1
              + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_re
              - (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i3
              + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i2;
-        T q2 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i2
+        double q2 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i2
              + (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i3
              + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_re
              - (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_i1;
-        T q3 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i3
+        double q3 = (rot.m_re * m_re - rot.m_i1 * m_i1 - rot.m_i2 * m_i2 - rot.m_i3 * m_i3) * rot.m_i3
              - (rot.m_re * m_i1 + rot.m_i1 * m_re + rot.m_i2 * m_i3 - rot.m_i3 * m_i2) * rot.m_i2
              + (rot.m_re * m_i2 - rot.m_i1 * m_i3 + rot.m_i2 * m_re + rot.m_i3 * m_i1) * rot.m_i1
              + (rot.m_re * m_i3 + rot.m_i1 * m_i2 - rot.m_i2 * m_i1 + rot.m_i3 * m_re) * rot.m_re;
@@ -565,26 +561,26 @@ public:
         return *this;
     }
 
-    static constexpr Quaternion rotation(Vector3 v, T theta)
+    static inline Quaternion rotation(Vector3 v, double theta)
     {
-        T c = cos(theta);
-        T s = sin(theta);
+        double c = cos(theta);
+        double s = sin(theta);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
-    static constexpr Quaternion rotation(T x, T y, T z, T theta)
+    static inline Quaternion rotation(double x, double y, double z, double theta)
     {
-        T c = cos(theta);
-        T s = sin(theta);
+        double c = cos(theta);
+        double s = sin(theta);
         return Quaternion(c, x * s, y * s, z * s);
     }
 
     // The function that combines makeRotation() and rot8().
     // v should be normalized
-    Quaternion rotMove(const Vector3& v, const T theta) const
+    Quaternion rotMove(const Vector3& v, const double theta) const
     {
-        T c = cos(theta);
-        T s = sin(theta);
+        double c = cos(theta);
+        double s = sin(theta);
         return Quaternion(
             m_re * c - (v.x() * m_i1 + v.y() * m_i2 + v.z() * m_i3) * s,
             m_i1 * c + (v.x() * m_re + v.y() * m_i3 - v.z() * m_i2) * s,
@@ -593,24 +589,24 @@ public:
         );
     }
 
-    static constexpr Quaternion slerp(
+    static inline Quaternion slerp(
             const Vector3& from, const Vector3& to,
-            T rate = 1, T threshold = 1)
+            double rate = 1.0, double threshold = 1.0)
     {
         auto cosVal = from.dot(to);
         if (cosVal >= threshold) // same direction
         {
-            return Quaternion(1);
+            return Quaternion(1.0);
         }
         auto angle = acos(cosVal) * rate * 0.5;
         auto cross = from.cross(to);
         if (cosVal <= -threshold) // opposite direction
         {
-            Vector3 tmp(1, 0, 0);
+            Vector3 tmp(1.0, 0.0, 0.0);
             cosVal = from.dot(to);
             if (cosVal >= threshold || cosVal <= -threshold)
             {
-                cross = from.cross({0, 0, 1});
+                cross = from.cross({0.0, 0.0, 1.0});
             } else {
                 cross = from.cross(tmp);
             }
@@ -624,12 +620,12 @@ private:
         {
             struct
             {
-                T m_re;
-                T m_i1;
-                T m_i2;
-                T m_i3;
+                double m_re;
+                double m_i1;
+                double m_i2;
+                double m_i3;
             };
-            T array[4];
+            double array[4];
         };
 };
 

@@ -7,38 +7,37 @@
 namespace hnn // https://github.com/hypernumbernet
 {
 
-template <typename T>
 class Octonion
 {
 public:
     Octonion() {}
 
-    Octonion(const T real, const T imaginary1, const T imaginary2, const T imaginary3,
-                       const T imaginary4, const T imaginary5, const T imaginary6, const T imaginary7)
+    constexpr Octonion(const double real, const double imaginary1, const double imaginary2, const double imaginary3,
+                       const double imaginary4, const double imaginary5, const double imaginary6, const double imaginary7)
         : m_re(real), m_i1(imaginary1), m_i2(imaginary2), m_i3(imaginary3),
           m_i4(imaginary4), m_i5(imaginary5), m_i6(imaginary6), m_i7(imaginary7){}
 
-    explicit Octonion(const T a)
-        : m_re(T(a)), m_i1(T(0)), m_i2(T(0)), m_i3(T(0)),
-          m_i4(T(0)), m_i5(T(0)), m_i6(T(0)), m_i7(T(0)) {}
+    explicit Octonion(const double a)
+        : m_re(a), m_i1(0.0), m_i2(0.0), m_i3(0.0),
+          m_i4(0.0), m_i5(0.0), m_i6(0.0), m_i7(0.0) {}
 
-    T re() const { return m_re; }
-    T i1() const { return m_i1; }
-    T i2() const { return m_i2; }
-    T i3() const { return m_i3; }
-    T i4() const { return m_i4; }
-    T i5() const { return m_i5; }
-    T i6() const { return m_i6; }
-    T i7() const { return m_i7; }
+    double re() const { return m_re; }
+    double i1() const { return m_i1; }
+    double i2() const { return m_i2; }
+    double i3() const { return m_i3; }
+    double i4() const { return m_i4; }
+    double i5() const { return m_i5; }
+    double i6() const { return m_i6; }
+    double i7() const { return m_i7; }
 
-    void setRe(T re) { m_re = re; }
-    void setI1(T i1) { m_i1 = i1; }
-    void setI2(T i2) { m_i2 = i2; }
-    void setI3(T i3) { m_i3 = i3; }
-    void setI4(T i4) { m_i4 = i4; }
-    void setI5(T i5) { m_i5 = i5; }
-    void setI6(T i6) { m_i6 = i6; }
-    void setI7(T i7) { m_i7 = i7; }
+    void setRe(const double re) { m_re = re; }
+    void setI1(const double i1) { m_i1 = i1; }
+    void setI2(const double i2) { m_i2 = i2; }
+    void setI3(const double i3) { m_i3 = i3; }
+    void setI4(const double i4) { m_i4 = i4; }
+    void setI5(const double i5) { m_i5 = i5; }
+    void setI6(const double i6) { m_i6 = i6; }
+    void setI7(const double i7) { m_i7 = i7; }
 
     const Octonion operator+(const Octonion& a) const
     {
@@ -177,7 +176,7 @@ public:
         );
     }
 
-    static constexpr Octonion cross(const Quaternion<T>& a, const Quaternion<T>& b, int w, int x, int y, int z)
+    static inline Octonion cross(const Quaternion& a, const Quaternion& b, int w, int x, int y, int z)
     {
         Octonion o1(0);
         o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
@@ -228,23 +227,23 @@ public:
                 hnn::fuzzyCompare(m_i7, a.m_i7);
     }
 
-    const T& operator[](int index) const
+    const double& operator[](int index) const
     {
         return array[index];
     }
 
-    T& operator[](int index)
+    double& operator[](int index)
     {
         return array[index];
     }
 
-    T norm() const
+    double norm() const
     {
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3 +
                 m_i4 * m_i4 + m_i5 * m_i5 + m_i6 * m_i6 + m_i7 * m_i7;
     }
 
-    T abs() const
+    double abs() const
     {
         return sqrt(norm());
     }
@@ -261,12 +260,12 @@ public:
 
     Octonion inversed() const
     {
-        T n = norm();
+        double n = norm();
         return Octonion(m_re / n, -m_i1 / n, -m_i2 / n, -m_i3 / n,
                         -m_i4 / n, -m_i5 / n, -m_i6 / n, -m_i7 / n);
     }
 
-    static constexpr void rotation(Quaternion<T>& a, const Quaternion<T>& rot,
+    static inline void rotation(Quaternion& a, const Quaternion& rot,
                                    int w, int x, int y, int z)
     {
         Octonion o1(0);
@@ -277,7 +276,7 @@ public:
         a.setRe(o3[w]); a.setI1(o3[x]); a.setI2(o3[y]); a.setI3(o3[z]);
     }
 
-    static constexpr void rotation(Quaternion<T>& a, const Octonion& rot,
+    static inline void rotation(Quaternion& a, const Octonion& rot,
                                    int w, int x, int y, int z)
     {
         Octonion o1(0);
@@ -299,16 +298,16 @@ private:
         {
             struct
             {
-                T m_re;
-                T m_i1;
-                T m_i2;
-                T m_i3;
-                T m_i4;
-                T m_i5;
-                T m_i6;
-                T m_i7;
+                double m_re;
+                double m_i1;
+                double m_i2;
+                double m_i3;
+                double m_i4;
+                double m_i5;
+                double m_i6;
+                double m_i7;
             };
-            T array[8];
+            double array[8];
         };
 };
 

@@ -108,7 +108,7 @@ inline double rand0center1max()
 inline QRecursiveMutex interactionMutex;
 
 template <typename T>
-inline void embedQuaternionToArray(const Quaternion<double>& q, T* const a, const quint64 index)
+inline void embedQuaternionToArray(const Quaternion& q, T* const a, const quint64 index)
 {
     a[index    ] = T(q.re());
     a[index + 1] = T(q.i1());

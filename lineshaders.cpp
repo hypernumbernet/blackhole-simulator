@@ -156,9 +156,9 @@ void LineShaders::drawCircle(
     Vector3 prev = startPoint;
     for (int i = 0; i <= resolution; ++i)
     {
-        auto rot = Quaternion<double>::rotation(axis, angle * (double)i * 0.5);
+        auto rot = Quaternion::rotation(axis, angle * (double)i * 0.5);
         Vector3 v = startPoint;
-        Quaternion<double>::rotate(v, rot);
+        Quaternion::rotate(v, rot);
         if (i > 0)
             appendLine(prev, v, color);
         prev = v;
@@ -174,12 +174,12 @@ void LineShaders::linesLongitudeAndLatitude()
     const Vector3 axis_x(1.0, 0.0, 0.0);
 
     int jmax = floor(resolution / 2) - 1;
-    auto rot_y = Quaternion<double>::rotation(axis_y, angle);
+    auto rot_y = Quaternion::rotation(axis_y, angle);
     Vector3 meridian_start = axis_x;
     drawCircle(resolution, meridian_start, axis_y, RED);
     for (int j = 0; j < jmax; ++j)
     {
-        Quaternion<double>::rotate(meridian_start, rot_y);
+        Quaternion::rotate(meridian_start, rot_y);
         drawCircle(resolution, meridian_start, axis_y, RED);
     }
 
@@ -190,9 +190,9 @@ void LineShaders::linesLongitudeAndLatitude()
         Vector3 v = axis_z;
         if (j > 0)
         {
-            Quaternion<double> rot_zy = Quaternion<double>::rotation(axis_x, angle * (double)j);
+            Quaternion rot_zy = Quaternion::rotation(axis_x, angle * (double)j);
             v = axis_z;
-            Quaternion<double>::rotate(v, rot_zy);
+            Quaternion::rotate(v, rot_zy);
         }
         drawCircle(resolution, axis_y, v, BLUE);
         drawCircle(resolution, axis_y, {v.x(), -v.y(), v.z()}, BLUE);
@@ -208,10 +208,10 @@ void LineShaders::linesQuaternionS3Rotation()
     static const int resolution = 72;
     static const double angle = degreeToRadian(360.0 / double(resolution));
 
-    const auto rotationY = Quaternion<double>::rotation({0,1,0}, angle);
+    const auto rotationY = Quaternion::rotation({0,1,0}, angle);
     for (int j = -8; j <= 8; j += 2)
     {
-        auto start = Quaternion<double>::rotation({1,0,0}, angle * j);
+        auto start = Quaternion::rotation({1,0,0}, angle * j);
         auto end = rotationY * start;
         for (int i = 0; i < (resolution * 1.0); ++i)
         {
@@ -249,34 +249,6 @@ void LineShaders::linesOctonionS3RotationAll()
                         linesOctonionRotationAt(i1, i2, i3, i4, i5);
                     }
     }
-
-    //    const auto rotX = Quaternion<float>::makeRotation(1.0f, 0.0f, 0.0f, angle * 0.5f);
-    //    for (int j = 0; j < 3; ++j)
-    //    {
-    //        auto start = Quaternion<float>::exp(0.0f, angle * j, 0.0f);
-    //        auto end = start.rotated8(rotX);
-    //        for (int i = 0; i < resolution; ++i)
-    //        {
-    //            appendLineHnn(start.lnV3() / pi, end.lnV3() / pi, GREEN);
-    //            start = end;
-    //            end = start.rotated8(rotX);
-    //        }
-    //    }
-
-    //    auto cross = origin.cross7V3(angleX);
-    //    cross.normalize();
-    //    for (int j = 0; j < 2; ++j)
-    //    {
-    //        auto start = Quaternion<float>::exp(0.0f, angle * j, 0.0f);
-    //        auto end = start.rotMove(cross, angle);
-    //        for (int i = 0; i < resolution; ++i)
-    //        {
-    //            appendLineHnn(start.lnV3() / pi, end.lnV3() / pi, BLUE);
-    //            start = end;
-    //            end = start.rotMove(cross, angle);
-    //        }
-    //    }
-
 }
 
 void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, double y0)
@@ -285,15 +257,15 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     static const double angle = degreeToRadian(360.0 / double(resolution));
     static const double scale = 0.1;
     static const double slideScale = 1.0;
-    double slideX = (double(m_ScreenX / 5) - 3.5) * slideScale;
+    double slideX = (double(m_ScreenX / 5) - 3.0) * slideScale;
     double slideY = (double(pole) - y0) * slideScale;
     double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
     QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
     color.normalize();
 
-    Octonion<double> origin(0);
-    Octonion<double> x90(0);
-    Octonion<double> y90(0);
+    Octonion origin(0);
+    Octonion x90(0);
+    Octonion y90(0);
     origin[w] = 1;
     switch (pole) {
     default:
@@ -314,10 +286,10 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
         auto rotationX = poleX * sin(angle * j * 0.5);
         rotationX.setRe(cos(angle * j * 0.5));
         auto startX = rotationX.conjugated() * origin * rotationX;
-        Quaternion<double> start(startX[w],startX[x],startX[y],startX[z]);
+        Quaternion start(startX[w],startX[x],startX[y],startX[z]);
         auto startY = startX;
         auto endY = rotationY.conjugated() * startX * rotationY;
-        Quaternion<double> end(endY[w],endY[x],endY[y],endY[z]);
+        Quaternion end(endY[w],endY[x],endY[y],endY[z]);
         for (int i = 0; i < (resolution * 1.0); ++i)
         {
             auto st = start.lnV3() * scale;
@@ -344,15 +316,15 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
     static const double angle = degreeToRadian(360.0 / double(resolution));
     static const double scale = 0.1;
     static const double slideScale = 1.0;
-    double slideX = (double(m_ScreenX) / 5.0 - 3.5) * slideScale;
+    double slideX = (double(m_ScreenX) / 5.0 - 3.0) * slideScale;
     double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
     QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
     color.normalize();
 
-    Octonion<double> origin(0);
-    Octonion<double> x90(0);
-    Octonion<double> y90(0);
-    Octonion<double> z90(0);
+    Octonion origin(0);
+    Octonion x90(0);
+    Octonion y90(0);
+    Octonion z90(0);
     origin[w] = 1;
     x90[x] = 1;
     y90[y] = 1;
@@ -373,10 +345,10 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
             auto rotationX = poleX * sin(angle * j * 0.5);
             rotationX.setRe(cos(angle * j * 0.5));
             auto startX = rotationX.conjugated() * startZ * rotationX;
-            Quaternion<double> start(startX[w],startX[x],startX[y],startX[z]);
+            Quaternion start(startX[w],startX[x],startX[y],startX[z]);
             auto startY = startX;
             auto endY = rotationY.conjugated() * startX * rotationY;
-            Quaternion<double> end(endY[w],endY[x],endY[y],endY[z]);
+            Quaternion end(endY[w],endY[x],endY[y],endY[z]);
             for (int i = 0; i < (resolution * 0.25); ++i)
             {
                 auto st = start.lnV3() * scale;

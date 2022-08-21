@@ -21,21 +21,21 @@ QMatrix4x4 Camera::viewMatrix() const
 void Camera::pitch(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = Quaternion<double>::rotation(m_right, degrees);
+    auto rot = Quaternion::rotation(m_right, degrees);
     multiplyRotation(rot);
 }
 
 void Camera::yaw(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = Quaternion<double>::rotation(m_up, degrees);
+    auto rot = Quaternion::rotation(m_up, degrees);
     multiplyRotation(rot);
 }
 
 void Camera::roll(const double degrees)
 {
     QMutexLocker locker(&m_mutex);
-    auto rot = Quaternion<double>::rotation(m_forward, degrees);
+    auto rot = Quaternion::rotation(m_forward, degrees);
     multiplyRotation(rot);
 }
 
@@ -61,7 +61,7 @@ bool Camera::standXZ(const bool resetY, const double rate)
         m_position.setY(m_position.y() + rate * (-1.0 - m_position.y()));
 
     auto direction = Vector3(0.0, 1.0, 0.0);
-    auto rot = Quaternion<double>::slerp(direction, m_up, rate, 0.999);
+    auto rot = Quaternion::slerp(direction, m_up, rate, 0.999);
     if (rot.re() == 1.0)
         return false;
 
@@ -75,7 +75,7 @@ void Camera::topY(const double rate)
     QMutexLocker locker(&m_mutex);
     auto position = m_position.normalized();
 
-    auto rot = Quaternion<double>::slerp(position, m_forward, rate, 0.99999);
+    auto rot = Quaternion::slerp(position, m_forward, rate, 0.99999);
     if (rot.re() < 1.0)
         multiplyRotation(rot);
 
@@ -86,9 +86,9 @@ void Camera::topY(const double rate)
         auto angleY = (acos(cosY) - hnn::PI * 0.5) * 0.5;
         auto crossY = position.cross(direction);
         crossY.normalize();
-        auto rotY = Quaternion<double>::rotation(crossY, angleY);
-        Quaternion<double>::rotate(direction, rotY);
-        auto rotU = Quaternion<double>::slerp(direction, m_up, rate);
+        auto rotY = Quaternion::rotation(crossY, angleY);
+        Quaternion::rotate(direction, rotY);
+        auto rotU = Quaternion::slerp(direction, m_up, rate);
         if (rotU.re() < 1.0)
             multiplyRotation(rotU);
     }
@@ -103,7 +103,7 @@ void Camera::lookAt(const Vector3& point, const double rate)
 {
     QMutexLocker locker(&m_mutex);
     auto direction = (m_position - point).normalized();
-    auto rot = Quaternion<double>::slerp(direction, m_forward, rate);
+    auto rot = Quaternion::slerp(direction, m_forward, rate);
     multiplyRotation(rot);
 }
 
@@ -139,17 +139,17 @@ void Camera::reset(const Vector3& position)
 {
     QMutexLocker locker(&m_mutex);
     m_position = position;
-    m_rotation = Quaternion<double>(1.0);
+    m_rotation = Quaternion(1.0);
     m_forward = Vector3(0.0, 0.0, -1.0);
     m_right = Vector3(1.0, 0.0, 0.0);
     m_up = Vector3(0.0, 1.0, 0.0);
 }
 
-void Camera::multiplyRotation(const Quaternion<double>& rot)
+void Camera::multiplyRotation(const Quaternion& rot)
 {
     m_rotation *= rot;
     m_rotation.normalize();
-    Quaternion<double>::rotate(m_forward, rot);
-    Quaternion<double>::rotate(m_right, rot);
-    Quaternion<double>::rotate(m_up, rot);
+    Quaternion::rotate(m_forward, rot);
+    Quaternion::rotate(m_right, rot);
+    Quaternion::rotate(m_up, rot);
 }

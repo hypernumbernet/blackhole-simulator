@@ -25,7 +25,7 @@ public:
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            auto vq = Quaternion<double>(velocities, i * 4);
+            auto vq = Quaternion(velocities, i * 4);
             auto vv3 = vq.lnV3();
             m_engine->angleToVelocity(vv3);
             auto to_add = vv3 * timePerFrame;
@@ -56,7 +56,7 @@ public:
         {
             a = i * 3;
 
-            auto qi = Quaternion<double>::identity();
+            auto qi = Quaternion::identity();
 
             for (quint64 j = 0; j < numberOfParticles; ++j)
             {
@@ -80,12 +80,12 @@ public:
                 theta = inv * inv * timeG * masses[j];
 
                 theta = m_engine->velocityToAngle(theta);
-                auto acc = Quaternion<double>::rotation(d1, d2, d3, theta * 0.5);
+                auto acc = Quaternion::rotation(d1, d2, d3, theta * 0.5);
                 qi.rotate8(acc);
             }
             a = i * 4;
 
-            auto va = Quaternion<double>(velocities, a);
+            auto va = Quaternion(velocities, a);
             va *= qi;
 
             velocities[a    ] = va.re();
