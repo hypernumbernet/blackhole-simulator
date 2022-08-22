@@ -1,6 +1,5 @@
 #pragma once
 
-#include "hnn/quaternion.h"
 #include "engine/3d/initializer3d.h"
 
 template <typename T>

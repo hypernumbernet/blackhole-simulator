@@ -24,7 +24,7 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_restitution(0.9)
+        , m_restitution(0.999)
         , m_boundary(0.04)
     {}
 
@@ -49,7 +49,6 @@ public:
         const double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
         const double* const masses = m_engine->masses();
-        double* const flags = m_engine->distances();
 
         const double timePerFrame = m_engine->timePerFrame();
         const double gravitationalConstant = m_engine->gravitationalConstant();
@@ -64,9 +63,6 @@ public:
         Vector3 udv, uav, ubv, pav, pbv, qav, qbv;
 
         double* vels = new double[numberOfParticles * 3]();
-
-        quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
-        bool collision = false;
 
         for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
@@ -83,18 +79,6 @@ public:
                 if (r <= boundaryToInvalidate)
                     continue;
                 if (r <= boundaryToCollision)
-                {
-                    if (flags[k] == 1.0)
-                        collision = false;
-                    else {
-                        collision = true;
-                        flags[k++] = 1.0;
-                    }
-                } else {
-                    collision = false;
-                    flags[k++] = 0.0;
-                }
-                if (collision)
                 {
                     udv.set(d1, d2, d3);
                     udv.normalize();
