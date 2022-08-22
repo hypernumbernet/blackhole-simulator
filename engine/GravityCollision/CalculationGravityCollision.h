@@ -24,8 +24,6 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_restitution(0.999)
-        , m_boundary(0.04)
     {}
 
     void calculateTimeProgress() const
@@ -46,6 +44,11 @@ public:
 
     void calculateInteraction() const
     {
+        static const double CONTINUE_THRESHOLD = 0.024;
+        static const double BOUNDARY_THRESHOLD = 0.025;
+        static const double COS_THRESHOLD = 0.999;
+        static const double RESTITUTION = 0.98;
+
         const double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
         const double* const masses = m_engine->masses();
@@ -54,8 +57,6 @@ public:
         const double gravitationalConstant = m_engine->gravitationalConstant();
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
-        const double boundaryToInvalidate = AbstractNBodyEngine<double>::BOUNDARY_TO_INVALIDATE;
-        const double boundaryToCollision = m_boundary;
 
         double d1, d2, d3, r, inv, theta;
         double ua, ub, va, vb, ma, mb, mm, absa, absb, cosad, cosbd;
@@ -76,9 +77,9 @@ public:
                 d3 = coordinates[b + 2] - coordinates[a + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (r <= boundaryToInvalidate)
+                if (r <= CONTINUE_THRESHOLD)
                     continue;
-                if (r <= boundaryToCollision)
+                if (r <= BOUNDARY_THRESHOLD)
                 {
                     udv.set(d1, d2, d3);
                     udv.normalize();
@@ -89,7 +90,7 @@ public:
                     absb = ubv.abs();
                     cosad = udv.dot(uav) / absa;
                     cosbd = udv.dot(ubv) / absb;
-                    if (abs(cosad) >= 0.999999999) {
+                    if (abs(cosad) >= COS_THRESHOLD) {
                         ua = absa;
                         qav.set(0.0, 0.0, 0.0);
                     } else {
@@ -99,7 +100,7 @@ public:
                         qav.normalize();
                         qav *= absa * sqrt(1.0 - cosad * cosad);
                     }
-                    if (abs(cosbd) >= 0.999999999) {
+                    if (abs(cosbd) >= COS_THRESHOLD) {
                         ub = absb;
                         qbv.set(0.0, 0.0, 0.0);
                     } else {
@@ -112,8 +113,8 @@ public:
                     ma = masses[i];
                     mb = masses[j];
                     mm = ma + mb;
-                    va = (m_restitution * mb  * (ub - ua) + ma * ua + mb * ub) / mm;
-                    vb = (m_restitution * ma  * (ua - ub) + ma * ua + mb * ub) / mm;
+                    va = (RESTITUTION * mb  * (ub - ua) + ma * ua + mb * ub) / mm;
+                    vb = (RESTITUTION * ma  * (ua - ub) + ma * ua + mb * ub) / mm;
 
                     uav.set( udv * va + qav);
                     ubv.set(-udv * vb + qbv);
@@ -159,6 +160,4 @@ private:
     const quint64 m_timeProgresEnd;
     const quint64 m_interactionStart;
     const quint64 m_interactionEnd;
-    const double m_restitution;
-    const double m_boundary;
 };
