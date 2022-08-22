@@ -21,7 +21,7 @@ public:
     T* coordinates() const;
     T* velocities() const;
     T* masses() const;
-    T* distanceInv() const;
+    T* distances() const;
     T* locations() const;
 
     const bhs::SimCondition& sim() const;
@@ -65,7 +65,7 @@ protected:
     // Physically calculated time per frame (second)
     T m_timePerFrame;
 
-    T* m_distanceInv;
+    T* m_distances;
 
     T* m_locations;
 

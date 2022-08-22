@@ -132,9 +132,9 @@ T* AbstractNBodyEngine<T>::masses() const
 }
 
 template <typename T>
-T* AbstractNBodyEngine<T>::distanceInv() const
+T* AbstractNBodyEngine<T>::distances() const
 {
-    return m_distanceInv;
+    return m_distances;
 }
 
 template <typename T>

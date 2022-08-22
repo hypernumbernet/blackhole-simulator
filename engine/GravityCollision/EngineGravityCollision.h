@@ -17,6 +17,9 @@ public:
         this->m_coordinates = new T[this->m_numberOfParticles * 3];
         this->m_velocities = new T[this->m_numberOfParticles * 3];
 
+        quint64 numberOfInteraction = this->m_numberOfParticles * (this->m_numberOfParticles - 1) / 2;
+        this->m_distances = new T[numberOfInteraction]{0.0};
+
         this->setTimePerFrame(sim.timePerFrame);
 
         this->init();

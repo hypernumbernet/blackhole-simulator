@@ -10,7 +10,7 @@ using namespace hnn;
 namespace bhs // Black Hole Simulator
 {
 
-// Not sort or delete
+// Do Not sort or delete
 enum class Engine
 {
     G3D,

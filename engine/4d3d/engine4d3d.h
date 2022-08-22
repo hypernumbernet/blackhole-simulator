@@ -21,7 +21,7 @@ public:
         this->m_locations = new T[this->m_numberOfParticles * 4];
 
         quint64 numberOfInteraction = this->m_numberOfParticles * (this->m_numberOfParticles - 1) / 2;
-        this->m_distanceInv = new T[numberOfInteraction];
+        this->m_distances = new T[numberOfInteraction];
 
         this->setTimePerFrame(sim.timePerFrame);
 
@@ -40,7 +40,7 @@ public:
                 d2 = this->m_coordinates[b + 1] - this->m_coordinates[a + 1];
                 d3 = this->m_coordinates[b + 2] - this->m_coordinates[a + 2];
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                this->m_distanceInv[k] = T(1.0) / r;
+                this->m_distances[k] = T(1.0) / r;
                 ++k;
             }
         }
@@ -52,7 +52,7 @@ public:
         delete[] this->m_velocities;
         delete[] this->m_masses;
         delete[] this->m_locations;
-        delete[] this->m_distanceInv;
+        delete[] this->m_distances;
     }
 
 };

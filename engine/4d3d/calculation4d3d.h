@@ -40,7 +40,7 @@ public:
     {
         const double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
-        double* const distanceInv = m_engine->distanceInv();
+        double* const distanceInv = m_engine->distances();
         const quint64 numberOfParticles = m_engine->numberOfParticle();
         const double timePerFrame = m_engine->timePerFrame();
         const double gravitationalConstant = m_engine->gravitationalConstant();

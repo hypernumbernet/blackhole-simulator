@@ -24,13 +24,24 @@ public:
     double y() const { return m_y; }
     double z() const { return m_z; }
 
-    void setX(double ax) { m_x = ax; }
-    void setY(double ay) { m_y = ay; }
-    void setZ(double az) { m_z = az; }
+    void setX(const double ax) { m_x = ax; }
+    void setY(const double ay) { m_y = ay; }
+    void setZ(const double az) { m_z = az; }
 
     void set(double ax, double ay, double az)
     {
         m_x = ax; m_y = ay; m_z = az;
+    }
+
+    void set(Vector3 v)
+    {
+        m_x = v.m_x; m_y = v.m_y; m_z = v.m_z;
+    }
+
+    template <typename typeE>
+    void set(const double* const a, const typeE i)
+    {
+        m_x = a[i]; m_y = a[i + 1]; m_z = a[i + 2];
     }
 
     const Vector3 operator+(const Vector3& a) const
