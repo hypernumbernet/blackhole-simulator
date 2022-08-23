@@ -44,12 +44,13 @@ public:
 
     void calculateInteraction() const
     {
-        static const double CONTINUE_THRESHOLD = 0.024;
-        static const double BOUNDARY_THRESHOLD = 0.025;
+        static const double CONTINUE_THRESHOLD = 1.0e-12;
+        static const double MIN_THRESHOLD = 0.02;
+        static const double BOUNDARY_THRESHOLD = 0.03;
         static const double COS_THRESHOLD = 0.999;
         static const double RESTITUTION = 0.98;
 
-        const double* const coordinates = m_engine->coordinates();
+        double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
         const double* const masses = m_engine->masses();
 
@@ -58,10 +59,10 @@ public:
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
 
-        double d1, d2, d3, r, inv, theta;
-        double ua, ub, va, vb, ma, mb, mm, absa, absb, cosad, cosbd;
+        double r, inv, theta;
+        double ua, ub, va, vb, ma, mb, mm, absa, absb, cosad, cosbd, fix;
         quint64 a, b;
-        Vector3 udv, uav, ubv, pav, pbv, qav, qbv;
+        Vector3 coa, cob, udv, uav, ubv, pav, pbv, qav, qbv, dir;
 
         double* vels = new double[numberOfParticles * 3]();
 
@@ -72,20 +73,37 @@ public:
             {
                 b = j * 3;
 
-                d1 = coordinates[b    ] - coordinates[a    ];
-                d2 = coordinates[b + 1] - coordinates[a + 1];
-                d3 = coordinates[b + 2] - coordinates[a + 2];
+                coa.set(coordinates, a);
+                cob.set(coordinates, b);
+                udv.set(cob - coa);
 
-                r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                r = udv.abs();
                 if (r <= CONTINUE_THRESHOLD)
-                    continue;
-                if (r <= BOUNDARY_THRESHOLD)
                 {
-                    udv.set(d1, d2, d3);
+                    continue;
+                }
+                if (r < MIN_THRESHOLD)
+                {
+                    dir.set(udv.normalized());
+                    fix = (MIN_THRESHOLD - r) * 0.5;
+                    if (fix > 0.0)
+                    {
+                        dir *= fix;
+                        coa -= dir;
+                        cob += dir;
+                        coordinates[a    ] = coa.x();
+                        coordinates[a + 1] = coa.y();
+                        coordinates[a + 2] = coa.z();
+                        coordinates[b    ] = cob.x();
+                        coordinates[b + 1] = cob.y();
+                        coordinates[b + 2] = cob.z();
+                    }
+                }
+                else if (r <= BOUNDARY_THRESHOLD)
+                {
                     udv.normalize();
                     uav.set(velocities, a);
                     ubv.set(velocities, b);
-
                     absa = uav.abs();
                     absb = ubv.abs();
                     cosad = udv.dot(uav) / absa;
@@ -115,7 +133,6 @@ public:
                     mm = ma + mb;
                     va = (RESTITUTION * mb  * (ub - ua) + ma * ua + mb * ub) / mm;
                     vb = (RESTITUTION * ma  * (ua - ub) + ma * ua + mb * ub) / mm;
-
                     uav.set( udv * va + qav);
                     ubv.set(-udv * vb + qbv);
 
@@ -125,21 +142,16 @@ public:
                     velocities[b    ] = ubv.x();
                     velocities[b + 1] = ubv.y();
                     velocities[b + 2] = ubv.z();
-                } else {
-                    inv = 1.0 / r;
-                    theta = inv * inv * inv * timeG;
-
-                    d1 *= theta;
-                    d2 *= theta;
-                    d3 *= theta;
-
-                    vels[a    ] += d1 * masses[j];
-                    vels[a + 1] += d2 * masses[j];
-                    vels[a + 2] += d3 * masses[j];
-                    vels[b    ] -= d1 * masses[i];
-                    vels[b + 1] -= d2 * masses[i];
-                    vels[b + 2] -= d3 * masses[i];
                 }
+                inv = 1.0 / r;
+                theta = inv * inv * inv * timeG;
+                udv *= theta;
+                vels[a    ] += udv.x() * masses[j];
+                vels[a + 1] += udv.y() * masses[j];
+                vels[a + 2] += udv.z() * masses[j];
+                vels[b    ] -= udv.x() * masses[i];
+                vels[b + 1] -= udv.y() * masses[i];
+                vels[b + 2] -= udv.z() * masses[i];
             }
         }
         bhs::interactionMutex.lock();
