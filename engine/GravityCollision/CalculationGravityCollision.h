@@ -54,7 +54,7 @@ public:
         static const double MIN_THRESHOLD = 0.03;
         static const double BOUNDARY_THRESHOLD = 0.04;
         static const double COS_THRESHOLD = 0.999;
-        static const double RESTITUTION = 0.98;
+        static const double RESTITUTION = 0.9;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
@@ -70,7 +70,7 @@ public:
         double r, inv, theta;
         double ma, mb, mm, dvl, cosd, ud, forseS;
         quint64 a, b;
-        Vector3 coa, cob, udv, uav, ubv, dir, uao, ubo, forseV;
+        Vector3 coa, cob, udv, uav, ubv, dir, uao, ubo;
 
         double* vels = new double[numberOfParticles * 3]();
 
@@ -118,16 +118,18 @@ public:
                         if (dvl <= CONTINUE_THRESHOLD)
                             continue;
                         cosd = dir.dot(udv) / dvl;
-                        if (abs(cosd) >= COS_THRESHOLD) {
+                        if (cosd > COS_THRESHOLD)
                             ud = dvl;
-                        } else {
+                        else if (cosd < -COS_THRESHOLD)
+                            ud = -dvl;
+                        else
                             ud = dvl * cosd;
-                        }
                         mm = ma + mb;
                         forseS = ma * (RESTITUTION + 1.0) * mb * ud / mm;
-                        forseV.set(dir * forseS);
-                        uao.set(forseV / ma);
-                        ubo.set(forseV / mb);
+                        //forseV.set(dir * forseS);
+                        dir *= forseS;
+                        uao.set( dir / ma);
+                        ubo.set(-dir / mb);
                         qDebug() << "uao: " << uao.toString().c_str();
                         qDebug() << "ubo: " << ubo.toString().c_str();
                         vels[a    ] += uao.x();
