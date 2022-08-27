@@ -392,7 +392,8 @@ void InitializerDialog::load()
         stg.endGroup();
 
         stg.beginGroup("Custom");
-        m_sim.custom.name = stg.value("Name", sim.custom.name).toString();
+        QFileInfo fileInfo(fileName);
+        m_sim.custom.name = fileInfo.fileName();
         m_sim.custom.scale = stg.value("Scale", sim.custom.scale).toDouble();
         stg.endGroup();
 

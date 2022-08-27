@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <string>
+#include <sstream>
 
 namespace hnn // https://github.com/hypernumbernet
 {
@@ -158,6 +160,13 @@ public:
     Vector3 cross(const Vector3& a) const
     {
         return Vector3(m_y * a.m_z - m_z * a.m_y, m_z * a.m_x - m_x * a.m_z, m_x * a.m_y - m_y * a.m_x);
+    }
+
+    std::string toString()
+    {
+        std::ostringstream o;
+        o << m_x << ", " << m_y << ", " << m_z;
+        return o.str();
     }
 
 private:

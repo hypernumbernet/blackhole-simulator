@@ -232,6 +232,18 @@ void LineShaders::linesOctonionS3RotationXY()
                 {
                     qDebug() << i1 << i2 << i3 << i4;
                     linesOctonionRotationAt(i1, i2, i3, i4, 0, 0.0);
+//                    linesOctonionRotationY(i1, i2, i3, i4);
+//                    linesOctonionRotationY(i1, i2, i4, i3);
+//                    linesOctonionRotationY(i1, i3, i2, i4);
+//                    linesOctonionRotationY(i1, i4, i2, i3);
+//                    linesOctonionRotationY(i1, i3, i4, i2);
+//                    linesOctonionRotationY(i1, i4, i3, i2);
+//                    linesOctonionRotationY(i3, i1, i2, i4);
+//                    linesOctonionRotationY(i4, i1, i2, i3);
+//                    linesOctonionRotationY(i3, i1, i4, i2);
+//                    linesOctonionRotationY(i4, i1, i3, i2);
+//                    linesOctonionRotationY(i3, i4, i1, i2);
+//                    linesOctonionRotationY(i4, i3, i1, i2);
                 }
 }
 
@@ -316,7 +328,7 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
     static const double angle = degreeToRadian(360.0 / double(resolution));
     static const double scale = 0.1;
     static const double slideScale = 1.0;
-    double slideX = (double(m_ScreenX) / 5.0 - 3.0) * slideScale;
+    double slideX = (double(m_ScreenX / 5) - 3.0) * slideScale;
     double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
     QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
     color.normalize();
@@ -349,7 +361,7 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
             auto startY = startX;
             auto endY = rotationY.conjugated() * startX * rotationY;
             Quaternion end(endY[w],endY[x],endY[y],endY[z]);
-            for (int i = 0; i < (resolution * 0.25); ++i)
+            for (int i = 0; i < (resolution * 1.); ++i)
             {
                 auto st = start.lnV3() * scale;
                 st.setX(st.x() + slideX);

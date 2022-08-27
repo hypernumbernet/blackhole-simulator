@@ -5,12 +5,18 @@
 /*
 Inelastic collision
 
-velocities: ua, ub -> va, vb
-masses: ma, mb
-coefficient of restitution: e
+Velocities: ua, ub -> va, vb
+Masses: ma, mb
+Coefficient of Restitution: e
 
-va = (emb(ub - ua) + maua + mbub)/(ma + mb)
-vb = (ema(ua - ub) + maua + mbub)/(ma + mb)
+va = (e mb(ub - ua) + ma ua + mb ub) / (ma + mb)
+vb = (e ma(ua - ub) + ma ua + mb ub) / (ma + mb)
+
+When ua -> 0
+ud = ub - ua
+va = (e + 1)mb ud / (ma + mb)
+
+Impulsive Force: ma va
 
 */
 
@@ -44,27 +50,31 @@ public:
 
     void calculateInteraction() const
     {
-        static const double CONTINUE_THRESHOLD = 1.0e-12;
-        static const double MIN_THRESHOLD = 0.02;
-        static const double BOUNDARY_THRESHOLD = 0.03;
+        static const double CONTINUE_THRESHOLD = 1e-10;
+        static const double MIN_THRESHOLD = 0.03;
+        static const double BOUNDARY_THRESHOLD = 0.04;
         static const double COS_THRESHOLD = 0.999;
         static const double RESTITUTION = 0.98;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
         const double* const masses = m_engine->masses();
+        double* const flags = m_engine->distances();
 
         const double timePerFrame = m_engine->timePerFrame();
+        //const double scaleInv = m_engine->scaleInv();
         const double gravitationalConstant = m_engine->gravitationalConstant();
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
 
         double r, inv, theta;
-        double ua, ub, va, vb, ma, mb, mm, absa, absb, cosad, cosbd, fix;
+        double ma, mb, mm, dvl, cosd, ud, forseS;
         quint64 a, b;
-        Vector3 coa, cob, udv, uav, ubv, pav, pbv, qav, qbv, dir;
+        Vector3 coa, cob, udv, uav, ubv, dir, uao, ubo, forseV;
 
         double* vels = new double[numberOfParticles * 3]();
+
+        quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
 
         for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
@@ -76,82 +86,62 @@ public:
                 coa.set(coordinates, a);
                 cob.set(coordinates, b);
                 udv.set(cob - coa);
+                ma = masses[i];
+                mb = masses[j];
 
                 r = udv.abs();
                 if (r <= CONTINUE_THRESHOLD)
                 {
                     continue;
                 }
-                if (r < MIN_THRESHOLD)
+                if (r > MIN_THRESHOLD)
                 {
-                    dir.set(udv.normalized());
-                    fix = (MIN_THRESHOLD - r) * 0.5;
-                    if (fix > 0.0)
+                    inv = 1.0 / r;
+                    theta = inv * inv * inv * timeG;
+                    dir.set(udv * theta);
+                    vels[a    ] += dir.x() * mb;
+                    vels[a + 1] += dir.y() * mb;
+                    vels[a + 2] += dir.z() * mb;
+                    vels[b    ] -= dir.x() * ma;
+                    vels[b + 1] -= dir.y() * ma;
+                    vels[b + 2] -= dir.z() * ma;
+                }
+                if (r <= BOUNDARY_THRESHOLD)
+                {
+                    if (flags[k] == 0.0)
                     {
-                        dir *= fix;
-                        coa -= dir;
-                        cob += dir;
-                        coordinates[a    ] = coa.x();
-                        coordinates[a + 1] = coa.y();
-                        coordinates[a + 2] = coa.z();
-                        coordinates[b    ] = cob.x();
-                        coordinates[b + 1] = cob.y();
-                        coordinates[b + 2] = cob.z();
+                        dir.set(udv.normalized());
+                        uav.set(velocities, a);
+                        ubv.set(velocities, b);
+                        udv.set(ubv - uav);
+                        dvl = udv.abs();
+                        if (dvl <= CONTINUE_THRESHOLD)
+                            continue;
+                        cosd = dir.dot(udv) / dvl;
+                        if (abs(cosd) >= COS_THRESHOLD) {
+                            ud = dvl;
+                        } else {
+                            ud = dvl * cosd;
+                        }
+                        mm = ma + mb;
+                        forseS = ma * (RESTITUTION + 1.0) * mb * ud / mm;
+                        forseV.set(dir * forseS);
+                        uao.set(forseV / ma);
+                        ubo.set(forseV / mb);
+                        qDebug() << "uao: " << uao.toString().c_str();
+                        qDebug() << "ubo: " << ubo.toString().c_str();
+                        vels[a    ] += uao.x();
+                        vels[a + 1] += uao.y();
+                        vels[a + 2] += uao.z();
+                        vels[b    ] += ubo.x();
+                        vels[b + 1] += ubo.y();
+                        vels[b + 2] += ubo.z();
+                        flags[k] = 1.0;
                     }
+                } else {
+                    flags[k] = 0.0;
                 }
-                else if (r <= BOUNDARY_THRESHOLD)
-                {
-                    udv.normalize();
-                    uav.set(velocities, a);
-                    ubv.set(velocities, b);
-                    absa = uav.abs();
-                    absb = ubv.abs();
-                    cosad = udv.dot(uav) / absa;
-                    cosbd = udv.dot(ubv) / absb;
-                    if (abs(cosad) >= COS_THRESHOLD) {
-                        ua = absa;
-                        qav.set(0.0, 0.0, 0.0);
-                    } else {
-                        ua = absa * cosad;
-                        pav.set(uav.cross(udv));
-                        qav.set(udv.cross(pav));
-                        qav.normalize();
-                        qav *= absa * sqrt(1.0 - cosad * cosad);
-                    }
-                    if (abs(cosbd) >= COS_THRESHOLD) {
-                        ub = absb;
-                        qbv.set(0.0, 0.0, 0.0);
-                    } else {
-                        ub = absb * cosbd;
-                        pbv.set(ubv.cross(udv));
-                        qbv.set(udv.cross(pbv));
-                        qbv.normalize();
-                        qbv *= absb * sqrt(1.0 - cosbd * cosbd);
-                    }
-                    ma = masses[i];
-                    mb = masses[j];
-                    mm = ma + mb;
-                    va = (RESTITUTION * mb  * (ub - ua) + ma * ua + mb * ub) / mm;
-                    vb = (RESTITUTION * ma  * (ua - ub) + ma * ua + mb * ub) / mm;
-                    uav.set( udv * va + qav);
-                    ubv.set(-udv * vb + qbv);
-
-                    velocities[a    ] = uav.x();
-                    velocities[a + 1] = uav.y();
-                    velocities[a + 2] = uav.z();
-                    velocities[b    ] = ubv.x();
-                    velocities[b + 1] = ubv.y();
-                    velocities[b + 2] = ubv.z();
-                }
-                inv = 1.0 / r;
-                theta = inv * inv * inv * timeG;
-                udv *= theta;
-                vels[a    ] += udv.x() * masses[j];
-                vels[a + 1] += udv.y() * masses[j];
-                vels[a + 2] += udv.z() * masses[j];
-                vels[b    ] -= udv.x() * masses[i];
-                vels[b + 1] -= udv.y() * masses[i];
-                vels[b + 2] -= udv.z() * masses[i];
+                ++k;
             }
         }
         bhs::interactionMutex.lock();
