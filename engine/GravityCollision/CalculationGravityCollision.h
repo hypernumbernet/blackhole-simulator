@@ -52,8 +52,7 @@ public:
     {
         static const double CONTINUE_THRESHOLD = 1e-10;
         static const double BOUNDARY_THRESHOLD = 0.04;
-        static const double COS_THRESHOLD = 0.999;
-        static const double FORCE_THRESHOLD = 1e-13;
+        static const double COS_THRESHOLD = 1.0;
         static const double RESTITUTION_PLUS_ONE = 1.9;
 
         double* const coordinates = m_engine->coordinates();
@@ -66,8 +65,7 @@ public:
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
 
-        double r, inv, theta;
-        double ma, mb, mm, dvl, cosd, ud, force;
+        double r, inv, ma, mb, mm, dvl, cosd, ud, effect;
         quint64 a, b;
         Vector3 coa, cob, udv, uav, ubv, dir, vav, vbv;
 
@@ -78,19 +76,18 @@ public:
         for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             a = i * 3;
-            for (quint64 j = i + 1; j < numberOfParticles; ++j)
+            for (quint64 j = i + 1; j < numberOfParticles; ++j, ++k)
             {
                 b = j * 3;
-
                 coa.set(coordinates, a);
                 cob.set(coordinates, b);
                 udv.set(cob - coa);
                 ma = masses[i];
                 mb = masses[j];
-
                 r = udv.abs();
                 if (r <= CONTINUE_THRESHOLD)
                 {
+                    qDebug() << "continue r" << a << b;
                     continue;
                 }
                 if (r <= BOUNDARY_THRESHOLD)
@@ -104,17 +101,18 @@ public:
                         dvl = udv.abs();
                         if (dvl <= CONTINUE_THRESHOLD)
                         {
-                            qDebug() << "CONTINUE_THRESHOLD " << bhs::rand0to1();
+                            qDebug() << "continue dvl" << a << b;
+                            flags[k] = 1.0;
                             continue;
                         }
                         cosd = dir.dot(udv) / dvl;
-                        if (cosd != cosd)
-                        {
-                            qDebug() << "cosd != cosd " << cosd;
-                            continue;
-                        }
+                        //if ( ! std::isfinite(cosd))
+                        //{
+                        //    qDebug() << "cos" << a << b << cosd;
+                        //    flags[k] = 1.0;
+                        //    continue;
+                        //}
                         if (cosd > COS_THRESHOLD) {
-                            qDebug() << "cosd > COS_THRESHOLD " << cosd;
                             ud = dvl;
                         } else if (cosd < -COS_THRESHOLD) {
                             ud = -dvl;
@@ -122,17 +120,15 @@ public:
                             ud = dvl * cosd;
                         }
                         mm = ma + mb;
-                        force = ma * RESTITUTION_PLUS_ONE * mb * ud / mm;
-                        if (force > FORCE_THRESHOLD)
-                        {
-                            //qDebug() << "FORCE_THRESHOLD " << force;
-                            force = FORCE_THRESHOLD;
-                        }
-                        dir *= force;
-                        vav.set( dir / ma);
-                        vbv.set(-dir / mb);
-                        //qDebug() << "uao: " << uao.toString().c_str();
-                        //qDebug() << "ubo: " << ubo.toString().c_str();
+                        effect = RESTITUTION_PLUS_ONE * ud / mm;
+                        //if ( ! std::isfinite(effect))
+                        //{
+                        //    qDebug() << "force" << a << b << effect;
+                        //    flags[k] = 1.0;
+                        //    continue;
+                        //}
+                        vav.set(dir * ( effect * mb));
+                        vbv.set(dir * (-effect * ma));
                         if (vav.isfinite() && vbv.isfinite()) {
                             vels[a    ] += vav.x();
                             vels[a + 1] += vav.y();
@@ -141,23 +137,27 @@ public:
                             vels[b + 1] += vbv.y();
                             vels[b + 2] += vbv.z();
                         } else {
-                            qDebug() << "! isfinite " << vav.toString().c_str() << vbv.toString().c_str();
+                            qDebug() << "CLL" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
                         }
                         flags[k] = 1.0;
                     }
                 } else {
                     flags[k] = 0.0;
                     inv = 1.0 / r;
-                    theta = inv * inv * inv * timeG;
-                    dir.set(udv * theta);
-                    vels[a    ] += dir.x() * mb;
-                    vels[a + 1] += dir.y() * mb;
-                    vels[a + 2] += dir.z() * mb;
-                    vels[b    ] -= dir.x() * ma;
-                    vels[b + 1] -= dir.y() * ma;
-                    vels[b + 2] -= dir.z() * ma;
+                    effect = inv * inv * inv * timeG;
+                    vav.set(udv * ( effect * mb));
+                    vbv.set(udv * (-effect * ma));
+                    //if ( ! vav.isfinite() || ! vbv.isfinite()) {
+                    //    qDebug() << "GRV" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
+                    //    continue;
+                    //}
+                    vels[a    ] += vav.x();
+                    vels[a + 1] += vav.y();
+                    vels[a + 2] += vav.z();
+                    vels[b    ] += vbv.x();
+                    vels[b + 1] += vbv.y();
+                    vels[b + 2] += vbv.z();
                 }
-                ++k;
             }
         }
         bhs::interactionMutex.lock();
