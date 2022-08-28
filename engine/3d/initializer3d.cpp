@@ -39,7 +39,7 @@ void Initializer3D<T>::initRandomCube()
     } else {
         for (quint64 i = 0; i < num; ++i)
         {
-            masses[i] = m_sim.massAvg;
+            masses[i] = m_sim.massAvg * correct.kg;
         }
     }
     for (quint64 i = 0; i < num * 3; ++i)
