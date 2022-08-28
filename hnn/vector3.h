@@ -162,6 +162,11 @@ public:
         return Vector3(m_y * a.m_z - m_z * a.m_y, m_z * a.m_x - m_x * a.m_z, m_x * a.m_y - m_y * a.m_x);
     }
 
+    bool isfinite() const
+    {
+        return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
+    }
+
     std::string toString()
     {
         std::ostringstream o;

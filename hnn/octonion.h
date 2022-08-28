@@ -287,10 +287,10 @@ public:
 
     std::string toString()
     {
-        return std::to_string(m_re) + ", " + std::to_string(m_i1) +
-                ", " + std::to_string(m_i2) + ", " + std::to_string(m_i3) +
-                ", " + std::to_string(m_i4) + ", " + std::to_string(m_i5) +
-                ", " + std::to_string(m_i6) + ", " + std::to_string(m_i7);
+        std::ostringstream o;
+        o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3 << ", " <<
+             m_i4 << ", " << m_i5 << ", " << m_i6 << ", " << m_i7;
+        return o.str();
     }
 
 private:

@@ -615,6 +615,13 @@ public:
         return rotation(cross, angle);
     }
 
+    std::string toString()
+    {
+        std::ostringstream o;
+        o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3;
+        return o.str();
+    }
+
 private:
     union
         {

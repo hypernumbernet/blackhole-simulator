@@ -51,10 +51,10 @@ public:
     void calculateInteraction() const
     {
         static const double CONTINUE_THRESHOLD = 1e-10;
-        static const double MIN_THRESHOLD = 0.03;
         static const double BOUNDARY_THRESHOLD = 0.04;
         static const double COS_THRESHOLD = 0.999;
-        static const double RESTITUTION = 0.9;
+        static const double FORCE_THRESHOLD = 1e-13;
+        static const double RESTITUTION_PLUS_ONE = 1.9;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
@@ -62,15 +62,14 @@ public:
         double* const flags = m_engine->distances();
 
         const double timePerFrame = m_engine->timePerFrame();
-        //const double scaleInv = m_engine->scaleInv();
         const double gravitationalConstant = m_engine->gravitationalConstant();
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
 
         double r, inv, theta;
-        double ma, mb, mm, dvl, cosd, ud, forseS;
+        double ma, mb, mm, dvl, cosd, ud, force;
         quint64 a, b;
-        Vector3 coa, cob, udv, uav, ubv, dir, uao, ubo;
+        Vector3 coa, cob, udv, uav, ubv, dir, vav, vbv;
 
         double* vels = new double[numberOfParticles * 3]();
 
@@ -94,18 +93,6 @@ public:
                 {
                     continue;
                 }
-                if (r > MIN_THRESHOLD)
-                {
-                    inv = 1.0 / r;
-                    theta = inv * inv * inv * timeG;
-                    dir.set(udv * theta);
-                    vels[a    ] += dir.x() * mb;
-                    vels[a + 1] += dir.y() * mb;
-                    vels[a + 2] += dir.z() * mb;
-                    vels[b    ] -= dir.x() * ma;
-                    vels[b + 1] -= dir.y() * ma;
-                    vels[b + 2] -= dir.z() * ma;
-                }
                 if (r <= BOUNDARY_THRESHOLD)
                 {
                     if (flags[k] == 0.0)
@@ -116,32 +103,59 @@ public:
                         udv.set(ubv - uav);
                         dvl = udv.abs();
                         if (dvl <= CONTINUE_THRESHOLD)
+                        {
+                            qDebug() << "CONTINUE_THRESHOLD " << bhs::rand0to1();
                             continue;
+                        }
                         cosd = dir.dot(udv) / dvl;
-                        if (cosd > COS_THRESHOLD)
+                        if (cosd != cosd)
+                        {
+                            qDebug() << "cosd != cosd " << cosd;
+                            continue;
+                        }
+                        if (cosd > COS_THRESHOLD) {
+                            qDebug() << "cosd > COS_THRESHOLD " << cosd;
                             ud = dvl;
-                        else if (cosd < -COS_THRESHOLD)
+                        } else if (cosd < -COS_THRESHOLD) {
                             ud = -dvl;
-                        else
+                        } else {
                             ud = dvl * cosd;
+                        }
                         mm = ma + mb;
-                        forseS = ma * (RESTITUTION + 1.0) * mb * ud / mm;
-                        //forseV.set(dir * forseS);
-                        dir *= forseS;
-                        uao.set( dir / ma);
-                        ubo.set(-dir / mb);
-                        qDebug() << "uao: " << uao.toString().c_str();
-                        qDebug() << "ubo: " << ubo.toString().c_str();
-                        vels[a    ] += uao.x();
-                        vels[a + 1] += uao.y();
-                        vels[a + 2] += uao.z();
-                        vels[b    ] += ubo.x();
-                        vels[b + 1] += ubo.y();
-                        vels[b + 2] += ubo.z();
+                        force = ma * RESTITUTION_PLUS_ONE * mb * ud / mm;
+                        if (force > FORCE_THRESHOLD)
+                        {
+                            //qDebug() << "FORCE_THRESHOLD " << force;
+                            force = FORCE_THRESHOLD;
+                        }
+                        dir *= force;
+                        vav.set( dir / ma);
+                        vbv.set(-dir / mb);
+                        //qDebug() << "uao: " << uao.toString().c_str();
+                        //qDebug() << "ubo: " << ubo.toString().c_str();
+                        if (vav.isfinite() && vbv.isfinite()) {
+                            vels[a    ] += vav.x();
+                            vels[a + 1] += vav.y();
+                            vels[a + 2] += vav.z();
+                            vels[b    ] += vbv.x();
+                            vels[b + 1] += vbv.y();
+                            vels[b + 2] += vbv.z();
+                        } else {
+                            qDebug() << "! isfinite " << vav.toString().c_str() << vbv.toString().c_str();
+                        }
                         flags[k] = 1.0;
                     }
                 } else {
                     flags[k] = 0.0;
+                    inv = 1.0 / r;
+                    theta = inv * inv * inv * timeG;
+                    dir.set(udv * theta);
+                    vels[a    ] += dir.x() * mb;
+                    vels[a + 1] += dir.y() * mb;
+                    vels[a + 2] += dir.z() * mb;
+                    vels[b    ] -= dir.x() * ma;
+                    vels[b + 1] -= dir.y() * ma;
+                    vels[b + 2] -= dir.z() * ma;
                 }
                 ++k;
             }
