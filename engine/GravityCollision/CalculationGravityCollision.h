@@ -52,7 +52,8 @@ public:
     {
         static const double CONTINUE_THRESHOLD = 1e-10;
         static const double BOUNDARY_THRESHOLD = 0.04;
-        static const double COS_THRESHOLD = 1.0;
+        static const double COS_MIN_THRESHOLD = -0.999;
+        static const double COS_MAX_THRESHOLD = -0.1;
         static const double RESTITUTION_PLUS_ONE = 1.9;
 
         double* const coordinates = m_engine->coordinates();
@@ -67,7 +68,7 @@ public:
 
         double r, inv, ma, mb, mm, dvl, cosd, ud, effect;
         quint64 a, b;
-        Vector3 coa, cob, udv, uav, ubv, dir, vav, vbv;
+        Vector3 coa, cob, cod, udv, uav, ubv, dir, vav, vbv;
 
         double* vels = new double[numberOfParticles * 3]();
 
@@ -81,52 +82,42 @@ public:
                 b = j * 3;
                 coa.set(coordinates, a);
                 cob.set(coordinates, b);
-                udv.set(cob - coa);
-                ma = masses[i];
-                mb = masses[j];
-                r = udv.abs();
+                cod.set(cob - coa);
+                r = cod.abs();
                 if (r <= CONTINUE_THRESHOLD)
                 {
-                    qDebug() << "continue r" << a << b;
+                    //qDebug() << "continue r" << a << b;
                     continue;
                 }
+                ma = masses[i];
+                mb = masses[j];
                 if (r <= BOUNDARY_THRESHOLD)
                 {
                     if (flags[k] == 0.0)
                     {
-                        dir.set(udv.normalized());
+                        dir.set(cod.normalized());
                         uav.set(velocities, a);
                         ubv.set(velocities, b);
                         udv.set(ubv - uav);
                         dvl = udv.abs();
                         if (dvl <= CONTINUE_THRESHOLD)
                         {
-                            qDebug() << "continue dvl" << a << b;
+                            //qDebug() << "continue dvl" << a << b;
                             flags[k] = 1.0;
                             continue;
                         }
                         cosd = dir.dot(udv) / dvl;
-                        //if ( ! std::isfinite(cosd))
-                        //{
-                        //    qDebug() << "cos" << a << b << cosd;
-                        //    flags[k] = 1.0;
-                        //    continue;
-                        //}
-                        if (cosd > COS_THRESHOLD) {
-                            ud = dvl;
-                        } else if (cosd < -COS_THRESHOLD) {
+                        if (cosd >= COS_MAX_THRESHOLD) {
+                            flags[k] = 1.0;
+                            continue;
+                            //ud = dvl * -cosd;
+                        } else if (cosd < COS_MIN_THRESHOLD) {
                             ud = -dvl;
                         } else {
                             ud = dvl * cosd;
                         }
                         mm = ma + mb;
                         effect = RESTITUTION_PLUS_ONE * ud / mm;
-                        //if ( ! std::isfinite(effect))
-                        //{
-                        //    qDebug() << "force" << a << b << effect;
-                        //    flags[k] = 1.0;
-                        //    continue;
-                        //}
                         vav.set(dir * ( effect * mb));
                         vbv.set(dir * (-effect * ma));
                         if (vav.isfinite() && vbv.isfinite()) {
@@ -137,7 +128,7 @@ public:
                             vels[b + 1] += vbv.y();
                             vels[b + 2] += vbv.z();
                         } else {
-                            qDebug() << "CLL" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
+                            //qDebug() << "CLL" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
                         }
                         flags[k] = 1.0;
                     }
@@ -145,8 +136,8 @@ public:
                     flags[k] = 0.0;
                     inv = 1.0 / r;
                     effect = inv * inv * inv * timeG;
-                    vav.set(udv * ( effect * mb));
-                    vbv.set(udv * (-effect * ma));
+                    vav.set(cod * ( effect * mb));
+                    vbv.set(cod * (-effect * ma));
                     //if ( ! vav.isfinite() || ! vbv.isfinite()) {
                     //    qDebug() << "GRV" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
                     //    continue;
