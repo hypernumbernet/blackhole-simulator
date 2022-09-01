@@ -260,7 +260,7 @@ void MainWidget::acceptInitializerDialog()
 
 void MainWidget::displayEngineName(const bhs::Engine engine)
 {
-    m_engineValue.setText(UpdateUi::engine().value(engine));
+    m_engineValue.setText(UpdateUi::engineLabel().value(engine));
 }
 
 void MainWidget::reset(const bhs::SimCondition& sim)

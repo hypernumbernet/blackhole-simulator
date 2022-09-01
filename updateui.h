@@ -11,7 +11,7 @@ public:
 
     static constexpr int SCALE_SLIDER_CENTER = 5000;
     static UpdateUi& it();
-    static QHash<bhs::Engine, QString>& engine();
+    static QHash<bhs::Engine, QString>& engineLabel();
     static QList<bhs::Engine>& engineUse();
     static QMap<bhs::Precision, QString>& precision();
     static QMap<bhs::Compute, QString>& compute();

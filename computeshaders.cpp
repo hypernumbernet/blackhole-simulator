@@ -58,6 +58,7 @@ void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
     {
     case bhs::Engine::G3D:
     case bhs::Engine::GravityCollision:
+    case bhs::Engine::GravityElasticity:
         m_programTimeProgressUsing = &m_programTimeProgressFloat;
         m_programInteractionUsing = &m_programInteractionFloat;
         break;
@@ -77,6 +78,7 @@ void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
     {
     case bhs::Engine::G3D:
     case bhs::Engine::GravityCollision:
+    case bhs::Engine::GravityElasticity:
         m_programTimeProgressUsing = &m_programTimeProgressDouble;
         m_programInteractionUsing = &m_programInteractionDouble;
         break;

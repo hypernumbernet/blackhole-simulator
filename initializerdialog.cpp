@@ -28,7 +28,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
     while (i.hasNext())
     {
         auto p = i.next();
-        QString s = UpdateUi::engine().find(p).value();
+        QString s = UpdateUi::engineLabel().find(p).value();
         auto radio = new QRadioButton(s);
         m_engineButtonGroup.addButton(radio, static_cast<int>(p));
         engineVbox->addWidget(radio);
@@ -209,6 +209,7 @@ bool InitializerDialog::validate()
             (m_sim.engine == bhs::Engine::G4D3D
              || m_sim.engine == bhs::Engine::G3D4DR1
              || m_sim.engine == bhs::Engine::GravityCollision
+             || m_sim.engine == bhs::Engine::GravityElasticity
              ))
     {
         QMessageBox::information(this, tr("Information"), tr("The GPU Engine is not implemented"));
