@@ -34,6 +34,7 @@ public:
     {
         static const double CONTINUE_THRESHOLD = 1e-10;
         static const double BOUNDARY_THRESHOLD = 0.04;
+        static const double BOUNDARY_THRESHOLD_MIN = 0.02;
         static const double ELASTIC_MODULUS = 1e-4;
 
         double* const coordinates = m_engine->coordinates();
@@ -73,6 +74,10 @@ public:
                 if (r < BOUNDARY_THRESHOLD)
                 {
                     dir.set(cod.normalized());
+                    if (r < BOUNDARY_THRESHOLD_MIN)
+                    {
+                        r = BOUNDARY_THRESHOLD_MIN;
+                    }
                     effect = (BOUNDARY_THRESHOLD - r) * scaleBound;
                     vav.set(dir * (-effect / ma));
                     vbv.set(dir * ( effect / mb));
