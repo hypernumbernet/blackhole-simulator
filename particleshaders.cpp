@@ -14,9 +14,6 @@
 #include "engine/GravityCollision/EngineGravityCollision.h"
 #include "engine/GravityCollision/CoreFloatGravityCollision.h"
 #include "engine/GravityCollision/CoreDoubleGravityCollision.h"
-#include "engine/GravityElasticity/EngineGravityElasticity.h"
-#include "engine/GravityElasticity/CoreFloatGravityElasticity.h"
-#include "engine/GravityElasticity/CoreDoubleGravityElasticity.h"
 
 ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)
@@ -87,10 +84,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
             m_NBodyEngineFloat = new EngineGravityCollision<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatGravityCollision::factory);
             break;
-        case bhs::Engine::GravityElasticity:
-            m_NBodyEngineFloat = new EngineGravityElasticity<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatGravityElasticity::factory);
-            break;
         }
     } else {
         switch (sim.engine)
@@ -116,10 +109,6 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
         case bhs::Engine::GravityCollision:
             m_NBodyEngineDouble = new EngineGravityCollision<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleGravityCollision::factory);
-            break;
-        case bhs::Engine::GravityElasticity:
-            m_NBodyEngineDouble = new EngineGravityElasticity<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleGravityElasticity::factory);
             break;
         }
     }

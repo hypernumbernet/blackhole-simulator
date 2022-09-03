@@ -12,7 +12,6 @@ QHash<bhs::Engine, QString>& UpdateUi::engineLabel()
         {bhs::Engine::G3D, tr("Gravity")},
         {bhs::Engine::G3D4DR1, tr("Gravity Lorentz Trans.")},
         {bhs::Engine::GravityCollision, tr("Gravity and Collision")},
-        {bhs::Engine::GravityElasticity, tr("Gravity and Elasticity")},
         {bhs::Engine::G3D4D, tr("Gravity 3S-Velocity")},
         {bhs::Engine::G4D3D, tr("Gravity 3S-Coordinate")},
     };
@@ -25,7 +24,6 @@ QList<bhs::Engine>& UpdateUi::engineUse()
         bhs::Engine::G3D,
         bhs::Engine::G3D4DR1,
         bhs::Engine::GravityCollision,
-        bhs::Engine::GravityElasticity,
         bhs::Engine::G3D4D,
         bhs::Engine::G4D3D,
     };

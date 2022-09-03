@@ -8,7 +8,6 @@ SOURCES += \
     camera.cpp \
     computeshaders.cpp \
     engine/GravityCollision/InitializerGravityCollision.cpp \
-    engine/GravityElasticity/InitializerGravityElasticity.cpp \
     engine/abstractnbodyengine.cpp \
     engine/3d/initializer3d.cpp \
     engine/3d4d/initializer3d4d.cpp \
@@ -32,11 +31,6 @@ HEADERS += \
     engine/GravityCollision/CoreFloatGravityCollision.h \
     engine/GravityCollision/EngineGravityCollision.h \
     engine/GravityCollision/InitializerGravityCollision.h \
-    engine/GravityElasticity/CalculationGravityElasticity.h \
-    engine/GravityElasticity/CoreDoubleGravityElasticity.h \
-    engine/GravityElasticity/CoreFloatGravityElasticity.h \
-    engine/GravityElasticity/EngineGravityElasticity.h \
-    engine/GravityElasticity/InitializerGravityElasticity.h \
     engine/abstractenginecore.h \
     engine/abstractenginecoredouble.h \
     engine/abstractenginecorefloat.h \
