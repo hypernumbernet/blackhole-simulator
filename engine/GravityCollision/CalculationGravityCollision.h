@@ -50,11 +50,11 @@ public:
 
     void calculateInteraction() const
     {
-        static const double CONTINUE_THRESHOLD = 1e-10;
         static const double BOUNDARY_THRESHOLD = 0.04;
-        static const double COS_MIN_THRESHOLD = -0.999;
-        static const double COS_MAX_THRESHOLD = -0.1;
-        static const double RESTITUTION_PLUS_ONE = 1.9;
+        static const double COS_MIN_THRESHOLD = - 1.0;
+        static const double COS_MAX_THRESHOLD = 1.0;
+        static const double RESTITUTION_PLUS_ONE = 1.8;
+        static double REPULSIVE_RATE = 30.0;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
@@ -63,8 +63,11 @@ public:
 
         const double timePerFrame = m_engine->timePerFrame();
         const double gravitationalConstant = m_engine->gravitationalConstant();
-        const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
+        //const double scaleInv = m_engine->scaleInv();
+
+        const double timeG = timePerFrame * gravitationalConstant;
+        const double repulsive = - timeG * REPULSIVE_RATE;
 
         double r, inv, ma, mb, mm, dvl, cosd, ud, effect;
         quint64 a, b;
@@ -84,15 +87,16 @@ public:
                 cob.set(coordinates, b);
                 cod.set(cob - coa);
                 r = cod.abs();
-                if (r <= CONTINUE_THRESHOLD)
-                {
-                    //qDebug() << "continue r" << a << b;
-                    continue;
-                }
                 ma = masses[i];
                 mb = masses[j];
-                if (r <= BOUNDARY_THRESHOLD)
+                if (r < BOUNDARY_THRESHOLD)
                 {
+                    if (r == 0.0)
+                    {
+                        qDebug() << "R=0" << a << b;
+                        flags[k] = 1.0;
+                        continue;
+                    }
                     if (flags[k] == 0.0)
                     {
                         dir.set(cod.normalized());
@@ -100,48 +104,48 @@ public:
                         ubv.set(velocities, b);
                         udv.set(ubv - uav);
                         dvl = udv.abs();
-                        if (dvl <= CONTINUE_THRESHOLD)
+                        if (dvl == 0.0)
                         {
-                            //qDebug() << "continue dvl" << a << b;
+                            qDebug() << "DV=0" << a << b;
                             flags[k] = 1.0;
                             continue;
                         }
-                        cosd = dir.dot(udv) / dvl;
-                        if (cosd >= COS_MAX_THRESHOLD) {
-                            flags[k] = 1.0;
-                            continue;
-                            //ud = dvl * -cosd;
+                        cosd = dir.dot(udv.normalized());
+                        if (cosd > COS_MAX_THRESHOLD) {
+                            ud = dvl;
                         } else if (cosd < COS_MIN_THRESHOLD) {
-                            ud = -dvl;
+                            ud = - dvl;
                         } else {
                             ud = dvl * cosd;
                         }
                         mm = ma + mb;
                         effect = RESTITUTION_PLUS_ONE * ud / mm;
-                        vav.set(dir * ( effect * mb));
-                        vbv.set(dir * (-effect * ma));
-                        if (vav.isfinite() && vbv.isfinite()) {
-                            vels[a    ] += vav.x();
-                            vels[a + 1] += vav.y();
-                            vels[a + 2] += vav.z();
-                            vels[b    ] += vbv.x();
-                            vels[b + 1] += vbv.y();
-                            vels[b + 2] += vbv.z();
-                        } else {
-                            //qDebug() << "CLL" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
-                        }
+                        vav.set(dir * (   effect * mb));
+                        vbv.set(dir * ( - effect * ma));
+                        vels[a    ] += vav.x();
+                        vels[a + 1] += vav.y();
+                        vels[a + 2] += vav.z();
+                        vels[b    ] += vbv.x();
+                        vels[b + 1] += vbv.y();
+                        vels[b + 2] += vbv.z();
                         flags[k] = 1.0;
                     }
+                    inv = 1.0 / r;
+                    effect = inv * inv * inv * repulsive;
+                    vav.set(cod * (   effect * mb));
+                    vbv.set(cod * ( - effect * ma));
+                    vels[a    ] += vav.x();
+                    vels[a + 1] += vav.y();
+                    vels[a + 2] += vav.z();
+                    vels[b    ] += vbv.x();
+                    vels[b + 1] += vbv.y();
+                    vels[b + 2] += vbv.z();
                 } else {
                     flags[k] = 0.0;
                     inv = 1.0 / r;
                     effect = inv * inv * inv * timeG;
-                    vav.set(cod * ( effect * mb));
-                    vbv.set(cod * (-effect * ma));
-                    //if ( ! vav.isfinite() || ! vbv.isfinite()) {
-                    //    qDebug() << "GRV" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
-                    //    continue;
-                    //}
+                    vav.set(cod * (   effect * mb));
+                    vbv.set(cod * ( - effect * ma));
                     vels[a    ] += vav.x();
                     vels[a + 1] += vav.y();
                     vels[a + 2] += vav.z();
@@ -155,7 +159,13 @@ public:
         quint64 end = numberOfParticles * 3;
         for (quint64 i = 0; i < end; ++i)
         {
+            r = velocities[i];
             velocities[i] += vels[i];
+            if ( ! isfinite(velocities[i]))
+            {
+                velocities[i] = r;
+                qDebug() << "VEL" << i << vels[i];
+            }
         }
         bhs::interactionMutex.unlock();
 

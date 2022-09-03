@@ -32,10 +32,8 @@ public:
 
     void calculateInteraction() const
     {
-        static const double CONTINUE_THRESHOLD = 1e-10;
         static const double BOUNDARY_THRESHOLD = 0.04;
-        static const double BOUNDARY_THRESHOLD_MIN = 0.02;
-        static const double ELASTIC_MODULUS = 1e-4;
+        static const double ELASTIC_MODULUS = 1000.0;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
@@ -64,21 +62,12 @@ public:
                 cob.set(coordinates, b);
                 cod.set(cob - coa);
                 r = cod.abs();
-                if (r < CONTINUE_THRESHOLD)
-                {
-                    //qDebug() << "continue r" << a << b;
-                    continue;
-                }
                 ma = masses[i];
                 mb = masses[j];
                 if (r < BOUNDARY_THRESHOLD)
                 {
                     dir.set(cod.normalized());
-                    if (r < BOUNDARY_THRESHOLD_MIN)
-                    {
-                        r = BOUNDARY_THRESHOLD_MIN;
-                    }
-                    effect = (BOUNDARY_THRESHOLD - r) * scaleBound;
+                    effect = (BOUNDARY_THRESHOLD - r) * scaleBound * ma * mb;
                     vav.set(dir * (-effect / ma));
                     vbv.set(dir * ( effect / mb));
                     if (vav.isfinite() && vbv.isfinite()) {
@@ -89,7 +78,7 @@ public:
                         vels[b + 1] += vbv.y();
                         vels[b + 2] += vbv.z();
                     } else {
-                        //qDebug() << "CLL" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
+                        qDebug() << "BOU" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
                     }
                     continue;
                 }
@@ -97,10 +86,10 @@ public:
                 effect = inv * inv * inv * timeG;
                 vav.set(cod * ( effect * mb));
                 vbv.set(cod * (-effect * ma));
-                //if ( ! vav.isfinite() || ! vbv.isfinite()) {
-                //    qDebug() << "GRV" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
-                //    continue;
-                //}
+                if ( ! vav.isfinite() || ! vbv.isfinite()) {
+                    qDebug() << "GRV" << a << b << "vav" << vav.toString().c_str() << "vbv" << vbv.toString().c_str();
+                    continue;
+                }
                 vels[a    ] += vav.x();
                 vels[a + 1] += vav.y();
                 vels[a + 2] += vav.z();
@@ -114,6 +103,10 @@ public:
         for (quint64 i = 0; i < end; ++i)
         {
             velocities[i] += vels[i];
+            if (!isfinite(velocities[i]))
+            {
+                qDebug() << "VEL" << i << velocities[i];
+            }
         }
         bhs::interactionMutex.unlock();
 

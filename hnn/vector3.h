@@ -167,6 +167,11 @@ public:
         return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
     }
 
+    bool ismyself() const
+    {
+        return m_x == m_x && m_y == m_y && m_z == m_z;
+    }
+
     std::string toString()
     {
         std::ostringstream o;
