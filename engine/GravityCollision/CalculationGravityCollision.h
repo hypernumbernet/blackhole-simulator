@@ -3,7 +3,7 @@
 #include "engine/abstractnbodyengine.h"
 
 /*
-Inelastic collision
+Inelastic collision formula
 
 Velocities: ua, ub -> va, vb
 Masses: ma, mb
@@ -16,8 +16,22 @@ When ua -> 0
 ud = ub - ua
 va = (e + 1)mb ud / (ma + mb)
 
-Impulsive Force: ma va
+Thus
+Impulsive force: ma va
 
+ma va = ma (e + 1)mb ud / (ma + mb)
+      = (e + 1) ud ma mb / (ma + mb)
+
+Accelaration for a:   ma va / ma = va =   (e + 1) ud mb / (ma + mb)
+Accelaration for b: - ma va / mb      = - (e + 1) ud ma / (ma + mb)
+
+Difinition
+effect = (e + 1) ud / (ma + mb)
+
+Accelaration for a:   effect * mb
+Accelaration for b: - effect * ma
+
+'effect' means: momentum / (ma mb)
 */
 
 class CalculationGravityCollision
@@ -50,11 +64,11 @@ public:
 
     void calculateInteraction() const
     {
-        static const double BOUNDARY_THRESHOLD = 0.04;
+        static const double BOUNCY_THRESHOLD = 0.04;
         static const double COS_MIN_THRESHOLD = - 1.0;
         static const double COS_MAX_THRESHOLD = 1.0;
-        static const double RESTITUTION_PLUS_ONE = 1.8;
-        static double REPULSIVE_RATE = 30.0;
+        static const double ELASTIC_MODULUS = 0.8;
+        static const double REPULSIVE_RATE = 30.0;
 
         double* const coordinates = m_engine->coordinates();
         double* const velocities = m_engine->velocities();
@@ -68,6 +82,7 @@ public:
 
         const double timeG = timePerFrame * gravitationalConstant;
         const double repulsive = - timeG * REPULSIVE_RATE;
+        const double ePlusOne = ELASTIC_MODULUS + 1.0;
 
         double r, inv, ma, mb, mm, dvl, cosd, ud, effect;
         quint64 a, b;
@@ -87,16 +102,16 @@ public:
                 cob.set(coordinates, b);
                 cod.set(cob - coa);
                 r = cod.abs();
+                if (r == 0.0)
+                {
+                    //qDebug() << "R=0" << a << b;
+                    flags[k] = 1.0;
+                    continue;
+                }
                 ma = masses[i];
                 mb = masses[j];
-                if (r < BOUNDARY_THRESHOLD)
+                if (r < BOUNCY_THRESHOLD)
                 {
-                    if (r == 0.0)
-                    {
-                        qDebug() << "R=0" << a << b;
-                        flags[k] = 1.0;
-                        continue;
-                    }
                     if (flags[k] == 0.0)
                     {
                         dir.set(cod.normalized());
@@ -106,7 +121,7 @@ public:
                         dvl = udv.abs();
                         if (dvl == 0.0)
                         {
-                            qDebug() << "DV=0" << a << b;
+                            //qDebug() << "DV=0" << a << b;
                             flags[k] = 1.0;
                             continue;
                         }
@@ -119,7 +134,7 @@ public:
                             ud = dvl * cosd;
                         }
                         mm = ma + mb;
-                        effect = RESTITUTION_PLUS_ONE * ud / mm;
+                        effect = ePlusOne * ud / mm;
                         vav.set(dir * (   effect * mb));
                         vbv.set(dir * ( - effect * ma));
                         vels[a    ] += vav.x();
@@ -163,8 +178,8 @@ public:
             velocities[i] += vels[i];
             if ( ! isfinite(velocities[i]))
             {
+                //qDebug() << "VEL" << i << vels[i];
                 velocities[i] = r;
-                qDebug() << "VEL" << i << vels[i];
             }
         }
         bhs::interactionMutex.unlock();
