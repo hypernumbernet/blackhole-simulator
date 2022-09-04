@@ -198,57 +198,6 @@ void AbstractNBodyEngine<T>::angleToVelocity(Vector3& a) const
 }
 
 template <typename T>
-void AbstractNBodyEngine<T>::LorentzTransformation(
-        QGenericMatrix<4, 4, double>& lt,
-        const double vx, const double vy, const double vz) const
-{
-    double vv = vx * vx + vy * vy + vz * vz;
-    if (vv == 0.0)
-    {
-        lt.setToIdentity();
-        return;
-    }
-    double ci = speedOfLightInv();
-    double beta = sqrt(vv) * ci;
-    if (beta > 1.0)
-    {
-        //qDebug() << "beta > 1: " << beta;
-        beta = hAbs(fmod(beta - 1.0, 4.0) - 2.0);
-    }
-
-    double gamma = 1.0 / sqrt(1.0 - beta * beta);
-    if (!std::isfinite(gamma))
-    {
-        //qDebug() << "gamma INFINITY: " << gamma;
-        lt.setToIdentity();
-        return;
-    }
-
-    double gxc = - gamma * vx * ci;
-    double gyc = - gamma * vy * ci;
-    double gzc = - gamma * vz * ci;
-    double g1 = gamma - 1.0;
-
-    double matrix[] = {
-        gamma, gxc, gyc, gzc,
-        gxc  , 1.0 + g1 * (vx * vx / vv),       g1 * (vx * vy / vv),       g1 * (vx * vz / vv),
-        gyc  ,       g1 * (vx * vy / vv), 1.0 + g1 * (vy * vy / vv),       g1 * (vy * vz / vv),
-        gzc  ,       g1 * (vx * vz / vv),       g1 * (vy * vz / vv), 1.0 + g1 * (vz * vz / vv),
-    };
-    for (int i = 0; i < 16; ++i)
-    {
-        lt.data()[i] = matrix[i];
-    }
-}
-
-template <typename T>
-void AbstractNBodyEngine<T>::LorentzTransformation(
-        QGenericMatrix<4, 4, double>& lt, const Vector3& v) const
-{
-    LorentzTransformation(lt, v.x(), v.y(), v.z());
-}
-
-template <typename T>
 const T AbstractNBodyEngine<T>::speedOfLightInv() const
 {
     return T(1.0 / (SPEED_OF_LIGHT * m_scaleInv));

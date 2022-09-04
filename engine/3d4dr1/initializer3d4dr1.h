@@ -1,7 +1,7 @@
 #pragma once
 
-#include "hnn/quaternion.h"
 #include "engine/3d/initializer3d.h"
+#include "calculation3d4dr1.h"
 
 using namespace hnn;
 
@@ -24,7 +24,7 @@ private:
     QGenericMatrix<1, 4, double> fromVector3(const Vector3& v3) const
     {
         QGenericMatrix<4, 4, double> lt;
-        m_engine->LorentzTransformation(lt, -v3);
+        Calculation3D4DR1::lorentzTransformation(lt, -v3, m_engine->speedOfLightInv());
         QGenericMatrix<1, 4, double> speed;
         speed(0, 0) = SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame();
         speed(1, 0) = 0.0;

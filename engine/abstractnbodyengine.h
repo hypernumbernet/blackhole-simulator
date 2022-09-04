@@ -43,8 +43,6 @@ public:
 
     double velocityToAngle(double) const;
     void angleToVelocity(Vector3&) const;
-    void LorentzTransformation(QGenericMatrix<4, 4, double>&, double, double, double) const;
-    void LorentzTransformation(QGenericMatrix<4, 4, double>&, const Vector3&) const;
 
 protected:
     void setNumberOfParticles();

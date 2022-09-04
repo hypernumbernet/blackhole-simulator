@@ -14,7 +14,49 @@ public:
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
         , m_ct(SPEED_OF_LIGHT * engine->scaleInv() * engine->timePerFrame())
+        , m_speedOfLightInv(1.0 / (SPEED_OF_LIGHT * engine->scaleInv()))
     {
+    }
+
+    static void lorentzTransformation(QGenericMatrix<4, 4, double>& lt, const Vector3& v, const double speedOfLightInv)
+    {
+        const double vx = v.x(), vy = v.y(), vz = v.z();
+        const double vv = vx * vx + vy * vy + vz * vz;
+        if (vv == 0.0)
+        {
+            lt.setToIdentity();
+            return;
+        }
+        double beta = sqrt(vv) * speedOfLightInv;
+        if (beta > 1.0)
+        {
+            //qDebug() << "beta > 1: " << beta;
+            beta = hAbs(fmod(beta - 1.0, 4.0) - 2.0);
+        }
+
+        const double gamma = 1.0 / sqrt(1.0 - beta * beta);
+        if (!std::isfinite(gamma))
+        {
+            //qDebug() << "gamma INFINITY: " << gamma;
+            lt.setToIdentity();
+            return;
+        }
+        const double gc = - gamma * speedOfLightInv;
+        const double gxc = vx * gc;
+        const double gyc = vy * gc;
+        const double gzc = vz * gc;
+        const double g1 = gamma - 1.0;
+
+        const double matrix[] = {
+            gamma, gxc, gyc, gzc,
+            gxc  , 1.0 + g1 * (vx * vx / vv),       g1 * (vx * vy / vv),       g1 * (vx * vz / vv),
+            gyc  ,       g1 * (vx * vy / vv), 1.0 + g1 * (vy * vy / vv),       g1 * (vy * vz / vv),
+            gzc  ,       g1 * (vx * vz / vv),       g1 * (vy * vz / vv), 1.0 + g1 * (vz * vz / vv),
+        };
+        for (int i = 0; i < 16; ++i)
+        {
+            lt.data()[i] = matrix[i];
+        }
     }
 
     void calculateTimeProgress() const
@@ -55,19 +97,19 @@ public:
 
         double d1, d2, d3, r, inv, theta;
         quint64 i3, j3, i4;
+        QGenericMatrix<1, 4, double> speed;
+        QGenericMatrix<4, 4, double> acc;
+        Vector3 g;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             i3 = i * 3;
             i4 = i * 4;
 
-            QGenericMatrix<1, 4, double> speed;
             speed(0, 0) = velocities[i4    ];
             speed(1, 0) = velocities[i4 + 1];
             speed(2, 0) = velocities[i4 + 2];
             speed(3, 0) = velocities[i4 + 3];
-
-            QGenericMatrix<4, 4, double> acc;
 
             for (quint64 j = 0; j < numberOfParticles; ++j)
             {
@@ -90,8 +132,8 @@ public:
                 d2 *= theta;
                 d3 *= theta;
 
-                Vector3 g(-d1, -d2, -d3);
-                m_engine->LorentzTransformation(acc, g);
+                g.set(-d1, -d2, -d3);
+                lorentzTransformation(acc, g, m_speedOfLightInv);
                 speed = acc * speed;
             }
             velocities[i4    ] = speed(0, 0);
@@ -110,4 +152,5 @@ private:
     const quint64 m_interactionEnd;
 
     const double m_ct;
+    const double m_speedOfLightInv;
 };
