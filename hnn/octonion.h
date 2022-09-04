@@ -2,7 +2,6 @@
 
 #include "constants.h"
 #include "quaternion.h"
-#include <string>
 
 namespace hnn // https://github.com/hypernumbernet
 {

@@ -2,7 +2,6 @@
 
 #include "constants.h"
 #include "vector3.h"
-#include <cmath>
 
 namespace hnn // https://github.com/hypernumbernet
 {
