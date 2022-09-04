@@ -17,12 +17,11 @@ public:
     {
         double* const coordinates = m_engine->coordinates();
         const double* const velocities = m_engine->velocities();
-
         const double timePerFrame = m_engine->timePerFrame();
-
+        quint64 j;
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            quint64 j = i * 3;
+            j = i * 3;
             coordinates[j] += velocities[j] * timePerFrame; ++j;
             coordinates[j] += velocities[j] * timePerFrame; ++j;
             coordinates[j] += velocities[j] * timePerFrame;
@@ -39,17 +38,18 @@ public:
         const double gravitationalConstant = m_engine->gravitationalConstant();
         const double timeG = timePerFrame * gravitationalConstant;
         const quint64 numberOfParticles = m_engine->numberOfParticle();
+        const quint64 number3 = numberOfParticles * 3;
         const double boundaryToInvalidate = AbstractNBodyEngine<double>::BOUNDARY_TO_INVALIDATE;
 
-        double d1, d2, d3, r, inv, theta;
-        quint64 a, b;
+        double d1, d2, d3, r, inv, theta, ma, mb;
+        quint64 a, b, i, j;
 
-        double* vels = new double[numberOfParticles * 3]();
+        double* vels = new double[number3]();
 
-        for (quint64 i = m_interactionStart; i < m_interactionEnd; ++i)
+        for (i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             a = i * 3;
-            for (quint64 j = i + 1; j < numberOfParticles; ++j)
+            for (j = i + 1; j < numberOfParticles; ++j)
             {
                 b = j * 3;
 
@@ -58,7 +58,7 @@ public:
                 d3 = coordinates[b + 2] - coordinates[a + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                if (r <= boundaryToInvalidate)
+                if (r < boundaryToInvalidate)
                     continue;
 
                 inv = 1.0 / r;
@@ -67,20 +67,26 @@ public:
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
-
-                vels[a    ] += d1 * masses[j];
-                vels[a + 1] += d2 * masses[j];
-                vels[a + 2] += d3 * masses[j];
-                vels[b    ] -= d1 * masses[i];
-                vels[b + 1] -= d2 * masses[i];
-                vels[b + 2] -= d3 * masses[i];
+                ma = masses[i];
+                mb = masses[j];
+                vels[a    ] += d1 * mb;
+                vels[a + 1] += d2 * mb;
+                vels[a + 2] += d3 * mb;
+                vels[b    ] -= d1 * ma;
+                vels[b + 1] -= d2 * ma;
+                vels[b + 2] -= d3 * ma;
             }
         }
         bhs::interactionMutex.lock();
-        quint64 end = numberOfParticles * 3;
-        for (quint64 i = 0; i < end; ++i)
+        for (i = 0; i < number3; ++i)
         {
+            r = velocities[i];
             velocities[i] += vels[i];
+            if ( ! isfinite(velocities[i]))
+            {
+                //qDebug() << "VEL" << i << vels[i];
+                velocities[i] = r;
+            }
         }
         bhs::interactionMutex.unlock();
 
