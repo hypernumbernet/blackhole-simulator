@@ -23,7 +23,6 @@ MainWidget::MainWidget(QWidget* parent)
     m_hLayout.addLayout(&m_vLayout);
 
     initUi();
-    //qDebug() << "GraphicWindow" << UpdateUi::debugString((quintptr)&UpdateUi::engineUse);
 }
 
 void MainWidget::initUi()
@@ -46,6 +45,14 @@ void MainWidget::initUi()
     m_vLayout.addLayout(frameNumberLayout);
     connect(&UpdateUi::it(), &UpdateUi::displayFrameNumber, this, &MainWidget::displayFrameNumber);
 
+    // Simulation Time
+    auto simTimeLayout = new QHBoxLayout;
+    auto simTimeLabel = new QLabel(tr("Time (day)"));
+    simTimeLayout->addWidget(simTimeLabel);
+    UpdateUi::style(m_simTimeValue);
+    simTimeLayout->addWidget(&m_simTimeValue);
+    m_vLayout.addLayout(simTimeLayout);
+
     // Time/Frame
     auto timePerFrameLayout = new QHBoxLayout;
     auto timePerFrameLabel = new QLabel(tr("Time/Frame (s)"));
@@ -54,14 +61,6 @@ void MainWidget::initUi()
     timePerFrameLayout->addWidget(&m_timePerFrameValue);
     m_vLayout.addLayout(timePerFrameLayout);
     connect(&UpdateUi::it(), &UpdateUi::displayTimePerFrame, this, &MainWidget::displayTimePerFrame);
-
-    // Simulation Time
-    auto simTimeLayout = new QHBoxLayout;
-    auto simTimeLabel = new QLabel(tr("Time"));
-    simTimeLayout->addWidget(simTimeLabel);
-    UpdateUi::style(m_simTimeValue);
-    simTimeLayout->addWidget(&m_simTimeValue);
-    m_vLayout.addLayout(simTimeLayout);
 
     // Start Button
     m_startButton.setFocusPolicy(Qt::NoFocus);
@@ -190,7 +189,7 @@ void MainWidget::displayFrameNumber(const int num)
     remain /= 60;
     quint64 hours = remain % 24;
     remain /= 24;
-    QString t = QString(tr("Day %1 %2:%3:%4"))
+    QString t = QString(tr("%1 %2:%3:%4"))
             .arg(remain)
             .arg(hours, 2, 10, QChar('0'))
             .arg(minutes, 2, 10, QChar('0'))
