@@ -12,7 +12,7 @@ public:
     {
     }
 
-    static inline AbstractEngineCore* factory(
+    static AbstractEngineCore* factory(
             AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
         return new CoreFloatGravityCollision(engine, threadNumber);

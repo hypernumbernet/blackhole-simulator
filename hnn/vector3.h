@@ -30,18 +30,18 @@ public:
     void setY(const double ay) { m_y = ay; }
     void setZ(const double az) { m_z = az; }
 
-    void set(double ax, double ay, double az)
+    void set(const double ax, const double ay, const double az)
     {
         m_x = ax; m_y = ay; m_z = az;
     }
 
-    void set(Vector3 v)
+    void set(const Vector3& v)
     {
         m_x = v.m_x; m_y = v.m_y; m_z = v.m_z;
     }
 
-    template <typename typeE>
-    void set(const double* const a, const typeE i)
+    template <typename E>
+    void set(const double* const a, const E i)
     {
         m_x = a[i]; m_y = a[i + 1]; m_z = a[i + 2];
     }
@@ -73,32 +73,32 @@ public:
     }
 
     template <typename E>
-    const Vector3 operator*(E a) const
+    const Vector3 operator*(const E a) const
     {
         return Vector3(m_x * a, m_y * a, m_z * a);
     }
 
     template <typename E>
-    friend inline const Vector3 operator*(E a, const Vector3& b)
+    friend const Vector3 operator*(const E a, const Vector3& b)
     {
         return Vector3(a * b.x(), a * b.y(), a * b.z());
     }
 
     template <typename E>
-    const Vector3 operator/(E a) const
+    const Vector3 operator/(const E a) const
     {
         return Vector3(m_x / a, m_y / a, m_z / a);
     }
 
     template <typename E>
-    Vector3& operator*=(E a)
+    Vector3& operator*=(const E a)
     {
         m_x *= a; m_y *= a; m_z *= a;
         return *this;
     }
 
     template <typename E>
-    Vector3& operator/=(E a)
+    Vector3& operator/=(const E a)
     {
         m_x /= a; m_y /= a; m_z /= a;
         return *this;
@@ -126,7 +126,7 @@ public:
 
     Vector3& normalize()
     {
-        double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+        const double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r != 0.0)
         {
             m_x /= r; m_y /= r; m_z /= r;
@@ -136,7 +136,7 @@ public:
 
     Vector3 normalized() const
     {
-        double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
+        const double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
         if (r == 0.0)
         {
             return Vector3(m_x, m_y, m_z);
@@ -151,9 +151,9 @@ public:
 
     double distance(const Vector3& a) const
     {
-        double d1 = m_x - a.m_x;
-        double d2 = m_y - a.m_y;
-        double d3 = m_z - a.m_z;
+        const double d1 = m_x - a.m_x;
+        const double d2 = m_y - a.m_y;
+        const double d3 = m_z - a.m_z;
         return sqrt(d1 * d1 + d2 * d2 + d3 * d3);
     }
 
@@ -172,7 +172,7 @@ public:
         return m_x == m_x && m_y == m_y && m_z == m_z;
     }
 
-    std::string toString()
+    std::string toString() const
     {
         std::ostringstream o;
         o << m_x << ", " << m_y << ", " << m_z;
@@ -180,7 +180,16 @@ public:
     }
 
 private:
-    double m_x, m_y, m_z;
+    union
+        {
+            struct
+            {
+                double m_x;
+                double m_y;
+                double m_z;
+            };
+            double array[3];
+        };
 };
 
 } // namespace

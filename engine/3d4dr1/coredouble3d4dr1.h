@@ -13,7 +13,7 @@ public:
     {
     }
 
-    static inline AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    static AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
         return new CoreDouble3D4DR1(engine, threadNumber);
     }

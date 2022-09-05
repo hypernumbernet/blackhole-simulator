@@ -34,7 +34,7 @@ public:
     void setI2(const double i2) { m_i2 = i2; }
     void setI3(const double i3) { m_i3 = i3; }
 
-    void set(const double real, const double imaginary1, double imaginary2, double imaginary3)
+    void set(const double real, const double imaginary1, const double imaginary2, const double imaginary3)
     {
         m_re = real;
         m_i1 = imaginary1;
@@ -112,13 +112,13 @@ public:
     }
 
     template <typename E>
-    const Quaternion operator*(E a) const
+    const Quaternion operator*(const E a) const
     {
         return Quaternion(m_re * a, m_i1 * a, m_i2 * a, m_i3 * a);
     }
 
     template <typename E>
-    friend inline const Quaternion operator*(E a, const Quaternion& b)
+    friend const Quaternion operator*(const E a, const Quaternion& b)
     {
         return Quaternion(a * b.m_re, a * b.m_i1, a * b.m_i2, a * b.m_i3);
     }
@@ -129,13 +129,13 @@ public:
     }
 
     template <typename E>
-    friend inline const Quaternion operator/(E a, const Quaternion& b)
+    friend const Quaternion operator/(const E a, const Quaternion& b)
     {
         return a * b.inversed();
     }
 
-    template <typename X>
-    const Quaternion operator/(X a) const
+    template <typename E>
+    const Quaternion operator/(const E a) const
     {
         return Quaternion(m_re / a, m_i1 / a, m_i2 / a, m_i3 / a);
     }
@@ -152,7 +152,7 @@ public:
     }
 
     template <typename E>
-    Quaternion& operator*=(E a)
+    Quaternion& operator*=(const E a)
     {
         m_re *= a;
         m_i1 *= a;
@@ -169,7 +169,7 @@ public:
     }
 
     template <typename E>
-    Quaternion& operator/=(E a)
+    Quaternion& operator/=(const E a)
     {
         m_re /= a;
         m_i1 /= a;
@@ -196,12 +196,12 @@ public:
                hnn::fuzzyCompare(m_i3, a.m_i3);
     }
 
-    const double& operator[](int index) const
+    const double& operator[](const int index) const
     {
         return array[index];
     }
 
-    double& operator[](int index)
+    double& operator[](const int index)
     {
         return array[index];
     }
@@ -228,7 +228,7 @@ public:
 
     Quaternion inversed() const
     {
-        double norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
+        const double norm = m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3;
         return Quaternion(m_re / norm, -m_i1 / norm, -m_i2 / norm, -m_i3 / norm);
     }
 
@@ -241,8 +241,8 @@ public:
     // Exponential
     Quaternion exp() const
     {
-        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        double e = std::exp(m_re);
+        const double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        const double e = std::exp(m_re);
         double a;
 
         if (n == 0)
@@ -256,7 +256,7 @@ public:
     // Exponential - only imaginary part
     Quaternion expIm() const
     {
-        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        const double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         double a;
 
         if (n == 0)
@@ -268,9 +268,9 @@ public:
     }
 
     // Exponential - only imaginary part
-    static inline Quaternion exp(double x, double y, double z)
+    static Quaternion exp(double x, double y, double z)
     {
-        double n = sqrt(x * x + y * y + z * z);
+        const double n = sqrt(x * x + y * y + z * z);
         double a;
 
         if (n == 0.0)
@@ -282,9 +282,9 @@ public:
     }
 
     // Exponential - only imaginary part
-    static inline Quaternion exp(const Vector3& v)
+    static Quaternion exp(const Vector3& v)
     {
-        double n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
+        const double n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
         double a = 0.0;
 
         if (n == 0.0)
@@ -296,9 +296,9 @@ public:
     }
 
     // Exponential - Hyperbolic
-    static inline Quaternion exph(double x, double y, double z)
+    static Quaternion exph(const double x, const double y, const double z)
     {
-        double n = sqrt(x * x + y * y + z * z);
+        const double n = sqrt(x * x + y * y + z * z);
         double a = 0.0;
 
         if (n == 0.0)
@@ -333,8 +333,8 @@ public:
 
     Vector3 lnAcos() const
     {
-        double n = acos(m_re);
-        double s = sin(n);
+        const double n = acos(m_re);
+        const double s = sin(n);
         return Vector3(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
     }
 
@@ -350,7 +350,7 @@ public:
 
     Vector3 lnV3Half() const
     {
-        double v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
+        const double v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         if (v == 0.0)
             return Vector3(0.0, 0.0, 0.0);
 
@@ -388,20 +388,20 @@ public:
         + j((aa - bb + cc - dd)y + 2((bc - ad)x + (cd + ab)z))
         + k((aa - bb - cc + dd)z + 2((bd + ac)x + (cd - ab)y))
     */
-    static inline void rotate(Vector3& axis, const Quaternion& rot)
+    static void rotate(Vector3& axis, const Quaternion& rot)
     {
-        double a = rot.re();
-        double b = rot.i1();
-        double c = rot.i2();
-        double d = rot.i3();
-        double x = axis.x();
-        double y = axis.y();
-        double z = axis.z();
+        const double a = rot.re();
+        const double b = rot.i1();
+        const double c = rot.i2();
+        const double d = rot.i3();
+        const double x = axis.x();
+        const double y = axis.y();
+        const double z = axis.z();
 
-        double aa = a*a, bb = b*b, cc = c*c, dd = d*d;
-        double rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
-        double ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
-        double rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
+        const double aa = a*a, bb = b*b, cc = c*c, dd = d*d;
+        const double rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
+        const double ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
+        const double rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
 
         axis.setX(rx);
         axis.setY(ry);
@@ -412,12 +412,12 @@ public:
 
     Quaternion rot() const
     {
-        double c1 = cos(m_i1);
-        double c2 = cos(m_i2);
-        double c3 = cos(m_i3);
-        double s1 = sin(m_i1);
-        double s2 = sin(m_i2);
-        double s3 = sin(m_i3);
+        const double c1 = cos(m_i1);
+        const double c2 = cos(m_i2);
+        const double c3 = cos(m_i3);
+        const double s1 = sin(m_i1);
+        const double s2 = sin(m_i2);
+        const double s3 = sin(m_i3);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -426,14 +426,14 @@ public:
         );
     }
 
-    static inline Quaternion rot(double x, double y, double z)
+    static Quaternion rot(double x, double y, double z)
     {
-        double c1 = cos(x);
-        double c2 = cos(y);
-        double c3 = cos(z);
-        double s1 = sin(x);
-        double s2 = sin(y);
-        double s3 = sin(z);
+        const double c1 = cos(x);
+        const double c2 = cos(y);
+        const double c3 = cos(z);
+        const double s1 = sin(x);
+        const double s2 = sin(y);
+        const double s3 = sin(z);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -442,14 +442,14 @@ public:
         );
     }
 
-    static inline Quaternion roth(double x, double y, double z)
+    static Quaternion roth(double x, double y, double z)
     {
-        double c1 = cosh(x);
-        double c2 = cosh(y);
-        double c3 = cosh(z);
-        double s1 = sinh(x);
-        double s2 = sinh(y);
-        double s3 = sinh(z);
+        const double c1 = cosh(x);
+        const double c2 = cosh(y);
+        const double c3 = cosh(z);
+        const double s1 = sinh(x);
+        const double s2 = sinh(y);
+        const double s3 = sinh(z);
         return Quaternion(
             c1 * c2 * c3 - s1 * s2 * s3,
             s1 * c2 * c3 + c1 * s2 * s3,
@@ -550,9 +550,9 @@ public:
 
     // Calculate a rotating quaternion from a normalized quaternion of cross7()
     template <typename E>
-    Quaternion& makeRotation(E theta)
+    Quaternion& makeRotation(const E theta)
     {
-        E s = sin(theta);
+        const E s = sin(theta);
         m_re = cos(theta);
         m_i1 *= s;
         m_i2 *= s;
@@ -560,17 +560,17 @@ public:
         return *this;
     }
 
-    static inline Quaternion rotation(Vector3 v, double theta)
+    static Quaternion rotation(const Vector3& v, const double theta)
     {
-        double c = cos(theta);
-        double s = sin(theta);
+        const double c = cos(theta);
+        const double s = sin(theta);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
-    static inline Quaternion rotation(double x, double y, double z, double theta)
+    static Quaternion rotation(const double x, const double y, const double z, const double theta)
     {
-        double c = cos(theta);
-        double s = sin(theta);
+        const double c = cos(theta);
+        const double s = sin(theta);
         return Quaternion(c, x * s, y * s, z * s);
     }
 
@@ -578,8 +578,8 @@ public:
     // v should be normalized
     Quaternion rotMove(const Vector3& v, const double theta) const
     {
-        double c = cos(theta);
-        double s = sin(theta);
+        const double c = cos(theta);
+        const double s = sin(theta);
         return Quaternion(
             m_re * c - (v.x() * m_i1 + v.y() * m_i2 + v.z() * m_i3) * s,
             m_i1 * c + (v.x() * m_re + v.y() * m_i3 - v.z() * m_i2) * s,
@@ -588,33 +588,33 @@ public:
         );
     }
 
-    static inline Quaternion slerp(
+    static Quaternion slerp(
             const Vector3& from, const Vector3& to,
-            double rate = 1.0, double threshold = 1.0)
+            const double rate = 1.0, const double threshold = 1.0)
     {
-        auto cosVal = from.dot(to);
+        const double cosVal = from.dot(to);
         if (cosVal >= threshold) // same direction
         {
             return Quaternion(1.0);
         }
-        auto angle = acos(cosVal) * rate * 0.5;
-        auto cross = from.cross(to);
+        Vector3 cross = from.cross(to);
         if (cosVal <= -threshold) // opposite direction
         {
-            Vector3 tmp(1.0, 0.0, 0.0);
-            cosVal = from.dot(to);
-            if (cosVal >= threshold || cosVal <= -threshold)
+            static Vector3 unitX(1.0, 0.0, 0.0);
+            const double cosX = from.dot(unitX);
+            if (cosX >= threshold || cosX <= -threshold)
             {
-                cross = from.cross({0.0, 0.0, 1.0});
+                cross = from.cross({0.0, 0.0, 1.0}); // on X axis
             } else {
-                cross = from.cross(tmp);
+                cross = from.cross(unitX);
             }
         }
         cross.normalize();
+        const double angle = acos(cosVal) * rate * 0.5;
         return rotation(cross, angle);
     }
 
-    std::string toString()
+    std::string toString() const
     {
         std::ostringstream o;
         o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3;

@@ -14,7 +14,7 @@ public:
     {
     }
 
-    static inline AbstractEngineCore* factory(
+    static AbstractEngineCore* factory(
             AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
         return new CoreDoubleGravityCollision(engine, threadNumber);

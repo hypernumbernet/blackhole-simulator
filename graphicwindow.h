@@ -41,7 +41,7 @@ protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private:
-    static inline Vector3 CAMERA_INI_POS = {-1.5, -1, -5};
+    static const inline Vector3 CAMERA_INI_POS = {-1.5, -1, -5};
 
     void keyPressEvent(QKeyEvent*) override;
     void keyReleaseEvent(QKeyEvent*) override;

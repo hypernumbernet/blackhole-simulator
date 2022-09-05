@@ -83,7 +83,7 @@ public:
     }
 
     template <typename E>
-    Octonion& operator*=(E a)
+    Octonion& operator*=(const E a)
     {
         m_re *= a;
         m_i1 *= a;
@@ -97,7 +97,7 @@ public:
     }
 
     template <typename E>
-    Octonion& operator/=(E a)
+    Octonion& operator/=(const E a)
     {
         m_re /= a;
         m_i1 /= a;
@@ -175,7 +175,8 @@ public:
         );
     }
 
-    static inline Octonion cross(const Quaternion& a, const Quaternion& b, int w, int x, int y, int z)
+    static Octonion cross(const Quaternion& a, const Quaternion& b,
+                                 const int w, const int x, const int y, const int z)
     {
         Octonion o1(0);
         o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
@@ -185,13 +186,13 @@ public:
     }
 
     template <typename E>
-    const Octonion operator*(E a) const
+    const Octonion operator*(const E a) const
     {
         return Octonion(m_re * a, m_i1 * a, m_i2 * a, m_i3 * a, m_i4 * a, m_i5 * a, m_i6 * a, m_i7 * a);
     }
 
     template <typename E>
-    friend inline const Octonion operator*(E a, const Octonion& b)
+    friend const Octonion operator*(const E a, const Octonion& b)
     {
         return Octonion(a * b.m_re, a * b.m_i1, a * b.m_i2, a * b.m_i3,
                         a * b.m_i4, a * b.m_i5, a * b.m_i6, a * b.m_i7);
@@ -205,13 +206,13 @@ public:
     bool operator==(const Octonion& a) const
     {
         return m_re == a.m_re && m_i1 == a.m_i1 && m_i2 == a.m_i2 && m_i3 == a.m_i3 &&
-                m_i4 == a.m_i4 && m_i5 == a.m_i5 && m_i6 == a.m_i6 && m_i7 == a.m_i7;
+               m_i4 == a.m_i4 && m_i5 == a.m_i5 && m_i6 == a.m_i6 && m_i7 == a.m_i7;
     }
 
     bool operator!=(const Octonion& a) const
     {
         return m_re != a.m_i1 || m_i1 != a.m_i1 || m_i2 != a.m_i2 || m_i3 != a.m_i3 ||
-                m_i4 != a.m_i4 || m_i5 != a.m_i5 || m_i6 != a.m_i6 || m_i7 != a.m_i7;
+               m_i4 != a.m_i4 || m_i5 != a.m_i5 || m_i6 != a.m_i6 || m_i7 != a.m_i7;
     }
 
     bool fuzzyCompare(const Octonion& a) const
@@ -226,12 +227,12 @@ public:
                 hnn::fuzzyCompare(m_i7, a.m_i7);
     }
 
-    const double& operator[](int index) const
+    const double& operator[](const int index) const
     {
         return array[index];
     }
 
-    double& operator[](int index)
+    double& operator[](const int index)
     {
         return array[index];
     }
@@ -239,7 +240,7 @@ public:
     double norm() const
     {
         return m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3 +
-                m_i4 * m_i4 + m_i5 * m_i5 + m_i6 * m_i6 + m_i7 * m_i7;
+               m_i4 * m_i4 + m_i5 * m_i5 + m_i6 * m_i6 + m_i7 * m_i7;
     }
 
     double abs() const
@@ -261,11 +262,11 @@ public:
     {
         double n = norm();
         return Octonion(m_re / n, -m_i1 / n, -m_i2 / n, -m_i3 / n,
-                        -m_i4 / n, -m_i5 / n, -m_i6 / n, -m_i7 / n);
+                      - m_i4 / n, -m_i5 / n, -m_i6 / n, -m_i7 / n);
     }
 
-    static inline void rotation(Quaternion& a, const Quaternion& rot,
-                                   int w, int x, int y, int z)
+    static void rotation(Quaternion& a, const Quaternion& rot,
+                                const int w, const int x, const int y, const int z)
     {
         Octonion o1(0);
         o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
@@ -275,8 +276,8 @@ public:
         a.setRe(o3[w]); a.setI1(o3[x]); a.setI2(o3[y]); a.setI3(o3[z]);
     }
 
-    static inline void rotation(Quaternion& a, const Octonion& rot,
-                                   int w, int x, int y, int z)
+    static void rotation(Quaternion& a, const Octonion& rot,
+                                const int w, const int x, const int y, const int z)
     {
         Octonion o1(0);
         o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
@@ -284,7 +285,7 @@ public:
         a.setRe(o3[w]); a.setI1(o3[x]); a.setI2(o3[y]); a.setI3(o3[z]);
     }
 
-    std::string toString()
+    std::string toString() const
     {
         std::ostringstream o;
         o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3 << ", " <<

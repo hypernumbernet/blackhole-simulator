@@ -11,7 +11,7 @@ public:
     {
     }
 
-    static inline AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    static AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
     {
         return new CoreFloat3D4DR1(engine, threadNumber);
     }
