@@ -86,6 +86,11 @@ void UpdateUi::style(QLabel& lbl)
     lbl.setMargin(2);
 }
 
+void UpdateUi::width(QLabel& lbl)
+{
+    lbl.setMaximumWidth(50);
+}
+
 QString UpdateUi::debugString(quintptr ptr)
 {
     return QString("0x%1").arg(ptr, QT_POINTER_SIZE * 2, 16, QChar('0'));

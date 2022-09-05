@@ -17,8 +17,9 @@ public:
     static QMap<bhs::Compute, QString>& compute();
     static QMap<bhs::Preset, QString>& preset();
     static QMap<bhs::LineType, QString>& lineType();
-    static void style(QLCDNumber& lcd);
-    static void style(QLabel& lbl);
+    static void style(QLCDNumber&);
+    static void style(QLabel&);
+    static void width(QLabel&);
     static QString debugString(quintptr);
 
 private:
@@ -37,5 +38,6 @@ signals:
     void resetParticles();
     void displayEngineName(bhs::Engine);
     void displayPrecision(bhs::Precision);
-    void displayPresetName(bhs::Preset);
+    void displayPresetName(bhs::Preset, QString);
+    void displayCompute(bhs::Compute);
 };

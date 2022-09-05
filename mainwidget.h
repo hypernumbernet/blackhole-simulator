@@ -26,7 +26,8 @@ public slots:
     void displayNumberOfParticles(int);
     void displayEngineName(bhs::Engine);
     void displayPrecision(bhs::Precision);
-    void displayPresetName(bhs::Preset);
+    void displayPresetName(bhs::Preset, QString);
+    void displayCompute(bhs::Compute);
 
     void showInitializerDialog();
     void acceptInitializerDialog();
@@ -55,6 +56,7 @@ private:
     QLabel m_presetValue;
     QLabel m_particleNumValue;
     QLabel m_precisionValue;
+    QLabel m_computeValue;
 
     InitializerDialog* m_initializerDialog = nullptr;
     MonitoringDialog* m_monitoringDialog = nullptr;

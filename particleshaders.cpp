@@ -114,7 +114,8 @@ void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
     }
     emit UpdateUi::it().displayEngineName(sim.engine);
     emit UpdateUi::it().displayPrecision(sim.precision);
-    emit UpdateUi::it().displayPresetName(sim.preset);
+    emit UpdateUi::it().displayPresetName(sim.preset, sim.custom.name);
+    emit UpdateUi::it().displayCompute(sim.compute);
 
     SSBODataStruct ssboStruct;
     GetSSBOStruct(ssboStruct, coordinateVectorSize, velocityVectorSize);

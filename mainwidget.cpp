@@ -142,13 +142,6 @@ void MainWidget::initUi()
     m_vLayout.addWidget(&m_scaleSlider);
     connect(&m_scaleSlider, &QSlider::sliderMoved, &m_graphicWindows, &GraphicWindow::setModelScaleInt);
 
-    // Number of particles
-    auto particleNumLabel = new QLabel(tr("Number of particles"));
-    m_vLayout.addWidget(particleNumLabel);
-    UpdateUi::style(m_particleNumValue);
-    m_vLayout.addWidget(&m_particleNumValue);
-    connect(&UpdateUi::it(), &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
-
     // Simulation Engine
     auto engineLabel = new QLabel(tr("Simulation Engine"));
     m_vLayout.addWidget(engineLabel);
@@ -156,19 +149,42 @@ void MainWidget::initUi()
     m_vLayout.addWidget(&m_engineValue);
     connect(&UpdateUi::it(), &UpdateUi::displayEngineName, this, &MainWidget::displayEngineName);
 
-    // Precision
-    auto precisionLabel = new QLabel(tr("Precision"));
-    m_vLayout.addWidget(precisionLabel);
-    UpdateUi::style(m_precisionValue);
-    m_vLayout.addWidget(&m_precisionValue);
-    connect(&UpdateUi::it(), &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
-
-    // Initial Condition Preset
-    auto presetLabel = new QLabel(tr("Initial Conditions Preset"));
+    // Initial Conditions
+    auto presetLabel = new QLabel(tr("Initial Conditions"));
     m_vLayout.addWidget(presetLabel);
     UpdateUi::style(m_presetValue);
     m_vLayout.addWidget(&m_presetValue);
     connect(&UpdateUi::it(), &UpdateUi::displayPresetName, this, &MainWidget::displayPresetName);
+
+    // Number of particles
+    auto particleNumLayout = new QHBoxLayout;
+    auto particleNumLabel = new QLabel(tr("Number of particles"));
+    particleNumLayout->addWidget(particleNumLabel);
+    UpdateUi::style(m_particleNumValue);
+    UpdateUi::width(m_particleNumValue);
+    particleNumLayout->addWidget(&m_particleNumValue);
+    m_vLayout.addLayout(particleNumLayout);
+    connect(&UpdateUi::it(), &UpdateUi::displayNumberOfParticles, this, &MainWidget::displayNumberOfParticles);
+
+    // Compute Device
+    auto computeLabel = new QLabel(tr("Compute"));
+    UpdateUi::style(m_computeValue);
+    UpdateUi::width(m_computeValue);
+    auto computeLayout = new QHBoxLayout;
+    computeLayout->addWidget(computeLabel);
+    computeLayout->addWidget(&m_computeValue);
+    m_vLayout.addLayout(computeLayout);
+    connect(&UpdateUi::it(), &UpdateUi::displayCompute, this, &MainWidget::displayCompute);
+
+    // Precision
+    auto precisionLayout = new QHBoxLayout;
+    auto precisionLabel = new QLabel(tr("Precision"));
+    precisionLayout->addWidget(precisionLabel);
+    UpdateUi::style(m_precisionValue);
+    UpdateUi::width(m_precisionValue);
+    precisionLayout->addWidget(&m_precisionValue);
+    m_vLayout.addLayout(precisionLayout);
+    connect(&UpdateUi::it(), &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
 
     // Monitoring
     auto graphButton = new QPushButton(tr("Monitoring..."));
@@ -269,9 +285,14 @@ void MainWidget::reset(const bhs::SimCondition& sim)
     updateStartButtonText(false);
 }
 
-void MainWidget::displayPresetName(const bhs::Preset preset)
+void MainWidget::displayPresetName(const bhs::Preset preset, const QString name)
 {
-    m_presetValue.setText(UpdateUi::preset().value(preset));
+    if (preset == bhs::Preset::Custom)
+    {
+        m_presetValue.setText(name);
+    } else {
+        m_presetValue.setText(UpdateUi::preset().value(preset));
+    }
 }
 
 void MainWidget::resetInitial()
@@ -301,4 +322,10 @@ void MainWidget::showMonitoringDialog()
     m_monitoringDialog->raise();
     m_monitoringDialog->activateWindow();
     m_monitoringDialog->update();
+}
+
+void MainWidget::displayCompute(bhs::Compute c)
+{
+    QString s = UpdateUi::compute().value(c);
+    m_computeValue.setText(s);
 }
