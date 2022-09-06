@@ -4,6 +4,26 @@
 
 using namespace hnn;
 
+/*
+The calculation of apsidal precession by general relativity
+
+Formula:
+
+omega = 6 pi G M / (P a (1 - e^2) c^2)
+      = 6 pi G M / (P a (b/a)^2 c^2)
+
+omega = (Amount of rotation)(rad/s)
+pi = 3.14
+G  = 6.67e-11 (Constant of gravitation, m^3 kg^-1 s^-2)
+M  = (Solar mass, kg)
+P  = (Orbital period, s)
+a  = (Semi-major axis, m)
+e  = (Eccentricity) = sqrt(1 - (b/a)^2)
+b  = (Semi-minor axis, m)
+c  = 3e+8 (Speed of light, m)
+
+*/
+
 class Calculation3D4DR1
 {
 public:
@@ -71,7 +91,7 @@ public:
             i4 = i * 4;
             i3 = i * 3;
             double tau = m_ct / velocities[i4];
-            //tau *= tau;
+            tau *= tau;
             if (!std::isfinite(tau))
             {
                 //qDebug() << "tau: " << tau;
