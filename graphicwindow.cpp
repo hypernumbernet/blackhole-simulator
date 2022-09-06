@@ -14,7 +14,6 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     , m_circleStrafingSpeed(1.0)
     , m_simCondition(&simCondition)
 {
-    //m_camera.reset(CAMERA_INI_POS);
     m_camera.topY(1.0);
 
     connect(&UpdateUi::it(), &UpdateUi::frameAdvance, &m_threadAdmin, &ThreadAdmin::frameAdvance);
@@ -22,7 +21,6 @@ GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     connect(&UpdateUi::it(), &UpdateUi::resetParticles, this, &GraphicWindow::resetParticles);
 
     m_threadAdmin.start();
-    //qDebug() << "GraphicWindow" << UpdateUi::debugString((quintptr)&UpdateUi::engineUse);
 }
 
 GraphicWindow::~GraphicWindow()
