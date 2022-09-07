@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hnn/quaternion.h"
+#include "hnn/biquaternion.h"
 #include <QDebug>
 #include <QMutex>
 #include <QGenericMatrix>
@@ -126,4 +127,5 @@ void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* const a, co
 
 } // namespace
 
-QDebug operator<<(QDebug q, const std::complex<double>& c);
+QDebug operator<<(QDebug, const std::complex<double>&);
+QDebug operator<<(QDebug, const Biquaternion&);

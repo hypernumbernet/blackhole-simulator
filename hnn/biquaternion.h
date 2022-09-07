@@ -247,15 +247,15 @@ public:
     g* f
     = (ha - ib - jc - kd + p - hiq - hjr - hks)(w + hix + hjy + hkz)
 
-    = haw  + hhiax  + hhjay  + hhkaz  - ibw  - ihibx  - ihjby  - ihkbz
-    - jcw  - jhicx  - jhjcy  - jhkcz  - kdw  - khidx  - khjdy  - khkdz
-    + pw   + hipx   + hjpy   + hkpz   - hiqw - hihiqx - hihjqy - hihkqz
-    - hjrw - hjhirx - hjhjry - hjhkrz - hksw - hkhisx - hkhjsy - hkhksz
+    = h  aw + hhi  ax + hhj  ay + hhk  az - i  bw - ihi  bx - ihj  by - ihk  bz
+    - j  cw - jhi  cx - jhj  cy - jhk  cz - k  dw - khi  dx - khj  dy - khk  dz
+    +    pw + hi   px + hj   py + hk   pz - hi qw - hihi qx - hihj qy - hihk qz
+    - hj rw - hjhi rx - hjhj ry - hjhk rz - hk sw - hkhi sx - hkhj sy - hkhk sz
 
-    = haw  - iax  - jay  - kaz  - ibw  + hbx  - hkby + hjbz
-    - jcw  + hkcx + hcy  - hicz - kdw  - hjdx + hidy + hdz
-    + pw   + hipx + hjpy + hkpz - hiqw - qx   + kqy  - jqz
-    - hjrw - krx  - ry   + irz  - hksw + jsx  - isy  - sz
+    = h  aw - i  ax - j  ay - k  az - i  bw + h  bx - hk by + hj bz
+    - j  cw + hk cx + h  cy - hi cz - k  dw - hj dx + hi dy + h  dz
+    +    pw + hi px + hj py + hk pz - hi qw -    qx + k  qy - j  qz
+    - hj rw - k  rx -    ry + i  rz - hk sw + j  sx - i  sy -    sz
 
     = h (  aw + bx + cy + dz)
     + i (- ax - bw + rz - sy)
@@ -323,28 +323,28 @@ public:
     - i (- acz - cdw + cqy - crx)
     -   (- adz - ddw + dqy - drx)
     + k (- apz - dpw + pqy - prx)
-    + hj(- aqz - dqw + qqy - qrx)
-    - hi(- arz - drw + qry - rrx)
-    - h (- asz - dsw + qsy - rsx)
+    - hj(- aqz - dqw + qqy - qrx)
+    + hi(- arz - drw + qry - rrx)
+    + h (- asz - dsw + qsy - rsx)
     =
     + hk(  aaz + adw - aqy + arx)
     + j (- abz - bdw + bqy - brx)
     + i (  acz + cdw - cqy + crx)
     +   (  adz + ddw - dqy + drx)
     + k (- apz - dpw + pqy - prx)
-    + hj(- aqz - dqw + qqy - qrx)
-    + hi(  arz + drw - qry + rrx)
-    + h (  asz + dsw - qsy + rsx)
+    + hj(  aqz + dqw - qqy + qrx)
+    + hi(- arz - drw + qry - rrx)
+    - h (  asz + dsw - qsy + rsx)
 
     (pw - qx - ry - sz)(- ha + ib + jc + kd + p - hiq - hjr - hks) =
-    - h (  apw - aqx - ary - asz)
-    + i (  bpw - bqx - bry - bsz)
-    + j (  cpw - cqx - cry - csz)
-    + k (  dpw - dqx - dry - dsz)
-    +   (  ppw - pqx - pry - psz)
-    - hi(  pqw - qqx - qry - qsz)
-    - hj(  prw - qrx - rry - rsz)
-    - hk(  psw - qsx - rsy - ssz)
+    - h (apw - aqx - ary - asz)
+    + i (bpw - bqx - bry - bsz)
+    + j (cpw - cqx - cry - csz)
+    + k (dpw - dqx - dry - dsz)
+    +   (ppw - pqx - pry - psz)
+    - hi(pqw - qqx - qry - qsz)
+    - hj(prw - qrx - rry - rsz)
+    - hk(psw - qsx - rsy - ssz)
     =
     + h (- apw + aqx + ary + asz)
     + i (  bpw - bqx - bry - bsz)
@@ -414,7 +414,7 @@ public:
 
     g* f g~ =
     + h (apw + bpx + cpy + dpz - aqx - bqw + qrz - qsy
-       - ary - crw - qrz + rsx + asz + dsw - qsy + rsx
+       - ary - crw - qrz + rsx - asz - dsw + qsy - rsx
        - apw + aqx + ary + asz + bcz - bdy - bpx + bqw
        - bcz + cdx - cpy + crw + bdy - cdx - dpz + dsw)
     + i (aqw + bqx + cqy + dqz - apx - bpw + prz - psy
@@ -434,11 +434,11 @@ public:
        + ppw - pqx - pry - psz + cqz - dqy - pqx + qqw
        - brz + drx - pry + rrw + bsy - csx - psz + ssw)
     + hi(abw + bbx + bcy + bdz + aax + abw - arz + asy
-       + asy + csw + qsz - ssx + arz + drw - qry + rrx
+       + asy + csw + qsz - ssx - arz - drw + qry - rrx
        - pqw + qqx + qry + qsz - cpz + dpy + ppx - pqw
        + bdz - ddx + dpy - drw + bcy - ccx - cpz + csw)
     + hj(acw + bcx + ccy + cdz - asx - bsw + rsz - ssy
-       + aay + acw + aqz - asx - aqz - dqw + qqy - qrx
+       + aay + acw + aqz - asx + aqz + dqw - qqy + qrx
        - prw + qrx + rry + rsz + cdz - ddy - dpx + dqw
        + bpz - dpx + ppy - prw - bby + bcx + bpz - bsw)
     + hk(adw + bdx + cdy + ddz + arx + brw - rrz + rsy
@@ -448,29 +448,26 @@ public:
     =
     + h (- 2 qsy + 2 rsx + 2 asz + 2 dsw)
     +   (aaw + bbw + ccw + ddw + ppw + qqw + rrw + ssw
-       + 2 abx - 2 csx - 2 pqx + 2 drx + 2 acy
-       - 2 dqy - 2 pry + 2 bsy + 2 adz - 2 brz
-       + 2 cqz - 2 psz)
-    + hi(aax + bbx - ccx - ddx + ppx + qqx + rrx - ssx
-       + 2 abw + 2 bdz + 2 asy + 2 csw + 2 qsz
-       + 2 bcy - 2 pqw - 2 cpz + 2 dpy)
-    + hj(aay - bby + ccy - ddy + ppy + qqy + rry - ssy
-       + 2 acw + 2 bcx + 2 cdz - 2 asx - 2 bsw
-       + 2 rsz - 2 prw - 2 dpx + 2 bpz)
+       + 2 abx - 2 csx - 2 pqx + 2 drx + 2 acy - 2 dqy
+       - 2 pry + 2 bsy + 2 adz - 2 brz + 2 cqz - 2 psz)
+    + hi(aax + bbx - ccx - ddx + ppx + qqx - rrx - ssx
+       + 2 abw + 2 bdz + 2 asy + 2 csw + 2 qsz + 2 bcy
+       - 2 pqw - 2 cpz + 2 dpy - 2 arz - 2 drw + 2 qry)
+    + hj(aay - bby + ccy - ddy + ppy - qqy + rry - ssy
+       + 2 acw + 2 bcx + 2 cdz - 2 asx - 2 bsw + 2 rsz
+       - 2 prw - 2 dpx + 2 bpz + 2 aqz + 2 dqw + 2 qrx)
     + hk(aaz - bbz - ccz + ddz + ppz - qqz - rrz + ssz
-       + 2 adw + 2 bdx + 2 cdy + 2 arx + 2 brw
-       + 2 rsy - 2 bpy - 2 aqy - 2 cqw + 2 qsx
-       - 2 psw + 2 cpx)
+       + 2 adw + 2 bdx + 2 cdy + 2 arx + 2 brw + 2 rsy
+       - 2 bpy - 2 aqy - 2 cqw + 2 qsx - 2 psw + 2 cpx)
     =
-    + h 2(dsw + rsx - qsy + asz)
     + (aa + bb + cc + dd + pp + qq + rr + ss)w
       + 2((ab - cs - pq + dr)x + (ac - dq - pr + bs)y + (ad - br + cq - ps)z)
-    + hi((aa + bb - cc - dd + pp + qq + rr - ss)x
-      + 2((ab + cs - pq)w + (as + bc + dp)y + (bd + qs - cp)z))
-    + hj((aa - bb + cc - dd + pp + qq + rr - ss)y
-      + 2((ac - bs - pr)w + (bc - as - dp)x + (cd + rs + bp)z))
+    + hi((aa + bb - cc - dd + pp + qq - rr - ss)x
+      + 2((ab + cs - pq - dr)w + (as + bc + dp + qr)y + (bd + qs - cp - ar)z))
+    + hj((aa - bb + cc - dd + pp - qq + rr - ss)y
+      + 2((ac - bs - pr + dq)w + (bc - as - dp + qr)x + (cd + rs + bp + aq)z))
     + hk((aa - bb - cc + dd + pp - qq - rr + ss)z
-      + 2((bd + ar + cp + qs)x + (cd + rs - bp - aq)y + (ad + br - cq - ps)w))
+      + 2((ad + br - cq - ps)w + (bd + ar + cp + qs)x + (cd + rs - bp - aq)y))
     */
     Biquaternion lorentzTransformation(const double w, const double x, const double y, const double z) const
     {
@@ -485,16 +482,16 @@ public:
         return Biquaternion(
             (a * a + b * b + c * c + d * d + p * p + q * q + r * r + s * s) * w
             + 2.0 * ((a * b - c * s - p * q + d * r) * x + (a * c - d * q - p * r + b * s) * y + (a * d - b * r + c * q - p * s) * z),
-            2.0 * (d * s * w + r * s * x - q * s * y + a * s * z),
             0.0,
-            (a * a + b * b - c * c - d * d + p * p + q * q + r * r - s * s) * x
-            + 2.0 * ((a * b + c * s - p * q) * w + (a * s + b * c + d * p) * y + (b * d + q * s - c * p) * z),
             0.0,
-            (a * a - b * b + c * c - d * d + p * p + q * q + r * r - s * s) * y
-            + 2.0 * ((a * c - b * s - p * r) * w + (b * c - a * s - d * p) * x + (c * d + r * s + b * p) * z),
+            (a * a + b * b - c * c - d * d + p * p + q * q - r * r - s * s) * x
+            + 2.0 * ((a * b + c * s - p * q - d * r) * w + (a * s + b * c + d * p + q * r) * y + (b * d + q * s - c * p - a * r) * z),
+            0.0,
+            (a * a - b * b + c * c - d * d + p * p - q * q + r * r - s * s) * y
+            + 2.0 * ((a * c - b * s - p * r + d * q) * w + (b * c - a * s - d * p + q * r) * x + (c * d + r * s + b * p + a * q) * z),
             0.0,
             (a * a - b * b - c * c + d * d + p * p - q * q - r * r + s * s) * z
-            + 2.0 * ((b * d + a * r + c * p + q * s) * x + (c * d + r * s - b * p - a * q) * y + (a * d + b * r - c * q - p * s)) * w
+            + 2.0 * ((a * d + b * r - c * q - p * s) * w + (b * d + a * r + c * p + q * s) * x + (c * d + r * s - b * p - a * q) * y)
         );
     }
 
@@ -505,7 +502,7 @@ private:
     complex m_z;
 };
 
-std::ostream& operator<<(std::ostream& os, const Biquaternion& bq)
+inline std::ostream& operator<<(std::ostream& os, const Biquaternion& bq)
 {
     os << bq.w() << ", " << bq.x() << ", " << bq.y() << ", " << bq.z();
     return os;

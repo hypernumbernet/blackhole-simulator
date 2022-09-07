@@ -14,10 +14,18 @@ double bhs::rand0center1max()
         return -(double)rand() / (double)RAND_MAX;
 }
 
-QDebug operator<<(QDebug q, const std::complex<double>& c)
+QDebug operator<<(QDebug q, const std::complex<double>& x)
 {
     std::ostringstream o;
-    o << c;
+    o << x;
+    q << o.str().c_str();
+    return q;
+}
+
+QDebug operator<<(QDebug q, const Biquaternion& x)
+{
+    std::ostringstream o;
+    o << x;
     q << o.str().c_str();
     return q;
 }
