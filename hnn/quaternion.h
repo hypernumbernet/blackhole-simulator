@@ -17,7 +17,7 @@ public:
     explicit Quaternion(const double a)
         : m_re(a), m_i1(0.0), m_i2(0.0), m_i3(0.0) {}
 
-    explicit Quaternion(const Vector3 v)
+    explicit Quaternion(const Vector3& v)
         : m_re(0.0), m_i1(v.x()), m_i2(v.y()), m_i3(v.z()) {}
 
     template <typename E>

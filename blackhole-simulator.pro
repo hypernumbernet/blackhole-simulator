@@ -58,7 +58,6 @@ HEADERS += \
     engine/4d3d/initializer4d3d.h \
     global.h \
     graphicwindow.h \
-    hnn/bioctonion.h \
     hnn/biquaternion.h \
     hnn/constants.h \
     hnn/octonion.h \
