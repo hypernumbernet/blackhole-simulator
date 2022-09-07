@@ -10,7 +10,7 @@ using namespace hnn;
 namespace bhs // Black Hole Simulator
 {
 
-// Do Not sort or delete
+// Do Not sort or delete for save files
 enum class Engine
 {
     G3D,
@@ -93,24 +93,13 @@ enum class LineType
     OctonionS3RotationAll,
 };
 
-inline double rand0to1()
-{
-    return (double)rand() / (double)RAND_MAX;
-}
-
-// Random numbers in the range of equality between plus and minus areas
-inline double rand0center1max()
-{
-    if (rand() % 2 == 0)
-        return (double)rand() / (double)RAND_MAX;
-    else
-        return -(double)rand() / (double)RAND_MAX;
-}
-
 inline QRecursiveMutex interactionMutex;
 
+double rand0to1();
+double rand0center1max();
+
 template <typename T>
-inline void embedQuaternionToArray(const Quaternion& q, T* const a, const quint64 index)
+void embedQuaternionToArray(const Quaternion& q, T* const a, const quint64 index)
 {
     a[index    ] = T(q.re());
     a[index + 1] = T(q.i1());
@@ -119,7 +108,7 @@ inline void embedQuaternionToArray(const Quaternion& q, T* const a, const quint6
 }
 
 template <typename T>
-inline void embedVector3ToArray(const Vector3& v, T* const a, const quint64 index)
+void embedVector3ToArray(const Vector3& v, T* const a, const quint64 index)
 {
     a[index    ] = T(v.x());
     a[index + 1] = T(v.y());
@@ -127,7 +116,7 @@ inline void embedVector3ToArray(const Vector3& v, T* const a, const quint64 inde
 }
 
 template <typename T>
-inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* const a, const quint64 index)
+void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* const a, const quint64 index)
 {
     a[index    ] = T(m(0, 0));
     a[index + 1] = T(m(1, 0));
@@ -135,4 +124,6 @@ inline void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* cons
     a[index + 3] = T(m(3, 0));
 }
 
-}
+} // namespace
+
+QDebug operator<<(QDebug q, const std::complex<double>& c);

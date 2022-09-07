@@ -5,6 +5,7 @@ CONFIG += c++17
 
 SOURCES += \
     UpdateUi.cpp \
+    bhs.cpp \
     camera.cpp \
     computeshaders.cpp \
     engine/GravityCollision/InitializerGravityCollision.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
     threadcontroller.cpp
 
 HEADERS += \
+    bhs.h \
     camera.h \
     computeshaders.h \
     engine/GravityCollision/CalculationGravityCollision.h \
@@ -56,7 +58,6 @@ HEADERS += \
     engine/4d3d/corefloat4d3d.h \
     engine/4d3d/engine4d3d.h \
     engine/4d3d/initializer4d3d.h \
-    global.h \
     graphicwindow.h \
     hnn/biquaternion.h \
     hnn/constants.h \

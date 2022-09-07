@@ -1,5 +1,7 @@
 #pragma once
 
+#include <complex>
+
 namespace hnn // https://github.com/hypernumbernet
 {
 
@@ -29,6 +31,11 @@ constexpr bool fuzzyCompare(const double p1, const double p2)
 constexpr bool fuzzyCompare(const float p1, const float p2)
 {
     return (hAbs(p1 - p2) * 100000.f <= hMin(hAbs(p1), hAbs(p2)));
+}
+
+constexpr bool fuzzyCompare(const std::complex<double>& p1, const std::complex<double>& p2)
+{
+    return fuzzyCompare(p1.real(), p2.real()) && fuzzyCompare(p1.imag(), p2.imag());
 }
 
 } // namespace

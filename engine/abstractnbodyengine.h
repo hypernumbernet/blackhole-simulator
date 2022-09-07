@@ -1,6 +1,6 @@
 #pragma once
 
-#include "global.h"
+#include "bhs.h"
 #include "hnn/vector3.h"
 #include <QThread>
 #include <QVector4D>

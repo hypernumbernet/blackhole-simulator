@@ -1,6 +1,6 @@
 #pragma once
 
-#include "global.h"
+#include "bhs.h"
 #include "camera.h"
 #include "lineshaders.h"
 #include "particleshaders.h"

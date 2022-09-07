@@ -1,5 +1,5 @@
 #include "lineshaders.h"
-#include "global.h"
+#include "bhs.h"
 #include "hnn/octonion.h"
 #include <QOpenGLBuffer>
 
