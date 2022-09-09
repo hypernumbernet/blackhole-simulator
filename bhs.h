@@ -127,5 +127,6 @@ void embedMatrix1x4ToArray(const QGenericMatrix<1, 4, double>& m, T* const a, co
 
 } // namespace
 
+QDebug operator<<(QDebug, const Quaternion&);
 QDebug operator<<(QDebug, const std::complex<double>&);
 QDebug operator<<(QDebug, const Biquaternion&);

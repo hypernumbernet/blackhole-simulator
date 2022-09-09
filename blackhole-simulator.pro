@@ -63,6 +63,7 @@ HEADERS += \
     hnn/constants.h \
     hnn/octonion.h \
     hnn/quaternion.h \
+    hnn/spacetime.h \
     hnn/vector3.h \
     initializerdialog.h \
     lineshaders.h \

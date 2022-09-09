@@ -1,6 +1,7 @@
 #pragma once
 
-#include "vector3.h"
+#include "quaternion.h"
+#include "spacetime.h"
 #include <complex>
 
 namespace hnn // https://github.com/hypernumbernet
@@ -8,10 +9,11 @@ namespace hnn // https://github.com/hypernumbernet
 
 using complex = std::complex<double>;
 
+// https://en.wikipedia.org/wiki/Biquaternion
 class Biquaternion
 {
 public:
-    constexpr Biquaternion() {}
+    Biquaternion() {}
 
     constexpr Biquaternion(const complex& w, const complex& x, const complex& y, const complex& z)
         : m_w(w), m_x(x), m_y(y), m_z(z) {}
@@ -19,8 +21,8 @@ public:
     explicit constexpr Biquaternion(const complex& w)
         : m_w(w), m_x(), m_y(), m_z() {}
 
-    explicit Biquaternion(const Vector3& v)
-        : m_w(), m_x(0.0, v.x()), m_y(0.0, v.y()), m_z(0.0, v.z()) {}
+    explicit Biquaternion(const Quaternion& q)
+        : m_w(q.re(), 0.0), m_x(q.i1(), 0.0), m_y(q.i2(), 0.0), m_z(q.i3(), 0.0) {}
 
     template <typename E>
     constexpr Biquaternion(const double* const a, const E index)
@@ -61,6 +63,14 @@ public:
     void setK (const double a) { m_z.real(a); }
     void setHk(const double a) { m_z.imag(a); }
 
+    void set(const Biquaternion& bq)
+    {
+        m_w = bq.w();
+        m_x = bq.x();
+        m_y = bq.y();
+        m_z = bq.z();
+    }
+
     void set(const complex& w, const complex& x, const complex& y, const complex& z)
     {
         m_w = w;
@@ -69,7 +79,7 @@ public:
         m_z = z;
     }
 
-    void set(const double* const a)
+    void setSpacetimeReal(const double* const a)
     {
         m_w.real(a[0]);
         m_x.imag(a[1]);
@@ -78,7 +88,7 @@ public:
     }
 
     template <typename E>
-    void set(const double* const a, const E index)
+    void setSpacetimeReal(const double* const a, const E index)
     {
         m_w.real(a[index]);
         m_x.imag(a[index + 1]);
@@ -86,9 +96,42 @@ public:
         m_z.imag(a[index + 3]);
     }
 
+    void setSpacetimeReal(const Spacetime& q)
+    {
+        m_w.real(q.w());
+        m_x.imag(q.x());
+        m_y.imag(q.y());
+        m_z.imag(q.z());
+    }
+
+    void setSpacetimeImag(const double* const a)
+    {
+        m_w.imag(a[0]);
+        m_x.real(a[1]);
+        m_y.real(a[2]);
+        m_z.real(a[3]);
+    }
+
+    template <typename E>
+    void setSpacetimeImag(const double* const a, const E index)
+    {
+        m_w.imag(a[index]);
+        m_x.real(a[index + 1]);
+        m_y.real(a[index + 2]);
+        m_z.real(a[index + 3]);
+    }
+
+    void setSpacetimeImag(const Spacetime& q)
+    {
+        m_w.imag(q.w());
+        m_x.real(q.x());
+        m_y.real(q.y());
+        m_z.real(q.z());
+    }
+
     static constexpr Biquaternion zero()
     {
-        return Biquaternion();
+        return Biquaternion(0.0, 0.0, 0.0, 0.0);
     }
 
     static constexpr Biquaternion identity()
@@ -224,7 +267,7 @@ public:
 
     double invariantImag() const
     {
-        return m_w.imag() * m_w.imag() - m_x.real() * m_x.real() - m_y.real() * m_y.real() - m_z.real() * m_z.real();
+        return - m_w.imag() * m_w.imag() + m_x.real() * m_x.real() + m_y.real() * m_y.real() + m_z.real() * m_z.real();
     }
 
     /*
@@ -234,7 +277,7 @@ public:
     */
     Biquaternion lorentzTransformation(const Biquaternion& g) const
     {
-        return g.biconjugated() * (*this) * g.complexConjugated();
+        return (g.biconjugated() * (*this)) * g.complexConjugated();
     }
 
     /*
@@ -495,6 +538,60 @@ public:
         );
     }
 
+    void lorentzTransformation(double& mw, double& mx, double& my, double& mz) const
+    {
+        const double a = h();
+        const double b = i();
+        const double c = j();
+        const double d = k();
+        const double p = re();
+        const double q = hi();
+        const double r = hj();
+        const double s = hk();
+        const double w = mw;
+        const double x = mx;
+        const double y = my;
+        const double z = mz;
+        mw = (a * a + b * b + c * c + d * d + p * p + q * q + r * r + s * s) * w
+            + 2.0 * ((a * b - c * s - p * q + d * r) * x + (a * c - d * q - p * r + b * s) * y + (a * d - b * r + c * q - p * s) * z);
+        mx = (a * a + b * b - c * c - d * d + p * p + q * q - r * r - s * s) * x
+            + 2.0 * ((a * b + c * s - p * q - d * r) * w + (a * s + b * c + d * p + q * r) * y + (b * d + q * s - c * p - a * r) * z);
+        my = (a * a - b * b + c * c - d * d + p * p - q * q + r * r - s * s) * y
+            + 2.0 * ((a * c - b * s - p * r + d * q) * w + (b * c - a * s - d * p + q * r) * x + (c * d + r * s + b * p + a * q) * z);
+        mz = (a * a - b * b - c * c + d * d + p * p - q * q - r * r + s * s) * z
+            + 2.0 * ((a * d + b * r - c * q - p * s) * w + (b * d + a * r + c * p + q * s) * x + (c * d + r * s - b * p - a * q) * y);
+    }
+
+    /**
+     * @brief Lorentz Transformation
+     * @param qu: Quaternion only used for time-space 4 vector
+     */
+    void lorentzTransformation(Quaternion& qu) const
+    {
+        const double a = h();
+        const double b = i();
+        const double c = j();
+        const double d = k();
+        const double p = re();
+        const double q = hi();
+        const double r = hj();
+        const double s = hk();
+        const double w = qu.re();
+        const double x = qu.i1();
+        const double y = qu.i2();
+        const double z = qu.i3();
+        qu.set(
+            (a * a + b * b + c * c + d * d + p * p + q * q + r * r + s * s) * w
+            + 2.0 * ((a * b - c * s - p * q + d * r) * x + (a * c - d * q - p * r + b * s) * y + (a * d - b * r + c * q - p * s) * z),
+            (a * a + b * b - c * c - d * d + p * p + q * q - r * r - s * s) * x
+            + 2.0 * ((a * b + c * s - p * q - d * r) * w + (a * s + b * c + d * p + q * r) * y + (b * d + q * s - c * p - a * r) * z),
+            (a * a - b * b + c * c - d * d + p * p - q * q + r * r - s * s) * y
+            + 2.0 * ((a * c - b * s - p * r + d * q) * w + (b * c - a * s - d * p + q * r) * x + (c * d + r * s + b * p + a * q) * z),
+            (a * a - b * b - c * c + d * d + p * p - q * q - r * r + s * s) * z
+            + 2.0 * ((a * d + b * r - c * q - p * s) * w + (b * d + a * r + c * p + q * s) * x + (c * d + r * s - b * p - a * q) * y)
+        );
+    }
+
 private:
     complex m_w;
     complex m_x;
@@ -506,6 +603,11 @@ inline std::ostream& operator<<(std::ostream& os, const Biquaternion& bq)
 {
     os << bq.w() << ", " << bq.x() << ", " << bq.y() << ", " << bq.z();
     return os;
+}
+
+constexpr bool fuzzyCompare(const Biquaternion& bq1, const Biquaternion& bq2)
+{
+    return fuzzyCompare(bq1.re(), bq2.re()) && fuzzyCompare(bq1.i(), bq2.i()) && fuzzyCompare(bq1.j(), bq2.j()) && fuzzyCompare(bq1.k(), bq2.k());
 }
 
 } // namespace

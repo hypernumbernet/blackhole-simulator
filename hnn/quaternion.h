@@ -188,14 +188,6 @@ public:
         return m_re != a.m_i1 || m_i1 != a.m_i1 || m_i2 != a.m_i2 || m_i3 != a.m_i3;
     }
 
-    bool fuzzyCompare(const Quaternion& a) const
-    {
-        return hnn::fuzzyCompare(m_re, a.m_re) &&
-               hnn::fuzzyCompare(m_i1, a.m_i1) &&
-               hnn::fuzzyCompare(m_i2, a.m_i2) &&
-               hnn::fuzzyCompare(m_i3, a.m_i3);
-    }
-
     const double& operator[](const int index) const
     {
         return array[index];
@@ -235,7 +227,8 @@ public:
     // Argument of complex
     double arg() const
     {
-        return acos(m_re / sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3));
+        //return acos(m_re / sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3));
+        return atan2(sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3), m_re);
     }
 
     // Exponential
@@ -268,45 +261,23 @@ public:
     }
 
     // Exponential - only imaginary part
-    static Quaternion exp(double x, double y, double z)
+    static Quaternion exp(const double x, const double y, const double z)
     {
         const double n = sqrt(x * x + y * y + z * z);
-        double a;
-
         if (n == 0.0)
-            a = 0.0;
-        else
-            a = sin(n) / n;
-
+            return identity();
+        const double a = sin(n) / n;
         return Quaternion(cos(n), x * a, y * a, z * a);
     }
 
     // Exponential - only imaginary part
     static Quaternion exp(const Vector3& v)
     {
-        const double n = sqrt(v.x() * v.x() + v.y() * v.y() + v.z() * v.z());
-        double a = 0.0;
-
+        const double n = v.abs();
         if (n == 0.0)
-            a = 0.0;
-        else
-            a = sin(n) / n;
-
+            return identity();
+        const double a = sin(n) / n;
         return Quaternion(cos(n), v.x() * a, v.y() * a, v.z() * a);
-    }
-
-    // Exponential - Hyperbolic
-    static Quaternion exph(const double x, const double y, const double z)
-    {
-        const double n = sqrt(x * x + y * y + z * z);
-        double a = 0.0;
-
-        if (n == 0.0)
-            a = 0.0;
-        else
-            a = sinh(n) / n;
-
-        return Quaternion(cosh(n), x * a, y * a, z * a);
     }
 
     // Logarithm
@@ -338,16 +309,6 @@ public:
         return Vector3(m_i1 * n / s, m_i2 * n / s, m_i3 * n / s);
     }
 
-    Vector3 lnhV3() const
-    {
-        double n = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
-        if (n == 0.0)
-            return Vector3(0.0, 0.0, 0.0);
-
-        n = atanh(n) / n;
-        return Vector3(m_i1 * n, m_i2 * n, m_i3 * n);
-    }
-
     Vector3 lnV3Half() const
     {
         const double v = sqrt(m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
@@ -356,7 +317,7 @@ public:
 
         double a;
         if (m_re == 0.0) // v == 1
-            a = PI / (double)2;
+            a = PI * 0.5;
         else
             a = atan(v / m_re) / v;
         return Vector3(m_i1 * a, m_i2 * a, m_i3 * a);
@@ -398,10 +359,10 @@ public:
         const double y = axis.y();
         const double z = axis.z();
 
-        const double aa = a*a, bb = b*b, cc = c*c, dd = d*d;
-        const double rx = (aa + bb - cc - dd) * x + 2.0f * ((b * c + a * d) * y + (b * d - a * c) * z);
-        const double ry = (aa - bb + cc - dd) * y + 2.0f * ((b * c - a * d) * x + (c * d + a * b) * z);
-        const double rz = (aa - bb - cc + dd) * z + 2.0f * ((b * d + a * c) * x + (c * d - a * b) * y);
+        const double aa = a * a, bb = b * b, cc = c * c, dd = d * d;
+        const double rx = (aa + bb - cc - dd) * x + 2. * ((b * c + a * d) * y + (b * d - a * c) * z);
+        const double ry = (aa - bb + cc - dd) * y + 2. * ((b * c - a * d) * x + (c * d + a * b) * z);
+        const double rz = (aa - bb - cc + dd) * z + 2. * ((b * d + a * c) * x + (c * d - a * b) * y);
 
         axis.setX(rx);
         axis.setY(ry);
@@ -614,13 +575,6 @@ public:
         return rotation(cross, angle);
     }
 
-    std::string toString() const
-    {
-        std::ostringstream o;
-        o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3;
-        return o.str();
-    }
-
 private:
     union
         {
@@ -634,5 +588,19 @@ private:
             double array[4];
         };
 };
+
+inline std::ostream& operator<<(std::ostream& os, const Quaternion& qu)
+{
+    os << qu.re() << ", " << qu.i1() << ", " << qu.i2() << ", " << qu.i3();
+    return os;
+}
+
+inline bool fuzzyCompare(const Quaternion& a, const Quaternion& b)
+{
+    return fuzzyCompare(a.re(), b.re()) &&
+           fuzzyCompare(a.i1(), b.i1()) &&
+           fuzzyCompare(a.i2(), b.i2()) &&
+           fuzzyCompare(a.i3(), b.i3());
+}
 
 } // namespace
