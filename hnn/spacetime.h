@@ -11,6 +11,7 @@ using complex = std::complex<double>;
 /**
  * @brief The Spacetime class
  * The part of Biquaternion {real, hi, hj, hk}
+ * https://en.wikipedia.org/wiki/Biquaternion
  */
 class Spacetime
 {

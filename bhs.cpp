@@ -37,3 +37,11 @@ QDebug operator<<(QDebug q, const Biquaternion& x)
     q << o.str().c_str();
     return q;
 }
+
+QDebug operator<<(QDebug q, const Spacetime& x)
+{
+    std::ostringstream o;
+    o << x;
+    q << o.str().c_str();
+    return q;
+}
