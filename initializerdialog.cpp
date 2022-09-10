@@ -209,6 +209,7 @@ bool InitializerDialog::validate()
             (m_sim.engine == bhs::Engine::G4D3D
              || m_sim.engine == bhs::Engine::G3D4DR1
              || m_sim.engine == bhs::Engine::GravityCollision
+             || m_sim.engine == bhs::Engine::Relativity2
              ))
     {
         QMessageBox::information(this, tr("Information"), tr("The GPU Engine is not implemented"));

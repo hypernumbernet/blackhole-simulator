@@ -1,15 +1,14 @@
 #pragma once
 
 #include "engine/3d/initializer3d.h"
-#include "calculation3d4dr1.h"
 
 using namespace hnn;
 
 template <typename T>
-class Initializer3D4DR1 : protected AbstractInitializer
+class InitializerRelativity2 : protected AbstractInitializer
 {
 public:
-    Initializer3D4DR1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    InitializerRelativity2(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
         , m_3d(sim, engine)
@@ -21,16 +20,11 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    QGenericMatrix<1, 4, double> fromVector3(const Vector3& v3) const
+    Spacetime fromVector3(const Vector3& v) const
     {
-        QGenericMatrix<4, 4, double> lt;
-        Calculation3D4DR1::lorentzTransformation(lt, -v3, m_engine->speedOfLightInv());
-        QGenericMatrix<1, 4, double> speed;
-        speed(0, 0) = SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame();
-        speed(1, 0) = 0.0;
-        speed(2, 0) = 0.0;
-        speed(3, 0) = 0.0;
-        return lt * speed;
+        Spacetime st(SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame(), 0., 0., 0.);
+        st.lorentzTransformation(v, m_engine->speedOfLightInv());
+        return st;
     }
 
     void fromInitializer3D()
@@ -46,7 +40,10 @@ private:
             quint64 i4 = i * 4;
             const Vector3 v((double)velocities[i3], (double)velocities[i3 + 1], (double)velocities[i3 + 2]);
             auto vel4 = fromVector3(v);
-            bhs::embedMatrix1x4ToArray<T>(vel4, vels, i4);
+            vels[i4    ] = (T)vel4.w();
+            vels[i4 + 1] = (T)vel4.x();
+            vels[i4 + 2] = (T)vel4.y();
+            vels[i4 + 3] = (T)vel4.z();
         }
         for (quint64 i = 0; i < num * 4; ++i)
         {

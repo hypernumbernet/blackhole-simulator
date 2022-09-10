@@ -10,8 +10,9 @@ QHash<bhs::Engine, QString>& UpdateUi::engineLabel()
 {
     static QHash<bhs::Engine, QString> map = {
         {bhs::Engine::G3D, tr("Gravity")},
-        {bhs::Engine::G3D4DR1, tr("Gravity Lorentz Trans.")},
         {bhs::Engine::GravityCollision, tr("Gravity and Collision")},
+        {bhs::Engine::G3D4DR1, tr("Relativity 1")},
+        {bhs::Engine::Relativity2, tr("Relativity 2")},
         {bhs::Engine::G3D4D, tr("Gravity 3S-Velocity")},
         {bhs::Engine::G4D3D, tr("Gravity 3S-Coordinate")},
     };
@@ -22,8 +23,9 @@ QList<bhs::Engine>& UpdateUi::engineUse()
 {
     static QList<bhs::Engine> list = {
         bhs::Engine::G3D,
-        bhs::Engine::G3D4DR1,
         bhs::Engine::GravityCollision,
+        bhs::Engine::G3D4DR1,
+        bhs::Engine::Relativity2,
         bhs::Engine::G3D4D,
         bhs::Engine::G4D3D,
     };

@@ -162,6 +162,40 @@ public:
         return Spacetime(cosh(a), v.x() * s, v.y() * s, v.z() * s);
     }
 
+    static Spacetime transformator(const Vector3& v, const double speedOfLightInv)
+    {
+        const double l = v.abs();
+        if (l == 0.)
+            return identity();
+        const double a = atanh(l * speedOfLightInv);
+        const Vector3 dir = v / l;
+        return Spacetime::exp(0.5 * a, dir.x(), dir.y(), dir.z());
+    }
+
+    /**
+     * @brief versor angles from momentum
+     * p = mvγ
+     * {γ : Lorentz factor : 1 / sqrt(1 - v^2 / c^2)}
+     * p = mv / sqrt(1 - v^2 / c^2)
+     * p^2 (1 -  v^2 / c^2)= m^2 v^2
+     * m^2 v^2 + p^2 v^2 / c^2 = p^2
+     * (m^2 + p^2 / c^2) v^2 = p^2
+     * v = p / sqrt(m^2 + |p|^2 / c^2 )
+     * v -> c (p -> ∞, m -> ∞)
+     * v = c (m = 0)
+     * @param p momentum
+     * @param speed of light on your scale
+     * @return versor angles
+     */
+    static Vector3 versorAngles(const Vector3& p, const double m, const double speedOfLight)
+    {
+        const Vector3 v = p / sqrt(m * m + p.norm() / (speedOfLight * speedOfLight));
+        const double l = v.abs();
+        const double a = atanh(l / speedOfLight);
+        const double b = a / l;
+        return Vector3(b * v.x(), b * v.y(), b * v.z());
+    }
+
     /**
      * @brief Lorentz Transformation by Biquaternion
      * @param g
@@ -185,6 +219,18 @@ public:
         m_x = (p * p + q * q - r * r - s * s) * x + 2. * q * ( - p * w + r * y + s * z);
         m_y = (p * p - q * q + r * r - s * s) * y + 2. * r * ( - p * w + q * x + s * z);
         m_z = (p * p - q * q - r * r + s * s) * z + 2. * s * ( - p * w + q * x + r * y);
+    }
+
+    void lorentzTransformation(const Vector3& v, const double speedOfLightInv)
+    {
+        Spacetime g;
+        const double l = v.abs();
+        if (l == 0.)
+            return;
+        const double a = atanh(l * speedOfLightInv);
+        const Vector3 dir = v / l;
+        g = Spacetime::exp(0.5 * a, dir.x(), dir.y(), dir.z());
+        lorentzTransformation(g);
     }
 
 private:

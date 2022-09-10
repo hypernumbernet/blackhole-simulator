@@ -3,18 +3,9 @@
 #include "engine/abstractinitializer.h"
 #include "engine/abstractnbodyengine.h"
 
-template <typename T> class Initializer3D4D;
-template <typename T> class Initializer3D4DR1;
-template <typename T> class Initializer4D3D;
-template <typename T> class InitializerGravityCollision;
-
 template <typename T>
 class Initializer3D : protected AbstractInitializer
 {
-    friend Initializer3D4D<T>;
-    friend Initializer3D4DR1<T>;
-    friend Initializer4D3D<T>;
-    friend InitializerGravityCollision<T>;
 
 public:
 
@@ -24,11 +15,11 @@ public:
     {
     }
 
-private:
     void initRandomCube() override;
     void initRandomSphere(double) override;
     void initCustom() override;
 
+private:
     void setRotation();
     AbstractNBodyEngine<T>* const m_engine;
 };

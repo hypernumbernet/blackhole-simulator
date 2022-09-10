@@ -64,6 +64,7 @@ void ComputeShaders::bind(const AbstractNBodyEngine<float>* const engine)
     case bhs::Engine::G3D4D:
     case bhs::Engine::G3D4DR1:
     case bhs::Engine::G4D3D:
+    case bhs::Engine::Relativity2:
         m_programTimeProgressUsing = &m_programTimeProgress3D4DFloat;
         m_programInteractionUsing = &m_programInteraction3D4DFloat;
         break;
@@ -83,6 +84,7 @@ void ComputeShaders::bind(const AbstractNBodyEngine<double>* const engine)
     case bhs::Engine::G3D4D:
     case bhs::Engine::G3D4DR1:
     case bhs::Engine::G4D3D:
+    case bhs::Engine::Relativity2:
         m_programTimeProgressUsing = &m_programTimeProgress3D4DDouble;
         m_programInteractionUsing = &m_programInteraction3D4DDouble;
         break;

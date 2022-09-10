@@ -46,6 +46,11 @@ public:
         m_x = a[i]; m_y = a[i + 1]; m_z = a[i + 2];
     }
 
+    static constexpr Vector3 zero()
+    {
+        return Vector3(0., 0., 0.);
+    }
+
     const Vector3 operator+(const Vector3& a) const
     {
         return Vector3(m_x + a.m_x, m_y + a.m_y, m_z + a.m_z);

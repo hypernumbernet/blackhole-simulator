@@ -14,6 +14,11 @@
 #include "engine/GravityCollision/EngineGravityCollision.h"
 #include "engine/GravityCollision/CoreFloatGravityCollision.h"
 #include "engine/GravityCollision/CoreDoubleGravityCollision.h"
+#include "engine/Relativity2/EngineRelativity2.h"
+#include "engine/Relativity2/CoreFloatRelativity2.h"
+#include "engine/Relativity2/CoreDoubleRelativity2.h"
+
+using namespace bhs;
 
 ParticleShaders::ParticleShaders(ThreadAdmin* const threadAdmin)
     : m_threadAdmin(threadAdmin)
@@ -52,63 +57,71 @@ bool ParticleShaders::initialize(const int screenHeight)
     return true;
 }
 
-void ParticleShaders::setNBodyEngine(const bhs::SimCondition& sim)
+void ParticleShaders::setNBodyEngine(const SimCondition& sim)
 {
     m_precision = sim.precision;
     int coordinateVectorSize = 3;
     int velocityVectorSize = 3;
 
-    if (sim.precision == bhs::Precision::Float)
+    if (sim.precision == Precision::Float)
     {
         switch (sim.engine)
         {
-        case bhs::Engine::G3D:
+        case Engine::G3D:
             m_NBodyEngineFloat = new Engine3D<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D::factory);
             break;
-        case bhs::Engine::G3D4D:
+        case Engine::G3D4D:
             m_NBodyEngineFloat = new Engine3D4D<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4D::factory);
             velocityVectorSize = 4;
             break;
-        case bhs::Engine::G3D4DR1:
+        case Engine::G3D4DR1:
             m_NBodyEngineFloat = new Engine3D4DR1<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4DR1::factory);
             velocityVectorSize = 4;
             break;
-        case bhs::Engine::G4D3D:
+        case Engine::G4D3D:
             m_NBodyEngineFloat = new Engine4D3D<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat4D3D::factory);
             break;
-        case bhs::Engine::GravityCollision:
+        case Engine::GravityCollision:
             m_NBodyEngineFloat = new EngineGravityCollision<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatGravityCollision::factory);
+            break;
+        case Engine::Relativity2:
+            m_NBodyEngineFloat = new EngineRelativity2<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatRelativity2::factory);
             break;
         }
     } else {
         switch (sim.engine)
         {
-        case bhs::Engine::G3D:
+        case Engine::G3D:
             m_NBodyEngineDouble = new Engine3D<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D::factory);
             break;
-        case bhs::Engine::G3D4D:
+        case Engine::G3D4D:
             m_NBodyEngineDouble = new Engine3D4D<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D4D::factory);
             velocityVectorSize = 4;
             break;
-        case bhs::Engine::G3D4DR1:
+        case Engine::G3D4DR1:
             m_NBodyEngineDouble = new Engine3D4DR1<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D4DR1::factory);
             velocityVectorSize = 4;
             break;
-        case bhs::Engine::G4D3D:
+        case Engine::G4D3D:
             m_NBodyEngineDouble = new Engine4D3D<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble4D3D::factory);
             break;
-        case bhs::Engine::GravityCollision:
+        case Engine::GravityCollision:
             m_NBodyEngineDouble = new EngineGravityCollision<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleGravityCollision::factory);
+            break;
+        case Engine::Relativity2:
+            m_NBodyEngineDouble = new EngineRelativity2<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleRelativity2::factory);
             break;
         }
     }
@@ -147,7 +160,7 @@ void ParticleShaders::updateGL()
         return;
 
     const quint64 VECTOR_SIZE = 3;
-    if (m_precision == bhs::Precision::Float)
+    if (m_precision == Precision::Float)
     {
         quint64 size = numberOfParticle() * VECTOR_SIZE * sizeof(float);
         glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, size, coordinates<float>());
@@ -181,7 +194,7 @@ void ParticleShaders::resize(int height)
     m_pointSizeScale = (double)height / (double)m_initHeight;
 }
 
-void ParticleShaders::reset(const bhs::SimCondition& sim)
+void ParticleShaders::reset(const SimCondition& sim)
 {
     if (m_NBodyEngineFloat)
     {
@@ -229,7 +242,7 @@ quint64 ParticleShaders::numberOfParticle() const
 const void* ParticleShaders::ssboData(SSBODataStruct& result, int coordinateVectorSize, int velocityVectorSize) const
 {
     const void* ret = nullptr;
-    if (m_precision == bhs::Precision::Float)
+    if (m_precision == Precision::Float)
         ret = makeSSBOData<float>(result, coordinateVectorSize, velocityVectorSize);
     else
         ret = makeSSBOData<double>(result, coordinateVectorSize, velocityVectorSize);
@@ -254,7 +267,7 @@ void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVector
     SSBODataStruct ssboDataStruct;
     result.data = ssboData(ssboDataStruct, coordinateVectorSize, velocityVectorSize);
 
-    if (m_precision == bhs::Precision::Float)
+    if (m_precision == Precision::Float)
     {
         result.dataSize = sizeof(float);
         result.precision = GL_FLOAT;
@@ -275,7 +288,7 @@ void ParticleShaders::GetSSBOStruct(SSBODataStruct& result, int coordinateVector
 
 QString ParticleShaders::particleData()
 {
-    if (m_precision == bhs::Precision::Float)
+    if (m_precision == Precision::Float)
         return particleDataToString<float>();
     else
         return particleDataToString<double>();
