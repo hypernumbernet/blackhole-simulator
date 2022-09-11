@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/abstractnbodyengine.h"
-#include "bhs.h"
 
 using namespace hnn;
 
@@ -31,27 +30,27 @@ public:
             i3 = i * 3;
             angle.set(angles[i3], angles[i3 + 1], angles[i3 + 2]);
 
-//            Spacetime st(m_ct);
-//            st.lorentzTransformation(angle);
-//            double tau = m_ct / st.w();
-//            tau *= tau;
-//            if ( ! std::isfinite(tau))
-//            {
-//                //qDebug() << "tau: " << tau << i;
-//                continue;
-//            }
-//            coordinates[i3    ] -= st.x() * tau;
-//            coordinates[i3 + 1] -= st.y() * tau;
-//            coordinates[i3 + 2] -= st.z() * tau;
+            Spacetime st(m_ct);
+            st.lorentzTransformation(angle);
+            double tau = m_ct / st.w();
+            //tau *= tau;
+            if ( ! std::isfinite(tau))
+            {
+                //qDebug() << "tau: " << tau << i;
+                continue;
+            }
+            coordinates[i3    ] -= st.x() * tau;
+            coordinates[i3 + 1] -= st.y() * tau;
+            coordinates[i3 + 2] -= st.z() * tau;
 
-            angle.set(Spacetime::velocities(angle, m_ct));
+            //angle.set(Spacetime::velocities(angle, m_ct));
             //if ( ! isfinite(angle.x()))
             //{
             //    qDebug() << "angles" << i << angle;
             //}
-            coordinates[i3    ] += angle.x();
-            coordinates[i3 + 1] += angle.y();
-            coordinates[i3 + 2] += angle.z();
+            //coordinates[i3    ] += angle.x();
+            //coordinates[i3 + 1] += angle.y();
+            //coordinates[i3 + 2] += angle.z();
         }
     }
 
