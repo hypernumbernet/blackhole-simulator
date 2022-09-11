@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/abstractnbodyengine.h"
+#include "bhs.h"
 
 using namespace hnn;
 
@@ -29,18 +30,28 @@ public:
         {
             i3 = i * 3;
             angle.set(angles[i3], angles[i3 + 1], angles[i3 + 2]);
-            Spacetime st(m_ct);
-            st.lorentzTransformation(angle);
-            double tau = m_ct / st.w();
-            tau *= tau;
-            if ( ! std::isfinite(tau))
-            {
-                //qDebug() << "tau: " << tau << i;
-                continue;
-            }
-            coordinates[i3    ] -= st.x() * tau;
-            coordinates[i3 + 1] -= st.y() * tau;
-            coordinates[i3 + 2] -= st.z() * tau;
+
+//            Spacetime st(m_ct);
+//            st.lorentzTransformation(angle);
+//            double tau = m_ct / st.w();
+//            tau *= tau;
+//            if ( ! std::isfinite(tau))
+//            {
+//                //qDebug() << "tau: " << tau << i;
+//                continue;
+//            }
+//            coordinates[i3    ] -= st.x() * tau;
+//            coordinates[i3 + 1] -= st.y() * tau;
+//            coordinates[i3 + 2] -= st.z() * tau;
+
+            angle.set(Spacetime::velocities(angle, m_ct));
+            //if ( ! isfinite(angle.x()))
+            //{
+            //    qDebug() << "angles" << i << angle;
+            //}
+            coordinates[i3    ] += angle.x();
+            coordinates[i3 + 1] += angle.y();
+            coordinates[i3 + 2] += angle.z();
         }
     }
 
@@ -60,7 +71,7 @@ public:
 
         double d1, d2, d3, r, inv, theta, ma, mb;
         quint64 i, j, a, b;
-        Vector3 momentumDeltaA, momentumDeltaB, angleA, angleB;
+        Vector3 momentumDelta, angleA, angleB;
 
         double* deltaAngles = new double[number3]();
 
@@ -87,10 +98,9 @@ public:
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
-                momentumDeltaA.set(  d1,   d2,   d3);
-                momentumDeltaB.set(- d1, - d2, - d3);
-                angleA.set(Spacetime::versorAngles(momentumDeltaA, ma, speedOfLight));
-                angleB.set(Spacetime::versorAngles(momentumDeltaB, mb, speedOfLight));
+                momentumDelta.set(d1, d2, d3);
+                angleA.set(Spacetime::versorAngles(  momentumDelta, ma, speedOfLight));
+                angleB.set(Spacetime::versorAngles(- momentumDelta, mb, speedOfLight));
                 deltaAngles[a    ] += angleA.x();
                 deltaAngles[a + 1] += angleA.y();
                 deltaAngles[a + 2] += angleA.z();
@@ -106,7 +116,7 @@ public:
             angles[i] += deltaAngles[i];
             if ( ! isfinite(angles[i]))
             {
-                qDebug() << "angles" << i << angles[i];
+                //qDebug() << "angles" << i << angles[i];
                 angles[i] = r;
             }
         }

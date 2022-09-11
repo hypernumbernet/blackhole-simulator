@@ -205,6 +205,16 @@ public:
         return Vector3(b * p.x(), b * p.y(), b * p.z());
     }
 
+    static Vector3 velocities(const Vector3& angles, const double speedOfLight)
+    {
+        const double a = angles.abs();
+        if (a == 0.)
+            return Vector3::zero();
+        const double beta = tanh(a);
+        const double v = beta * speedOfLight / a;
+        return Vector3(v * angles.x(), v * angles.y(), v * angles.z());
+    }
+
     /**
      * @brief Lorentz Transformation by Biquaternion
      * @param g
