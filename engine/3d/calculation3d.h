@@ -44,7 +44,7 @@ public:
         double d1, d2, d3, r, inv, theta, ma, mb;
         quint64 a, b, i, j;
 
-        double* vels = new double[number3]();
+        double* acceleration = new double[number3]();
 
         for (i = m_interactionStart; i < m_interactionEnd; ++i)
         {
@@ -69,19 +69,19 @@ public:
                 d3 *= theta;
                 ma = masses[i];
                 mb = masses[j];
-                vels[a    ] += d1 * mb;
-                vels[a + 1] += d2 * mb;
-                vels[a + 2] += d3 * mb;
-                vels[b    ] -= d1 * ma;
-                vels[b + 1] -= d2 * ma;
-                vels[b + 2] -= d3 * ma;
+                acceleration[a    ] += d1 * mb;
+                acceleration[a + 1] += d2 * mb;
+                acceleration[a + 2] += d3 * mb;
+                acceleration[b    ] -= d1 * ma;
+                acceleration[b + 1] -= d2 * ma;
+                acceleration[b + 2] -= d3 * ma;
             }
         }
         bhs::interactionMutex.lock();
         for (i = 0; i < number3; ++i)
         {
             r = velocities[i];
-            velocities[i] += vels[i];
+            velocities[i] += acceleration[i];
             if ( ! isfinite(velocities[i]))
             {
                 //qDebug() << "VEL" << i << vels[i];
@@ -90,7 +90,7 @@ public:
         }
         bhs::interactionMutex.unlock();
 
-        delete[] vels;
+        delete[] acceleration;
     }
 
 private:

@@ -21,83 +21,98 @@ public:
     void calculateTimeProgress() const
     {
         double* const coordinates = m_engine->coordinates();
-        const double* const velocities = m_engine->velocities();
-
-        quint64 i4, i3;
+        const double* const angles = m_engine->velocities();
+        quint64 i3;
+        Vector3 angle;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            i4 = i * 4;
             i3 = i * 3;
-            double tau = m_ct / velocities[i4];
+            angle.set(angles[i3], angles[i3 + 1], angles[i3 + 2]);
+            Spacetime st(m_ct);
+            st.lorentzTransformation(angle);
+            double tau = m_ct / st.w();
             tau *= tau;
-            if (!std::isfinite(tau))
+            if ( ! std::isfinite(tau))
             {
-                //qDebug() << "tau: " << tau;
+                //qDebug() << "tau: " << tau << i;
                 continue;
             }
-            coordinates[i3    ] += velocities[i4 + 1] * tau;
-            coordinates[i3 + 1] += velocities[i4 + 2] * tau;
-            coordinates[i3 + 2] += velocities[i4 + 3] * tau;
+            coordinates[i3    ] -= st.x() * tau;
+            coordinates[i3 + 1] -= st.y() * tau;
+            coordinates[i3 + 2] -= st.z() * tau;
         }
     }
 
     void calculateInteraction() const
     {
         const double* const coordinates = m_engine->coordinates();
-        double* const velocities = m_engine->velocities();
+        double* const angles = m_engine->velocities();
         const double* const masses = m_engine->masses();
 
         const double timePerFrame = m_engine->timePerFrame();
         const double gravitationalConstant = m_engine->gravitationalConstant();
         const double timeG = timePerFrame * gravitationalConstant;
         quint64 numberOfParticles = m_engine->numberOfParticle();
+        const quint64 number3 = numberOfParticles * 3;
         const double boundaryToInvalidate = AbstractNBodyEngine<double>::BOUNDARY_TO_INVALIDATE;
+        const double speedOfLight = SPEED_OF_LIGHT * m_engine->scaleInv();
 
-        double d1, d2, d3, r, inv, theta;
-        quint64 i3, j3, i4;
-        Spacetime speed;
-        Vector3 g;
+        double d1, d2, d3, r, inv, theta, ma, mb;
+        quint64 i, j, a, b;
+        Vector3 momentumDeltaA, momentumDeltaB, angleA, angleB;
 
-        for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
+        double* deltaAngles = new double[number3]();
+
+        for (i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            i3 = i * 3;
-            i4 = i * 4;
-
-            speed.setW(velocities[i4    ]);
-            speed.setX(velocities[i4 + 1]);
-            speed.setY(velocities[i4 + 2]);
-            speed.setZ(velocities[i4 + 3]);
-
-            for (quint64 j = 0; j < numberOfParticles; ++j)
+            a = i * 3;
+            for (j = i + 1; j < numberOfParticles; ++j)
             {
-                if (i == j)
-                    continue;
+                b = j * 3;
 
-                j3 = j * 3;
-
-                d1 = coordinates[j3    ] - coordinates[i3    ];
-                d2 = coordinates[j3 + 1] - coordinates[i3 + 1];
-                d3 = coordinates[j3 + 2] - coordinates[i3 + 2];
+                d1 = coordinates[b    ] - coordinates[a    ];
+                d2 = coordinates[b + 1] - coordinates[a + 1];
+                d3 = coordinates[b + 2] - coordinates[a + 2];
 
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
                 if (r <= boundaryToInvalidate)
                     continue;
 
                 inv = 1.0 / r;
-                theta = inv * inv * inv * timeG * masses[j];
+                ma = masses[i];
+                mb = masses[j];
+                theta = inv * inv * inv * timeG * ma * mb;
+
                 d1 *= theta;
                 d2 *= theta;
                 d3 *= theta;
-
-                g.set(-d1, -d2, -d3);
-                speed.lorentzTransformation(g, m_speedOfLightInv);
+                momentumDeltaA.set(  d1,   d2,   d3);
+                momentumDeltaB.set(- d1, - d2, - d3);
+                angleA.set(Spacetime::versorAngles(momentumDeltaA, ma, speedOfLight));
+                angleB.set(Spacetime::versorAngles(momentumDeltaB, mb, speedOfLight));
+                deltaAngles[a    ] += angleA.x();
+                deltaAngles[a + 1] += angleA.y();
+                deltaAngles[a + 2] += angleA.z();
+                deltaAngles[b    ] += angleB.x();
+                deltaAngles[b + 1] += angleB.y();
+                deltaAngles[b + 2] += angleB.z();
             }
-            velocities[i4    ] = speed.w();
-            velocities[i4 + 1] = speed.x();
-            velocities[i4 + 2] = speed.y();
-            velocities[i4 + 3] = speed.z();
         }
+        bhs::interactionMutex.lock();
+        for (i = 0; i < number3; ++i)
+        {
+            r = angles[i];
+            angles[i] += deltaAngles[i];
+            if ( ! isfinite(angles[i]))
+            {
+                qDebug() << "angles" << i << angles[i];
+                angles[i] = r;
+            }
+        }
+        bhs::interactionMutex.unlock();
+
+        delete[] deltaAngles;
     }
 
 private:

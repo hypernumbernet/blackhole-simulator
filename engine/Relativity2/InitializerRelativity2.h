@@ -20,37 +20,23 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    Spacetime fromVector3(const Vector3& v) const
-    {
-        Spacetime st(SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame(), 0., 0., 0.);
-        st.lorentzTransformation(v, m_engine->speedOfLightInv());
-        return st;
-    }
-
     void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
-        T* const velocities = m_engine->velocities();
-
-        T* const vels = new T[num * 4];
+        T* const angles = m_engine->velocities();
+        T* const masses = m_engine->masses();
+        const double speedOfLight = m_engine->scaleInv() * SPEED_OF_LIGHT;
 
         for (quint64 i = 0; i < num; ++i)
         {
-            quint64 i3 = i * 3;
-            quint64 i4 = i * 4;
-            const Vector3 v((double)velocities[i3], (double)velocities[i3 + 1], (double)velocities[i3 + 2]);
-            auto vel4 = fromVector3(v);
-            vels[i4    ] = (T)vel4.w();
-            vels[i4 + 1] = (T)vel4.x();
-            vels[i4 + 2] = (T)vel4.y();
-            vels[i4 + 3] = (T)vel4.z();
+            const quint64 i3 = i * 3;
+            Vector3 p(angles[i3], angles[i3 + 1], angles[i3 + 2]);
+            p *= masses[i];
+            const Vector3 a = Spacetime::versorAngles(p, masses[i], speedOfLight);
+            angles[i3    ] = a.x();
+            angles[i3 + 1] = a.y();
+            angles[i3 + 2] = a.z();
         }
-        for (quint64 i = 0; i < num * 4; ++i)
-        {
-            velocities[i] = vels[i];
-        }
-
-        delete[] vels;
     }
 
     AbstractNBodyEngine<T>* const m_engine;

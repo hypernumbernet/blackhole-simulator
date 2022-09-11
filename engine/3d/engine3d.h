@@ -15,9 +15,9 @@ public:
     {
         this->setNumberOfParticles();
 
-        this->m_masses = new T[this->m_numberOfParticles];
         this->m_coordinates = new T[this->m_numberOfParticles * 3];
         this->m_velocities = new T[this->m_numberOfParticles * 3];
+        this->m_masses = new T[this->m_numberOfParticles];
 
         this->setTimePerFrame(sim.timePerFrame);
 
