@@ -131,7 +131,7 @@ https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
 `q = (q0 + q1 h) + (q2 + q3 h) i + (q4 + q5 h) j + (q6 + q7 h) k`
 
-双四元数は二種類の共役を持ちます。四元数部分を共役したものと複素数部分を共役したものです。
+双四元数は2種類の共役を持ちます。四元数部分を共役したものと複素数部分を共役したものです。
 
 `q* = (q0 + q1 h) - (q2 + q3 h) i - (q4 + q5 h) j - (q6 + q7 h) k`
 
@@ -147,13 +147,13 @@ https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
 `g* s g~ (Lorentz Transformation)`
 
-g として二種類のグループが定義できます。単位四元数と上記の単位時空四元数です。時空四元数はここでの呼称で、ソースコード中に Spacetime class として定義しています。
+g は2つの部分を持っています。単位四元数と上記 s の単位時空四元数です。時空四元数はここでの呼称で、ソースコード中に Spacetime class として定義しています。
 
-`g = q0 + q2 i + q4 j + q6 k (G∩H)`
+`g = q0 + q2 i + q4 j + q6 k (単位四元数)`
 
 または
 
-`g = q1 + q3 hi + q5 hj + q7 hk (G∩M)`
+`g = q1 + q3 hi + q5 hj + q7 hk (単位時空四元数)`
 
 ここでは、後者の単位時空四元数の使い方を書きます。指数関数を使って以下のように書けます。
 
@@ -175,23 +175,23 @@ g として二種類のグループが定義できます。単位四元数と上
 
 双四元数によるローレンツ変換を成分として書くと、
 
-`g  =   ha + ib + jc + kd + p + hiq + hjr + hks`
+`g  = ia + jb + kc + p + hiq + hjr + hks`
 
-`g* =   ha - ib - jc - kd + p - hiq - hjr - hks`
+`g* = - ia - jb - kc + p - hiq - hjr - hks`
 
-`g~ = - ha + ib + jc + kd + p - hiq - hjr - hks`
+`g~ = ia + jb + kc + p - hiq - hjr - hks`
 
 `f = w + hix + hjy + hkz`
 
 と定義して、
 
-`g* f g~ = (aa + bb + cc + dd + pp + qq + rr + ss)w + 2((ab - cs - pq + dr)x + (ac - dq - pr + bs)y + (ad - br + cq - ps)z)`
+`g* f g~ = (aa + bb + cc + pp + qq + rr + ss)w + 2((- bs + cr - pq)x + (as - cq - pr)y + (- ar + bq - ps)z)`
 
-` + hi((aa + bb - cc - dd + pp + qq - rr - ss)x + 2((ab + cs - pq - dr)w + (as + bc + dp + qr)y + (bd + qs - cp - ar)z))`
+` + hi((aa - bb - cc + pp + qq - rr - ss)x + 2((bs - cr - pq)w + (ab + cp + qr)y + (ac - bp + qs)z))`
 
-` + hj((aa - bb + cc - dd + pp - qq + rr - ss)y + 2((ac - bs - pr + dq)w + (bc - as - dp + qr)x + (cd + rs + bp + aq)z))`
+` + hj((- aa + bb - cc + pp - qq + rr - ss)y + 2((- as + cq - pr)w + (ab - cp + qr)x + (bc + ap + rs)z))`
 
-` + hk((aa - bb - cc + dd + pp - qq - rr + ss)z + 2((ad + br - cq - ps)w + (bd + ar + cp + qs)x + (cd + rs - bp - aq)y))`
+` + hk((- aa - bb + cc + pp - qq - rr + ss)z + 2((ar - bq - ps)w + (ac + bp + qs)x + (bc - ap + rs)y))`
 
 となります。つまり、再度時空四元数となります。 `g = p + hiq + hjr + hks` だけを使うとすれば、
 
