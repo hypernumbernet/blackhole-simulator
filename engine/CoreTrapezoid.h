@@ -1,24 +1,21 @@
 #pragma once
 
 #include "abstractenginecore.h"
-#include "abstractnbodyengine.h"
 
 class CoreTrapezoid : public AbstractEngineCore
 {
     Q_OBJECT
 
 public:
-    explicit CoreTrapezoid(AbstractNBodyEngine<float>* const engine, const int threadNumber)
-        : m_hasRangeTimeProgress(engine->timeProgressRanges().at(threadNumber).end -
-                                 engine->timeProgressRanges().at(threadNumber).start > 0)
-        , m_hasRangeInteraction(engine->interactionRanges().at(threadNumber).end -
-                                engine->interactionRanges().at(threadNumber).start > 0)
+    explicit CoreTrapezoid(const bhs::IntRange& timeProgressRange, const bhs::IntRange& interactionRange)
+        : m_hasRangeTimeProgress(timeProgressRange.end - timeProgressRange.start > 0)
+        , m_hasRangeInteraction(interactionRange.end - interactionRange.start > 0)
     {
     }
 
-    static AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    static AbstractEngineCore* factory(const bhs::IntRange& timeProgressRange, const bhs::IntRange& interactionRange)
     {
-        return new CoreTrapezoid(engine, threadNumber);
+        return new CoreTrapezoid(timeProgressRange, interactionRange);
     }
 
     bool hasRangeTimeProgress() const override

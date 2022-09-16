@@ -144,7 +144,7 @@ void ThreadAdmin::initialize(AbstractNBodyEngine<float>* const engine, coreFacto
 {
     for (int i = 0; i < size(); ++i)
     {
-        at(i)->initialize(factory(engine, i));
+        at(i)->initialize(factory(engine->timeProgressRanges().at(i), engine->interactionRanges().at(i)));
     }
     m_computeShaders->bind(engine);
 }

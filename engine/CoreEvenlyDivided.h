@@ -1,22 +1,20 @@
 #pragma once
 
 #include "abstractenginecore.h"
-#include "abstractnbodyengine.h"
 
 class CoreEvenlyDivided : public AbstractEngineCore
 {
     Q_OBJECT
 
 public:
-    explicit CoreEvenlyDivided(AbstractNBodyEngine<float>* const engine, const int threadNumber)
-        : m_hasRangeTimeProgress(engine->timeProgressRanges().at(threadNumber).end -
-                                 engine->timeProgressRanges().at(threadNumber).start > 0)
+    explicit CoreEvenlyDivided(const bhs::IntRange& timeProgressRange)
+        : m_hasRangeTimeProgress(timeProgressRange.end - timeProgressRange.start > 0)
     {
     }
 
-    static AbstractEngineCore* factory(AbstractNBodyEngine<float>* const engine, const int threadNumber)
+    static AbstractEngineCore* factory(const bhs::IntRange& timeProgressRange, const bhs::IntRange&)
     {
-        return new CoreEvenlyDivided(engine, threadNumber);
+        return new CoreEvenlyDivided(timeProgressRange);
     }
 
     bool hasRangeTimeProgress() const override
