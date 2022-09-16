@@ -142,6 +142,11 @@ T* AbstractNBodyEngine<T>::velocities() const
 {
     return m_velocities;
 }
+template <typename T>
+T* AbstractNBodyEngine<T>::accelerations() const
+{
+    return m_accelerations;
+}
 
 template <typename T>
 T AbstractNBodyEngine<T>::timePerFrame() const

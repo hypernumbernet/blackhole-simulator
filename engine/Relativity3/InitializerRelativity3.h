@@ -5,10 +5,10 @@
 using namespace hnn;
 
 template <typename T>
-class InitializerRelativity2 : protected AbstractInitializer
+class InitializerRelativity3 : protected AbstractInitializer
 {
 public:
-    InitializerRelativity2(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    InitializerRelativity3(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
         , m_3d(sim, engine)
@@ -23,19 +23,17 @@ private:
     void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
-        T* const angles = m_engine->velocities();
+        T* const momentums = m_engine->velocities();
         T* const masses = m_engine->masses();
-        const double speedOfLight = m_engine->scaleInv() * SPEED_OF_LIGHT;
 
         for (quint64 i = 0; i < num; ++i)
         {
             const quint64 i3 = i * 3;
-            Vector3 p(angles[i3], angles[i3 + 1], angles[i3 + 2]);
+            Vector3 p(momentums[i3], momentums[i3 + 1], momentums[i3 + 2]);
             p *= masses[i];
-            const Vector3 a = Spacetime::versorAngle(p, masses[i], speedOfLight);
-            angles[i3    ] = a.x();
-            angles[i3 + 1] = a.y();
-            angles[i3 + 2] = a.z();
+            momentums[i3    ] = p.x();
+            momentums[i3 + 1] = p.y();
+            momentums[i3 + 2] = p.z();
         }
     }
 

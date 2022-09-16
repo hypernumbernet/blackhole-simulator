@@ -20,6 +20,7 @@ enum class Engine
     G4D3D,
     GravityCollision,
     Relativity2,
+    Relativity3,
 };
 
 enum class Precision

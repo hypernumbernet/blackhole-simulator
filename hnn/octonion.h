@@ -139,10 +139,10 @@ public:
       + a5b1l  - a5b2o  + a5b3n  - a5b4i  - a5b5   - a5b6k  + a5b7j
       + a6b1o  + a6b2l  - a6b3m  - a6b4j  + a6b5k  - a6b6   - a6b7i
       - a7b1n  + a7b2m  + a7b3l  - a7b4k  - a7b5j  + a7b6i  - a7b7
-    =  − a1​b1​ - a2​b2 - a3​b3​ - a4​b4​ - a5​b5 ​- a6​b6 - a7​b7
-      + (  a2​b3​ − a3​b2​ + a4​b5​ − a5​b4​ − a6​b7​ + a7​b6​)i
-      + (​− a1​b3 + a3​b1​ + a4​b6 ​+ a5​b7​ − a6​b4 ​− a7​b5​)j
-      + (  a1​b2​ − a2​b1​ + a4​b7 - a5​b6 + a6​b5 - a7​b4​​)k
+    = - a1​b1​ - a2​b2 - a3​b3​ - a4​b4​ - a5​b5 ​- a6​b6 - a7​b7
+      + (  a2​b3​ - a3​b2​ + a4​b5​ - a5​b4​ - a6​b7​ + a7​b6​)i
+      + (​- a1​b3 + a3​b1​ + a4​b6 ​+ a5​b7​ - a6​b4 ​- a7​b5​)j
+      + (  a1​b2​ - a2​b1​ + a4​b7 - a5​b6 + a6​b5 - a7​b4​​)k
       + (- a1​b5 - a2​b6 - a3​b7 + a5​b1​ + a6​b2​ + a7​b3​)l
       + (  a1​b4 - a2​b7​ + a3​b6 - a4​b1​ - a6​b3 + a7​b2​)m
       + (  a1​b7​ + a2​b4 - a3​b5 - a4​b2 + a5​b3​ - a7​b1​)n

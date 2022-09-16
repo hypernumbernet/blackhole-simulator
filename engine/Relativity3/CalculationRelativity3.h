@@ -4,10 +4,10 @@
 
 using namespace hnn;
 
-class CalculationRelativity2
+class CalculationRelativity3
 {
 public:
-    CalculationRelativity2(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CalculationRelativity3(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
@@ -21,44 +21,41 @@ public:
     void calculateTimeProgress() const
     {
         double* const coordinates = m_engine->coordinates();
-        const double* const angles = m_engine->velocities();
+        double* const velocities = m_engine->velocities();
         quint64 i3;
-        Vector3 angle;
+        Vector3 v;
         Spacetime st;
+        Quaternion q;
+        double tau;
 
         for (quint64 i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
             i3 = i * 3;
-            angle.set(angles[i3], angles[i3 + 1], angles[i3 + 2]);
+            q.set(1.);
 
+            v.set(velocities[i3], velocities[i3 + 1], velocities[i3 + 2]);
+            v += q.lnV3();
             st.set(m_ct);
-            st.lorentzTransformation(angle);
-            double tau = m_ct / st.w();
-            //tau *= tau;
-            if ( ! std::isfinite(tau))
-            {
-                //qDebug() << "tau: " << tau << i;
-                continue;
-            }
+            st.lorentzTransformation(v);
+            tau = m_ct / st.w();
+            //q.set(Quaternion::exp(angles[i3], angles[i3 + 1], angles[i3 + 2]));
+            //Quaternion::rotate(v, q);
+//            coordinates[i3    ] += v.x();
+//            coordinates[i3 + 1] += v.y();
+//            coordinates[i3 + 2] += v.z();
             coordinates[i3    ] += st.x() * tau;
             coordinates[i3 + 1] += st.y() * tau;
             coordinates[i3 + 2] += st.z() * tau;
-
-            //angle.set(Spacetime::velocities(angle, m_ct));
-            //if ( ! isfinite(angle.x()))
-            //{
-            //    qDebug() << "angles" << i << angle;
-            //}
-            //coordinates[i3    ] += angle.x();
-            //coordinates[i3 + 1] += angle.y();
-            //coordinates[i3 + 2] += angle.z();
+            velocities[i3    ] = v.x();
+            velocities[i3 + 1] = v.y();
+            velocities[i3 + 2] = v.z();
         }
     }
 
     void calculateInteraction() const
     {
         const double* const coordinates = m_engine->coordinates();
-        double* const angles = m_engine->velocities();
+        double* const accelerations = m_engine->velocities();
         const double* const masses = m_engine->masses();
 
         const double timePerFrame = m_engine->timePerFrame();
@@ -73,7 +70,7 @@ public:
         quint64 i, j, a, b;
         Vector3 momentumDelta, angleA, angleB;
 
-        double* deltaAngles = new double[number3]();
+        double* dAccelerations = new double[number3]();
 
         for (i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
@@ -101,28 +98,25 @@ public:
                 momentumDelta.set(d1, d2, d3);
                 angleA.set(Spacetime::versorAngle(  momentumDelta, ma, speedOfLight));
                 angleB.set(Spacetime::versorAngle(- momentumDelta, mb, speedOfLight));
-                deltaAngles[a    ] += angleA.x();
-                deltaAngles[a + 1] += angleA.y();
-                deltaAngles[a + 2] += angleA.z();
-                deltaAngles[b    ] += angleB.x();
-                deltaAngles[b + 1] += angleB.y();
-                deltaAngles[b + 2] += angleB.z();
+                dAccelerations[a    ] += angleA.x();
+                dAccelerations[a + 1] += angleA.y();
+                dAccelerations[a + 2] += angleA.z();
+                dAccelerations[b    ] += angleB.x();
+                dAccelerations[b + 1] += angleB.y();
+                dAccelerations[b + 2] += angleB.z();
             }
         }
         bhs::interactionMutex.lock();
-        for (i = 0; i < number3; ++i)
+        for (i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
         {
-            r = angles[i];
-            angles[i] += deltaAngles[i];
-            if ( ! std::isfinite(angles[i]))
-            {
-                //qDebug() << "angles" << i << angles[i];
-                angles[i] = r;
-            }
+            a = i * 3;
+            accelerations[a] = dAccelerations[a]; ++a;
+            accelerations[a] = dAccelerations[a]; ++a;
+            accelerations[a] = dAccelerations[a];
         }
         bhs::interactionMutex.unlock();
 
-        delete[] deltaAngles;
+        delete[] dAccelerations;
     }
 
 private:

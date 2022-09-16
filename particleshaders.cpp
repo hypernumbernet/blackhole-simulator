@@ -1,22 +1,20 @@
 #include "particleshaders.h"
+#include "engine/CoreTrapezoid.h"
+#include "engine/CoreEvenlyDivided.h"
 #include "engine/3d/engine3d.h"
-#include "engine/3d/corefloat3d.h"
 #include "engine/3d/coredouble3d.h"
 #include "engine/3d4d/engine3d4d.h"
-#include "engine/3d4d/corefloat3d4d.h"
 #include "engine/3d4d/coredouble3d4d.h"
 #include "engine/3d4dr1/engine3d4dr1.h"
-#include "engine/3d4dr1/corefloat3d4dr1.h"
 #include "engine/3d4dr1/coredouble3d4dr1.h"
 #include "engine/4d3d/engine4d3d.h"
-#include "engine/4d3d/corefloat4d3d.h"
 #include "engine/4d3d/coredouble4d3d.h"
 #include "engine/GravityCollision/EngineGravityCollision.h"
-#include "engine/GravityCollision/CoreFloatGravityCollision.h"
 #include "engine/GravityCollision/CoreDoubleGravityCollision.h"
 #include "engine/Relativity2/EngineRelativity2.h"
-#include "engine/Relativity2/CoreFloatRelativity2.h"
 #include "engine/Relativity2/CoreDoubleRelativity2.h"
+#include "engine/Relativity3/EngineRelativity3.h"
+#include "engine/Relativity3/CoreDoubleRelativity3.h"
 
 using namespace bhs;
 
@@ -69,29 +67,33 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
         {
         case Engine::G3D:
             m_NBodyEngineFloat = new Engine3D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         case Engine::G3D4D:
             m_NBodyEngineFloat = new Engine3D4D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4D::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreEvenlyDivided::factory);
             velocityVectorSize = 4;
             break;
         case Engine::G3D4DR1:
             m_NBodyEngineFloat = new Engine3D4DR1<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat3D4DR1::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreEvenlyDivided::factory);
             velocityVectorSize = 4;
             break;
         case Engine::G4D3D:
             m_NBodyEngineFloat = new Engine4D3D<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloat4D3D::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         case Engine::GravityCollision:
             m_NBodyEngineFloat = new EngineGravityCollision<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatGravityCollision::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         case Engine::Relativity2:
             m_NBodyEngineFloat = new EngineRelativity2<float>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreFloatRelativity2::factory);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreEvenlyDivided::factory);
+            break;
+        case Engine::Relativity3:
+            m_NBodyEngineFloat = new EngineRelativity3<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         }
     } else {
@@ -122,6 +124,10 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
         case Engine::Relativity2:
             m_NBodyEngineDouble = new EngineRelativity2<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleRelativity2::factory);
+            break;
+        case Engine::Relativity3:
+            m_NBodyEngineDouble = new EngineRelativity3<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleRelativity3::factory);
             break;
         }
     }

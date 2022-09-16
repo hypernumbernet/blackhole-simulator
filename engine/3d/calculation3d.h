@@ -82,7 +82,7 @@ public:
         {
             r = velocities[i];
             velocities[i] += acceleration[i];
-            if ( ! isfinite(velocities[i]))
+            if ( ! std::isfinite(velocities[i]))
             {
                 //qDebug() << "VEL" << i << vels[i];
                 velocities[i] = r;

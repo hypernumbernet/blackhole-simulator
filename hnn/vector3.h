@@ -177,13 +177,6 @@ public:
         return m_x == m_x && m_y == m_y && m_z == m_z;
     }
 
-    std::string toString() const
-    {
-        std::ostringstream o;
-        o << m_x << ", " << m_y << ", " << m_z;
-        return o.str();
-    }
-
 private:
     union
         {

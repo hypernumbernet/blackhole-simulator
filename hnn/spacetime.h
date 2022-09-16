@@ -57,6 +57,14 @@ public:
         m_z = z;
     }
 
+    void set(const double w)
+    {
+        m_w = w;
+        m_x = 0.;
+        m_y = 0.;
+        m_z = 0.;
+    }
+
     void set(const double* const a)
     {
         m_w = a[0];
@@ -169,7 +177,7 @@ public:
             return identity();
         const double a = atanh(l * speedOfLightInv);
         const Vector3 dir = v / l;
-        return Spacetime::exp(0.5 * a, dir.x(), dir.y(), dir.z());
+        return Spacetime::exp(- 0.5 * a, dir.x(), dir.y(), dir.z());
     }
 
     /**
@@ -193,7 +201,7 @@ public:
      * @param speed of light on your scale
      * @return versor angles
      */
-    static Vector3 versorAngles(const Vector3& p, const double m, const double speedOfLight)
+    static Vector3 versorAngle(const Vector3& p, const double m, const double speedOfLight)
     {
         const double pn = p.norm();
         if (pn == 0.)
@@ -205,20 +213,20 @@ public:
         return Vector3(b * p.x(), b * p.y(), b * p.z());
     }
 
-    static Vector3 velocities(const Vector3& angles, const double speedOfLight)
+    static Vector3 velocities(const Vector3& versorAngle, const double speedOfLight)
     {
-        const double a = angles.abs();
+        const double a = versorAngle.abs();
         if (a == 0.)
             return Vector3::zero();
         const double beta = tanh(a);
         const double v = beta * speedOfLight / a;
-        return Vector3(v * angles.x(), v * angles.y(), v * angles.z());
+        return Vector3(v * versorAngle.x(), v * versorAngle.y(), v * versorAngle.z());
     }
 
     /**
      * @brief Lorentz Transformation by Biquaternion
      * @param g
-     * {g  : exp(0.5 h a r)
+     * {g  : exp(- 0.5 h a r)
      * {g* : biconjugation}
      * {g~ : complex conjugation}
      * g* = g~
@@ -247,17 +255,17 @@ public:
             return;
         const double a = atanh(l * speedOfLightInv);
         const Vector3 dir = v / l;
-        const Spacetime g = Spacetime::exp(0.5 * a, dir.x(), dir.y(), dir.z());
+        const Spacetime g = Spacetime::exp(- 0.5 * a, dir);
         lorentzTransformation(g);
     }
 
-    void lorentzTransformation(const Vector3& angles)
+    void lorentzTransformation(const Vector3& versorAngle)
     {
-        const double a = angles.abs();
+        const double a = versorAngle.abs();
         if (a == 0.)
             return;
-        const Vector3 dir = angles / a;
-        const Spacetime g = Spacetime::exp(0.5 * a, dir.x(), dir.y(), dir.z());
+        const Vector3 dir = versorAngle / a;
+        const Spacetime g = Spacetime::exp(- 0.5 * a, dir);
         lorentzTransformation(g);
     }
 

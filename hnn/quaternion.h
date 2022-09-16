@@ -42,6 +42,22 @@ public:
         m_i3 = imaginary3;
     }
 
+    void set(const Quaternion& q)
+    {
+        m_re = q.m_re;
+        m_i1 = q.m_i1;
+        m_i2 = q.m_i2;
+        m_i3 = q.m_i3;
+    }
+
+    void set(const double re)
+    {
+        m_re = re;
+        m_i1 = 0.;
+        m_i2 = 0.;
+        m_i3 = 0.;
+    }
+
     void set(const double* const a)
     {
         m_re = a[0];

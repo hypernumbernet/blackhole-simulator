@@ -79,6 +79,18 @@ public:
         m_z = z;
     }
 
+    void set(const Spacetime& s)
+    {
+        m_w.real(s.w());
+        m_w.imag(0.);
+        m_x.real(0.);
+        m_x.imag(s.x());
+        m_y.real(0.);
+        m_y.imag(s.y());
+        m_z.real(0.);
+        m_z.imag(s.z());
+    }
+
     void setSpacetimeReal(const double* const a)
     {
         m_w.real(a[0]);
@@ -564,9 +576,9 @@ public:
 
     /**
      * @brief Lorentz Transformation
-     * @param qu: Quaternion only used for time-space 4 vector
+     * @param st
      */
-    void lorentzTransformation(Quaternion& qu) const
+    void lorentzTransformation(Spacetime& st) const
     {
         const double a = h();
         const double b = i();
@@ -576,11 +588,11 @@ public:
         const double q = hi();
         const double r = hj();
         const double s = hk();
-        const double w = qu.re();
-        const double x = qu.i1();
-        const double y = qu.i2();
-        const double z = qu.i3();
-        qu.set(
+        const double w = st.w();
+        const double x = st.x();
+        const double y = st.y();
+        const double z = st.z();
+        st.set(
             (a * a + b * b + c * c + d * d + p * p + q * q + r * r + s * s) * w
             + 2.0 * ((a * b - c * s - p * q + d * r) * x + (a * c - d * q - p * r + b * s) * y + (a * d - b * r + c * q - p * s) * z),
             (a * a + b * b - c * c - d * d + p * p + q * q - r * r - s * s) * x
@@ -605,7 +617,7 @@ inline std::ostream& operator<<(std::ostream& os, const Biquaternion& bq)
     return os;
 }
 
-constexpr bool fuzzyCompare(const Biquaternion& bq1, const Biquaternion& bq2)
+inline bool fuzzyCompare(const Biquaternion& bq1, const Biquaternion& bq2)
 {
     return fuzzyCompare(bq1.re(), bq2.re()) && fuzzyCompare(bq1.i(), bq2.i()) && fuzzyCompare(bq1.j(), bq2.j()) && fuzzyCompare(bq1.k(), bq2.k());
 }

@@ -23,6 +23,7 @@ public:
     T* masses() const;
     T* distances() const;
     T* locations() const;
+    T* accelerations() const;
 
     const bhs::SimCondition& sim() const;
     quint64 numberOfParticle() const;
@@ -66,6 +67,8 @@ protected:
     T* m_distances;
 
     T* m_locations;
+
+    T* m_accelerations;
 
     quint64 m_numberOfParticles;
     double m_modelScale;
