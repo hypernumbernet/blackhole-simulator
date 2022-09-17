@@ -1,5 +1,5 @@
-#include "initializerdialog.h"
-#include "updateui.h"
+#include "InitializerDialog.h"
+#include "UpdateUi.h"
 #include <QRadioButton>
 #include <QPushButton>
 #include <QGroupBox>

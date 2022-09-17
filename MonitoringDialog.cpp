@@ -1,4 +1,4 @@
-#include "monitoringdialog.h"
+#include "MonitoringDialog.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 

@@ -1,4 +1,4 @@
-#include "computeshaders.h"
+#include "ComputeShaders.h"
 
 ComputeShaders::ComputeShaders()
 {

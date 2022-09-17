@@ -31,12 +31,10 @@ public:
 public slots:
     void calculateTimeProgress() const override
     {
-        resultReady();
     }
 
     void calculateInteraction() const override
     {
-        resultReady();
     }
 
 protected:

@@ -4,7 +4,7 @@
 #include "camera.h"
 #include "lineshaders.h"
 #include "particleshaders.h"
-#include "threadadmin.h"
+#include "ThreadAdmin.h"
 #include <QOpenGLWindow>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions_4_5_Core>

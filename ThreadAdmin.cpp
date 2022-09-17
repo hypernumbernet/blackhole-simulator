@@ -1,4 +1,4 @@
-#include "threadadmin.h"
+#include "ThreadAdmin.h"
 #include <QTimerEvent>
 
 ThreadAdmin::ThreadAdmin(QObject* parent, ComputeShaders* cs)

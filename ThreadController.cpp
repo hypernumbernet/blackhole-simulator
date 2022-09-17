@@ -1,4 +1,4 @@
-#include "threadcontroller.h"
+#include "ThreadController.h"
 
 ThreadController::ThreadController(QObject* parent)
     : QObject(parent)

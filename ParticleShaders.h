@@ -1,6 +1,6 @@
 #pragma once
 
-#include "threadadmin.h"
+#include "ThreadAdmin.h"
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>

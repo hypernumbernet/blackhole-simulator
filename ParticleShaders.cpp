@@ -1,4 +1,4 @@
-#include "particleshaders.h"
+#include "ParticleShaders.h"
 #include "engine/CoreTrapezoid.h"
 #include "engine/CoreEvenlyDivided.h"
 #include "engine/3d/engine3d.h"

@@ -4,10 +4,12 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
+    ThreadAdmin.cpp \
+    ThreadController.cpp \
     UpdateUi.cpp \
     bhs.cpp \
-    camera.cpp \
-    computeshaders.cpp \
+    Camera.cpp \
+    ComputeShaders.cpp \
     engine/GravityCollision/InitializerGravityCollision.cpp \
     engine/Relativity2/InitializerRelativity2.cpp \
     engine/Relativity3/InitializerRelativity3.cpp \
@@ -16,20 +18,21 @@ SOURCES += \
     engine/3d4d/initializer3d4d.cpp \
     engine/3d4dr1/initializer3d4dr1.cpp \
     engine/4d3d/initializer4d3d.cpp \
-    graphicwindow.cpp \
-    initializerdialog.cpp \
-    lineshaders.cpp \
+    GraphicWindow.cpp \
+    InitializerDialog.cpp \
+    LineShaders.cpp \
     main.cpp \
-    mainwidget.cpp \
-    monitoringdialog.cpp \
-    particleshaders.cpp \
-    threadadmin.cpp \
-    threadcontroller.cpp
+    MainWidget.cpp \
+    MonitoringDialog.cpp \
+    ParticleShaders.cpp
 
 HEADERS += \
+    ThreadAdmin.h \
+    ThreadController.h \
+    UpdateUi.h \
     bhs.h \
-    camera.h \
-    computeshaders.h \
+    Camera.h \
+    ComputeShaders.h \
     engine/CoreEvenlyDivided.h \
     engine/CoreTrapezoid.h \
     engine/GravityCollision/CalculationGravityCollision.h \
@@ -64,21 +67,18 @@ HEADERS += \
     engine/4d3d/coredouble4d3d.h \
     engine/4d3d/engine4d3d.h \
     engine/4d3d/initializer4d3d.h \
-    graphicwindow.h \
+    GraphicWindow.h \
     hnn/biquaternion.h \
     hnn/constants.h \
     hnn/octonion.h \
     hnn/quaternion.h \
     hnn/spacetime.h \
     hnn/vector3.h \
-    initializerdialog.h \
-    lineshaders.h \
-    mainwidget.h \
-    monitoringdialog.h \
-    particleshaders.h \
-    threadadmin.h \
-    threadcontroller.h \
-    updateui.h \
+    InitializerDialog.h \
+    LineShaders.h \
+    MainWidget.h \
+    MonitoringDialog.h \
+    ParticleShaders.h \
 
 RESOURCES += \
     shaders.qrc

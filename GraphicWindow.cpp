@@ -1,4 +1,4 @@
-#include "graphicwindow.h"
+#include "GraphicWindow.h"
 
 GraphicWindow::GraphicWindow(const bhs::SimCondition& simCondition)
     : m_lineShaders(new LineShaders)
