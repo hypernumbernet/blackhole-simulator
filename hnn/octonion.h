@@ -38,6 +38,30 @@ public:
     void setI6(const double i6) { m_i6 = i6; }
     void setI7(const double i7) { m_i7 = i7; }
 
+    void set(const double re)
+    {
+        m_re = re;
+        m_i1 = 0.;
+        m_i2 = 0.;
+        m_i3 = 0.;
+        m_i4 = 0.;
+        m_i5 = 0.;
+        m_i6 = 0.;
+        m_i7 = 0.;
+    }
+
+    void set(const Octonion& o)
+    {
+        m_re = o.re();
+        m_i1 = o.i1();
+        m_i2 = o.i2();
+        m_i3 = o.i3();
+        m_i4 = o.i4();
+        m_i5 = o.i5();
+        m_i6 = o.i6();
+        m_i7 = o.i7();
+    }
+
     const Octonion operator+(const Octonion& a) const
     {
         return Octonion(m_re + a.m_re, m_i1 + a.m_i1, m_i2 + a.m_i2, m_i3 + a.m_i3,
@@ -265,24 +289,12 @@ public:
                       - m_i4 / n, -m_i5 / n, -m_i6 / n, -m_i7 / n);
     }
 
-    static void rotation(Quaternion& a, const Quaternion& rot,
-                                const int w, const int x, const int y, const int z)
+    static Octonion rotation(const Octonion& pole, const double angle)
     {
-        Octonion o1(0);
-        o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
-        Octonion o2(0);
-        o2[w] = rot.re(); o2[x] = rot.i1(); o2[y] = rot.i2(); o2[z] = rot.i3();
-        Octonion o3 = o2.conjugated() * o1 * o2;
-        a.setRe(o3[w]); a.setI1(o3[x]); a.setI2(o3[y]); a.setI3(o3[z]);
-    }
-
-    static void rotation(Quaternion& a, const Octonion& rot,
-                                const int w, const int x, const int y, const int z)
-    {
-        Octonion o1(0);
-        o1[w] = a.re(); o1[x] = a.i1(); o1[y] = a.i2(); o1[z] = a.i3();
-        Octonion o3 = rot.conjugated() * o1 * rot;
-        a.setRe(o3[w]); a.setI1(o3[x]); a.setI2(o3[y]); a.setI3(o3[z]);
+        const double h = angle * 0.5;
+        Octonion o(pole * sin(h));
+        o.setRe(cos(h));
+        return o;
     }
 
     std::string toString() const

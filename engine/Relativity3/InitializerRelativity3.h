@@ -23,18 +23,27 @@ private:
     void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
-        T* const momentums = m_engine->velocities();
-        T* const masses = m_engine->masses();
-
+        T* const velocities = m_engine->velocities();
+        T* vels = new T[num * 4]();
         for (quint64 i = 0; i < num; ++i)
         {
             const quint64 i3 = i * 3;
-            Vector3 p(momentums[i3], momentums[i3 + 1], momentums[i3 + 2]);
-            p *= masses[i];
-            momentums[i3    ] = p.x();
-            momentums[i3 + 1] = p.y();
-            momentums[i3 + 2] = p.z();
+            const quint64 i4 = i * 4;
+            Vector3 v3((double)velocities[i3], (double)velocities[i3 + 1], (double)velocities[i3 + 2]);
+            const double speed = v3.abs();
+            if (speed != 0.)
+            {
+                v3 /= speed;
+            }
+            const auto angle = m_engine->velocityToAngle(speed);
+            auto q = Quaternion::exp(v3 * angle);
+            bhs::embedQuaternionToArray<T>(q, vels, i4);
         }
+        for (quint64 i = 0; i < num * 4; ++i)
+        {
+            velocities[i] = vels[i];
+        }
+        delete[] vels;
     }
 
     AbstractNBodyEngine<T>* const m_engine;

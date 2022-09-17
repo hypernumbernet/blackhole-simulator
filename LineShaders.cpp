@@ -259,7 +259,18 @@ void LineShaders::linesOctonionS3RotationAll()
                     {
                         qDebug() << i1 << i2 << i3 << i4;
                         linesOctonionRotationAt(i1, i2, i3, i4, i5);
+//                        qDebug() << i2 << i1 << i3 << i4;
+//                        linesOctonionRotationAt(i2, i1, i3, i4, i5);
+//                        qDebug() << i3 << i2 << i1 << i4;
+//                        linesOctonionRotationAt(i3, i2, i1, i4, i5);
+//                        qDebug() << i4 << i2 << i3 << i1;
+//                        linesOctonionRotationAt(i4, i2, i3, i1, i5);
                     }
+//        linesOctonionRotationAt(1, 2, 4, 6, i5);
+//        linesOctonionRotationAt(1, 2, 5, 7, i5);
+//        linesOctonionRotationAt(1, 3, 4, 7, i5);
+//        linesOctonionRotationAt(2, 3, 4, 7, i5);
+//        linesOctonionRotationAt(2, 3, 5, 6, i5);
     }
 }
 
@@ -290,13 +301,11 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     }
     auto poleX(x90.cross(origin));
     auto poleY(y90.cross(origin));
-    auto rotationY = sin(angle * 0.5) * poleY;
-    rotationY.setRe(cos(angle * 0.5));
+    Octonion rotationY(Octonion::rotation(poleY, angle));
 
     for (int j = -8; j <= 8; j += 2)
     {
-        auto rotationX = poleX * sin(angle * j * 0.5);
-        rotationX.setRe(cos(angle * j * 0.5));
+        Octonion rotationX(Octonion::rotation(poleX, angle * j));
         auto startX = rotationX.conjugated() * origin * rotationX;
         Quaternion start(startX[w],startX[x],startX[y],startX[z]);
         auto startY = startX;
@@ -344,8 +353,7 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
     auto poleX(x90 * origin);
     auto poleY(y90 * origin);
     auto poleZ(z90 * origin);
-    auto rotationY = poleY * sin(angle * 0.5);
-    rotationY.setRe(cos(angle * 0.5));
+    Octonion rotationY(Octonion::rotation(poleY, angle));
 
     for (int k = -8; k <= 8; k += 2)
     {
@@ -354,8 +362,7 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
         auto startZ = rotationZ.conjugated() * origin * rotationZ;
         for (int j = -8; j <= 8; j += 2)
         {
-            auto rotationX = poleX * sin(angle * j * 0.5);
-            rotationX.setRe(cos(angle * j * 0.5));
+            Octonion rotationX(Octonion::rotation(poleX, angle * j));
             auto startX = rotationX.conjugated() * startZ * rotationX;
             Quaternion start(startX[w],startX[x],startX[y],startX[z]);
             auto startY = startX;

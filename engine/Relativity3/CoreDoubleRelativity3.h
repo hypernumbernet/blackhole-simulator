@@ -18,6 +18,11 @@ public:
         return new CoreDoubleRelativity3(engine, threadNumber);
     }
 
+    bool hasRangeInteraction() const override
+    {
+        return m_hasRangeTimeProgress;
+    }
+
 public slots:
     void calculateTimeProgress() const override
     {
