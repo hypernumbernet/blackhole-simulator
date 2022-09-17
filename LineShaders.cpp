@@ -156,7 +156,7 @@ void LineShaders::drawCircle(
     Vector3 prev = startPoint;
     for (int i = 0; i <= resolution; ++i)
     {
-        auto rot = Quaternion::rotation(axis, angle * (double)i * 0.5);
+        auto rot = Quaternion::rotation(axis, angle * (double)i);
         Vector3 v = startPoint;
         Quaternion::rotate(v, rot);
         if (i > 0)
@@ -168,7 +168,7 @@ void LineShaders::drawCircle(
 void LineShaders::linesLongitudeAndLatitude()
 {
     static const int resolution = 36;
-    static const double angle = hnn::PI / double(resolution);
+    static const double angle = 2. * hnn::PI / double(resolution);
 
     const Vector3 axis_y(0.0, 1.0, 0.0);
     const Vector3 axis_x(1.0, 0.0, 0.0);
@@ -206,7 +206,7 @@ void LineShaders::linesLongitudeAndLatitude()
 void LineShaders::linesQuaternionS3Rotation()
 {
     static const int resolution = 72;
-    static const double angle = degreeToRadian(360.0 / double(resolution));
+    static const double angle = 2. * degreeToRadian(360.0 / double(resolution));
 
     const auto rotationY = Quaternion::rotation({0,1,0}, angle);
     for (int j = -8; j <= 8; j += 2)

@@ -83,7 +83,7 @@ void Camera::topY(const double rate)
     auto cosY = position.dot(direction);
     if (cosY < 0.99 && cosY > -0.99)
     {
-        auto angleY = (acos(cosY) - hnn::PI * 0.5) * 0.5;
+        auto angleY = (acos(cosY) - hnn::PI * 0.5);
         auto crossY = position.cross(direction);
         crossY.normalize();
         auto rotY = Quaternion::rotation(crossY, angleY);

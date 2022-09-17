@@ -1,9 +1,9 @@
 #pragma once
 
 #include "bhs.h"
-#include "camera.h"
-#include "lineshaders.h"
-#include "particleshaders.h"
+#include "Camera.h"
+#include "LineShaders.h"
+#include "ParticleShaders.h"
 #include "ThreadAdmin.h"
 #include <QOpenGLWindow>
 #include <QOpenGLShaderProgram>

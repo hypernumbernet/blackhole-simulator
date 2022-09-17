@@ -539,15 +539,17 @@ public:
 
     static Quaternion rotation(const Vector3& v, const double theta)
     {
-        const double c = cos(theta);
-        const double s = sin(theta);
+        const double h = theta * 0.5;
+        const double c = cos(h);
+        const double s = sin(h);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
     static Quaternion rotation(const double x, const double y, const double z, const double theta)
     {
-        const double c = cos(theta);
-        const double s = sin(theta);
+        const double h = theta * 0.5;
+        const double c = cos(h);
+        const double s = sin(h);
         return Quaternion(c, x * s, y * s, z * s);
     }
 
@@ -587,7 +589,7 @@ public:
             }
         }
         cross.normalize();
-        const double angle = acos(cosVal) * rate * 0.5;
+        const double angle = acos(cosVal) * rate;
         return rotation(cross, angle);
     }
 
