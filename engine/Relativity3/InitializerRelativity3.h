@@ -25,6 +25,8 @@ private:
         const quint64 num = m_engine->numberOfParticle();
         T* const velocities = m_engine->velocities();
         T* vels = new T[num * 4]();
+        const double anglePerVelocity = PI / (SPEED_OF_LIGHT * m_engine->scaleInv());
+
         for (quint64 i = 0; i < num; ++i)
         {
             const quint64 i3 = i * 3;
@@ -35,7 +37,7 @@ private:
             {
                 v3 /= speed;
             }
-            const auto angle = m_engine->velocityToAngle(speed);
+            const auto angle = speed * anglePerVelocity;
             auto q = Quaternion::exp(v3 * angle);
             bhs::embedQuaternionToArray<T>(q, vels, i4);
         }
@@ -47,6 +49,5 @@ private:
     }
 
     AbstractNBodyEngine<T>* const m_engine;
-
     Initializer3D<T> m_3d;
 };

@@ -170,14 +170,14 @@ public:
         return Spacetime(cosh(a), v.x() * s, v.y() * s, v.z() * s);
     }
 
-    static Spacetime transformator(const Vector3& v, const double speedOfLightInv)
+    static Vector3 versorAngle(const Vector3& v, const double speedOfLightInv)
     {
-        const double l = v.abs();
-        if (l == 0.)
-            return identity();
-        const double a = atanh(l * speedOfLightInv);
-        const Vector3 dir = v / l;
-        return Spacetime::exp(- 0.5 * a, dir.x(), dir.y(), dir.z());
+        const double speed = v.abs();
+        if (speed == 0.)
+            return Vector3::zero();
+        const double a = atanh(speed * speedOfLightInv);
+        const double b = a / speed;
+        return Vector3(b * v.x(), b * v.y(), b * v.z());
     }
 
     /**

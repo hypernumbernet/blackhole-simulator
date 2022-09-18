@@ -14,8 +14,8 @@ public:
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
         , m_interactionStart(engine->interactionRanges().at(threadNumber).start)
         , m_interactionEnd(engine->interactionRanges().at(threadNumber).end)
-        , m_ct(SPEED_OF_LIGHT * engine->scaleInv() * engine->timePerFrame())
-        , m_speedOfLightInv(1.0 / (SPEED_OF_LIGHT * engine->scaleInv()))
+        , m_velocityPerAngle((SPEED_OF_LIGHT * engine->scaleInv()) / PI)
+        , m_anglePerVelocity(PI / (SPEED_OF_LIGHT * engine->scaleInv()))
     {
     }
 
@@ -33,7 +33,7 @@ public:
         {
             vq.set(velocities, i * 4);
             v3.set(vq.lnV3());
-            m_engine->angleToVelocity(v3);
+            v3 *= m_velocityPerAngle;
             v3 *= timePerFrame;
             i3 = i * 3;
             coordinates[i3] += v3.x(); ++i3;
@@ -74,11 +74,11 @@ public:
             a = i * 3;
             i4 = i * 4;
             ov.set(0.);
-            ov[w] = velocities[i4];
+            ov[w] = velocities[i4    ];
             ov[x] = velocities[i4 + 1];
             ov[y] = velocities[i4 + 2];
             ov[z] = velocities[i4 + 3];
-            for (j = i + 1; j < numberOfParticles; ++j)
+            for (j = 0; j < numberOfParticles; ++j)
             {
                 if (i == j)
                     continue;
@@ -94,7 +94,7 @@ public:
                 d2 *= inv;
                 d3 *= inv;
                 theta = inv * inv * timeG * masses[j];
-                theta = m_engine->velocityToAngle(theta);
+                theta *= m_anglePerVelocity;
 
                 qd.set(Quaternion::rotation(d1, d2, d3, 1.));
                 od.set(0.);
@@ -103,12 +103,13 @@ public:
                 od[y] = qd.i2();
                 od[z] = qd.i3();
                 pole.set(od.cross(origin));
-                rotation = pole * sin(theta * 0.5);
-                rotation.setRe(cos(theta * 0.5));
-
-
-
+                rotation.set(Octonion::rotation(pole, theta));
+                ov.set(rotation.conjugated() * ov * rotation);
             }
+            velocities[i4    ] = ov[w];
+            velocities[i4 + 1] = ov[x];
+            velocities[i4 + 2] = ov[y];
+            velocities[i4 + 3] = ov[z];
         }
     }
 
@@ -120,6 +121,6 @@ private:
     const quint64 m_interactionStart;
     const quint64 m_interactionEnd;
 
-    const double m_ct;
-    const double m_speedOfLightInv;
+    const double m_velocityPerAngle;
+    const double m_anglePerVelocity;
 };
