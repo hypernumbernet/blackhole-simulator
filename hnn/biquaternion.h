@@ -79,6 +79,18 @@ public:
         m_z = z;
     }
 
+    void set(const Quaternion& q)
+    {
+        m_w.real(q.re());
+        m_w.imag(0.);
+        m_x.real(q.i1());
+        m_x.imag(0.);
+        m_y.real(q.i2());
+        m_y.imag(0.);
+        m_z.real(q.i3());
+        m_z.imag(0.);
+    }
+
     void set(const Spacetime& s)
     {
         m_w.real(s.w());

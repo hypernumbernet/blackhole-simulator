@@ -75,7 +75,7 @@ public:
 
         double* deltaAngles = new double[number3]();
 
-        for (i = m_timeProgresStart; i < m_timeProgresEnd; ++i)
+        for (i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             a = i * 3;
             for (j = i + 1; j < numberOfParticles; ++j)
