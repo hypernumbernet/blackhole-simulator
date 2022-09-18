@@ -11,12 +11,12 @@ SOURCES += \
     Camera.cpp \
     ComputeShaders.cpp \
     engine/GravityCollision/InitializerGravityCollision.cpp \
+    engine/Relativity1/InitializerRelativity1.cpp \
     engine/Relativity2/InitializerRelativity2.cpp \
     engine/Relativity3/InitializerRelativity3.cpp \
     engine/abstractnbodyengine.cpp \
     engine/3d/initializer3d.cpp \
     engine/3d4d/initializer3d4d.cpp \
-    engine/3d4dr1/initializer3d4dr1.cpp \
     engine/4d3d/initializer4d3d.cpp \
     GraphicWindow.cpp \
     InitializerDialog.cpp \
@@ -39,6 +39,10 @@ HEADERS += \
     engine/GravityCollision/CoreDoubleGravityCollision.h \
     engine/GravityCollision/EngineGravityCollision.h \
     engine/GravityCollision/InitializerGravityCollision.h \
+    engine/Relativity1/CalculationRelativity1.h \
+    engine/Relativity1/CoreDoubleRelativity1.h \
+    engine/Relativity1/EngineRelativity1.h \
+    engine/Relativity1/InitializerRelativity1.h \
     engine/Relativity2/CalculationRelativity2.h \
     engine/Relativity2/CoreDoubleRelativity2.h \
     engine/Relativity2/EngineRelativity2.h \
@@ -59,10 +63,6 @@ HEADERS += \
     engine/3d4d/coredouble3d4d.h \
     engine/3d4d/engine3d4d.h \
     engine/3d4d/initializer3d4d.h \
-    engine/3d4dr1/calculation3d4dr1.h \
-    engine/3d4dr1/coredouble3d4dr1.h \
-    engine/3d4dr1/engine3d4dr1.h \
-    engine/3d4dr1/initializer3d4dr1.h \
     engine/4d3d/calculation4d3d.h \
     engine/4d3d/coredouble4d3d.h \
     engine/4d3d/engine4d3d.h \

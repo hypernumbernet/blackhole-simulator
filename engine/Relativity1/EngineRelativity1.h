@@ -1,15 +1,15 @@
 #pragma once
 
 #include "engine/abstractnbodyengine.h"
-#include "initializer3d4dr1.h"
+#include "InitializerRelativity1.h"
 
 template <typename T>
-class Engine3D4DR1 : public AbstractNBodyEngine<T>, private Initializer3D4DR1<T>
+class EngineRelativity1 : public AbstractNBodyEngine<T>, private InitializerRelativity1<T>
 {
 public:
-    explicit Engine3D4DR1(const bhs::SimCondition& sim)
+    explicit EngineRelativity1(const bhs::SimCondition& sim)
         : AbstractNBodyEngine<T>(sim)
-        , Initializer3D4DR1<T>(sim, this)
+        , InitializerRelativity1<T>(sim, this)
     {
         this->setNumberOfParticles();
 
@@ -22,7 +22,7 @@ public:
         this->init();
     }
 
-    ~Engine3D4DR1()
+    ~EngineRelativity1()
     {
         delete[] this->m_coordinates;
         delete[] this->m_velocities;

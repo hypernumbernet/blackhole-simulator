@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/abstractenginecoredouble.h"
-#include "calculation3d4dr1.h"
+#include "CalculationRelativity1.h"
 
-class CoreDouble3D4DR1 : public AbstractEngineCoreDouble
+class CoreDoubleRelativity1 : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    CoreDouble3D4DR1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CoreDoubleRelativity1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,7 +15,7 @@ public:
 
     static AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new CoreDouble3D4DR1(engine, threadNumber);
+        return new CoreDoubleRelativity1(engine, threadNumber);
     }
 
     bool hasRangeInteraction() const override
@@ -37,5 +37,5 @@ public slots:
     }
 
 private:
-    Calculation3D4DR1 m_calc;
+    CalculationRelativity1 m_calc;
 };

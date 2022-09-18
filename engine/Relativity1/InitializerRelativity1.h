@@ -1,15 +1,15 @@
 #pragma once
 
 #include "engine/3d/initializer3d.h"
-#include "calculation3d4dr1.h"
+#include "CalculationRelativity1.h"
 
 using namespace hnn;
 
 template <typename T>
-class Initializer3D4DR1 : protected AbstractInitializer
+class InitializerRelativity1 : protected AbstractInitializer
 {
 public:
-    Initializer3D4DR1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    InitializerRelativity1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
         , m_3d(sim, engine)
@@ -24,7 +24,7 @@ private:
     QGenericMatrix<1, 4, double> fromVector3(const Vector3& v3) const
     {
         QGenericMatrix<4, 4, double> lt;
-        Calculation3D4DR1::lorentzTransformation(lt, -v3, m_engine->speedOfLightInv());
+        CalculationRelativity1::lorentzTransformation(lt, -v3, m_engine->speedOfLightInv());
         QGenericMatrix<1, 4, double> speed;
         speed(0, 0) = SPEED_OF_LIGHT * m_engine->scaleInv() * m_engine->timePerFrame();
         speed(1, 0) = 0.0;

@@ -24,10 +24,10 @@ c  = 3e+8 (Speed of light, m)
 
 */
 
-class Calculation3D4DR1
+class CalculationRelativity1
 {
 public:
-    Calculation3D4DR1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CalculationRelativity1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
