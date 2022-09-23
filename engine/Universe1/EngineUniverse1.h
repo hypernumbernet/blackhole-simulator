@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/AbstractNBodyEngine.h"
-#include "initializer3d4d.h"
+#include "InitializerUniverse1.h"
 
 // Gravity 3D-Coordinate 3S-Velocity with Mass Euler method N-Body Engine
 

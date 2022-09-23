@@ -1,13 +1,13 @@
 #pragma once
 
 #include "engine/AbstractEngineCoreDouble.h"
-#include "calculation4d3d.h"
+#include "CalculationUniverse1.h"
 
-class CoreDoubleUniverse2 : public AbstractEngineCoreDouble
+class CoreDoubleUniverse1 : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    CoreDoubleUniverse2(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CoreDoubleUniverse1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,22 +15,27 @@ public:
 
     static AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new CoreDoubleUniverse2(engine, threadNumber);
+        return new CoreDoubleUniverse1(engine, threadNumber);
+    }
+
+    bool hasRangeInteraction() const override
+    {
+        return m_hasRangeTimeProgress;
     }
 
 public slots:
-    void calculateTimeProgress() const
+    void calculateTimeProgress() const override
     {
         m_calc.calculateTimeProgress();
         resultReady();
     }
 
-    void calculateInteraction() const
+    void calculateInteraction() const override
     {
         m_calc.calculateInteraction();
         resultReady();
     }
 
 private:
-    CalculationUniverse2 m_calc;
+    CalculationUniverse1 m_calc;
 };

@@ -19,8 +19,8 @@ SOURCES += \
     GraphicWindow.cpp \
     InitializerDialog.cpp \
     LineShaders.cpp \
-    engine/Universe1/initializer3d4d.cpp \
-    engine/Universe2/initializer4d3d.cpp \
+    engine/Universe1/InitializerUniverse1.cpp \
+    engine/Universe2/InitializerUniverse2.cpp \
     main.cpp \
     MainWidget.cpp \
     MonitoringDialog.cpp \
@@ -60,14 +60,14 @@ HEADERS += \
     engine/Relativity3/EngineRelativity3.h \
     engine/Relativity3/InitializerRelativity3.h \
     GraphicWindow.h \
-    engine/Universe1/calculation3d4d.h \
-    engine/Universe1/coredouble3d4d.h \
-    engine/Universe1/engine3d4d.h \
-    engine/Universe1/initializer3d4d.h \
-    engine/Universe2/calculation4d3d.h \
-    engine/Universe2/coredouble4d3d.h \
-    engine/Universe2/engine4d3d.h \
-    engine/Universe2/initializer4d3d.h \
+    engine/Universe1/CalculationUniverse1.h \
+    engine/Universe1/CoreDoubleUniverse1.h \
+    engine/Universe1/EngineUniverse1.h \
+    engine/Universe1/InitializerUniverse1.h \
+    engine/Universe2/CalculationUniverse2.h \
+    engine/Universe2/CoreDoubleUniverse2.h \
+    engine/Universe2/EngineUniverse2.h \
+    engine/Universe2/InitializerUniverse2.h \
     hnn/biquaternion.h \
     hnn/constants.h \
     hnn/octonion.h \

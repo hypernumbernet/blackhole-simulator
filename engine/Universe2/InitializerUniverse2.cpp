@@ -1,4 +1,4 @@
-#include "initializer4d3d.h"
+#include "InitializerUniverse2.h"
 
 template class InitializerUniverse2<float>;
 template class InitializerUniverse2<double>;
