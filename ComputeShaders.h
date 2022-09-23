@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractnbodyengine.h"
+#include "engine/AbstractNBodyEngine.h"
 #include <QOpenGLFunctions_4_5_Core>
 #include <QOpenGLShaderProgram>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractnbodyengine.h"
+#include "engine/AbstractNBodyEngine.h"
 #include "hnn/octonion.h"
 
 using namespace hnn;

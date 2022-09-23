@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractenginecoredouble.h"
+#include "engine/AbstractEngineCoreDouble.h"
 #include "CalculationRelativity2.h"
 
 class CoreDoubleRelativity2 : public AbstractEngineCoreDouble

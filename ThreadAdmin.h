@@ -1,7 +1,7 @@
 #pragma once
 
-#include "computeshaders.h"
-#include "threadcontroller.h"
+#include "ComputeShaders.h"
+#include "ThreadController.h"
 #include <QBasicTimer>
 
 class ThreadAdmin : public QThread

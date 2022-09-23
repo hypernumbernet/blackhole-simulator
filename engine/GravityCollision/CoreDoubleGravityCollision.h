@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractenginecoredouble.h"
+#include "engine/AbstractEngineCoreDouble.h"
 #include "CalculationGravityCollision.h"
 
 class CoreDoubleGravityCollision : public AbstractEngineCoreDouble

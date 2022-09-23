@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractnbodyengine.h"
+#include "engine/AbstractNBodyEngine.h"
 
 using namespace hnn;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractnbodyengine.h"
+#include "engine/AbstractNBodyEngine.h"
 
 class Calculation3D
 {

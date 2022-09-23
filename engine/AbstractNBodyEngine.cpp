@@ -1,4 +1,4 @@
-#include "abstractnbodyengine.h"
+#include "AbstractNBodyEngine.h"
 #include "UpdateUi.h"
 
 template class AbstractNBodyEngine<float>;

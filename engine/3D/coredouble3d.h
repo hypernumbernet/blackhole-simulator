@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/abstractenginecoredouble.h"
-#include "calculation3d.h"
+#include "engine/AbstractEngineCoreDouble.h"
+#include "Calculation3D.h"
 
 class CoreDouble3D : public AbstractEngineCoreDouble
 {

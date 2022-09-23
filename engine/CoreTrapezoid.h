@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstractenginecore.h"
+#include "AbstractEngineCore.h"
 
 class CoreTrapezoid : public AbstractEngineCore
 {

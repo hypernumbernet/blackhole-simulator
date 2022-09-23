@@ -1,7 +1,7 @@
 #pragma once
 
-#include "abstractenginecore.h"
-#include "abstractnbodyengine.h"
+#include "AbstractEngineCore.h"
+#include "AbstractNBodyEngine.h"
 
 class AbstractEngineCoreDouble : public AbstractEngineCore
 {

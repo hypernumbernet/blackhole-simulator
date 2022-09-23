@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphicwindow.h"
+#include "GraphicWindow.h"
 #include <QDialog>
 #include <QPlainTextEdit>
 

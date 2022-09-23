@@ -10,12 +10,12 @@ SOURCES += \
     bhs.cpp \
     Camera.cpp \
     ComputeShaders.cpp \
+    engine/3D/Initializer3D.cpp \
+    engine/AbstractNBodyEngine.cpp \
     engine/GravityCollision/InitializerGravityCollision.cpp \
     engine/Relativity1/InitializerRelativity1.cpp \
     engine/Relativity2/InitializerRelativity2.cpp \
     engine/Relativity3/InitializerRelativity3.cpp \
-    engine/abstractnbodyengine.cpp \
-    engine/3d/initializer3d.cpp \
     engine/3d4d/initializer3d4d.cpp \
     engine/4d3d/initializer4d3d.cpp \
     GraphicWindow.cpp \
@@ -33,6 +33,14 @@ HEADERS += \
     bhs.h \
     Camera.h \
     ComputeShaders.h \
+    engine/3D/Calculation3D.h \
+    engine/3D/CoreDouble3D.h \
+    engine/3D/Engine3D.h \
+    engine/3D/Initializer3D.h \
+    engine/AbstractEngineCore.h \
+    engine/AbstractEngineCoreDouble.h \
+    engine/AbstractInitializer.h \
+    engine/AbstractNBodyEngine.h \
     engine/CoreEvenlyDivided.h \
     engine/CoreTrapezoid.h \
     engine/GravityCollision/CalculationGravityCollision.h \
@@ -51,14 +59,6 @@ HEADERS += \
     engine/Relativity3/CoreDoubleRelativity3.h \
     engine/Relativity3/EngineRelativity3.h \
     engine/Relativity3/InitializerRelativity3.h \
-    engine/abstractenginecore.h \
-    engine/abstractenginecoredouble.h \
-    engine/abstractinitializer.h \
-    engine/abstractnbodyengine.h \
-    engine/3d/calculation3d.h \
-    engine/3d/coredouble3d.h \
-    engine/3d/engine3d.h \
-    engine/3d/initializer3d.h \
     engine/3d4d/calculation3d4d.h \
     engine/3d4d/coredouble3d4d.h \
     engine/3d4d/engine3d4d.h \

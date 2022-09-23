@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/abstractinitializer.h"
-#include "engine/abstractnbodyengine.h"
+#include "engine/AbstractInitializer.h"
+#include "engine/AbstractNBodyEngine.h"
 
 template <typename T>
 class Initializer3D : protected AbstractInitializer

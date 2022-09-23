@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractenginecore.h"
+#include "engine/AbstractEngineCore.h"
 #include <QThread>
 
 class ThreadController : public QObject

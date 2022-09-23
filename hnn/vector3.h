@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cmath>
-#include <string>
 #include <sstream>
 
 namespace hnn // https://github.com/hypernumbernet

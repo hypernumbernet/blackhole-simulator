@@ -1,8 +1,8 @@
 #pragma once
 
-#include "graphicwindow.h"
-#include "initializerdialog.h"
-#include "monitoringdialog.h"
+#include "GraphicWindow.h"
+#include "InitializerDialog.h"
+#include "MonitoringDialog.h"
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/abstractenginecoredouble.h"
+#include "engine/AbstractEngineCoreDouble.h"
 #include "calculation3d4d.h"
 
 class CoreDouble3D4D : public AbstractEngineCoreDouble
