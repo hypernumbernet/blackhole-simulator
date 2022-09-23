@@ -6,10 +6,10 @@
 using namespace hnn;
 
 template <typename T>
-class Initializer3D4D : protected AbstractInitializer
+class InitializerUniverse1 : protected AbstractInitializer
 {
 public:
-    Initializer3D4D(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
+    InitializerUniverse1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
         , m_3d(sim, engine)

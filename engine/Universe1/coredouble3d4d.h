@@ -3,11 +3,11 @@
 #include "engine/AbstractEngineCoreDouble.h"
 #include "calculation3d4d.h"
 
-class CoreDouble3D4D : public AbstractEngineCoreDouble
+class CoreDoubleUniverse1 : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    CoreDouble3D4D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CoreDoubleUniverse1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,7 +15,7 @@ public:
 
     static AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new CoreDouble3D4D(engine, threadNumber);
+        return new CoreDoubleUniverse1(engine, threadNumber);
     }
 
     bool hasRangeInteraction() const override
@@ -37,5 +37,5 @@ public slots:
     }
 
 private:
-    Calculation3D4D m_calc;
+    CalculationUniverse1 m_calc;
 };

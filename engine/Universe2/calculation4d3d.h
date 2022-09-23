@@ -4,10 +4,10 @@
 
 using namespace hnn;
 
-class Calculation4D3D
+class CalculationUniverse2
 {
 public:
-    Calculation4D3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CalculationUniverse2(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)

@@ -70,7 +70,7 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         case Engine::Universe1:
-            m_NBodyEngineFloat = new Engine3D4D<float>(sim);
+            m_NBodyEngineFloat = new EngineUniverse1<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreEvenlyDivided::factory);
             velocityVectorSize = 4;
             break;
@@ -80,7 +80,7 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
             velocityVectorSize = 4;
             break;
         case Engine::Universe2:
-            m_NBodyEngineFloat = new Engine4D3D<float>(sim);
+            m_NBodyEngineFloat = new EngineUniverse2<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
         case Engine::GravityCollision:
@@ -104,8 +104,8 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D::factory);
             break;
         case Engine::Universe1:
-            m_NBodyEngineDouble = new Engine3D4D<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble3D4D::factory);
+            m_NBodyEngineDouble = new EngineUniverse1<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleUniverse1::factory);
             velocityVectorSize = 4;
             break;
         case Engine::Relativity1:
@@ -114,8 +114,8 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
             velocityVectorSize = 4;
             break;
         case Engine::Universe2:
-            m_NBodyEngineDouble = new Engine4D3D<double>(sim);
-            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDouble4D3D::factory);
+            m_NBodyEngineDouble = new EngineUniverse2<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleUniverse2::factory);
             break;
         case Engine::GravityCollision:
             m_NBodyEngineDouble = new EngineGravityCollision<double>(sim);

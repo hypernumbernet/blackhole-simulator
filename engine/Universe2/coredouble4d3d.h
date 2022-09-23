@@ -3,11 +3,11 @@
 #include "engine/AbstractEngineCoreDouble.h"
 #include "calculation4d3d.h"
 
-class CoreDouble4D3D : public AbstractEngineCoreDouble
+class CoreDoubleUniverse2 : public AbstractEngineCoreDouble
 {
     Q_OBJECT
 public:
-    CoreDouble4D3D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CoreDoubleUniverse2(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : AbstractEngineCoreDouble(engine, threadNumber)
         , m_calc(engine, threadNumber)
     {
@@ -15,7 +15,7 @@ public:
 
     static AbstractEngineCore* factory(AbstractNBodyEngine<double>* const engine, const int threadNumber)
     {
-        return new CoreDouble4D3D(engine, threadNumber);
+        return new CoreDoubleUniverse2(engine, threadNumber);
     }
 
 public slots:
@@ -32,5 +32,5 @@ public slots:
     }
 
 private:
-    Calculation4D3D m_calc;
+    CalculationUniverse2 m_calc;
 };

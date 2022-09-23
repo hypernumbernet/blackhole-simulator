@@ -7,10 +7,10 @@ using namespace hnn;
 /**
  * @brief Quaternion Logarithm Gravity
  */
-class Calculation3D4D
+class CalculationUniverse1
 {
 public:
-    Calculation3D4D(AbstractNBodyEngine<double>* const engine, const int threadNumber)
+    CalculationUniverse1(AbstractNBodyEngine<double>* const engine, const int threadNumber)
         : m_engine(engine)
         , m_timeProgresStart(engine->timeProgressRanges().at(threadNumber).start)
         , m_timeProgresEnd(engine->timeProgressRanges().at(threadNumber).end)
