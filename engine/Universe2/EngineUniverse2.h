@@ -40,7 +40,7 @@ public:
                 d2 = this->m_coordinates[b + 1] - this->m_coordinates[a + 1];
                 d3 = this->m_coordinates[b + 2] - this->m_coordinates[a + 2];
                 r = sqrt(d1 * d1 + d2 * d2 + d3 * d3);
-                this->m_distances[k] = T(1.0) / r;
+                this->m_distances[k] = T(1. / r);
                 ++k;
             }
         }

@@ -14,8 +14,8 @@ QHash<bhs::Engine, QString>& UpdateUi::engineLabel()
         {bhs::Engine::Relativity1, tr("Relativity 1")},
         {bhs::Engine::Relativity2, tr("Relativity 2")},
         {bhs::Engine::Relativity3, tr("Relativity 3")},
-        {bhs::Engine::Universe1, tr("Gravity 3S-Velocity")},
-        {bhs::Engine::Universe2, tr("Gravity 3S-Coordinate")},
+        {bhs::Engine::Universe1, tr("Universe1")},
+        {bhs::Engine::Universe2, tr("Universe2")},
     };
     return map;
 }
