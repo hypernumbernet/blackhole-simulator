@@ -131,7 +131,7 @@ https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
 `q = (q0 + q1 h) + (q2 + q3 h) i + (q4 + q5 h) j + (q6 + q7 h) k`
 
-双四元数は二種類の共役を持ちます。四元数部分を共役したものと複素数部分を共役したものです。
+双四元数は2種類の共役を持ちます。四元数部分を共役したものと複素数部分を共役したものです。
 
 `q* = (q0 + q1 h) - (q2 + q3 h) i - (q4 + q5 h) j - (q6 + q7 h) k`
 
@@ -147,15 +147,15 @@ https://github.com/hypernumbernet/blackhole-simulator/tree/version2qt/binary
 
 `g* s g~ (Lorentz Transformation)`
 
-g として二種類のグループが定義できます。単位四元数と双四元数の四元数以外の部分です。
+g は2つの部分を持っています。単位四元数と上記 s の単位時空四元数です。時空四元数はここでの呼称で、ソースコード中に Spacetime class として定義しています。
 
-`g = q0 + q2 i + q4 j + q6 k`
+`g = q0 + q2 i + q4 j + q6 k (単位四元数)`
 
 または
 
-`g = q1 + q3 hi + q5 hj + q7 hk`
+`g = q1 + q3 hi + q5 hj + q7 hk (単位時空四元数)`
 
-ここでは、後者の四元数以外の部分の使い方を書きます。指数関数を使って以下のように書けます。
+ここでは、後者の単位時空四元数の使い方を書きます。指数関数を使って以下のように書けます。
 
 `exp(ahr) = cosh(a) + hr sinh(a)`
 
@@ -167,8 +167,40 @@ g として二種類のグループが定義できます。単位四元数と双
 
 として求められます。割り算を使用しないので計算不能に陥りにくいです。また、ローレンツ変換を角度の足し算として計算できることが分かります。
 
-ここで角度 a は、 `a = atanh(|v|/c)` として求められます。ラピディティとして知られているものです。しかし、多粒子シミュレーションとしてはこの式は扱い難いです。vが積算で大きくなりcを超えると計算不能になります。そこで、運動量 p を導入します。
+ここで角度 a は、 `a = atanh(|v|/c)` として求められます。ラピディティとして知られているものです。しかし、多粒子シミュレーションとしてはこの式は扱い難いです。強い条件で v を合計すると簡単に c を超え計算不能になります。そこで、運動量 p による算出を行っています。
 
 `|v| / c = |p| / sqrt(m^2 c^2 + |p|^2)`
 
 この関係を利用すると、p がいくら大きくなっても数式は 1 以下になるので都合が良いです。m は質量ですがマイナスにはなりません。m がゼロの時は v=c  なので光子になることが分かります。ただ、atanh は1より小さくないと無限になるので、この方式では光子を扱うことは出来ないことが分かります。
+
+双四元数によるローレンツ変換を成分として書くと、
+
+`g  = ia + jb + kc + p + hiq + hjr + hks`
+
+`g* = - ia - jb - kc + p - hiq - hjr - hks`
+
+`g~ = ia + jb + kc + p - hiq - hjr - hks`
+
+`f = w + hix + hjy + hkz`
+
+と定義して、
+
+`g* f g~ = (aa + bb + cc + pp + qq + rr + ss)w + 2((- bs + cr - pq)x + (as - cq - pr)y + (- ar + bq - ps)z)`
+
+` + hi((aa - bb - cc + pp + qq - rr - ss)x + 2((bs - cr - pq)w + (ab + cp + qr)y + (ac - bp + qs)z))`
+
+` + hj((- aa + bb - cc + pp - qq + rr - ss)y + 2((- as + cq - pr)w + (ab - cp + qr)x + (bc + ap + rs)z))`
+
+` + hk((- aa - bb + cc + pp - qq - rr + ss)z + 2((ar - bq - ps)w + (ac + bp + qs)x + (bc - ap + rs)y))`
+
+となります。つまり、再度時空四元数となります。 `g = p + hiq + hjr + hks` だけを使うとすれば、
+
+`g* f g~ = (pp + qq + rr + ss)w + 2p(- qx - ry - sz)`
+
+` + hi((pp + qq - rr - ss)x + 2q(- pw + ry + sz))`
+
+` + hj((pp - qq + rr - ss)y + 2r(- pw + qx + sz))`
+
+` + hk((pp - qq - rr + ss)z + 2s(- pw + qx + ry))`
+
+となります。
