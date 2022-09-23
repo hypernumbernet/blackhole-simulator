@@ -16,11 +16,11 @@ SOURCES += \
     engine/Relativity1/InitializerRelativity1.cpp \
     engine/Relativity2/InitializerRelativity2.cpp \
     engine/Relativity3/InitializerRelativity3.cpp \
-    engine/3d4d/initializer3d4d.cpp \
-    engine/4d3d/initializer4d3d.cpp \
     GraphicWindow.cpp \
     InitializerDialog.cpp \
     LineShaders.cpp \
+    engine/Universe1/initializer3d4d.cpp \
+    engine/Universe2/initializer4d3d.cpp \
     main.cpp \
     MainWidget.cpp \
     MonitoringDialog.cpp \
@@ -59,15 +59,15 @@ HEADERS += \
     engine/Relativity3/CoreDoubleRelativity3.h \
     engine/Relativity3/EngineRelativity3.h \
     engine/Relativity3/InitializerRelativity3.h \
-    engine/3d4d/calculation3d4d.h \
-    engine/3d4d/coredouble3d4d.h \
-    engine/3d4d/engine3d4d.h \
-    engine/3d4d/initializer3d4d.h \
-    engine/4d3d/calculation4d3d.h \
-    engine/4d3d/coredouble4d3d.h \
-    engine/4d3d/engine4d3d.h \
-    engine/4d3d/initializer4d3d.h \
     GraphicWindow.h \
+    engine/Universe1/calculation3d4d.h \
+    engine/Universe1/coredouble3d4d.h \
+    engine/Universe1/engine3d4d.h \
+    engine/Universe1/initializer3d4d.h \
+    engine/Universe2/calculation4d3d.h \
+    engine/Universe2/coredouble4d3d.h \
+    engine/Universe2/engine4d3d.h \
+    engine/Universe2/initializer4d3d.h \
     hnn/biquaternion.h \
     hnn/constants.h \
     hnn/octonion.h \

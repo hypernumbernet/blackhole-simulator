@@ -4,6 +4,9 @@
 
 using namespace hnn;
 
+/**
+ * @brief Quaternion Logarithm Gravity
+ */
 class Calculation3D4D
 {
 public:

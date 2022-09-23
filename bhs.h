@@ -14,10 +14,10 @@ namespace bhs // Black Hole Simulator
 // Do Not sort or delete for save files
 enum class Engine
 {
-    G3D,
-    G3D4D,
-    G3D4DR1,
-    G4D3D,
+    Gravity3D,
+    Universe1,
+    Relativity1,
+    Universe2,
     GravityCollision,
     Relativity2,
     Relativity3,
@@ -60,7 +60,7 @@ struct CustomData
 
 struct SimCondition
 {
-    Engine engine = Engine::G3D;
+    Engine engine = Engine::Gravity3D;
     Precision precision = Precision::Float;
     Compute compute = Compute::GPU;
     Preset preset = Preset::RandomBall;

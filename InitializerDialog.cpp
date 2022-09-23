@@ -32,7 +32,7 @@ InitializerDialog::InitializerDialog(QWidget* parent)
         auto radio = new QRadioButton(s);
         m_engineButtonGroup.addButton(radio, static_cast<int>(p));
         engineVbox->addWidget(radio);
-        if (p == bhs::Engine::G3D)
+        if (p == bhs::Engine::Gravity3D)
             radio->setChecked(true);
     }
 
@@ -206,8 +206,8 @@ bool InitializerDialog::validate()
     m_sim.speed = toDouble(m_speedEdit, allOk);
     m_sim.rotation = toDouble(m_rotationEdit, allOk);
     if (m_sim.compute == bhs::Compute::GPU &&
-            (m_sim.engine == bhs::Engine::G4D3D
-             || m_sim.engine == bhs::Engine::G3D4DR1
+            (m_sim.engine == bhs::Engine::Universe2
+             || m_sim.engine == bhs::Engine::Relativity1
              || m_sim.engine == bhs::Engine::GravityCollision
              || m_sim.engine == bhs::Engine::Relativity2
              || m_sim.engine == bhs::Engine::Relativity3
