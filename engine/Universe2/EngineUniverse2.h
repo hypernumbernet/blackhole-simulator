@@ -28,12 +28,12 @@ public:
         this->init();
 
         T d1, d2, d3, r;
-        quint64 a, b;
+        quint64 i, j, a, b;
         quint64 k = 0;
-        for (quint64 i = 0; i < this->m_numberOfParticles - 1; ++i)
+        for (i = 0; i < this->m_numberOfParticles - 1; ++i)
         {
             a = i * 3;
-            for (quint64 j = i + 1; j < this->m_numberOfParticles; ++j)
+            for (j = i + 1; j < this->m_numberOfParticles; ++j)
             {
                 b = j * 3;
                 d1 = this->m_coordinates[b    ] - this->m_coordinates[a    ];
@@ -54,5 +54,4 @@ public:
         delete[] this->m_locations;
         delete[] this->m_distances;
     }
-
 };

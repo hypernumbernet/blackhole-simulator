@@ -9,6 +9,8 @@ template <typename T>
 class InitializerUniverse1 : protected AbstractInitializer
 {
 public:
+    static constexpr double ZOOM = 32.;
+
     InitializerUniverse1(const bhs::SimCondition& sim, AbstractNBodyEngine<T>* const engine)
         : AbstractInitializer(sim)
         , m_engine(engine)
@@ -21,37 +23,36 @@ private:
     void initRandomSphere(double) override;
     void initCustom() override;
 
-    Quaternion fromDirectionAndSpeed(
-            const double x, const double y, const double z,
-            const double speed
-            ) const
-    {
-        Vector3 dr(x, y, z);
-        dr.normalize();
-        const auto angle = m_engine->velocityToAngle(speed);
-        return Quaternion::exp(dr * angle);
-    }
-
-    Quaternion fromVector3(Vector3 v3) const
-    {
-        const auto speed = v3.abs();
-        return fromDirectionAndSpeed(v3.x(), v3.y(), v3.z(), speed);
-    }
-
     void fromInitializer3D()
     {
         const quint64 num = m_engine->numberOfParticle();
-        T* const velocities = m_engine->velocities();
-
-        T* vels = new T[num * 4];
+        const T* const coordinates = m_engine->coordinates();
+        T* const locations = m_engine->locations();
+        const double coordToAngle = PI / ZOOM;
 
         for (quint64 i = 0; i < num; ++i)
         {
             quint64 i3 = i * 3;
             quint64 i4 = i * 4;
 
-            auto q = fromVector3({velocities[i3], velocities[i3+1], velocities[i3+2]});
-            bhs::embedQuaternionToArray<T>(q, vels, i4);
+            Vector3 coord((double)coordinates[i3], (double)coordinates[i3 + 1], (double)coordinates[i3 + 2]);
+            coord *= coordToAngle;
+            Quaternion qc = Quaternion::exp(coord);
+            bhs::embedQuaternionToArray<T>(qc, locations, i4);
+        }
+
+        T* const velocities = m_engine->velocities();
+        T* vels = new T[num * 4];
+        Vector3 vv;
+        Quaternion vq;
+
+        for (quint64 i = 0; i < num; ++i)
+        {
+            quint64 i3 = i * 3;
+            quint64 i4 = i * 4;
+            vv.set((double)velocities[i3], (double)velocities[i3 + 1], (double)velocities[i3 + 2]);
+            vq.set(Quaternion::exp(vv * coordToAngle));
+            bhs::embedQuaternionToArray(vq, vels, i4);
         }
         for (quint64 i = 0; i < num * 4; ++i)
         {

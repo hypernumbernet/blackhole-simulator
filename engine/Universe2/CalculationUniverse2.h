@@ -63,14 +63,14 @@ public:
         quint64 k = m_interactionStart * numberOfParticles - (m_interactionStart + 1) * m_interactionStart / 2;
 
         double d1, d2, d3, r, theta, ma, mb;
-        quint64 i, i3, j3;
+        quint64 i, j, i3, j3;
 
         double* acceleration = new double[number3]();
 
         for (i = m_interactionStart; i < m_interactionEnd; ++i)
         {
             i3 = i * 3;
-            for (quint64 j = i + 1; j < numberOfParticles; ++j)
+            for (j = i + 1; j < numberOfParticles; ++j)
             {
                 j3 = j * 3;
 

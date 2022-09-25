@@ -555,16 +555,18 @@ public:
 
     // The function that combines makeRotation() and rot8().
     // v should be normalized
-    Quaternion rotMove(const Vector3& v, const double theta) const
+    void rotMove(const Vector3& v, const double theta)
     {
         const double c = cos(theta);
         const double s = sin(theta);
-        return Quaternion(
-            m_re * c - (v.x() * m_i1 + v.y() * m_i2 + v.z() * m_i3) * s,
-            m_i1 * c + (v.x() * m_re + v.y() * m_i3 - v.z() * m_i2) * s,
-            m_i2 * c + (v.y() * m_re + v.z() * m_i1 - v.x() * m_i3) * s,
-            m_i3 * c + (v.z() * m_re - v.y() * m_i1 + v.x() * m_i2) * s
-        );
+        const double re = m_re * c - (v.x() * m_i1 + v.y() * m_i2 + v.z() * m_i3) * s;
+        const double i1 = m_i1 * c + (v.x() * m_re + v.y() * m_i3 - v.z() * m_i2) * s;
+        const double i2 = m_i2 * c + (v.y() * m_re + v.z() * m_i1 - v.x() * m_i3) * s;
+        const double i3 = m_i3 * c + (v.z() * m_re - v.y() * m_i1 + v.x() * m_i2) * s;
+        m_re = re;
+        m_i1 = i1;
+        m_i2 = i2;
+        m_i3 = i3;
     }
 
     static Quaternion slerp(
