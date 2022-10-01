@@ -1,5 +1,7 @@
 #include "MainWidget.h"
+#include "bhs.h"
 #include <QComboBox>
+#include <QMessageBox>
 
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent)
@@ -121,7 +123,14 @@ void MainWidget::initUi()
     auto lineTypeCombo = new QComboBox();
     lineTypeCombo->setFocusPolicy(Qt::NoFocus);
     lineTypeCombo->setInsertPolicy(QComboBox::NoInsert);
-    lineTypeCombo->addItems(UpdateUi::it().lineType().values());
+    QListIterator<bhs::LineType> i(UpdateUi::gridList());
+    while (i.hasNext())
+    {
+        auto p = i.next();
+        QString s = UpdateUi::lineType().find(p).value();
+        QVariant v = static_cast<int>(p);
+        lineTypeCombo->addItem(s, v);
+    }
     m_vLayout.addWidget(lineTypeCombo);
     connect(lineTypeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), &m_graphicWindows, &GraphicWindow::setLineType);
 
@@ -187,10 +196,16 @@ void MainWidget::initUi()
     connect(&UpdateUi::it(), &UpdateUi::displayPrecision, this, &MainWidget::displayPrecision);
 
     // Monitoring
-    auto graphButton = new QPushButton(tr("Monitoring..."));
+    auto monitorButton = new QPushButton(tr("Monitoring..."));
+    monitorButton->setFocusPolicy(Qt::NoFocus);
+    m_vLayout.addWidget(monitorButton);
+    connect(monitorButton, &QPushButton::clicked, this, &MainWidget::showMonitoringDialog);
+
+    // Graph
+    auto graphButton = new QPushButton(tr("Graph..."));
     graphButton->setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(graphButton);
-    connect(graphButton, &QPushButton::clicked, this, &MainWidget::showMonitoringDialog);
+    connect(graphButton, &QPushButton::clicked, this, &MainWidget::showGraphDialog);
 
     updateStartButtonText(false);
 }
@@ -270,7 +285,7 @@ void MainWidget::showInitializerDialog()
 void MainWidget::acceptInitializerDialog()
 {
     m_simCondition = m_initializerDialog->simCondition();
-    reset(m_simCondition);
+    reset();
 }
 
 void MainWidget::displayEngineName(const bhs::Engine engine)
@@ -278,9 +293,9 @@ void MainWidget::displayEngineName(const bhs::Engine engine)
     m_engineValue.setText(UpdateUi::engineLabel().value(engine));
 }
 
-void MainWidget::reset(const bhs::SimCondition& sim)
+void MainWidget::reset()
 {
-    m_graphicWindows.resetWaitForDone(sim);
+    m_graphicWindows.resetWaitForDone(m_simCondition);
     resetScaleSlider();
     updateStartButtonText(false);
 }
@@ -297,16 +312,15 @@ void MainWidget::displayPresetName(const bhs::Preset preset, const QString name)
 
 void MainWidget::resetInitial()
 {
-    reset(m_simCondition);
+    reset();
 }
 
 void MainWidget::displayNumberOfParticles(const int num)
 {
-    m_simCondition.numberOfParticles = num;
     m_particleNumValue.setText(QString::number(num));
 }
 
-void MainWidget::displayPrecision(bhs::Precision precision)
+void MainWidget::displayPrecision(const bhs::Precision precision)
 {
     QString s = UpdateUi::precision().value(precision);
     m_precisionValue.setText(s);
@@ -324,8 +338,41 @@ void MainWidget::showMonitoringDialog()
     m_monitoringDialog->update();
 }
 
-void MainWidget::displayCompute(bhs::Compute c)
+void MainWidget::displayCompute(const bhs::Compute c)
 {
     QString s = UpdateUi::compute().value(c);
     m_computeValue.setText(s);
+}
+
+void MainWidget::showGraphDialog()
+{
+    if (m_graphicWindows.frameNumber() > 0)
+    {
+        auto rep = QMessageBox::question(this, tr("Confirm"), tr("Reset the simulation. Is it OK?"));
+        if (rep != QMessageBox::Yes)
+            return;
+    }
+
+    if ( ! m_graphDialog)
+    {
+        m_graphDialog = new GraphDialog(this, &m_graphicWindows);
+        connect(m_graphDialog, &GraphDialog::finished, this, &MainWidget::finishedGraphDialog);
+    }
+
+    m_graphDialog->saveCondition(m_simCondition.numberOfParticles, m_simCondition.preset, bhs::LineType::XZMeshes);
+    m_simCondition.numberOfParticles = 0;
+    m_simCondition.preset = bhs::Preset::RandomCube;
+    reset();
+
+    m_graphDialog->show();
+    m_graphDialog->raise();
+    m_graphDialog->activateWindow();
+}
+
+void MainWidget::finishedGraphDialog(int)
+{
+    m_simCondition.numberOfParticles = m_graphDialog->numberOfParticles();
+    m_simCondition.preset = m_graphDialog->preset();
+    reset();
+    m_graphicWindows.setLineType(static_cast<int>(m_graphDialog->lineType()));
 }

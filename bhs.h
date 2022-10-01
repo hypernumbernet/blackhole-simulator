@@ -43,6 +43,17 @@ enum class Preset
     Custom,
 };
 
+enum class LineType
+{
+    XZMeshes,
+    Axis,
+    CubeMeshes,
+    LongitudeAndLatitude,
+    QuaternionS3Rotation,
+    OctonionS3RotationXY,
+    OctonionS3RotationAll,
+};
+
 struct Particle
 {
     Vector3 coordinate;
@@ -83,17 +94,6 @@ struct IntRange
 {
     quint64 start;
     quint64 end;
-};
-
-enum class LineType
-{
-    XZMeshes,
-    Axis,
-    CubeMeshes,
-    LongitudeAndLatitude,
-    QuaternionS3Rotation,
-    OctonionS3RotationXY,
-    OctonionS3RotationAll,
 };
 
 inline QRecursiveMutex interactionMutex;

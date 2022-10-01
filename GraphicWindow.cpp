@@ -262,7 +262,7 @@ void GraphicWindow::startSim()
 
 void GraphicWindow::setLineType(const int index)
 {
-    m_lineShaders->setLineType(index);
+    m_lineShaders->setLineType(static_cast<bhs::LineType>(index));
 }
 
 void GraphicWindow::frameAdvance1()

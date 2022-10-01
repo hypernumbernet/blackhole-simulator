@@ -3,6 +3,7 @@
 #include "GraphicWindow.h"
 #include "InitializerDialog.h"
 #include "MonitoringDialog.h"
+#include "GraphDialog.h"
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -32,10 +33,12 @@ public slots:
     void showInitializerDialog();
     void acceptInitializerDialog();
     void showMonitoringDialog();
+    void showGraphDialog();
+    void finishedGraphDialog(int);
 
 private:
     void initUi();
-    void reset(const bhs::SimCondition&);
+    void reset();
 
     bhs::SimCondition m_simCondition;
     GraphicWindow m_graphicWindows;
@@ -60,4 +63,5 @@ private:
 
     InitializerDialog* m_initializerDialog = nullptr;
     MonitoringDialog* m_monitoringDialog = nullptr;
+    GraphDialog* m_graphDialog = nullptr;
 };

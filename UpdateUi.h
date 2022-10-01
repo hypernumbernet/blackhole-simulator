@@ -17,6 +17,8 @@ public:
     static QMap<bhs::Compute, QString>& compute();
     static QMap<bhs::Preset, QString>& preset();
     static QMap<bhs::LineType, QString>& lineType();
+    static QList<bhs::LineType>& gridList();
+    static QList<bhs::LineType>& graphList();
     static void style(QLCDNumber&);
     static void style(QLabel&);
     static void width(QLabel&);

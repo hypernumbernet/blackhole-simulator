@@ -77,6 +77,27 @@ QMap<bhs::LineType, QString>& UpdateUi::lineType()
     return map;
 }
 
+QList<bhs::LineType>& UpdateUi::gridList()
+{
+    static QList<bhs::LineType> list = {
+        bhs::LineType::XZMeshes,
+        bhs::LineType::Axis,
+        bhs::LineType::CubeMeshes,
+        bhs::LineType::LongitudeAndLatitude,
+    };
+    return list;
+}
+
+QList<bhs::LineType>& UpdateUi::graphList()
+{
+    static QList<bhs::LineType> list = {
+        bhs::LineType::QuaternionS3Rotation,
+        bhs::LineType::OctonionS3RotationXY,
+        bhs::LineType::OctonionS3RotationAll,
+    };
+    return list;
+}
+
 void UpdateUi::style(QLCDNumber& lcd)
 {
     lcd.setFrameStyle(QFrame::StyledPanel | QFrame::Plain);

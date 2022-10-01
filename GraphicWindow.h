@@ -20,7 +20,7 @@ public:
 
 public slots:
     void enableGridLines(bool);
-    void setLineType(int);
+    void setLineType(const int);
     void startSim();
     void frameAdvance1();
     void frameAdvance10();

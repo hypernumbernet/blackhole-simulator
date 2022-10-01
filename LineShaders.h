@@ -1,5 +1,6 @@
 #pragma once
 
+#include "bhs.h"
 #include "hnn/vector3.h"
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLWindow>
@@ -18,7 +19,7 @@ public:
     bool initialize();
     void paint(const QMatrix4x4& viewProjection);
     void enableGridLines(bool);
-    void setLineType(int);
+    void setLineType(const bhs::LineType);
 
 private:
     QOpenGLShaderProgram m_program;

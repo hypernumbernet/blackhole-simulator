@@ -4,6 +4,7 @@ QT += opengl
 CONFIG += c++17
 
 SOURCES += \
+    GraphDialog.cpp \
     ThreadAdmin.cpp \
     ThreadController.cpp \
     UpdateUi.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
     ParticleShaders.cpp
 
 HEADERS += \
+    GraphDialog.h \
     ThreadAdmin.h \
     ThreadController.h \
     UpdateUi.h \

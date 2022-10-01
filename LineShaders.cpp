@@ -84,11 +84,11 @@ void LineShaders::enableGridLines(const bool enabled)
     m_enableGridLines = enabled;
 }
 
-void LineShaders::setLineType(const int index)
+void LineShaders::setLineType(const bhs::LineType index)
 {
     m_vertex.clear();
 
-    switch (static_cast<bhs::LineType>(index))
+    switch (index)
     {
     case bhs::LineType::XZMeshes:
         linesXZMeshes();
