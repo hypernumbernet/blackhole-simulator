@@ -48,17 +48,18 @@ public:
                 dot = qa.dot(qb);
                 if (dot >= 1.)
                 {
-                    r = std::numeric_limits<double>::min();
+                    this->m_distances[k] = T(std::numeric_limits<float>::max());
                 }
                 else if (dot < - 1.)
                 {
                     r = acos(- 1.);
+                    this->m_distances[k] = T(1. / r);
                 }
                 else
                 {
                     r = acos(dot);
+                    this->m_distances[k] = T(1. / r);
                 }
-                this->m_distances[k] = T(1. / r);
                 ++k;
             }
         }
