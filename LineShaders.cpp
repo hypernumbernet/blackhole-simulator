@@ -1,5 +1,6 @@
 #include "LineShaders.h"
 #include "bhs.h"
+#include "engine/Relativity1/CalculationRelativity1.h"
 #include "hnn/octonion.h"
 #include <QOpenGLBuffer>
 
@@ -110,6 +111,9 @@ void LineShaders::setLineType(const bhs::LineType index)
         break;
     case bhs::LineType::OctonionS3RotationAll:
         linesOctonionS3RotationAll();
+        break;
+    case bhs::LineType::LorentzTrans1:
+        linesLorentzTrans1();
         break;
     }
     initGridLines();
@@ -385,4 +389,81 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
         }
     }
     ++m_ScreenX;
+}
+
+void LineShaders::linesLorentzTrans1()
+{
+    QGenericMatrix<4, 4, double> matrix;
+    Vector3 speed(0., 0., 0.);
+    double speedOfLightInv = 1. / SPEED_OF_LIGHT;
+    QGenericMatrix<1, 4, double> spacetimeOrg;
+    spacetimeOrg(0, 0) = 1.;
+    spacetimeOrg(1, 0) = 0.;
+    spacetimeOrg(2, 0) = 0.;
+    spacetimeOrg(3, 0) = 0.;
+    QGenericMatrix<1, 4, double> spacetimeA, spacetimeB;
+
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            for (int i = -8; i <= 8; i += 2)
+            {
+                speed.set(SPEED_OF_LIGHT * 0.07 * (double)k, SPEED_OF_LIGHT * 0.05 * (double)i, SPEED_OF_LIGHT * 0.07 * (double)j);
+                CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
+                spacetimeB = matrix * spacetimeOrg;
+                if (i > -8)
+                {
+                    double ax = spacetimeA(1, 0);
+                    double ay = spacetimeA(2, 0);
+                    double az = spacetimeA(3, 0);
+                    double bx = spacetimeB(1, 0);
+                    double by = spacetimeB(2, 0);
+                    double bz = spacetimeB(3, 0);
+                    appendLine({ax, ay, az}, {bx, by, bz}, GREEN);
+                }
+                spacetimeA = spacetimeB;
+            }
+        }
+    }
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            speed.set(SPEED_OF_LIGHT * 0.07 * (double)j, 0., SPEED_OF_LIGHT * 0.07 * (double)k);
+            CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
+            spacetimeB = matrix * spacetimeOrg;
+            if (j > -8)
+            {
+                double ax = spacetimeA(1, 0);
+                double ay = spacetimeA(2, 0);
+                double az = spacetimeA(3, 0);
+                double bx = spacetimeB(1, 0);
+                double by = spacetimeB(2, 0);
+                double bz = spacetimeB(3, 0);
+                appendLine({ax, ay, az}, {bx, by, bz}, RED);
+            }
+            spacetimeA = spacetimeB;
+        }
+    }
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            speed.set(SPEED_OF_LIGHT * 0.07 * (double)k, 0., SPEED_OF_LIGHT * 0.07 * (double)j);
+            CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
+            spacetimeB = matrix * spacetimeOrg;
+            if (j > -8)
+            {
+                double ax = spacetimeA(1, 0);
+                double ay = spacetimeA(2, 0);
+                double az = spacetimeA(3, 0);
+                double bx = spacetimeB(1, 0);
+                double by = spacetimeB(2, 0);
+                double bz = spacetimeB(3, 0);
+                appendLine({ax, ay, az}, {bx, by, bz}, BLUE);
+            }
+            spacetimeA = spacetimeB;
+        }
+    }
 }

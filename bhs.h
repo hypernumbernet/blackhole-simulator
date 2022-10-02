@@ -52,6 +52,7 @@ enum class LineType
     QuaternionS3Rotation,
     OctonionS3RotationXY,
     OctonionS3RotationAll,
+    LorentzTrans1,
 };
 
 struct Particle

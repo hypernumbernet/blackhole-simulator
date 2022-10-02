@@ -44,6 +44,7 @@ private:
     void linesOctonionS3RotationAll();
     void linesOctonionRotationAt(int, int, int, int, int pole, double y0 = 2.5);
     void linesOctonionRotationY(int, int, int, int);
+    void linesLorentzTrans1();
     int m_ScreenX = 0;
     void drawCircle(int resolution, const Vector3& axis, const Vector3& startPoint, const QVector3D color);
 

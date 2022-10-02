@@ -73,6 +73,7 @@ QMap<bhs::LineType, QString>& UpdateUi::lineType()
         {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rotation")},
         {bhs::LineType::OctonionS3RotationXY, tr("Octonion S3 Rotation XY")},
         {bhs::LineType::OctonionS3RotationAll, tr("Octonion S3 Rotation All")},
+        {bhs::LineType::LorentzTrans1, tr("Lorentz Transformation 1")},
     };
     return map;
 }
@@ -94,6 +95,7 @@ QList<bhs::LineType>& UpdateUi::graphList()
         bhs::LineType::QuaternionS3Rotation,
         bhs::LineType::OctonionS3RotationXY,
         bhs::LineType::OctonionS3RotationAll,
+        bhs::LineType::LorentzTrans1,
     };
     return list;
 }
