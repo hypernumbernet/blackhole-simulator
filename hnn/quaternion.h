@@ -11,7 +11,7 @@ class Quaternion
 public:
     Quaternion() {}
 
-    constexpr Quaternion(const double real, const double imaginary1, const double imaginary2, const double imaginary3)
+    Quaternion(const double real, const double imaginary1, const double imaginary2, const double imaginary3)
         : m_re(real), m_i1(imaginary1), m_i2(imaginary2), m_i3(imaginary3) {}
 
     explicit Quaternion(const double a)
@@ -75,14 +75,16 @@ public:
         m_i3 = a[index + 3];
     }
 
-    static constexpr Quaternion zero()
+    static Quaternion zero()
     {
-        return Quaternion(0.0, 0.0, 0.0, 0.0);
+        static Quaternion z(0., 0., 0., 0.);
+        return z;
     }
 
-    static constexpr Quaternion identity()
+    static Quaternion identity()
     {
-        return Quaternion(1.0, 0.0, 0.0, 0.0);
+        static Quaternion i(1., 0., 0., 0.);
+        return i;
     }
 
     const Quaternion operator+(const Quaternion& a) const
@@ -204,14 +206,20 @@ public:
         return m_re != a.m_i1 || m_i1 != a.m_i1 || m_i2 != a.m_i2 || m_i3 != a.m_i3;
     }
 
-    const double& operator[](const int index) const
+    const double& operator[](const int i) const
     {
-        return array[index];
+        if (i == 0) return m_re;
+        if (i == 1) return m_i1;
+        if (i == 2) return m_i2;
+        return m_i3;
     }
 
-    double& operator[](const int index)
+    double& operator[](const int i)
     {
-        return array[index];
+        if (i == 0) return m_re;
+        if (i == 1) return m_i1;
+        if (i == 2) return m_i2;
+        return m_i3;
     }
 
     double norm() const
@@ -595,32 +603,25 @@ public:
         return rotation(cross, angle);
     }
 
+    bool fuzzyCompare(const Quaternion& a)
+    {
+        return hnn::fuzzyCompare(m_re, a.m_re) &&
+               hnn::fuzzyCompare(m_i1, a.m_i1) &&
+               hnn::fuzzyCompare(m_i2, a.m_i2) &&
+               hnn::fuzzyCompare(m_i3, a.m_i3);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Quaternion& a)
+    {
+        os << a.m_re << ", " << a.m_i1 << ", " << a.m_i2 << ", " << a.m_i3;
+        return os;
+    }
+
 private:
-    union
-        {
-            struct
-            {
-                double m_re;
-                double m_i1;
-                double m_i2;
-                double m_i3;
-            };
-            double array[4];
-        };
+    double m_re;
+    double m_i1;
+    double m_i2;
+    double m_i3;
 };
-
-inline std::ostream& operator<<(std::ostream& os, const Quaternion& qu)
-{
-    os << qu.re() << ", " << qu.i1() << ", " << qu.i2() << ", " << qu.i3();
-    return os;
-}
-
-inline bool fuzzyCompare(const Quaternion& a, const Quaternion& b)
-{
-    return fuzzyCompare(a.re(), b.re()) &&
-           fuzzyCompare(a.i1(), b.i1()) &&
-           fuzzyCompare(a.i2(), b.i2()) &&
-           fuzzyCompare(a.i3(), b.i3());
-}
 
 } // namespace

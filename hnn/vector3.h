@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include "constants.h"
 #include <sstream>
 
 namespace hnn // https://github.com/hypernumbernet
@@ -11,14 +11,14 @@ class Vector3
 public:
     Vector3() {}
 
-    constexpr Vector3(const double ax, const double ay, const double az)
+    Vector3(const double ax, const double ay, const double az)
         : m_x(ax), m_y(ay), m_z(az) {}
 
-    explicit constexpr Vector3(const double* const a)
+    explicit Vector3(const double* const a)
         : m_x(a[0]), m_y(a[1]), m_z(a[2]) {}
 
     template <typename E>
-    constexpr Vector3(const double* const a, const E index)
+    Vector3(const double* const a, const E index)
         : m_x(a[index]), m_y(a[index + 1]), m_z(a[index + 2]) {}
 
     double x() const { return m_x; }
@@ -45,9 +45,24 @@ public:
         m_x = a[i]; m_y = a[i + 1]; m_z = a[i + 2];
     }
 
-    static constexpr Vector3 zero()
+    const double& operator[](const int i) const
     {
-        return Vector3(0., 0., 0.);
+        if (i == 0) return m_x;
+        if (i == 1) return m_y;
+        return m_z;
+    }
+
+    double& operator[](int i)
+    {
+        if (i == 0) return m_x;
+        if (i == 1) return m_y;
+        return m_z;
+    }
+
+    static Vector3 zero()
+    {
+        static Vector3 z(0., 0., 0.);
+        return z;
     }
 
     const Vector3 operator+(const Vector3& a) const
@@ -59,8 +74,6 @@ public:
     {
         return Vector3(m_x - a.m_x, m_y - a.m_y, m_z - a.m_z);
     }
-
-    const Vector3 operator+() const { return *this; }
 
     const Vector3 operator-() const { return Vector3( - m_x, - m_y, - m_z); }
 
@@ -85,7 +98,7 @@ public:
     template <typename E>
     friend const Vector3 operator*(const E a, const Vector3& b)
     {
-        return Vector3(a * b.x(), a * b.y(), a * b.z());
+        return Vector3(a * b.m_x, a * b.m_y, a * b.m_z);
     }
 
     template <typename E>
@@ -131,7 +144,7 @@ public:
     Vector3& normalize()
     {
         const double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
-        if (r != 0.0)
+        if (r != 0.)
         {
             m_x /= r; m_y /= r; m_z /= r;
         }
@@ -141,7 +154,7 @@ public:
     Vector3 normalized() const
     {
         const double r = sqrt(m_x * m_x + m_y * m_y + m_z * m_z);
-        if (r == 0.0)
+        if (r == 0.)
         {
             return Vector3(m_x, m_y, m_z);
         }
@@ -171,28 +184,21 @@ public:
         return std::isfinite(m_x) && std::isfinite(m_y) && std::isfinite(m_z);
     }
 
-    bool ismyself() const
+    bool fuzzyCompare(const Vector3& a)
     {
-        return m_x == m_x && m_y == m_y && m_z == m_z;
+        return hnn::fuzzyCompare(m_x, a.m_x) && hnn::fuzzyCompare(m_y, a.m_y) && hnn::fuzzyCompare(m_z, a.m_z);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Vector3& a)
+    {
+        os << a.x() << ", " << a.y() << ", " << a.z();
+        return os;
     }
 
 private:
-    union
-        {
-            struct
-            {
-                double m_x;
-                double m_y;
-                double m_z;
-            };
-            double array[3];
-        };
+    double m_x;
+    double m_y;
+    double m_z;
 };
-
-inline std::ostream& operator<<(std::ostream& os, const Vector3& v)
-{
-    os << v.x() << ", " << v.y() << ", " << v.z();
-    return os;
-}
 
 } // namespace

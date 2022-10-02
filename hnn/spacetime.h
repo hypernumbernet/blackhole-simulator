@@ -102,14 +102,20 @@ public:
         return m_w != a.m_x || m_x != a.m_x || m_y != a.m_y || m_z != a.m_z;
     }
 
-    const double& operator[](const int index) const
+    const double& operator[](const int i) const
     {
-        return array[index];
+        if (i == 0) return m_w;
+        if (i == 1) return m_x;
+        if (i == 2) return m_y;
+        return m_z;
     }
 
-    double& operator[](const int index)
+    double& operator[](const int i)
     {
-        return array[index];
+        if (i == 0) return m_w;
+        if (i == 1) return m_x;
+        if (i == 2) return m_y;
+        return m_z;
     }
 
     // Invariant
@@ -269,32 +275,25 @@ public:
         lorentzTransformation(g);
     }
 
+    bool fuzzyCompare(const Spacetime& a)
+    {
+        return hnn::fuzzyCompare(m_w, a.m_w) &&
+               hnn::fuzzyCompare(m_x, a.m_x) &&
+               hnn::fuzzyCompare(m_y, a.m_y) &&
+               hnn::fuzzyCompare(m_z, a.m_z);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Spacetime& st)
+    {
+        os << st.m_w << ", " << st.m_x << ", " << st.m_y << ", " << st.m_z;
+        return os;
+    }
+
 private:
-    union
-        {
-            struct
-            {
-                double m_w;
-                double m_x;
-                double m_y;
-                double m_z;
-            };
-            double array[4];
-        };
+    double m_w;
+    double m_x;
+    double m_y;
+    double m_z;
 };
-
-inline std::ostream& operator<<(std::ostream& os, const Spacetime& st)
-{
-    os << st.w() << ", " << st.x() << ", " << st.y() << ", " << st.z();
-    return os;
-}
-
-inline bool fuzzyCompare(const Spacetime& a, const Spacetime& b)
-{
-    return fuzzyCompare(a.w(), b.w()) &&
-           fuzzyCompare(a.x(), b.x()) &&
-           fuzzyCompare(a.y(), b.y()) &&
-           fuzzyCompare(a.z(), b.z());
-}
 
 } // namespace

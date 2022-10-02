@@ -251,14 +251,28 @@ public:
                 hnn::fuzzyCompare(m_i7, a.m_i7);
     }
 
-    const double& operator[](const int index) const
+    const double& operator[](const int i) const
     {
-        return array[index];
+        if (i == 0) return m_re;
+        if (i == 1) return m_i1;
+        if (i == 2) return m_i2;
+        if (i == 3) return m_i3;
+        if (i == 4) return m_i4;
+        if (i == 5) return m_i5;
+        if (i == 6) return m_i6;
+        return m_i7;
     }
 
-    double& operator[](const int index)
+    double& operator[](const int i)
     {
-        return array[index];
+        if (i == 0) return m_re;
+        if (i == 1) return m_i1;
+        if (i == 2) return m_i2;
+        if (i == 3) return m_i3;
+        if (i == 4) return m_i4;
+        if (i == 5) return m_i5;
+        if (i == 6) return m_i6;
+        return m_i7;
     }
 
     double norm() const
@@ -297,30 +311,34 @@ public:
         return o;
     }
 
-    std::string toString() const
+    bool fuzzyCompare(const Octonion& a)
     {
-        std::ostringstream o;
-        o << m_re << ", " << m_i1 << ", " << m_i2 << ", " << m_i3 << ", " <<
-             m_i4 << ", " << m_i5 << ", " << m_i6 << ", " << m_i7;
-        return o.str();
+        return hnn::fuzzyCompare(m_re, a.m_re) &&
+               hnn::fuzzyCompare(m_i1, a.m_i1) &&
+               hnn::fuzzyCompare(m_i2, a.m_i2) &&
+               hnn::fuzzyCompare(m_i3, a.m_i3) &&
+               hnn::fuzzyCompare(m_i4, a.m_i4) &&
+               hnn::fuzzyCompare(m_i5, a.m_i5) &&
+               hnn::fuzzyCompare(m_i6, a.m_i6) &&
+               hnn::fuzzyCompare(m_i7, a.m_i7);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Octonion& a)
+    {
+        os << a.m_re << ", " << a.m_i1 << ", " << a.m_i2 << ", " << a.m_i3 << ", " <<
+              a.m_i4 << ", " << a.m_i5 << ", " << a.m_i6 << ", " << a.m_i7;
+        return os;
     }
 
 private:
-    union
-        {
-            struct
-            {
-                double m_re;
-                double m_i1;
-                double m_i2;
-                double m_i3;
-                double m_i4;
-                double m_i5;
-                double m_i6;
-                double m_i7;
-            };
-            double array[8];
-        };
+    double m_re;
+    double m_i1;
+    double m_i2;
+    double m_i3;
+    double m_i4;
+    double m_i5;
+    double m_i6;
+    double m_i7;
 };
 
 } // namespace

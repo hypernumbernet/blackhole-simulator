@@ -616,22 +616,25 @@ public:
         );
     }
 
+    bool fuzzyCompare(const Biquaternion& a)
+    {
+        return hnn::fuzzyCompare(m_w, a.m_w) &&
+               hnn::fuzzyCompare(m_x, a.m_x) &&
+               hnn::fuzzyCompare(m_y, a.m_y) &&
+               hnn::fuzzyCompare(m_z, a.m_z);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Biquaternion& a)
+    {
+        os << a.m_w << ", " << a.m_x << ", " << a.m_y << ", " << a.m_z;
+        return os;
+    }
+
 private:
     complex m_w;
     complex m_x;
     complex m_y;
     complex m_z;
 };
-
-inline std::ostream& operator<<(std::ostream& os, const Biquaternion& bq)
-{
-    os << bq.w() << ", " << bq.x() << ", " << bq.y() << ", " << bq.z();
-    return os;
-}
-
-inline bool fuzzyCompare(const Biquaternion& bq1, const Biquaternion& bq2)
-{
-    return fuzzyCompare(bq1.re(), bq2.re()) && fuzzyCompare(bq1.i(), bq2.i()) && fuzzyCompare(bq1.j(), bq2.j()) && fuzzyCompare(bq1.k(), bq2.k());
-}
 
 } // namespace
