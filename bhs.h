@@ -53,6 +53,7 @@ enum class LineType
     OctonionS3RotationXY,
     OctonionS3RotationAll,
     LorentzTrans1,
+    LorentzTrans2,
 };
 
 struct Particle

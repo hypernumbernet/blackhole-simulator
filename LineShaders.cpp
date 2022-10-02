@@ -115,6 +115,9 @@ void LineShaders::setLineType(const bhs::LineType index)
     case bhs::LineType::LorentzTrans1:
         linesLorentzTrans1();
         break;
+    case bhs::LineType::LorentzTrans2:
+        linesLorentzTrans2();
+        break;
     }
     initGridLines();
 }
@@ -393,6 +396,8 @@ void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
 
 void LineShaders::linesLorentzTrans1()
 {
+    static double rateXZ = 0.07;
+    static double rateY = 0.05;
     QGenericMatrix<4, 4, double> matrix;
     Vector3 speed(0., 0., 0.);
     double speedOfLightInv = 1. / SPEED_OF_LIGHT;
@@ -409,7 +414,7 @@ void LineShaders::linesLorentzTrans1()
         {
             for (int i = -8; i <= 8; i += 2)
             {
-                speed.set(SPEED_OF_LIGHT * 0.07 * (double)k, SPEED_OF_LIGHT * 0.05 * (double)i, SPEED_OF_LIGHT * 0.07 * (double)j);
+                speed.set(SPEED_OF_LIGHT * rateXZ * (double)k, SPEED_OF_LIGHT * rateY * (double)i, SPEED_OF_LIGHT * rateXZ * (double)j);
                 CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
                 spacetimeB = matrix * spacetimeOrg;
                 if (i > -8)
@@ -430,7 +435,7 @@ void LineShaders::linesLorentzTrans1()
     {
         for (int j = -8; j <= 8; j += 2)
         {
-            speed.set(SPEED_OF_LIGHT * 0.07 * (double)j, 0., SPEED_OF_LIGHT * 0.07 * (double)k);
+            speed.set(SPEED_OF_LIGHT * rateXZ * (double)j, 0., SPEED_OF_LIGHT * rateXZ * (double)k);
             CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
             spacetimeB = matrix * spacetimeOrg;
             if (j > -8)
@@ -450,7 +455,7 @@ void LineShaders::linesLorentzTrans1()
     {
         for (int j = -8; j <= 8; j += 2)
         {
-            speed.set(SPEED_OF_LIGHT * 0.07 * (double)k, 0., SPEED_OF_LIGHT * 0.07 * (double)j);
+            speed.set(SPEED_OF_LIGHT * rateXZ * (double)k, 0., SPEED_OF_LIGHT * rateXZ * (double)j);
             CalculationRelativity1::lorentzTransformation(matrix, speed, speedOfLightInv);
             spacetimeB = matrix * spacetimeOrg;
             if (j > -8)
@@ -462,6 +467,61 @@ void LineShaders::linesLorentzTrans1()
                 double by = spacetimeB(2, 0);
                 double bz = spacetimeB(3, 0);
                 appendLine({ax, ay, az}, {bx, by, bz}, BLUE);
+            }
+            spacetimeA = spacetimeB;
+        }
+    }
+}
+
+void LineShaders::linesLorentzTrans2()
+{
+    static double rateXZ = 0.07;
+    static double rateY = 0.05;
+    double speedOfLightInv = 1. / SPEED_OF_LIGHT;
+    Vector3 speed(0., 0., 0.);
+    Spacetime spacetimeA, spacetimeB;
+
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            for (int i = -8; i <= 8; i += 2)
+            {
+                speed.set(SPEED_OF_LIGHT * rateXZ * (double)k, SPEED_OF_LIGHT * rateY * (double)i, SPEED_OF_LIGHT * rateXZ * (double)j);
+                spacetimeB = Spacetime::identity();
+                spacetimeB.lorentzTransformation(speed, speedOfLightInv);
+                if (i > -8)
+                {
+                    appendLine({spacetimeA.x(), spacetimeA.y(), spacetimeA.z()}, {spacetimeB.x(), spacetimeB.y(), spacetimeB.z()}, GREEN);
+                }
+                spacetimeA = spacetimeB;
+            }
+        }
+    }
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            speed.set(SPEED_OF_LIGHT * rateXZ * (double)j, 0., SPEED_OF_LIGHT * rateXZ * (double)k);
+            spacetimeB = Spacetime::identity();
+            spacetimeB.lorentzTransformation(speed, speedOfLightInv);
+            if (j > -8)
+            {
+                appendLine({spacetimeA.x(), spacetimeA.y(), spacetimeA.z()}, {spacetimeB.x(), spacetimeB.y(), spacetimeB.z()}, RED);
+            }
+            spacetimeA = spacetimeB;
+        }
+    }
+    for (int k = -8; k <= 8; k += 2)
+    {
+        for (int j = -8; j <= 8; j += 2)
+        {
+            speed.set(SPEED_OF_LIGHT * rateXZ * (double)k, 0., SPEED_OF_LIGHT * rateXZ * (double)j);
+            spacetimeB = Spacetime::identity();
+            spacetimeB.lorentzTransformation(speed, speedOfLightInv);
+            if (j > -8)
+            {
+                appendLine({spacetimeA.x(), spacetimeA.y(), spacetimeA.z()}, {spacetimeB.x(), spacetimeB.y(), spacetimeB.z()}, BLUE);
             }
             spacetimeA = spacetimeB;
         }
