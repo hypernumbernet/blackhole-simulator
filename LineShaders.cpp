@@ -1,7 +1,6 @@
 #include "LineShaders.h"
 #include "bhs.h"
 #include "engine/Relativity1/CalculationRelativity1.h"
-#include "hnn/octonion.h"
 #include <QOpenGLBuffer>
 
 LineShaders::LineShaders()
@@ -103,14 +102,29 @@ void LineShaders::setLineType(const bhs::LineType index)
     case bhs::LineType::LongitudeAndLatitude:
         linesLongitudeAndLatitude();
         break;
-    case bhs::LineType::QuaternionS3Rotation:
-        linesQuaternionS3Rotation();
+    case bhs::LineType::QuaternionLeftIsoclinicRotation:
+        linesQuaternionLeftIsoclinicRotation();
         break;
-    case bhs::LineType::OctonionS3RotationXY:
-        linesOctonionS3RotationXY();
+    case bhs::LineType::QuaternionRightIsoclinicRotation:
+        linesQuaternionRightIsoclinicRotation();
         break;
-    case bhs::LineType::OctonionS3RotationAll:
-        linesOctonionS3RotationAll();
+    case bhs::LineType::OctonionRotationYList:
+        linesOctonionRotationYList();
+        break;
+    case bhs::LineType::OctonionRotationAll:
+        linesOctonionRotationAll();
+        break;
+    case bhs::LineType::OctonionRotationLeft:
+        linesOctonionRotationXY(1,2,4,7);
+        break;
+    case bhs::LineType::OctonionRotationRight:
+        linesOctonionRotationXY(1,2,5,6);
+        break;
+    case bhs::LineType::OctonionRotationOpenXY:
+        linesOctonionRotationXY(1,2,3,4);
+        break;
+    case bhs::LineType::OctonionRotationCloseXY:
+        linesOctonionRotationXY(1,2,4,5);
         break;
     case bhs::LineType::LorentzTrans1:
         linesLorentzTrans1();
@@ -210,26 +224,55 @@ void LineShaders::linesLongitudeAndLatitude()
     appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
-void LineShaders::linesQuaternionS3Rotation()
+void LineShaders::linesQuaternionLeftIsoclinicRotation()
 {
-    static const int resolution = 72;
+    static const int resolution = 180;
     static const double angle = 2. * degreeToRadian(360.0 / double(resolution));
 
     const auto rotationY = Quaternion::rotation({0,1,0}, angle);
-    for (int j = -8; j <= 8; j += 2)
+    for (int j = -4; j <= 4; ++j)
     {
-        auto start = Quaternion::rotation({1,0,0}, angle * j);
+        if (j == 0)
+            continue;
+        auto start = Quaternion::rotation({1,0,0}, j * 0.4);
         auto end = rotationY * start;
-        for (int i = 0; i < (resolution * 1.0); ++i)
+        for (int i = 0; i < resolution; ++i)
         {
-            appendLine(start.lnV3(), end.lnV3(), GREEN);
+            appendLine(start.lnV3() / 3.14, end.lnV3() / 3.14, WHITE);
             start = end;
             end = rotationY * start;
         }
     }
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
-void LineShaders::linesOctonionS3RotationXY()
+void LineShaders::linesQuaternionRightIsoclinicRotation()
+{
+    static const int resolution = 180;
+    static const double angle = 2. * degreeToRadian(360.0 / double(resolution));
+
+    const auto rotationY = Quaternion::rotation({0,1,0}, angle);
+    for (int j = -4; j <= 4; ++j)
+    {
+        if (j == 0)
+            continue;
+        auto start = Quaternion::rotation({1,0,0}, j * 0.4);
+        auto end = start * rotationY;
+        for (int i = 0; i < resolution; ++i)
+        {
+            appendLine(start.lnV3() / 3.14, end.lnV3() / 3.14, WHITE);
+            start = end;
+            end = start * rotationY;
+        }
+    }
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
+}
+
+void LineShaders::linesOctonionRotationYList()
 {
     m_ScreenX = 0;
     for (int i1 = 1; i1 <= 4; ++i1)
@@ -239,22 +282,10 @@ void LineShaders::linesOctonionS3RotationXY()
                 {
                     qDebug() << i1 << i2 << i3 << i4;
                     linesOctonionRotationAt(i1, i2, i3, i4, 0, 0.0);
-//                    linesOctonionRotationY(i1, i2, i3, i4);
-//                    linesOctonionRotationY(i1, i2, i4, i3);
-//                    linesOctonionRotationY(i1, i3, i2, i4);
-//                    linesOctonionRotationY(i1, i4, i2, i3);
-//                    linesOctonionRotationY(i1, i3, i4, i2);
-//                    linesOctonionRotationY(i1, i4, i3, i2);
-//                    linesOctonionRotationY(i3, i1, i2, i4);
-//                    linesOctonionRotationY(i4, i1, i2, i3);
-//                    linesOctonionRotationY(i3, i1, i4, i2);
-//                    linesOctonionRotationY(i4, i1, i3, i2);
-//                    linesOctonionRotationY(i3, i4, i1, i2);
-//                    linesOctonionRotationY(i4, i3, i1, i2);
                 }
 }
 
-void LineShaders::linesOctonionS3RotationAll()
+void LineShaders::linesOctonionRotationAll()
 {
     for (int i5 = 0; i5 < 6; ++i5)
     {
@@ -266,18 +297,7 @@ void LineShaders::linesOctonionS3RotationAll()
                     {
                         qDebug() << i1 << i2 << i3 << i4;
                         linesOctonionRotationAt(i1, i2, i3, i4, i5);
-//                        qDebug() << i2 << i1 << i3 << i4;
-//                        linesOctonionRotationAt(i2, i1, i3, i4, i5);
-//                        qDebug() << i3 << i2 << i1 << i4;
-//                        linesOctonionRotationAt(i3, i2, i1, i4, i5);
-//                        qDebug() << i4 << i2 << i3 << i1;
-//                        linesOctonionRotationAt(i4, i2, i3, i1, i5);
                     }
-//        linesOctonionRotationAt(1, 2, 4, 6, i5);
-//        linesOctonionRotationAt(1, 2, 5, 7, i5);
-//        linesOctonionRotationAt(1, 3, 4, 7, i5);
-//        linesOctonionRotationAt(2, 3, 4, 7, i5);
-//        linesOctonionRotationAt(2, 3, 5, 6, i5);
     }
 }
 
@@ -310,9 +330,9 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     auto poleY(y90.cross(origin));
     Octonion rotationY(Octonion::rotation(poleY, angle));
 
-    for (int j = -8; j <= 8; j += 2)
+    for (int j = -4; j <= 4; ++j)
     {
-        Octonion rotationX(Octonion::rotation(poleX, angle * j));
+        Octonion rotationX(Octonion::rotation(poleX, j * 0.2));
         auto startX = rotationX.conjugated() * origin * rotationX;
         Quaternion start(startX[w],startX[x],startX[y],startX[z]);
         auto startY = startX;
@@ -338,60 +358,59 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     ++m_ScreenX;
 }
 
-void LineShaders::linesOctonionRotationY(int w, int x, int y, int z)
+void LineShaders::linesOctonionRotation2(int w, int x, int y, int z, int pole)
 {
-    static const int resolution = 72;
+    static const int resolution = 180;
     static const double angle = degreeToRadian(360.0 / double(resolution));
-    static const double scale = 0.1;
-    static const double slideScale = 1.0;
-    double slideX = (double(m_ScreenX / 5) - 3.0) * slideScale;
-    double slideZ = (double(m_ScreenX % 5) - 2.0) * slideScale;
-    QVector3D color((float)bhs::rand0to1(),(float)bhs::rand0to1(),(float)bhs::rand0to1());
-    color.normalize();
+    static const double scale = 1.0 / 3.14;
 
     Octonion origin(0);
     Octonion x90(0);
     Octonion y90(0);
-    Octonion z90(0);
     origin[w] = 1;
-    x90[x] = 1;
-    y90[y] = 1;
-    z90[z] = 1;
-    auto poleX(x90 * origin);
-    auto poleY(y90 * origin);
-    auto poleZ(z90 * origin);
+    switch (pole) {
+    default:
+    case 0: x90[x] = 1; y90[y] = 1; break;
+    case 1: x90[z] = 1; y90[y] = 1; break;
+    case 2: x90[x] = 1; y90[z] = 1; break;
+    case 3: x90[y] = 1; y90[z] = 1; break;
+    case 4: x90[y] = 1; y90[x] = 1; break;
+    case 5: x90[z] = 1; y90[x] = 1; break;
+    }
+    auto poleX(x90.cross(origin));
+    auto poleY(y90.cross(origin));
     Octonion rotationY(Octonion::rotation(poleY, angle));
 
-    for (int k = -8; k <= 8; k += 2)
+    for (int j = -4; j <= 4; ++j)
     {
-        auto rotationZ = poleZ * sin(angle * k * 0.5);
-        rotationZ.setRe(cos(angle * k * 0.5));
-        auto startZ = rotationZ.conjugated() * origin * rotationZ;
-        for (int j = -8; j <= 8; j += 2)
+        if (j == 0)
+            continue;
+        Octonion rotationX(Octonion::rotation(poleX, j * 0.2));
+        auto startX = rotationX.conjugated() * origin * rotationX;
+        Quaternion start(startX[w],startX[x],startX[y],startX[z]);
+        auto startY = startX;
+        auto endY = rotationY.conjugated() * startX * rotationY;
+        Quaternion end(endY[w],endY[x],endY[y],endY[z]);
+        for (int i = 0; i < (resolution * 1.0); ++i)
         {
-            Octonion rotationX(Octonion::rotation(poleX, angle * j));
-            auto startX = rotationX.conjugated() * startZ * rotationX;
-            Quaternion start(startX[w],startX[x],startX[y],startX[z]);
-            auto startY = startX;
-            auto endY = rotationY.conjugated() * startX * rotationY;
-            Quaternion end(endY[w],endY[x],endY[y],endY[z]);
-            for (int i = 0; i < (resolution * 1.); ++i)
-            {
-                auto st = start.lnV3() * scale;
-                st.setX(st.x() + slideX);
-                st.setZ(st.z() + slideZ);
-                auto ed = end.lnV3() * scale;
-                ed.setX(ed.x() + slideX);
-                ed.setZ(ed.z() + slideZ);
-                appendLine(st, ed, color);
-                startY = endY;
-                start = end;
-                endY = rotationY.conjugated() * startY * rotationY;
-                end = {endY[w],endY[x],endY[y],endY[z]};
-            }
+            auto st = start.lnV3() * scale;
+            auto ed = end.lnV3() * scale;
+            appendLine(st, ed, WHITE);
+            startY = endY;
+            start = end;
+            endY = rotationY.conjugated() * startY * rotationY;
+            end = {endY[w],endY[x],endY[y],endY[z]};
         }
     }
-    ++m_ScreenX;
+}
+
+void LineShaders::linesOctonionRotationXY(int w, int x, int y, int z)
+{
+    linesOctonionRotation2(w,x,y,z,0);
+    linesOctonionRotation2(w,x,y,z,4);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
 void LineShaders::linesLorentzTrans1()

@@ -70,9 +70,14 @@ QMap<bhs::LineType, QString>& UpdateUi::lineType()
         {bhs::LineType::Axis, tr("Basic Axis")},
         {bhs::LineType::CubeMeshes, tr("Cube")},
         {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
-        {bhs::LineType::QuaternionS3Rotation, tr("Quaternion S3 Rotation")},
-        {bhs::LineType::OctonionS3RotationXY, tr("Octonion S3 Rotation XY")},
-        {bhs::LineType::OctonionS3RotationAll, tr("Octonion S3 Rotation All")},
+        {bhs::LineType::QuaternionLeftIsoclinicRotation, tr("4-Dimensional Quaternion Left-Isoclinic Rotation")},
+        {bhs::LineType::QuaternionRightIsoclinicRotation, tr("4-Dimensional Quaternion Right-Isoclinic Rotation")},
+        {bhs::LineType::OctonionRotationYList, tr("4-Dimensional Octonion Rotation Y List")},
+        {bhs::LineType::OctonionRotationAll, tr("4-Dimensional Octonion Rotation All")},
+        {bhs::LineType::OctonionRotationLeft, tr("4-Dimensional Octonion Rotation Left")},
+        {bhs::LineType::OctonionRotationRight, tr("4-Dimensional Octonion Rotation Right")},
+        {bhs::LineType::OctonionRotationOpenXY, tr("4-Dimensional Octonion Rotation Open")},
+        {bhs::LineType::OctonionRotationCloseXY, tr("4-Dimensional Octonion Rotation Close")},
         {bhs::LineType::LorentzTrans1, tr("Lorentz Transformation 1")},
         {bhs::LineType::LorentzTrans2, tr("Lorentz Transformation 2")},
     };
@@ -93,9 +98,14 @@ QList<bhs::LineType>& UpdateUi::gridList()
 QList<bhs::LineType>& UpdateUi::graphList()
 {
     static QList<bhs::LineType> list = {
-        bhs::LineType::QuaternionS3Rotation,
-        bhs::LineType::OctonionS3RotationXY,
-        bhs::LineType::OctonionS3RotationAll,
+        bhs::LineType::QuaternionLeftIsoclinicRotation,
+        bhs::LineType::QuaternionRightIsoclinicRotation,
+        bhs::LineType::OctonionRotationYList,
+        bhs::LineType::OctonionRotationAll,
+        bhs::LineType::OctonionRotationLeft,
+        bhs::LineType::OctonionRotationRight,
+        bhs::LineType::OctonionRotationOpenXY,
+        bhs::LineType::OctonionRotationCloseXY,
         bhs::LineType::LorentzTrans1,
         bhs::LineType::LorentzTrans2,
     };

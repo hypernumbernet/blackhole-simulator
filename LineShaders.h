@@ -2,6 +2,7 @@
 
 #include "bhs.h"
 #include "hnn/vector3.h"
+#include "hnn/octonion.h"
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLWindow>
 #include <QOpenGLShaderProgram>
@@ -34,16 +35,19 @@ private:
     static constexpr QVector3D RED = {1, 0, 0};
     static constexpr QVector3D GREEN = {0, 1, 0};
     static constexpr QVector3D BLUE = {0, 0, 1};
+    static constexpr QVector3D WHITE = {1, 1, 1};
 
     void linesAxis();
     void linesCubeMeshes();
     void linesXZMeshes();
     void linesLongitudeAndLatitude();
-    void linesQuaternionS3Rotation();
-    void linesOctonionS3RotationXY();
-    void linesOctonionS3RotationAll();
-    void linesOctonionRotationAt(int, int, int, int, int pole, double y0 = 2.5);
-    void linesOctonionRotationY(int, int, int, int);
+    void linesQuaternionLeftIsoclinicRotation();
+    void linesQuaternionRightIsoclinicRotation();
+    void linesOctonionRotationYList();
+    void linesOctonionRotationAll();
+    void linesOctonionRotationAt(int, int, int, int, int, double y0 = 2.5);
+    void linesOctonionRotation2(int, int, int, int, int);
+    void linesOctonionRotationXY(int, int, int, int);
     void linesLorentzTrans1();
     void linesLorentzTrans2();
     int m_ScreenX = 0;
