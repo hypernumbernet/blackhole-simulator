@@ -498,7 +498,7 @@ void LineShaders::linesLorentzTrans2()
     static double rateY = 0.05;
     double speedOfLightInv = 1. / SPEED_OF_LIGHT;
     Vector3 speed(0., 0., 0.);
-    Spacetime spacetimeA, spacetimeB;
+    Spacetime spacetimeA(0.), spacetimeB(0.);
 
     for (int k = -8; k <= 8; k += 2)
     {
