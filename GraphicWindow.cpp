@@ -185,22 +185,22 @@ void GraphicWindow::timerEvent(QTimerEvent* ev)
             m_camera.jump(m_walkSpeed);
 
         if (m_keyPressing.indexOf(Qt::Key_Up) >= 0)
-            m_camera.pitch(-m_lookAroundSpeed);
-
-        if (m_keyPressing.indexOf(Qt::Key_Down) >= 0)
             m_camera.pitch(m_lookAroundSpeed);
 
-        if (m_keyPressing.indexOf(Qt::Key_Left) >= 0)
-            m_camera.yaw(-m_lookAroundSpeed);
+        if (m_keyPressing.indexOf(Qt::Key_Down) >= 0)
+            m_camera.pitch(-m_lookAroundSpeed);
 
-        if (m_keyPressing.indexOf(Qt::Key_Right) >= 0)
+        if (m_keyPressing.indexOf(Qt::Key_Left) >= 0)
             m_camera.yaw(m_lookAroundSpeed);
 
+        if (m_keyPressing.indexOf(Qt::Key_Right) >= 0)
+            m_camera.yaw(-m_lookAroundSpeed);
+
         if (m_keyPressing.indexOf(Qt::Key_E) >= 0)
-            m_camera.roll(-m_lookAroundSpeed);
+            m_camera.roll(m_lookAroundSpeed);
 
         if (m_keyPressing.indexOf(Qt::Key_Q) >= 0)
-            m_camera.roll(m_lookAroundSpeed);
+            m_camera.roll(-m_lookAroundSpeed);
 
         if (m_keyPressing.indexOf(Qt::Key_Shift) >= 0)
             m_camera.standXZ(true, 0.2f);

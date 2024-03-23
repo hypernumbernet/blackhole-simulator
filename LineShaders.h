@@ -2,7 +2,6 @@
 
 #include "bhs.h"
 #include "hnn/vector3.h"
-#include "hnn/octonion.h"
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLWindow>
 #include <QOpenGLShaderProgram>
@@ -41,6 +40,7 @@ private:
     void linesCubeMeshes();
     void linesXZMeshes();
     void linesLongitudeAndLatitude();
+    void linesQuaternion3DRotation();
     void linesQuaternionLeftIsoclinicRotation();
     void linesQuaternionRightIsoclinicRotation();
     void linesOctonionRotationYList();

@@ -1,13 +1,16 @@
-set work=C:\develop\blackhole-simulator\binary\blackhole-simulator-win-x64
-set src=C:\develop\_build-blackhole-simulator-Desktop_Qt_6_2_4_MSVC2019_64bit-Release\release
-set dst=C:\develop\blackhole-simulator\binary\blackhole-simulator-win-x64.7z
+set devfolder=C:\develop
+set qtbin=C:\Qt\6.5.1\msvc2019_64\bin
+set src=%devfolder%\build-blackhole-simulator-Desktop_Qt_6_5_1_MSVC2019_64bit-Release\release
+
+set work=%devfolder%\blackhole-simulator\binary\blackhole-simulator-win-x64
+set dst=%devfolder%\blackhole-simulator\binary\blackhole-simulator-win-x64.7z
 
 mkdir %work%
-cd C:\Qt\6.2.4\msvc2019_64\bin
+cd %qtbin%
 windeployqt --dir %work% %src%\blackhole-simulator.exe
 copy %src%\blackhole-simulator.exe %work%
 mkdir %work%\settings
-copy C:\develop\blackhole-simulator\settings %work%\settings
+copy %devfolder%\blackhole-simulator\settings %work%\settings
 del /q %dst%
 cd "C:\Program Files\7-Zip"
 7z a %dst% %work%

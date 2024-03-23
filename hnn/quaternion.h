@@ -395,6 +395,24 @@ public:
         axis.normalize();
     }
 
+    Vector3 rotate(const Vector3& axis) const
+    {
+        const double a = m_re;
+        const double b = m_i1;
+        const double c = m_i2;
+        const double d = m_i3;
+        const double x = axis.x();
+        const double y = axis.y();
+        const double z = axis.z();
+
+        const double aa = a * a, bb = b * b, cc = c * c, dd = d * d;
+        const double rx = (aa + bb - cc - dd) * x + 2. * ((b * c + a * d) * y + (b * d - a * c) * z);
+        const double ry = (aa - bb + cc - dd) * y + 2. * ((b * c - a * d) * x + (c * d + a * b) * z);
+        const double rz = (aa - bb - cc + dd) * z + 2. * ((b * d + a * c) * x + (c * d - a * b) * y);
+
+        return Vector3(rx, ry, rz);
+    }
+
     Quaternion rot() const
     {
         const double c1 = cos(m_i1);
@@ -549,7 +567,7 @@ public:
     {
         const double h = theta * 0.5;
         const double c = cos(h);
-        const double s = sin(h);
+        const double s = -sin(h);
         return Quaternion(c, v.x() * s, v.y() * s, v.z() * s);
     }
 
@@ -557,7 +575,7 @@ public:
     {
         const double h = theta * 0.5;
         const double c = cos(h);
-        const double s = sin(h);
+        const double s = -sin(h);
         return Quaternion(c, x * s, y * s, z * s);
     }
 
