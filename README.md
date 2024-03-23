@@ -16,7 +16,7 @@ https://github.com/hypernumbernet/blackhole-simulator/blob/master/binary/blackho
 このプログラムでは、多数の粒子間に働く力をエンジンとして定義していて、エンジンを切り替えながら様々な初期条件からの時間進展を検証できます。
 現実世界の惑星のデータを入力して軌道を予測したり、曲がった時空間をシミュレーションすることもできます。
 
-実世界の惑星や衛星データを準備すれば読み込ませることが出来ます。 *データファイル募集中です。*
+実世界の惑星や衛星データを準備すれば読み込ませることが出来ます。
 
 ## 使い方
 
@@ -49,14 +49,15 @@ https://github.com/hypernumbernet/blackhole-simulator/blob/master/binary/blackho
 
 ## 開発環境
 
-### Qt 6.2.4, Qt Creator 8, C++17
+### Qt Creator 10, Qt 6.5.1
 
-* コンパイラー : MSVC2019 または MinGW8.1 または GCC (すべて64bit)
-* OS: Windows10 または Kubuntu 20.04
-* ビデオカード : NVIDIA GeForce RTX 2060 super
+* コンパイラー : MSVC2019 または MinGW または GCC (すべて64bit)
+* OS: Windows11 または Kubuntu 22.04
+* ビデオカード : NVIDIA GeForce または AMD Radeon
 
 ## 技術要素
 
+* C++17
 * GPGPUを使った並列化された高速数値計算。
 * CPUのコアの数に最適化された可変マルチスレッドでのCPU計算のためのクラス設計。
 * 3DCGのカメラ視点で制限のない動きの計算。軸に固定されたり上下の制限のない回転。
@@ -90,6 +91,7 @@ https://github.com/hypernumbernet/blackhole-simulator/blob/master/binary/blackho
 ## 数学の解説
 
 PDF形式のまとめはこちら
+
 https://github.com/hypernumbernet/blackhole-simulator/blob/master/documents/blackhole-simulator-doc-mathematics.pdf
 
 ### 円そして超球

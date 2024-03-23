@@ -428,7 +428,7 @@ void LineShaders::linesOctonionRotation2(int w, int x, int y, int z, int pole)
         auto startY = startX;
         auto endY = rotationY.conjugated() * startX * rotationY;
         Quaternion end(endY[w],endY[x],endY[y],endY[z]);
-        for (int i = 0; i < resolution-10; ++i)
+        for (int i = 0; i < resolution; ++i)
         {
             auto st = start.lnV3() * scale;
             auto ed = end.lnV3() * scale;
