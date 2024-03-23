@@ -70,6 +70,7 @@ QMap<bhs::LineType, QString>& UpdateUi::lineType()
         {bhs::LineType::Axis, tr("Basic Axis")},
         {bhs::LineType::CubeMeshes, tr("Cube")},
         {bhs::LineType::LongitudeAndLatitude, tr("Longitude Latitude")},
+        {bhs::LineType::Quaternion3DRotation, tr("3-Dimensional Quaternion Rotation")},
         {bhs::LineType::QuaternionLeftIsoclinicRotation, tr("4-Dimensional Quaternion Left-Isoclinic Rotation")},
         {bhs::LineType::QuaternionRightIsoclinicRotation, tr("4-Dimensional Quaternion Right-Isoclinic Rotation")},
         {bhs::LineType::OctonionRotationYList, tr("4-Dimensional Octonion Rotation Y List")},
@@ -100,6 +101,7 @@ QList<bhs::LineType>& UpdateUi::gridList()
 QList<bhs::LineType>& UpdateUi::graphList()
 {
     static QList<bhs::LineType> list = {
+        bhs::LineType::Quaternion3DRotation,
         bhs::LineType::QuaternionLeftIsoclinicRotation,
         bhs::LineType::QuaternionRightIsoclinicRotation,
         bhs::LineType::OctonionRotationYList,

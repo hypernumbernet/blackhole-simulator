@@ -49,6 +49,7 @@ enum class LineType
     Axis,
     CubeMeshes,
     LongitudeAndLatitude,
+    Quaternion3DRotation,
     QuaternionLeftIsoclinicRotation,
     QuaternionRightIsoclinicRotation,
     OctonionRotationYList,

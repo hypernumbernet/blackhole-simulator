@@ -1,5 +1,6 @@
 #include "LineShaders.h"
 #include "bhs.h"
+#include "hnn/octonion.h"
 #include "engine/Relativity1/CalculationRelativity1.h"
 #include <QOpenGLBuffer>
 
@@ -101,6 +102,9 @@ void LineShaders::setLineType(const bhs::LineType index)
         break;
     case bhs::LineType::LongitudeAndLatitude:
         linesLongitudeAndLatitude();
+        break;
+    case bhs::LineType::Quaternion3DRotation:
+        linesQuaternion3DRotation();
         break;
     case bhs::LineType::QuaternionLeftIsoclinicRotation:
         linesQuaternionLeftIsoclinicRotation();
@@ -230,6 +234,33 @@ void LineShaders::linesLongitudeAndLatitude()
     appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
 }
 
+void LineShaders::linesQuaternion3DRotation()
+{
+    static const int resolution = 50;
+    Vector3 a(-2,2,3);
+    a.normalize();
+    Vector3 b(3,2,-1);
+    b.normalize();
+    double theta = acos(a.dot(b));
+    Vector3 w = a.cross(b);
+    w.normalize();
+    double angle = theta / double(resolution);
+    Quaternion h = Quaternion::rotation(w, angle);
+    Vector3 f = h.rotate(a);
+
+    appendLine({0.0, 0.0, 0.0}, a, {float(a.x()), float(a.y()), float(a.z())});
+    appendLine({0.0, 0.0, 0.0}, b, {float(b.x()), float(b.y()), float(b.z())});
+    for (int i = 1; i < resolution; ++i)
+    {
+        appendLine({0.0, 0.0, 0.0}, f, {float(f.x()), float(f.y()), float(f.z())});
+        f = h.rotate(f);
+    }
+
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
+}
+
 void LineShaders::linesQuaternionLeftIsoclinicRotation()
 {
     static const int resolution = 180;
@@ -332,8 +363,8 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
     case 4: x90[y] = 1; y90[x] = 1; break;
     case 5: x90[z] = 1; y90[x] = 1; break;
     }
-    auto poleX(x90.cross(origin));
-    auto poleY(y90.cross(origin));
+    auto poleX(origin.cross(x90));
+    auto poleY(origin.cross(y90));
     Octonion rotationY(Octonion::rotation(poleY, angle));
 
     for (int j = -4; j <= 4; ++j)
@@ -344,7 +375,7 @@ void LineShaders::linesOctonionRotationAt(int w, int x, int y, int z, int pole, 
         auto startY = startX;
         auto endY = rotationY.conjugated() * startX * rotationY;
         Quaternion end(endY[w],endY[x],endY[y],endY[z]);
-        for (int i = 0; i < (resolution * 1.0); ++i)
+        for (int i = 0; i < resolution; ++i)
         {
             auto st = start.lnV3() * scale;
             st.setX(st.x() + slideX);
@@ -383,8 +414,8 @@ void LineShaders::linesOctonionRotation2(int w, int x, int y, int z, int pole)
     case 4: x90[y] = 1; y90[x] = 1; break;
     case 5: x90[z] = 1; y90[x] = 1; break;
     }
-    auto poleX(x90.cross(origin));
-    auto poleY(y90.cross(origin));
+    auto poleX(origin.cross(x90));
+    auto poleY(origin.cross(y90));
     Octonion rotationY(Octonion::rotation(poleY, angle));
 
     for (int j = -4; j <= 4; ++j)
@@ -397,7 +428,7 @@ void LineShaders::linesOctonionRotation2(int w, int x, int y, int z, int pole)
         auto startY = startX;
         auto endY = rotationY.conjugated() * startX * rotationY;
         Quaternion end(endY[w],endY[x],endY[y],endY[z]);
-        for (int i = 0; i < (resolution * 1.0); ++i)
+        for (int i = 0; i < resolution-10; ++i)
         {
             auto st = start.lnV3() * scale;
             auto ed = end.lnV3() * scale;

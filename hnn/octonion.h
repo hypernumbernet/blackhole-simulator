@@ -305,7 +305,7 @@ public:
 
     static Octonion rotation(const Octonion& pole, const double angle)
     {
-        const double h = angle * 0.5;
+        const double h = angle * -0.5;
         Octonion o(pole * sin(h));
         o.setRe(cos(h));
         return o;
