@@ -123,6 +123,12 @@ void LineShaders::setLineType(const bhs::LineType index)
     case bhs::LineType::OctonionRotationOpenXY:
         linesOctonionRotationXY(1,2,3,4);
         break;
+    case bhs::LineType::OctonionRotationOpenYZ:
+        linesOctonionRotationYZ(1,2,4,5);
+        break;
+    case bhs::LineType::OctonionRotationOpenZX:
+        linesOctonionRotationZX(2,5,6,7);
+        break;
     case bhs::LineType::OctonionRotationCloseXY:
         linesOctonionRotationXY(1,2,4,5);
         break;
@@ -408,6 +414,24 @@ void LineShaders::linesOctonionRotationXY(int w, int x, int y, int z)
 {
     linesOctonionRotation2(w,x,y,z,0);
     linesOctonionRotation2(w,x,y,z,4);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
+}
+
+void LineShaders::linesOctonionRotationYZ(int w, int x, int y, int z)
+{
+    linesOctonionRotation2(w,x,y,z,1);
+    linesOctonionRotation2(w,x,y,z,3);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
+}
+
+void LineShaders::linesOctonionRotationZX(int w, int x, int y, int z)
+{
+    linesOctonionRotation2(w,x,y,z,2);
+    linesOctonionRotation2(w,x,y,z,5);
     appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
     appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
     appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);

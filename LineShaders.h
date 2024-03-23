@@ -48,6 +48,8 @@ private:
     void linesOctonionRotationAt(int, int, int, int, int, double y0 = 2.5);
     void linesOctonionRotation2(int, int, int, int, int);
     void linesOctonionRotationXY(int, int, int, int);
+    void linesOctonionRotationYZ(int, int, int, int);
+    void linesOctonionRotationZX(int, int, int, int);
     void linesLorentzTrans1();
     void linesLorentzTrans2();
     int m_ScreenX = 0;
