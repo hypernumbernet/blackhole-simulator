@@ -1,6 +1,7 @@
 #include "LineShaders.h"
 #include "bhs.h"
 #include "hnn/octonion.h"
+#include "hnn/splitoctonion.h"
 #include "engine/Relativity1/CalculationRelativity1.h"
 #include <QOpenGLBuffer>
 
@@ -112,17 +113,14 @@ void LineShaders::setLineType(const bhs::LineType index)
     case bhs::LineType::QuaternionRightIsoclinicRotation:
         linesQuaternionRightIsoclinicRotation();
         break;
-    case bhs::LineType::OctonionRotationYList:
-        linesOctonionRotationYList();
-        break;
-    case bhs::LineType::OctonionRotationAll:
-        linesOctonionRotationAll();
-        break;
     case bhs::LineType::OctonionRotationLeft:
         linesOctonionRotationXY(1,2,4,7);
         break;
     case bhs::LineType::OctonionRotationRight:
         linesOctonionRotationXY(1,2,5,6);
+        break;
+    case bhs::LineType::OctonionRotationCloseXY:
+        linesOctonionRotationXY(1,2,4,5);
         break;
     case bhs::LineType::OctonionRotationOpenXY:
         linesOctonionRotationXY(1,2,3,4);
@@ -133,8 +131,14 @@ void LineShaders::setLineType(const bhs::LineType index)
     case bhs::LineType::OctonionRotationOpenZX:
         linesOctonionRotationZX(2,5,6,7);
         break;
-    case bhs::LineType::OctonionRotationCloseXY:
-        linesOctonionRotationXY(1,2,4,5);
+    case bhs::LineType::OctonionRotationYList:
+        linesOctonionRotationYList();
+        break;
+    case bhs::LineType::OctonionRotationAll:
+        linesOctonionRotationAll();
+        break;
+    case bhs::LineType::SplitOctonionRotation:
+        linesSplitOctonionRotation();
         break;
     case bhs::LineType::LorentzTrans1:
         linesLorentzTrans1();
@@ -463,6 +467,36 @@ void LineShaders::linesOctonionRotationZX(int w, int x, int y, int z)
 {
     linesOctonionRotation2(w,x,y,z,2);
     linesOctonionRotation2(w,x,y,z,5);
+    appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
+    appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
+}
+
+void LineShaders::linesSplitOctonionRotation()
+{
+    int resolution = 180;
+    double angle = degreeToRadian(360.0 / double(resolution));
+    double scale = 1.0 / 3.14;
+
+    Quaternion origin(1.0);
+    Quaternion x(0.0, 1.0, 0.0, 0.0);
+    Quaternion y(0.0, 0.0, 1.0, 0.0);
+    Vector3 axisX = SplitOctonion::axis(origin, x);
+    Vector3 axisY = SplitOctonion::axis(origin, y);
+    Quaternion rotorY = SplitOctonion::rotor(axisY, angle);
+    for (int j = -4; j <= 4; ++j)
+    {
+        if (j == 0)
+            continue;
+        auto start = SplitOctonion::rotor(axisX, j * 0.4);;
+        auto end = SplitOctonion::rotation(start, rotorY);
+        for (int i = 0; i < resolution; ++i)
+        {
+            appendLine(start.lnV3() * scale, end.lnV3() * scale, WHITE);
+            start = end;
+            end = SplitOctonion::rotation(start, rotorY);
+        }
+    }
     appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
     appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
     appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);

@@ -50,6 +50,7 @@ private:
     void linesOctonionRotationXY(int, int, int, int);
     void linesOctonionRotationYZ(int, int, int, int);
     void linesOctonionRotationZX(int, int, int, int);
+    void linesSplitOctonionRotation();
     void linesLorentzTrans1();
     void linesLorentzTrans2();
     int m_ScreenX = 0;

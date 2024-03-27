@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{jsreport}
+\documentclass[a4paper,12pt,notitlepage]{jsreport}
 \usepackage[left=10truemm,right=10truemm,top=25truemm,bottom=20truemm]{geometry}
 \usepackage{mathtools}
 \usepackage{amsmath}
@@ -13,6 +13,11 @@
 \date{\today}
 \begin{document}
 \maketitle
+
+\begin{abstract}
+重力多体シミュレーションを行うに当たって数学的基盤を整えておく目的でまとめを書いています。
+プログラミングですぐに活用できるように計算手順を具体化し実係数で式を展開しています。
+\end{abstract}
 
 \chapter{双四元数による相対性理論}
 
@@ -615,6 +620,28 @@ CGのコンピューティングではあらかじめこの計算をしておき
 xi+yj+zk=\frac{v}{|v|}\texttt{atan2}(|v|, s_0)
 \end{gather}
 
+また、四元数の指数関数について以下のように変形しておくとイメージしやすいです。
+普通に四元数$h=a+bi+cj+dk$の指数関数を求めると、
+\begin{gather}
+\exp(h)=\exp(a)\left(\cos\sqrt{b^2+c^2+d^2}+\frac{bi+cj+dk}{\sqrt{b^2+c^2+d^2}}\sin\sqrt{b^2+c^2+d^2}\right)
+\end{gather}
+
+という形になりますが、予め$\theta=\sqrt{b^2+c^2+d^2}$と置いて整理しておくと、
+\begin{gather}
+h=a+bi+cj+dk=a+\theta v,\quad v\in\mathbb{V}\\
+\exp(h)=\exp(a+\theta v)=\exp(a)(\cos \theta+v\sin\theta)
+\end{gather}
+というように簡潔になります。特に純虚四元数ではさらに簡潔になります。
+\begin{gather}
+\exp(\theta v)=\cos \theta+v\sin\theta
+\end{gather}
+三次元の方向が$v$で移動量が$\theta$というイメージで把握できるようになります。
+
+また、以下のように計算すれば三次元の角度になるのではないかと思われるかもしれませんが、実際に計算をしてみると似て非なる物になります。
+\begin{gather}
+\exp(xi)\exp(yj)\exp(zk)
+\end{gather}
+
 \section{四次元の回転計算は単純ではない}
 
 四次元を四元数を使って回転させる事はできるのでしょうか？
@@ -928,7 +955,7 @@ au_1 \ge 2b \quad\land\quad bv_1 \ge 2a  \quad\land\quad u_1,v_1 \le 1
 これらを満たす実数$a,b$は存在しません。
 従って、四元数の実軸から$i$軸にだけ回転させる計算は少なくとも単位四元数の回転計算の範囲には存在しないことになります。
 
-\section{八元数とは何か？}
+\section{八元数の定義}
 
 八元数は以下のように定義されます。
 \begin{equation}
@@ -955,7 +982,7 @@ $e_1,...,e_7$の乗法は表\ref{octonion-multiplication-table}に従います�
 乗法は順番を変えてはならず、3つ以上並んだ場合は左から順番に計算しないといけません。
 
 乗積表には480通りのバリエーションがあり、ここではその一つを書いています。
-しかし、その他の479通りの八元数についての本質的な違いはありません。
+しかし、その他の479通りの八元数についての本質的な違いはないと考えられています。
 また、虚数単位$e_1,...,e_7$の書き方についても、$i,j,k,l$や$h,i,j,k$を組み合わせたりする事もあります。
 
 八元数の共役$o^*$とノルム$N(o)$は以下のようになります。
@@ -963,7 +990,7 @@ $e_1,...,e_7$の乗法は表\ref{octonion-multiplication-table}に従います�
 \begin{split}
 o=~&r_0+r_1e_1+r_2e_2+r_3e_3+r_4e_4+r_5e_5+r_6e_6+r_7e_7\\
 o^*=~&r_0-r_1e_1-r_2e_2-r_3e_3-r_4e_4-r_5e_5-r_6e_6-r_7e_7\\
-N(o)=~&oo^*=r_0^2+r_1^2+r_2^2+r_3^2+r_4^2+r_5^2+r_6^2+r_7^2
+N(o)=~&o^*o=r_0^2+r_1^2+r_2^2+r_3^2+r_4^2+r_5^2+r_6^2+r_7^2
 \end{split}
 \end{equation}
 
@@ -977,7 +1004,7 @@ o_1=~&q_0+q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7
 \end{split}
 \end{equation}
 
-$o_0o_1$を実直に計算しても良いですがスカラーパートを分けることで少し楽をします。
+$o_0o_1$を実直に計算しても良いですがスカラーパートを分ける事で少し楽をします。
 \begin{equation}
 \begin{split}
 u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
@@ -1027,9 +1054,9 @@ uv=~&-p_1q_1-p_2q_2-p_3q_3-p_4q_4-p_5q_5-p_6q_6-p_7q_7\\
 &+(p_3q_1-p_1q_3+p_4q_6-p_6q_4+p_5q_7-p_7q_5)e_2\\
 &+(p_1q_2-p_2q_1+p_4q_7-p_7q_4+p_6q_5-p_5q_6)e_3\\
 &+(p_5q_1-p_1q_5+p_6q_2-p_2q_6+p_7q_3-p_3q_7)e_4\\
-&+(p_1q_4-p_4q_1+p_7q_2-p_2q_7+p_3q_6-p_6q_3)e_5\\
-&+(p_2q_4-p_4q_2+p_5q_3-p_3q_5+p_1q_7-p_7q_1)e_6\\
-&+(p_3q_4-p_4q_3+p_6q_1-p_1q_6+p_2q_5-p_5q_2)e_7
+&+(p_1q_4-p_4q_1+p_3q_6-p_6q_3+p_7q_2-p_2q_7)e_5\\
+&+(p_1q_7-p_7q_1+p_2q_4-p_4q_2+p_5q_3-p_3q_5)e_6\\
+&+(p_2q_5-p_5q_2+p_3q_4-p_4q_3+p_6q_1-p_1q_6)e_7
 \end{split}
 \end{equation}
 
@@ -1040,9 +1067,9 @@ o_0o_1=~&p_0q_0-p_1q_1-p_2q_2-p_3q_3-p_4q_4-p_5q_5-p_6q_6-p_7q_7\\
 &+(p_0q_2+p_2q_0+p_3q_1-p_1q_3+p_4q_6-p_6q_4+p_5q_7-p_7q_5)e_2\\
 &+(p_0q_3+p_3q_0+p_1q_2-p_2q_1+p_4q_7-p_7q_4+p_6q_5-p_5q_6)e_3\\
 &+(p_0q_4+p_4q_0+p_5q_1-p_1q_5+p_6q_2-p_2q_6+p_7q_3-p_3q_7)e_4\\
-&+(p_0q_5+p_5q_0+p_1q_4-p_4q_1+p_7q_2-p_2q_7+p_3q_6-p_6q_3)e_5\\
-&+(p_0q_6+p_6q_0+p_2q_4-p_4q_2+p_5q_3-p_3q_5+p_1q_7-p_7q_1)e_6\\
-&+(p_0q_7+p_7q_0+p_3q_4-p_4q_3+p_6q_1-p_1q_6+p_2q_5-p_5q_2)e_7
+&+(p_0q_5+p_5q_0+p_1q_4-p_4q_1+p_3q_6-p_6q_3+p_7q_2-p_2q_7)e_5\\
+&+(p_0q_6+p_6q_0+p_1q_7-p_7q_1+p_2q_4-p_4q_2+p_5q_3-p_3q_5)e_6\\
+&+(p_0q_7+p_7q_0+p_2q_5-p_5q_2+p_3q_4-p_4q_3+p_6q_1-p_1q_6)e_7
 \end{split}
 \end{equation}
 
@@ -1140,9 +1167,278 @@ s'=o^*so
 実数成分で${}_7 \mathrm{C}_4=35$の組み合わせで展開してみるのは流石に冗長なので、コンピューターを使って計算をしてみましょう。
 するとすべての組み合わせで、この回転計算の結果$s'$が$s$が選択した八元数の4つの軸による空間に戻ることが確認できます。
 また、3Dグラフで視覚化をしてみると、確かに循環する輪が描かれる事が分かります。
-循環する輪の形は(1)右回りにねじれる、(2)左回りにねじれる、(3)開いている、(4)閉じているの4種類あるようです。
+循環する輪の形は(1)右回りにねじれる、(2)左回りにねじれる、(3)閉じている、(4)開いているの4種類あるようです。
 これらの内、(1)(2)のねじれるパターンは、四元数の乗算と同じ形になっており、ねじれるという欠点があります。
-そして、平行線を伸ばしたら合流してしまう(4)は除外できるでしょう。
-(3)の開いているという回転のパターンが求める三次元超球面の移動だと考えられます。
+そして、平行線を伸ばしたら合流してしまう(3)は除外できるでしょう。
+(4)の開いているという回転のパターンが求める三次元超球面の移動だと考えられます。
+しかし、これらの回転パターンは注目したある二次元の面にだけ成り立つ特徴があり、
+三次元の移動を考えた時に3軸全てで(4)の開いているという形状をしているパターンは35種類の組み合わせの中には発見できません。
+つまり、三次元超球面から切り取った原点を含む二次元面については回転計算が成立しますが、そこから外れる事ができません。
+
+\section{分解型八元数の定義}
+
+\begin{wraptable}{r}{8cm}
+\caption{分解型八元数の乗積表\label{split-octonion-multiplication-table}}
+\centering
+\begin{tabular}{rrrrrrrr}\hline
+     & $e_1$& $e_2$& $e_3$& $e_4$& $e_5$& $e_6$& $e_7$\\\hline
+$e_1$& $ -1$& $e_3$&-$e_2$&-$e_5$& $e_4$&-$e_7$& $e_6$\\\hline
+$e_2$&-$e_3$& $ -1$& $e_1$&-$e_6$& $e_7$& $e_4$&-$e_5$\\\hline
+$e_3$& $e_2$&-$e_1$& $ -1$&-$e_7$&-$e_6$& $e_5$& $e_4$\\\hline
+$e_4$& $e_5$& $e_6$& $e_7$& $  1$& $e_1$& $e_2$& $e_3$\\\hline
+$e_5$&-$e_4$&-$e_7$& $e_6$&-$e_1$& $  1$& $e_3$&-$e_2$\\\hline
+$e_6$& $e_7$&-$e_4$&-$e_5$&-$e_2$&-$e_3$& $  1$& $e_1$\\\hline
+$e_7$&-$e_6$& $e_5$&-$e_4$&-$e_3$& $e_2$&-$e_1$& $  1$\\\hline
+\end{tabular}
+\end{wraptable}
+
+分解型八元数についても可能性を調査してみましょう。
+分解型八元数は以下のように定義されます。
+\begin{multline}
+\texttt{Split-octonion}:\\
+\mathbb{O}_s\coloneq r_0+r_1e_1+r_2e_2+r_3e_3+r_4e_4+r_5e_5+r_6e_6+r_7e_7\\
+\quad r_0,...,r_7\in\mathbb{R}
+\end{multline}
+
+$e_1,...,e_7$の乗法は表\ref{split-octonion-multiplication-table}に従います。
+
+共役は八元数と同じ定義です。
+\begin{equation}
+\begin{split}
+s=~&r_0+r_1e_1+r_2e_2+r_3e_3+r_4e_4+r_5e_5+r_6e_6+r_7e_7\\
+s^*=~&r_0-r_1e_1-r_2e_2-r_3e_3-r_4e_4-r_5e_5-r_6e_6-r_7e_7
+\end{split}
+\end{equation}
+
+ノルムについては少し様子が違って以下のようになります。
+\begin{equation}
+\begin{split}
+N(s)=s^*s=(r_0^2+r_1^2+r_2^2+r_3^2)-(r_4^2+r_5^2+r_6^2+r_7^2)
+\end{split}
+\end{equation}
+八元数同様に乗積表の右上と左下の符号が反転しているので共役をかけるとそれらが消えて実数部分のみになります。
+
+まず、任意の分解型八元数$s_0,s_1$の積をその実数成分で表現しておきましょう。
+\begin{equation}
+\begin{split}
+s_0=~&p_0+p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
+s_1=~&q_0+q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7
+\end{split}
+\end{equation}
+
+スカラーパートを分けておきます。
+\begin{equation}
+\begin{split}
+u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
+v=~&q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+s_0s_1=~&(p_0+u)(q_0+v)\\
+=~&p_0q_0+p_0v+q_0u+uv
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+uv=~&(p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7)(q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7)\\
+=~&p_1e_1q_1e_1+p_1e_1q_2e_2+p_1e_1q_3e_3+p_1e_1q_4e_4+p_1e_1q_5e_5+p_1e_1q_6e_6+p_1e_1q_7e_7\\
+&+p_2e_2q_1e_1+p_2e_2q_2e_2+p_2e_2q_3e_3+p_2e_2q_4e_4+p_2e_2q_5e_5+p_2e_2q_6e_6+p_2e_2q_7e_7\\
+&+p_3e_3q_1e_1+p_3e_3q_2e_2+p_3e_3q_3e_3+p_3e_3q_4e_4+p_3e_3q_5e_5+p_3e_3q_6e_6+p_3e_3q_7e_7\\
+&+p_4e_4q_1e_1+p_4e_4q_2e_2+p_4e_4q_3e_3+p_4e_4q_4e_4+p_4e_4q_5e_5+p_4e_4q_6e_6+p_4e_4q_7e_7\\
+&+p_5e_5q_1e_1+p_5e_5q_2e_2+p_5e_5q_3e_3+p_5e_5q_4e_4+p_5e_5q_5e_5+p_5e_5q_6e_6+p_5e_5q_7e_7\\
+&+p_6e_6q_1e_1+p_6e_6q_2e_2+p_6e_6q_3e_3+p_6e_6q_4e_4+p_6e_6q_5e_5+p_6e_6q_6e_6+p_6e_6q_7e_7\\
+&+p_7e_7q_1e_1+p_7e_7q_2e_2+p_7e_7q_3e_3+p_7e_7q_4e_4+p_7e_7q_5e_5+p_7e_7q_6e_6+p_7e_7q_7e_7\\
+=~&-p_1q_1+p_1q_2e_3-p_1q_3e_2-p_1q_4e_5+p_1q_5e_4-p_1q_6e_7+p_1q_7e_6\\
+&-p_2q_1e_3-p_2q_2+p_2q_3e_1-p_2q_4e_6+p_2q_5e_7+p_2q_6e_4-p_2q_7e_5\\
+&+p_3q_1e_2-p_3q_2e_1-p_3q_3-p_3q_4e_7-p_3q_5e_6+p_3q_6e_5+p_3q_7e_4\\
+&+p_4q_1e_5+p_4q_2e_6+p_4q_3e_7+p_4q_4+p_4q_5e_1+p_4q_6e_2+p_4q_7e_3\\
+&-p_5q_1e_4-p_5q_2e_7+p_5q_3e_6-p_5q_4e_1+p_5q_5+p_5q_6e_3-p_5q_7e_2\\
+&+p_6q_1e_7-p_6q_2e_4-p_6q_3e_5-p_6q_4e_2-p_6q_5e_3+p_6q_6+p_6q_7e_1\\
+&-p_7q_1e_6+p_7q_2e_5-p_7q_3e_4-p_7q_4e_3+p_7q_5e_2-p_7q_6e_1+p_7q_7\\
+=~&-p_1q_1-p_2q_2-p_3q_3+p_4q_4+p_5q_5+p_6q_6+p_7q_7\\
+&+(p_2q_3-p_3q_2+p_4q_5-p_5q_4+p_6q_7-p_7q_6)e_1\\
+&+(p_3q_1-p_1q_3+p_4q_6-p_6q_4+p_7q_5-p_5q_7)e_2\\
+&+(p_1q_2-p_2q_1+p_4q_7-p_7q_4+p_5q_6-p_6q_5)e_3\\
+&+(p_1q_5-p_5q_1+p_2q_6-p_6q_2+p_3q_7-p_7q_3)e_4\\
+&+(p_3q_6-p_6q_3+p_4q_1-p_1q_4+p_7q_2-p_2q_7)e_5\\
+&+(p_1q_7-p_7q_1+p_4q_2-p_2q_4+p_5q_3-p_3q_5)e_6\\
+&+(p_2q_5-p_5q_2+p_4q_3-p_3q_4+p_6q_1-p_1q_6)e_7\\
+\end{split}
+\end{equation}
+この展開された式は八元数の七次元の外積とは別物のようです。何を表すのでしょうか？
+掘り下げて調査する必要がありそうです。
+
+\section{分解型八元数の角度}
+
+分解型八元数に内在する角度がオイラーの公式からどうなるかを調べましょう。
+\begin{equation}
+s_L=~r_0+r_1e_1+r_2e_2+r_3e_3,\quad s_R=r_4e_4+r_5e_5+r_6e_6+r_7e_7
+\end{equation}
+というように分解すると$s_L$は四元数と同様になり、$r_1^2+r_2^2+r_3^2\ne 0$の時、
+\begin{equation}
+\alpha v_L=r_1e_1+r_2e_2+r_3e_3,\quad v_L^2=-1,\quad \alpha\in\mathbb{R}
+\end{equation}
+と置いて、
+\begin{equation}
+\exp(s_L)=\exp(r_0+\alpha v_L)=\exp(r_0)(\cos \alpha+v_L\sin\alpha)
+\end{equation}
+$s_R$については、$|s_R|\ne 0$の時、
+\begin{equation}
+\beta v_R=r_4e_4+r_5e_5+r_6e_6+r_7e_7,\quad v_R^2=+1,\quad \beta\in\mathbb{R}
+\end{equation}
+と置くと、分解型複素数のオイラーの公式から、
+\begin{equation}
+\exp(s_R)=\exp(\beta v_R)=\cosh \beta+v_R\sinh \beta
+\end{equation}
+従って、分解型八元数の角度表現は以下のようになります。
+\begin{equation}
+\begin{split}
+\exp(s)=~&\exp(s_L+s_R)=\exp(s_L)\exp(s_R)
+=\exp(r_0)(\cos\alpha+v_L\sin\alpha)(\cosh\beta+v_R\sinh\beta)
+\end{split}
+\end{equation}
+純虚分解型八元数について書き直すと、
+\begin{equation}
+\exp(s)=\exp(\alpha v_L+\beta v_R)=(\cos\alpha+v_L\sin\alpha)(\cosh\beta+v_R\sinh\beta),\quad r_0=0
+\end{equation}
+以下のように展開してみます。
+\begin{equation}
+\exp(s)=\cos\alpha\cosh\beta+v_Lv_R\sin\alpha\sinh\beta+v_L\sin\alpha\cosh\beta+v_R\cos\alpha\sinh\beta
+\end{equation}
+複素数による三角関数と加法定理より、$I^2=-1$という別の虚数単位を導入して、
+\begin{equation}
+\begin{split}
+\cos(\alpha-I\beta)=~&\cos\alpha\cos I\beta+\sin\alpha\sin I\beta\\
+=~&\cos\alpha\cosh\beta+I\sin\alpha\sinh\beta\\
+\sin(\alpha-I\beta)=~&\sin\alpha\cos I\beta-\cos\alpha\sin I\beta\\
+=~&\sin\alpha\cosh\beta-I\cos\alpha\sinh\beta\\
+\end{split}
+\end{equation}
+さらに$J^2=-1$という別の虚数単位を導入すると、
+\begin{equation}
+J\sin(\alpha-I\beta)=J\sin\alpha\cosh\beta-JI\cos\alpha\sinh\beta
+\end{equation}
+$I=v_Lv_R,J=v_L$というように当てはめると、
+\begin{equation}
+\begin{split}
+\exp(s)=~&\cos\alpha\cosh\beta+v_Lv_R\sin\alpha\sinh\beta+v_L\sin\alpha\cosh\beta-v_Lv_Lv_R\cos\alpha\sinh\beta\\
+=~&\cos(\alpha-v_Lv_R\beta)+v_L\sin(\alpha-v_Lv_R\beta)\\
+=~&\exp(v_L(\alpha-v_Lv_R\beta))\\
+=~&\exp(v_L\alpha+v_R\beta)\\
+=~&\exp(s)\\
+\end{split}
+\end{equation}
+元に戻ります。ここで$\theta=\alpha-v_Lv_R\beta$と置けば、四元数のオイラーの公式と同じ形が得られます。
+\begin{equation}
+\exp(v_L\theta)=\cos\theta+v_L\sin\theta
+\end{equation}
+
+\section{純虚分解型八元数の指数関数}
+
+改めて純虚分解型八元数を以下のように定義し直します。
+\begin{equation}
+\begin{split}
+\exp(s)=~&\exp(\alpha u+\beta v)=p_0+p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
+&\alpha,\beta,p_0,...,p_7\in\mathbb{R}\\
+u=~&a_1e_1+a_2e_2+a_3e_3,\quad a_1^2+a_2^2+a_3^2=1\\
+v=~&a_4e_4+a_5e_5+a_6e_6+a_7e_7,\quad a_4^2+a_5^2+a_6^2+a_7^2=1\\
+&a_1,...,a_7\in\mathbb{R}\\
+\end{split}
+\end{equation}
+$p_0,...,p_7$を角度と方向からなる実数で表現してみましょう。
+\begin{equation}
+\begin{split}
+\exp(s)=~&(\cos\alpha+u\sin\alpha)(\cosh\beta+v\sinh\beta)\\
+=~&\cos\alpha\cosh\beta+uv\sin\alpha\sinh\beta+u\sin\alpha\cosh\beta+v\cos\alpha\sinh\beta\\
+\end{split}
+\end{equation}
+$uv$を先に展開して、
+\begin{equation}
+\begin{split}
+uv=~&(a_1e_1+a_2e_2+a_3e_3)(a_4e_4+a_5e_5+a_6e_6+a_7e_7)\\
+=~&(a_1a_5+a_2a_6+a_3a_7)e_4\\
+&+(a_3a_6-a_1a_4-a_2a_7)e_5\\
+&+(a_1a_7-a_2a_4-a_3a_5)e_6\\
+&+(a_2a_5-a_3a_4-a_1a_6)e_7\\
+\end{split}
+\end{equation}
+$e_1,e_2,e_3$の項が消えてしまうのが印象的です。
+\begin{equation}
+\begin{split}
+\exp(s)=~&\cos\alpha\cosh\beta+a_1e_1\sin\alpha\cosh\beta+a_2e_2\sin\alpha\cosh\beta+a_3e_3\sin\alpha\cosh\beta\\
+&+((a_1a_5+a_2a_6+a_3a_7)\sin\alpha+a_4\cos\alpha)e_4\sinh\beta\\
+&+((a_3a_6-a_1a_4-a_2a_7)\sin\alpha+a_5\cos\alpha)e_5\sinh\beta\\
+&+((a_1a_7-a_2a_4-a_3a_5)\sin\alpha+a_6\cos\alpha)e_6\sinh\beta\\
+&+((a_2a_5-a_3a_4-a_1a_6)\sin\alpha+a_7\cos\alpha)e_7\sinh\beta\\
+\end{split}
+\end{equation}
+
+\begin{equation}
+\begin{split}
+p_0=~&\cos\alpha\cosh\beta\\
+p_1=~&a_1\sin\alpha\cosh\beta\\
+p_2=~&a_2\sin\alpha\cosh\beta\\
+p_3=~&a_3\sin\alpha\cosh\beta\\
+p_4=~&((a_1a_5+a_2a_6+a_3a_7)\sin\alpha+a_4\cos\alpha)\sinh\beta\\
+p_5=~&((a_3a_6-a_1a_4-a_2a_7)\sin\alpha+a_5\cos\alpha)\sinh\beta\\
+p_6=~&((a_1a_7-a_2a_4-a_3a_5)\sin\alpha+a_6\cos\alpha)\sinh\beta\\
+p_7=~&((a_2a_5-a_3a_4-a_1a_6)\sin\alpha+a_7\cos\alpha)\sinh\beta\\
+\end{split}
+\end{equation}
+
+\section{分解型八元数による回転}
+
+分解型八元数に内在する角度が2つある事が分かってきました。
+方向を表す2つのベクトル、三次元単位ベクトルと四次元単位ベクトルの組み合わせとしての七次元を考えます。
+\begin{equation}
+\begin{split}
+u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
+&p_1^2+p_2^2+p_3^2=1,\quad p_4^2+p_5^2+p_6^2+p_7^2=1\\
+v=~&q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7\\
+&q_1^2+q_2^2+q_3^2=1,\quad q_4^2+q_5^2+q_6^2+q_7^2=1\\
+\cos\alpha=~&p_1q_1+p_2q_2+p_3q_3\\
+\cos\beta=~&p_4q_4+p_5q_5+p_6q_6+p_7q_7\\
+\end{split}
+\end{equation}
+$u,v$のノルムは$0$になります。
+\begin{equation}
+N(u)=N(v)=N(uv)=0
+\end{equation}
+積の計算結果から、
+\begin{equation}
+uv=-\cos\alpha+\cos\beta+s
+\end{equation}
+となるように$s$を置くと、
+\begin{gather}
+N(uv)=(-\cos\alpha+\cos\beta)^2+N(s)=0\\
+N(s)=-(-\cos\alpha+\cos\beta)^2
+\end{gather}
+$s$が回転軸を表すためには少なくとも$N(s)=0$でなくてはいけないので、
+$\alpha=\beta$も正規化の条件になります。
+回転軸$w$は、
+\begin{equation}
+\begin{split}
+&s=s_1e_1+s_2e_2+s_3e_3+s_4e_4+s_5e_5+s_6e_6+s_7e_7\\
+&s_L=s_1e_1+s_2e_2+s_3e_3,\quad s_R=s_4e_4+s_5e_5+s_6e_6+s_7e_7\\
+\end{split}
+\end{equation}
+として、
+\begin{equation}
+\begin{split}
+w_L=~&\frac{s_L}{|s_L|},\quad w_R=\frac{s_R}{|s_R|}\\
+w=~&w_L+w_R
+\end{split}
+\end{equation}
+回転子は$\theta=\alpha=\beta$として、
+\begin{equation}
+\exp(-0.5t\theta w)=(\cos 0.5t\theta-w_L\sin0.5t\theta)(\cosh 0.5t\theta-w_R\sinh 0.5t\theta)
+\end{equation}
+純虚分解型八元数$f$を回転させて$f'$になるとすると、
+\begin{equation}
+f'=(\cosh 0.5t\theta+w_R\sinh 0.5t\theta)(\cos 0.5t\theta+w_L\sin0.5t\theta)f(\cos 0.5t\theta-w_L\sin0.5t\theta)(\cosh 0.5t\theta-w_R\sinh 0.5t\theta)
+\end{equation}
 
 \end{document}
