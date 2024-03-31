@@ -1392,7 +1392,11 @@ p_7=~&((a_2a_5-a_3a_4-a_1a_6)\sin\alpha+a_7\cos\alpha)\sinh\beta\\
 \section{分解型八元数による回転}
 
 分解型八元数に内在する角度が2つある事が分かってきました。
-方向を表す2つのベクトル、三次元単位ベクトルと四次元単位ベクトルの組み合わせとしての七次元を考えます。
+方向を表す2つのベクトルもあります。
+三次元単位ベクトルと四次元単位ベクトルです。
+これらが組み合わさって七次元を構成しています。
+
+2つの純虚分解型八元数$u,v$を以下のように定義して回転を計算してみます。
 \begin{equation}
 \begin{split}
 u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
@@ -1416,9 +1420,7 @@ uv=-\cos\alpha+\cos\beta+s
 N(uv)=(-\cos\alpha+\cos\beta)^2+N(s)=0\\
 N(s)=-(-\cos\alpha+\cos\beta)^2
 \end{gather}
-$s$が回転軸を表すためには少なくとも$N(s)=0$でなくてはいけないので、
-$\alpha=\beta$も正規化の条件になります。
-回転軸$w$は、
+というような関係性が見られます。回転軸$w$は、
 \begin{equation}
 \begin{split}
 &s=s_1e_1+s_2e_2+s_3e_3+s_4e_4+s_5e_5+s_6e_6+s_7e_7\\
@@ -1429,16 +1431,20 @@ $\alpha=\beta$も正規化の条件になります。
 \begin{equation}
 \begin{split}
 w_L=~&\frac{s_L}{|s_L|},\quad w_R=\frac{s_R}{|s_R|}\\
-w=~&w_L+w_R
+w=~&w_L+w_R,\quad N(w)=0\\
 \end{split}
 \end{equation}
-回転子は$\theta=\alpha=\beta$として、
+回転子$\rho$は、$w_L$方向に$a\alpha$、$w_R$方向に$b\beta$回転させるとして、
 \begin{equation}
-\exp(-0.5t\theta w)=(\cos 0.5t\theta-w_L\sin0.5t\theta)(\cosh 0.5t\theta-w_R\sinh 0.5t\theta)
+\rho=\exp(-0.5a\alpha w_L+b\beta w_R)=(\cos 0.5a\alpha-w_L\sin0.5a\alpha)(\cosh 0.5b\beta-w_R\sinh 0.5b\beta)
 \end{equation}
 純虚分解型八元数$f$を回転させて$f'$になるとすると、
 \begin{equation}
-f'=(\cosh 0.5t\theta+w_R\sinh 0.5t\theta)(\cos 0.5t\theta+w_L\sin0.5t\theta)f(\cos 0.5t\theta-w_L\sin0.5t\theta)(\cosh 0.5t\theta-w_R\sinh 0.5t\theta)
+\begin{split}
+f'=~&\rho^*f\rho\\
+=~&(\cosh 0.5b\beta+w_R\sinh 0.5b\beta)(\cos 0.5a\alpha+w_L\sin0.5a\alpha)f
+(\cos 0.5a\alpha-w_L\sin0.5a\alpha)(\cosh 0.5b\beta-w_R\sinh 0.5b\beta)
+\end{split}
 \end{equation}
 
 \end{document}

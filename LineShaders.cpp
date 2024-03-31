@@ -478,25 +478,7 @@ void LineShaders::linesSplitOctonionRotation()
     double angle = degreeToRadian(360.0 / double(resolution));
     double scale = 1.0 / 3.14;
 
-    Quaternion origin(1.0);
-    Quaternion x(0.0, 1.0, 0.0, 0.0);
-    Quaternion y(0.0, 0.0, 1.0, 0.0);
-    Vector3 axisX = SplitOctonion::axis(origin, x);
-    Vector3 axisY = SplitOctonion::axis(origin, y);
-    Quaternion rotorY = SplitOctonion::rotor(axisY, angle);
-    for (int j = -4; j <= 4; ++j)
-    {
-        if (j == 0)
-            continue;
-        auto start = SplitOctonion::rotor(axisX, j * 0.4);;
-        auto end = SplitOctonion::rotation(start, rotorY);
-        for (int i = 0; i < resolution; ++i)
-        {
-            appendLine(start.lnV3() * scale, end.lnV3() * scale, WHITE);
-            start = end;
-            end = SplitOctonion::rotation(start, rotorY);
-        }
-    }
+
     appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
     appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
     appendLine({0.0, 0.0, 0.0}, {0.0, 0.0, 1.0}, BLUE);
