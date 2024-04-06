@@ -252,7 +252,7 @@ public:
         double l = sqrt(m_re * m_re + m_i1 * m_i1 + m_i2 * m_i2 + m_i3 * m_i3);
         double r = sqrt(m_i4 * m_i4 + m_i5 * m_i5 + m_i6 * m_i6 + m_i7 * m_i7);
         if (l == 0.) {
-            m_re = 1.; m_i1 = 0.; m_i2 = 0.; m_i3 = 0.;
+            m_re = 0.; m_i1 = 1.; m_i2 = 0.; m_i3 = 0.;
         } else {
             m_re /= l; m_i1 /= l; m_i2 /= l; m_i3 /= l;
         }
@@ -291,7 +291,7 @@ public:
         return w.normalize();
     }
 
-    static SplitOctonion rotor(const SplitOctonion& axis, const double alpha, const double beta)
+    static SplitOctonion rotator(const SplitOctonion& axis, const double alpha, const double beta)
     {
         double a = -0.5 * alpha;
         double b = -0.5 * beta;

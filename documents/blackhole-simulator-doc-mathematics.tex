@@ -9,7 +9,7 @@
 \DeclareMathOperator\arctanh{arctanh}
 \DeclareMathOperator\arccosh{arccosh}
 \title{blackhole-simulator documents}
-\author{hyper7}
+\author{https://github.com/hypernumbernet}
 \date{\today}
 \begin{document}
 \maketitle
@@ -19,7 +19,7 @@
 プログラミングですぐに活用できるように計算手順を具体化し実係数で式を展開しています。
 \end{abstract}
 
-\chapter{双四元数による相対性理論}
+\chapter{双四元数による特殊相対性理論}
 
 \section{双四元数とは}
 
@@ -368,8 +368,8 @@ b_0b_1=~&(w_0+w_1i+w_2j+w_3k)(u_0+u_1i+u_2j+u_3k)\\
 &+w_2u_0j-w_2u_1k-w_2u_2+w_2u_3i\\
 &+w_3u_0k+w_3u_1j-w_3u_2i-w_3u_3\\
 =~&w_0u_0-w_1u_1-w_2u_2-w_3u_3\\
-&+(w_0u_1-w_1u_0+w_2u_3-w_3u_2)i\\
-&+(w_0u_2-w_1u_3-w_2u_0+w_3u_1)j\\
+&+(w_0u_1+w_1u_0+w_2u_3-w_3u_2)i\\
+&+(w_0u_2-w_1u_3+w_2u_0+w_3u_1)j\\
 &+(w_0u_3+w_1u_2-w_2u_1+w_3u_0)k
 \end{split}
 \end{equation}
@@ -378,8 +378,8 @@ b_0b_1=~&(w_0+w_1i+w_2j+w_3k)(u_0+u_1i+u_2j+u_3k)\\
 \begin{equation}
 \begin{split}
 b_0b_1=~&(p_0+p_1I)(q_0+q_1I)-(p_2+p_3I)(q_2+q_3I)-(p_4+p_5I)(q_4+q_5I)-(p_6+p_7I)(q_6+q_7I)\\
-&+((p_0+p_1I)(q_2+q_3I)-(p_2+p_3I)(q_0+q_1I)+(p_4+p_5I)(q_6+q_7I)-(p_6+p_7I)(q_4+q_5I))i\\
-&+((p_0+p_1I)(q_4+q_5I)-(p_2+p_3I)(q_6+q_7I)-(p_4+p_5I)(q_0+q_1I)+(p_6+p_7I)(q_2+q_3I))j\\
+&+((p_0+p_1I)(q_2+q_3I)+(p_2+p_3I)(q_0+q_1I)+(p_4+p_5I)(q_6+q_7I)-(p_6+p_7I)(q_4+q_5I))i\\
+&+((p_0+p_1I)(q_4+q_5I)-(p_2+p_3I)(q_6+q_7I)+(p_4+p_5I)(q_0+q_1I)+(p_6+p_7I)(q_2+q_3I))j\\
 &+((p_0+p_1I)(q_6+q_7I)+(p_2+p_3I)(q_4+q_5I)-(p_4+p_5I)(q_2+q_3I)+(p_6+p_7I)(q_0+q_1I))k
 \end{split}
 \end{equation}
@@ -387,10 +387,10 @@ b_0b_1=~&(p_0+p_1I)(q_0+q_1I)-(p_2+p_3I)(q_2+q_3I)-(p_4+p_5I)(q_4+q_5I)-(p_6+p_7
 \begin{split}
 =~&(p_0q_0-p_1q_1+(p_0q_1+p_1q_0)I)-(p_2q_2-p_3q_3+(p_2q_3+p_3q_2)I)\\
 &-(p_4q_4-p_5q_5+(p_4q_5+p_5q_4)I)-(p_6q_6-p_7q_7+(p_6q_7+p_7q_6)I)\\
-&+((p_0q_2-p_1q_3+(p_0q_3+p_1q_2)I)-(p_2q_0-p_3q_1+(p_2q_1+p_3q_0)I)\\
+&+((p_0q_2-p_1q_3+(p_0q_3+p_1q_2)I)+(p_2q_0-p_3q_1+(p_2q_1+p_3q_0)I)\\
 &+(p_4q_6-p_5q_7+(p_4q_7+p_5q_6)I)-(p_6q_4-p_7q_5+(p_6q_5+p_7q_4)I))i\\
 &+((p_0q_4-p_1q_5+(p_0q_5+p_1q_4)I)-(p_2q_6-p_3q_7+(p_2q_7+p_3q_6)I)\\
-&-(p_4q_0-p_5q_1+(p_4q_1+p_5q_0)I)+(p_6q_2-p_7q_3+(p_6q_3+p_7q_2)I))j\\
+&+(p_4q_0-p_5q_1+(p_4q_1+p_5q_0)I)+(p_6q_2-p_7q_3+(p_6q_3+p_7q_2)I))j\\
 &+((p_0q_6-p_1q_7+(p_0q_7+p_1q_6)I)+(p_2q_4-p_3q_5+(p_2q_5+p_3q_4)I)\\
 &-(p_4q_2-p_5q_3+(p_4q_3+p_5q_2)I)+(p_6q_0-p_7q_1+(p_6q_1+p_7q_0)I))k
 \end{split}
@@ -399,10 +399,10 @@ b_0b_1=~&(p_0+p_1I)(q_0+q_1I)-(p_2+p_3I)(q_2+q_3I)-(p_4+p_5I)(q_4+q_5I)-(p_6+p_7
 \begin{split}
 =~&p_0q_0-p_1q_1-p_2q_2+p_3q_3-p_4q_4+p_5q_5-p_6q_6+p_7q_7\\
 &+(p_0q_1+p_1q_0-p_2q_3-p_3q_2-p_4q_5-p_5q_4-p_6q_7-p_7q_6)I\\
-&+(p_0q_2-p_1q_3-p_2q_0+p_3q_1+p_4q_6-p_5q_7-p_6q_4+p_7q_5)i\\
-&+(p_0q_3+p_1q_2-p_2q_1-p_3q_0+p_4q_7+p_5q_6-p_6q_5-p_7q_4)Ii\\
-&+(p_0q_4-p_1q_5-p_2q_6+p_3q_7-p_4q_0+p_5q_1+p_6q_2-p_7q_3)j\\
-&+(p_0q_5+p_1q_4-p_2q_7-p_3q_6-p_4q_1-p_5q_0+p_6q_3+p_7q_2)Ij\\
+&+(p_0q_2-p_1q_3+p_2q_0-p_3q_1+p_4q_6-p_5q_7-p_6q_4+p_7q_5)i\\
+&+(p_0q_3+p_1q_2+p_2q_1+p_3q_0+p_4q_7+p_5q_6-p_6q_5-p_7q_4)Ii\\
+&+(p_0q_4-p_1q_5-p_2q_6+p_3q_7+p_4q_0-p_5q_1+p_6q_2-p_7q_3)j\\
+&+(p_0q_5+p_1q_4-p_2q_7-p_3q_6+p_4q_1+p_5q_0+p_6q_3+p_7q_2)Ij\\
 &+(p_0q_6-p_1q_7+p_2q_4-p_3q_5-p_4q_2+p_5q_3+p_6q_0-p_7q_1)k\\
 &+(p_0q_7+p_1q_6+p_2q_5+p_3q_4-p_4q_3-p_5q_2+p_6q_1+p_7q_0)Ik
 \end{split}
@@ -488,13 +488,13 @@ $\bm{a}$と$\bm{b}$の成す角度$\theta$を内積から求めます。
 \begin{equation}
 \begin{split}
 \bm{a}=~&(a_x,a_y,a_z),\quad \bm{b}=~(b_x,b_y,b_z),\quad a_x,a_y,a_z,b_x,b_y,b_z\in\mathbb{R}\\
-\theta=~&\arccos\bm{a}\cdot\bm{b}=\arccos(a_xb_x+a_yb_y+a_zb_z),\quad \theta\in\mathbb{R}
+\theta=~&\arccos(\bm{a}\cdot\bm{b})=\arccos(a_xb_x+a_yb_y+a_zb_z),\quad \theta\in\mathbb{R}
 \end{split}
 \end{equation}
 
-回転軸を表す三次元単位ベクトルを外積から求めます。
+回転軸\footnote{一般的に$N$次元の回転軸は$N-1$次元になります。プログラム中の名称はaxis。}を表す三次元単位ベクトルを外積から求めます。
 \begin{equation}
-\bm{w}_{cross}=~\bm{a}\times\bm{b}=(a_yb_z-a_zb_y,~a_zb_x-a_xb_z,~a_xb_y-a_yb_x)
+\bm{w}_{cross}=~\bm{a}\times\bm{b}=a_yb_z-a_zb_y,~a_zb_x-a_xb_z,~a_xb_y-a_yb_x
 \end{equation}
 
 この外積の結果を正規化し単位ベクトルにしておきます。
@@ -505,10 +505,10 @@ $\bm{a}$と$\bm{b}$の成す角度$\theta$を内積から求めます。
 
 この回転軸をベルソル化しておきます。
 \begin{equation}
-w=\bm{w}_{unit}\begin{pmatrix}i\\j\\k\end{pmatrix}=w_xi+w_yj+w_zk,\quad e\in\mathbb{V}
+w=\bm{w}_{unit}\begin{pmatrix}i\\j\\k\end{pmatrix}=w_xi+w_yj+w_zk,\quad w\in\mathbb{V}
 \end{equation}
 
-回転子としての四元数は以下のように構成されます。
+回転子\footnote{プログラム中の名称はrotator。}としての四元数は以下のように構成されます。
 \footnote{$h$のノルムは$1$になっていますので、$h$は単位四元数です。}
 \begin{equation}
 h=\exp(-0.5t\theta w)=\cos 0.5t\theta-w\sin 0.5t\theta,\quad h\in\mathbb{H}
@@ -1446,5 +1446,69 @@ f'=~&\rho^*f\rho\\
 (\cos 0.5a\alpha-w_L\sin0.5a\alpha)(\cosh 0.5b\beta-w_R\sinh 0.5b\beta)
 \end{split}
 \end{equation}
+
+\chapter{多体シミュレーションにおける物理法則}
+
+\section{時間進捗の考え方の導入}
+
+多体物理シミュレーションに適用する物理法則を考えるに当たって、最も重要な事は時間に対する考え方になります。
+通常の物理方程式の解の求め方では、時間を連続した直線的な概念として把握します。
+時間を直線的な$t$のパラメーターとして考えてある時刻を$t$に当てはめれば、どんな未来も過去も物理的実体を厳密に算出する事ができます。
+
+しかし、このような物理方程式を多体について厳密に解いていく事は不可能です。
+コンピューターによる多体シミュレーションでは時間は非連続的であると考えます。
+フィルム映画やアニメーションのようにコマ送りで物理法則を計算していきます。
+計算する内容は現在の物理的パラメーターに基づいた次の瞬間の物理パラメーターの遷移についてだけです。
+
+このシミュレーションの方法では任意に時刻を指定して状態を厳密に算出する事はできません。
+もし任意の時刻の状態を知りたいのであれば、一度知りたい時刻の範囲の計算を行っておいて、そのデータを全部記録しておく事になります。
+
+\section{時間進捗で計算する内容}
+
+全ての物体が分解したり合体したりしないで総数が一定の粒子であるとすれば、
+それぞれの粒子について位置と運動量をデータとして持っておき、それらの相互作用を計算することで多体シミュレーションを成立させます。
+具体的に行う計算には2種類あります。
+
+一つは、状態変化の計算になります。
+具体的には速度を位置の変化に反映させる計算になります。
+$N$体あれば$N$回の計算で済みます。
+
+もう一つは、他の粒子との相互作用になります。
+この計算は、$N$体あれば$N(N-1)/2$回の計算になり、計算量オーダー的に$O(n^2)$となりますので、粒子数が増えると計算量が激増します。
+具体的には、運動量の交換がこの相互作用で行われます。
+
+\chapter{クリフォード代数による一般相対性理論}
+
+\section{四元数の直積}
+
+双四元数は四元数の係数を複素数にしましたが、同じように係数を四元数にしてみます。
+四元数としてお互いに干渉しない虚数単位のセットを2つ定義します。
+\begin{gather}
+i^2=j^2=k^2=-1\\
+I^2=J^2=K^2=-1\\
+ij=k,~jk=i,~ki=j,~ji=-k,~kj=-i,~ik=-j\\
+IJ=K,~JK=I,~KI=J,~JI=-K,~KJ=-I,~IK=-J\\
+iI=Ii,~jI=Ij,~kI=Ik\\
+iJ=Ji,~jJ=Jj,~kJ=Jk\\
+iK=Ki,~jK=Kj,~kK=Kk
+\end{gather}
+これらを組み合わせて2つの四元数の直積を作りますが、利便性の為に以後「四双四元数」(クアクォータニオン)と呼称します。
+\begin{equation}
+\begin{split}
+\texttt{Quaquaternion}:\mathbb{H}\otimes\mathbb{H}\coloneq ~&a+bi+cj+dk+m+ni+rj+sk\\
+&a,b,c,d\in\mathbb{R}\\
+&m=m_1I+m_2J+m_3K,\quad m_1,m_2,m_3\in\mathbb{R}\\
+&n=n_1I+n_2J+n_3K,\quad n_1,n_2,n_3\in\mathbb{R}\\
+&r=r_1I+r_2J+r_3K,\quad r_1,r_2,r_3\in\mathbb{R}\\
+&n=s_1I+s_2J+s_3K,\quad s_1,s_2,s_3\in\mathbb{R}
+\end{split}
+\end{equation}
+部分に以下のような呼称があります。\\
+スカラーパート：$a$、疑似スカラーパート：$bi$\\
+ベクトルパート：$cj+sk$、バイベクトルパート：$m+ni$、トリベクトルパート：$dk+rj$\\
+
+\section{四双四元数による四次元擬ユークリッド空間}
+
+
 
 \end{document}

@@ -475,9 +475,33 @@ void LineShaders::linesOctonionRotationZX(int w, int x, int y, int z)
 void LineShaders::linesSplitOctonionRotation()
 {
     int resolution = 180;
-    double angle = degreeToRadian(360.0 / double(resolution));
-    double scale = 1.0 / 3.14;
+    double angle = degreeToRadian(360. / double(resolution));
+    double scale = 1. / 3.14;
 
+    SplitOctonion origin(0., 1., 0., 0., 1., 0., 0., 0.);
+    SplitOctonion x90   (0., 1., 0., 0., 0., 1., 0., 0.);
+    SplitOctonion y90   (0., 1., 0., 0., 0., 0., 1., 0.);
+
+    SplitOctonion axisX = SplitOctonion::axis(origin, x90);
+    SplitOctonion axisY = SplitOctonion::axis(origin, y90);
+
+    SplitOctonion rotatorY = SplitOctonion::rotator(axisY, 0., angle);
+    for (int j = -4; j <= 4; ++j)
+    {
+        if (j == 0)
+            continue;
+        SplitOctonion rotatorX = SplitOctonion::rotator(axisX, 0., j * 0.2);
+        SplitOctonion start = rotatorX.rotation(origin);
+        SplitOctonion end = rotatorY.rotation(start);
+        for (int i = 0; i < resolution; ++i)
+        {
+            Quaternion startQ(start.i4(), start.i5(), start.i6(), start.i7());
+            Quaternion endQ(end.i4(), end.i5(), end.i6(), end.i7());
+            appendLine(startQ.lnV3() * scale, endQ.lnV3() * scale, WHITE);
+            start = end;
+            end = end = rotatorY.rotation(start);
+        }
+    }
 
     appendLine({0.0, 0.0, 0.0}, {1.0, 0.0, 0.0}, RED);
     appendLine({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, GREEN);
