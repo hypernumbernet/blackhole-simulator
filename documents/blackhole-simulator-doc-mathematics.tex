@@ -1501,14 +1501,139 @@ iK=Ki,~jK=Kj,~kK=Kk
 &m=m_1I+m_2J+m_3K,\quad m_1,m_2,m_3\in\mathbb{R}\\
 &n=n_1I+n_2J+n_3K,\quad n_1,n_2,n_3\in\mathbb{R}\\
 &r=r_1I+r_2J+r_3K,\quad r_1,r_2,r_3\in\mathbb{R}\\
-&n=s_1I+s_2J+s_3K,\quad s_1,s_2,s_3\in\mathbb{R}
+&s=s_1I+s_2J+s_3K,\quad s_1,s_2,s_3\in\mathbb{R}
 \end{split}
 \end{equation}
 部分に以下のような呼称があります。\\
 スカラーパート：$a$、疑似スカラーパート：$bi$\\
 ベクトルパート：$cj+sk$、バイベクトルパート：$m+ni$、トリベクトルパート：$dk+rj$\\
 
+四双四元数の積の計算をするにあたっては、四元数の実係数に四元数を当てはめれば算出できます。
+コンピューターの計算であっても係数を四元数として定義すれば実装は容易なので、全部を実数係数に落とし込む事はしません。
+
+四双四元数$A$の共役は以下のように定義できます。
+\begin{equation}
+A^*=a+bi-cj+dk-m-ni+rj-sk
+\end{equation}
+四双四元数$A,B$の共役の関係は以下のようになります。
+\begin{equation}
+(AB)^*=B^*A^*
+\end{equation}
+交換子は以下のようになります。
+\begin{equation}
+2[A,B]=AB-BA
+\end{equation}
+
+さて、四元数の積には以下のように内積と外積が組み込まれています。
+\begin{equation}
+\begin{split}
+a=~&a_0+a_1i+a_2j+a_3k=a_0+u\\
+b=~&b_0+b_1i+b_2j+b_3k=b_0+v\\
+\end{split}
+\end{equation}
+と置いて、
+\begin{equation}
+\begin{split}
+ab=~&a_0b_0-a_1b_1-a_2b_2-a_3b_3\\
+&+(a_0b_1+a_1b_0+a_2b_3-a_3b_2)i\\
+&+(a_0b_2+a_2b_0+a_3b_1-a_1b_3)j\\
+&+(a_0b_3+a_3b_0+a_1b_2-a_2b_1)k\\
+=~&a_0b_0-u\cdot v+a_0v+ub_0+u\times v
+\end{split}
+\end{equation}
+実数部分を取り除いて考えれば、
+\begin{equation}
+uv=-u\cdot v+u\times v
+\end{equation}
+
+四双四元数のベクトルパートの内積と外積を考えます。
+ベクトルパートを実数係数で具体化すると以下のようになっています。
+\begin{equation}
+\begin{split}
+p=~&p_0j+p_1Ik+p_2Jk+p_3Kk\\
+q=~&q_0j+q_1Ik+q_2Jk+q_3Kk,\quad p_0,...,q_3,q_0,...,q_3\in\mathbb{R}
+\end{split}
+\end{equation}
+内積と外積の極めて一般的な定義としてはウェッジ積を用いて以下の定義になります。
+\begin{equation}
+pq=\lambda p\cdot q+\mu p\wedge q,\quad \lambda,\mu\in\mathbb{R}
+\end{equation}
+ここで$\lambda=\mu=-1$を選択すると、
+\begin{equation}
+\begin{split}
+pq=~&-p\cdot q-p\wedge q\\
+qp=~&-q\cdot p-q\wedge p=-p\cdot q+p\wedge q
+\end{split}
+\end{equation}
+\begin{equation}
+\begin{split}
+2p\cdot q=~&-(pq+qp)\\
+2p\wedge q=~&-(pq-qp)\\
+p\cdot q=~&-0.5(pq+qp)\\
+p\wedge q=~&-0.5(pq-qp)
+\end{split}
+\end{equation}
+
+ベクトルパート$p$とマルチベクトル\footnote{複数回ウェッジ積を重ねた結果の事}$A_n=p_1\wedge p_2...\wedge p_n$の内積と外積は以下のようになります。
+\begin{equation}
+\begin{split}
+2p\cdot A_n=~&(-1)^n(pA_n-(-1)^nA_np)\\
+2p\wedge A_n=~&(-1)^n(pA_n+(-1)^nA_np)
+\end{split}
+\end{equation}
+ベクトルパート$p=p_0j+\bm{p_1}k,q=q_0j+\bm{q_1}k$のウェッジ積について計算すると、
+\begin{equation}
+\begin{split}
+pq=~&(p_0j+\bm{p_1}k)(q_0j+\bm{q_1}k)=-p_0q_0-\bm{p_1}\bm{q_1}+(p_0\bm{q_1}-\bm{p_1}q_0)i\\
+qp=~&(q_0j+\bm{q_1}k)(p_0j+\bm{p_1}k)=-p_0q_0-\bm{p_1}\bm{q_1}-(p_0\bm{q_1}-\bm{p_1}q_0)i\\
+2p\wedge q=~&-(pq-qp)=-2(p_0\bm{q_1}-\bm{p_1}q_0)i\\
+p\wedge q=~&-(p_0\bm{q_1}-\bm{p_1}q_0)i
+\end{split}
+\end{equation}
+$p\wedge q$がバイベクトルパートの範囲内になるのでバイベクトルパートは$n=2$である事がわかります。
+従って、バイベクトルパート$B=\bm{b_1}i$とベクトルパートの内積は、
+\begin{equation}
+2p\cdot B=pB-Bp,\quad 2B\cdot p=Bp-pB
+\end{equation}
+
+マルチベクトル$A_m,B_n$の内積と外積は、
+\begin{equation}
+\begin{split}
+A_m\cdot B_n=~&(a_1\wedge ...\wedge a_{m-1})\cdot(a_m\cdot B_n)\\
+A_m\wedge B_n=~&a_1\wedge(a_2\wedge ...a_m\wedge B_n)
+\end{split}
+\end{equation}
+
 \section{四双四元数による四次元擬ユークリッド空間}
+
+ベクトルパートの実数係数を以下のように定めて内積を計算すると、
+\begin{gather}
+s=tj+xIk+yJk+zKk,\quad t,x,y,z\in\mathbb{R}\\
+s\cdot s=-ss=t^2-x^2-y^2-z^2
+\end{gather}
+内積は相対論的不変量になります。ローレンツ変換は以下のように定義されます。
+\begin{gather}
+s'=g^*sg
+\end{gather}
+ここで$g$は$gg^*=1$を満たし、偶数個のベクトルパートをウェッジ積で乗算したマルチベクトルです。
+同様に任意のマルチベクトル$A$に対して、
+\begin{gather}
+A'=g^*Ag
+\end{gather}
+が成り立ち、相対論的不変量$AA^*$が得られます。
+ラピディティ$\theta$が、$\tanh\theta=v/c$で与えられ、方向を表す単位ベクトルが、
+\begin{gather}
+v=v_1I+v_2J+v_3K,\quad v_1^2+v_2^2+v_3^2=1,\quad v_1,v_2,v_3\in\mathbb{R}
+\end{gather}
+で与えられる時、
+\begin{equation}
+\begin{split}
+g=~&\exp(-0.5\theta vi)\\
+=~&\cosh 0.5\theta-vi\sinh 0.5\theta\\
+=~&\cosh 0.5\theta-(v_1Ii+v_2Ji+v_3Ki)\sinh 0.5\theta
+\end{split}
+\end{equation}
+として$g$が定まります。
 
 \chapter{角度空間での歪み}
 
@@ -1607,9 +1732,13 @@ $XY$平面に描かれた円が$Z$軸方向に球面を歪んでいく事を想�
 パルサーは高速回転をする天体であると仮定していては説明できない現象もあります。
 ブラックホール表面での重力反転仮説では良く説明できる可能性があります。
 
-パルサーのエネルギー源がその表面物質の質量であり、その全てがエネルギーに変換されるまで膨大なエネルギーを宇宙に放射し続ける能力があると考えると、
-計算不可能なほどの膨大なエネルギー源に説明が付きます。
+パルサーのエネルギー源がその表面物質の質量であり、そのほとんどがエネルギーに変換されるまで膨大なエネルギーを宇宙に放射し続ける能力があると考えると、
+回転体と考えた場合には計算不可能なほどのエネルギー源に説明が付きます。
 しばしば強力なバーストを起こす事についても、他の天体を吸収し同化した時に起きる現象として説明できます。
+
+また、ブラックホール表面で振動する質量体が消滅していくにつれて、パルスの間隔が次第に短くなっていくと考えられます。
+弾んでいるピンポン玉の周期がだんだんと短くなる事と同様と考えられます。
+古いパルサーほど周期が短い問題で、パルサーを回転体と考えた場合は回転エネルギーが増えるとして説明しますが、そのエネルギーの供給源を無理に想定する必要は無くなります。
 
 \chapter{多元数の微分積分}
 
