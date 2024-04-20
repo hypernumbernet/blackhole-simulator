@@ -2,6 +2,7 @@
 
 #include "hnn/quaternion.h"
 #include "hnn/biquaternion.h"
+#include "hnn/octonion.h"
 #include <QDebug>
 #include <QMutex>
 #include <QGenericMatrix>
@@ -52,15 +53,14 @@ enum class LineType
     Quaternion3DRotation,
     QuaternionLeftIsoclinicRotation,
     QuaternionRightIsoclinicRotation,
+    OctonionRotationYList,
+    OctonionRotationAll,
     OctonionRotationLeft,
     OctonionRotationRight,
-    OctonionRotationCloseXY,
     OctonionRotationOpenXY,
     OctonionRotationOpenYZ,
     OctonionRotationOpenZX,
-    OctonionRotationYList,
-    OctonionRotationAll,
-    SplitOctonionRotation,
+    OctonionRotationCloseXY,
     LorentzTrans1,
     LorentzTrans2,
 };
@@ -145,3 +145,4 @@ QDebug operator<<(QDebug, const Quaternion&);
 QDebug operator<<(QDebug, const std::complex<double>&);
 QDebug operator<<(QDebug, const Biquaternion&);
 QDebug operator<<(QDebug, const Spacetime&);
+QDebug operator<<(QDebug, const Octonion&);
