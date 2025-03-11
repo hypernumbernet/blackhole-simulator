@@ -61,6 +61,7 @@ enum class LineType
     OctonionRotationOpenYZ,
     OctonionRotationOpenZX,
     OctonionRotationCloseXY,
+    SplitOctonionRotation,
     LorentzTrans1,
     LorentzTrans2,
 };

@@ -110,14 +110,14 @@ void MainWidget::initUi()
     circleStrafingCB->setFocusPolicy(Qt::NoFocus);
     circleStrafingCB->setChecked(false);
     m_vLayout.addWidget(circleStrafingCB);
-    connect(circleStrafingCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::circleStrafing);
+    connect(circleStrafingCB, &QCheckBox::checkStateChanged, &m_graphicWindows, &GraphicWindow::circleStrafing);
 
     // Grid Lines
     auto gridLinesCB = new QCheckBox(tr("Grid Lines"));
     gridLinesCB->setChecked(true);
     gridLinesCB->setFocusPolicy(Qt::NoFocus);
     m_vLayout.addWidget(gridLinesCB);
-    connect(gridLinesCB, &QCheckBox::stateChanged, &m_graphicWindows, &GraphicWindow::enableGridLines);
+    connect(gridLinesCB, &QCheckBox::checkStateChanged, &m_graphicWindows, &GraphicWindow::enableGridLines);
 
     // Line Type
     auto lineTypeCombo = new QComboBox();

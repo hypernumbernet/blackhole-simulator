@@ -499,7 +499,7 @@ void LineShaders::linesSplitOctonionRotation()
             Quaternion endQ(end.i4(), end.i5(), end.i6(), end.i7());
             appendLine(startQ.lnV3() * scale, endQ.lnV3() * scale, WHITE);
             start = end;
-            end = end = rotatorY.rotation(start);
+            end = rotatorY.rotation(start);
         }
     }
 
