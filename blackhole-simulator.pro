@@ -71,6 +71,8 @@ HEADERS += \
     engine/Universe2/EngineUniverse2.h \
     engine/Universe2/InitializerUniverse2.h \
     hnn/biquaternion.h \
+    hnn/clifford13.h \
+    hnn/clifford31.h \
     hnn/constants.h \
     hnn/octonion.h \
     hnn/quaternion.h \
