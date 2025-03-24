@@ -6,7 +6,8 @@
 \usepackage{bm}
 \usepackage{setspace}
 \usepackage{wrapfig}
-\usepackage{mathcomp}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
 \DeclareMathOperator\arctanh{arctanh}
 \DeclareMathOperator\arccosh{arccosh}
 \title{blackhole-simulator documents}
@@ -19,6 +20,10 @@
   重力多体シミュレーションを行うに当たって数学的基盤を整えておく目的でまとめを書いています。
   プログラミングですぐに活用できるように計算手順を具体化し実係数で式を展開しています。
 \end{abstract}
+
+\clearpage
+\tableofcontents
+\clearpage
 
 \chapter{双四元数による特殊相対性理論}
 
@@ -965,7 +970,7 @@ $u_1$が実数である条件は
 \end{equation}
 
 \begin{wraptable}{r}{8cm}
-  \caption{乗積表\label{octonion-multiplication-table}}
+  \caption{八元数の乗積表}
   \centering
   \begin{tabular}{rrrrrrrr}\hline
         & $e_1$& $e_2$& $e_3$& $e_4$& $e_5$& $e_6$& $e_7$\\\hline
@@ -979,7 +984,7 @@ $u_1$が実数である条件は
   \end{tabular}
 \end{wraptable}
 
-$e_1,...,e_7$の乗法は表\ref{octonion-multiplication-table}に従います。
+$e_1,...,e_7$の乗法は乗積表から算出できます。
 乗法は順番を変えてはならず、3つ以上並んだ場合は左から順番に計算しないといけません。
 
 乗積表には480通りのバリエーションがあり、ここではその一つを書いています。
@@ -1176,277 +1181,483 @@ $e_1,e_2,e_3,e_4$内に四次元を取ると
 三次元の移動を考えた時に3軸全てで(4)の開いているという形状をしているパターンは35種類の組み合わせの中には発見できません。
 つまり、三次元超球面から切り取った原点を含む二次元面については回転計算が成立しますが、そこから外れる事ができません。
 
-\section{分解型八元数の定義}
+\chapter{クリフォード代数による物理計算}
 
-\begin{wraptable}{r}{8cm}
-  \caption{分解型八元数の乗積表\label{split-octonion-multiplication-table}}
+\section{クリフォード代数の導入}
+
+クリフォード代数は、2種類の基底ベクトルで構成されます。2乗して$1$になる基底ベクトルと、2乗して$-1$になる基底ベクトルです。
+これらの基底ベクトルを任意の個数だけ使う事ができます。通常は、$e$に添え字で書いて$e_1, e_2, ...$というように基底ベクトルを表記します。
+異なる基底ベクトル間の積に交換法則はありません。積の順序を変えると符号が反転します。
+
+\begin{equation}
+  e_1e_2=-e_2e_1,\quad e_2e_3=-e_3e_2
+\end{equation}
+
+この符号反転の法則から添え字の大きい方から開始する基底ベクトルの積は、小さい方から開始される基底ベクトルの積に入れ替えが可能です。
+小さい添え字から開始される積により、新たな基底ベクトルが定義されます。
+例えば、基底ベクトルの数が3個あるとすると、以下のような構成になります。
+
+\begin{equation}
+  e_1,\quad e_2,\quad e_3,\quad e_1e_2,\quad e_1e_3,\quad e_2e_3,\quad e_1e_2e_3
+\end{equation}
+
+実係数を加えると、
+
+\begin{equation}
+  a_0+a_1e_1+a_2e_2+a_3e_3+a_4e_1e_2+a_5e_1e_3+a_6e_2e_3+a_7e_1e_2e_3,\quad a_0,..., a_7\in\mathbb{R}
+\end{equation}
+
+という8次元の数になります。2つの基底ベクトルの積の事を特別に双ベクトル(bivector)と呼び、
+3つの基底ベクトルの積は、3-ベクトル(trivector)と呼びます。
+
+\begin{itemize}
+  \item 双ベクトル(bivector): $e_1e_2,\quad e_1e_3,\quad e_2e_3$
+  \item 3-ベクトル(trivector): $e_1e_2e_3$
+\end{itemize}
+これらに対して単一構成の基底ベクトルを、1-ベクトルと言う事があります。
+
+一般的に、組み合わせて使用する1-ベクトルの内、2乗して$1$になる1-ベクトルの数を$m$個、
+2乗して$-1$になる1-ベクトルの数を$n$個とした時のクリフォード代数を$Cl(m,n)$と表現します。
+$Cl(3,0)$では通常の3次元空間を扱うことができます。
+$Cl(0,0)$は実数$\mathbb{R}$と同型で、$Cl(0,1)$は複素数$\mathbb{C}$と同型です。
+四元数は$Cl(0,2)$により構成可能ですが、八元数は$Cl(0,3)$と同型にはなりません。
+クリフォード代数が結合的である一方、八元数は非結合だからです。
+
+\begin{itemize}
+  \item クリフォード代数は結合的で括弧の付け方で結果が変わらない。$(e_ie_j)e_k = e_i(e_je_k)$
+  \item 八元数は非結合で括弧の付け方で結果が変わる。$(e_ie_j)e_k \neq e_i(e_je_k)$
+\end{itemize}
+
+\section{クリフォード代数による時空表現}
+
+クリフォード代数で特殊相対性理論の時空を表現する場合、$Cl(3,1)$もしくは、$Cl(1,3)$が適合すると考えられます。
+物理学的には$(+,-,-,-)$が習慣的に良く使用されるので、$Cl(1,3)$を選択します。
+
+\begin{itemize}
+  \item 1-ベクトル:\quad $e_0,\quad e_1,\quad e_2,\quad e_3$
+\end{itemize}
+
+\begin{equation}
+  e_0^2=+1（時間的）\quad e_1^2=e_2^2=e_3^2=-1（空間的）\quad e_ie_j=-e_je_i\quad (i\neq j)
+\end{equation}
+
+\begin{itemize}
+  \item 双ベクトル:\quad $e_0e_1,\quad e_0e_2,\quad e_0e_3,\quad e_1e_2,\quad e_1e_3,\quad e_2e_3$
+  \item 3-ベクトル:\quad $e_0e_1e_2,\quad e_0e_1e_3,\quad e_0e_2e_3,\quad e_1e_2e_3$
+  \item 4-ベクトル:\quad $e_0e_1e_2e_3$
+\end{itemize}
+
+これらの要素でクリフォード代数の16次元を構成します。
+\begin{equation}
+  \begin{split}
+    \texttt{Cl(1,3)}\coloneq &r_0+r_1e_0+r_2e_1+r_3e_2+r_4e_3\\
+    &+r_5e_0e_1+r_6e_0e_2+r_7e_0e_3+r_8e_1e_2+r_9e_1e_3+r_{10}e_2e_3\\
+    &+r_{11}e_0e_1e_2+r_{12}e_0e_1e_3+r_{13}e_0e_2e_3+r_{14}e_1e_2e_3\\
+    &+r_{15}e_0e_1e_2e_3\\
+    &\quad r_0,...,r_{15}\in\mathbb{R}
+  \end{split}
+\end{equation}
+
+時間$t$と空間$x,y,z$はこの一部を使い、
+\begin{equation}
+  te_0+xe_1+ye_2+ze_3
+\end{equation}
+と表されます。
+
+その他の係数は主に回転を算出するための要素となります。詳しく見ていきます。
+
+\section{クリフォード代数の積}
+
+基底ベクトルの積は、添え字を小さい順になるように入れ替えて符号を変えるという操作と、
+2乗して$1$か$-1$にするという操作を組み合わせて行います。幾何積（geometric product）とも呼びます。
+例えば、$e_0e_2$と$e_0e_1e_3$の積は、
+\begin{equation}
+  e_0e_2e_0e_1e_3=e_0(e_2e_0)e_1e_3=-e_0(e_0e_2)e_1e_3=-(e_0e_0)e_2e_1e_3=e_2e_1e_3=-e_1e_2e_3
+\end{equation}
+となります。この規則により$Cl(1,3)$の乗積表を作ると以下の通りです。
+プログラムで作成しています。基底ベクトルをビットパターンに当てはめる事で、比較的単純な規則で算出可能です。
+\begin{itemize}
+  \item $e_0$を2進数で[0001]、$e_1$を[0010]とすると、$e_0e_1$が[0011]、$e_1e_2e_3$は[1110]
+\end{itemize}
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Cl(1,3)の乗積表1}
+    \small
+    \begin{tabular}{r|rrrrrrrrrrrrrrr}
+      &$e_0$&$e_1$&$e_2$&$e_3$&$e_0e_1$&$e_0e_2$&$e_0e_3$\\\hline
+      $e_0$&$+1$&$+e_0e_1$&$+e_0e_2$&$+e_0e_3$&$+e_1$&$+e_2$&$+e_3$\\
+      $e_1$&$-e_0e_1$&$-1$&$+e_1e_2$&$+e_1e_3$&$+e_0$&$-e_0e_1e_2$&$-e_0e_1e_3$\\
+      $e_2$&$-e_0e_2$&$-e_1e_2$&$-1$&$+e_2e_3$&$+e_0e_1e_2$&$+e_0$&$-e_0e_2e_3$\\
+      $e_3$&$-e_0e_3$&$-e_1e_3$&$-e_2e_3$&$-1$&$+e_0e_1e_3$&$+e_0e_2e_3$&$+e_0$\\
+      $e_0e_1$&$-e_1$&$-e_0$&$+e_0e_1e_2$&$+e_0e_1e_3$&$+1$&$-e_1e_2$&$-e_1e_3$\\
+      $e_0e_2$&$-e_2$&$-e_0e_1e_2$&$-e_0$&$+e_0e_2e_3$&$+e_1e_2$&$+1$&$-e_2e_3$\\
+      $e_0e_3$&$-e_3$&$-e_0e_1e_3$&$-e_0e_2e_3$&$-e_0$&$+e_1e_3$&$+e_2e_3$&$+1$\\
+      $e_1e_2$&$+e_0e_1e_2$&$+e_2$&$-e_1$&$+e_1e_2e_3$&$+e_0e_2$&$-e_0e_1$&$+e_0e_1e_2e_3$\\
+      $e_1e_3$&$+e_0e_1e_3$&$+e_3$&$-e_1e_2e_3$&$-e_1$&$+e_0e_3$&$-e_0e_1e_2e_3$&$-e_0e_1$\\
+      $e_2e_3$&$+e_0e_2e_3$&$+e_1e_2e_3$&$+e_3$&$-e_2$&$+e_0e_1e_2e_3$&$+e_0e_3$&$-e_0e_2$\\
+      $e_0e_1e_2$&$+e_1e_2$&$+e_0e_2$&$-e_0e_1$&$+e_0e_1e_2e_3$&$+e_2$&$-e_1$&$+e_1e_2e_3$\\
+      $e_0e_1e_3$&$+e_1e_3$&$+e_0e_3$&$-e_0e_1e_2e_3$&$-e_0e_1$&$+e_3$&$-e_1e_2e_3$&$-e_1$\\
+      $e_0e_2e_3$&$+e_2e_3$&$+e_0e_1e_2e_3$&$+e_0e_3$&$-e_0e_2$&$+e_1e_2e_3$&$+e_3$&$-e_2$\\
+      $e_1e_2e_3$&$-e_0e_1e_2e_3$&$-e_2e_3$&$+e_1e_3$&$-e_1e_2$&$+e_0e_2e_3$&$-e_0e_1e_3$&$+e_0e_1e_2$\\
+      $e_0e_1e_2e_3$&$-e_1e_2e_3$&$-e_0e_2e_3$&$+e_0e_1e_3$&$-e_0e_1e_2$&$+e_2e_3$&$-e_1e_3$&$+e_1e_2$\\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[ht]
+  \begin{center}
+    \caption{Cl(1,3)の乗積表2}
+    \small
+    \begin{tabular}{r|rrrrrrrrrrrrrrr}
+      &$e_1e_2$&$e_1e_3$&$e_2e_3$&$e_0e_1e_2$&$e_0e_1e_3$&$e_0e_2e_3$&$e_1e_2e_3$&$e_0e_1e_2e_3$\\\hline
+      $e_0$&$+e_0e_1e_2$&$+e_0e_1e_3$&$+e_0e_2e_3$&$+e_1e_2$&$+e_1e_3$&$+e_2e_3$&$+e_0e_1e_2e_3$&$+e_1e_2e_3$\\
+      $e_1$&$-e_2$&$-e_3$&$+e_1e_2e_3$&$+e_0e_2$&$+e_0e_3$&$-e_0e_1e_2e_3$&$-e_2e_3$&$+e_0e_2e_3$\\
+      $e_2$&$+e_1$&$-e_1e_2e_3$&$-e_3$&$-e_0e_1$&$+e_0e_1e_2e_3$&$+e_0e_3$&$+e_1e_3$&$-e_0e_1e_3$\\
+      $e_3$&$+e_1e_2e_3$&$+e_1$&$+e_2$&$-e_0e_1e_2e_3$&$-e_0e_1$&$-e_0e_2$&$-e_1e_2$&$+e_0e_1e_2$\\
+      $e_0e_1$&$-e_0e_2$&$-e_0e_3$&$+e_0e_1e_2e_3$&$+e_2$&$+e_3$&$-e_1e_2e_3$&$-e_0e_2e_3$&$+e_2e_3$\\
+      $e_0e_2$&$+e_0e_1$&$-e_0e_1e_2e_3$&$-e_0e_3$&$-e_1$&$+e_1e_2e_3$&$+e_3$&$+e_0e_1e_3$&$-e_1e_3$\\
+      $e_0e_3$&$+e_0e_1e_2e_3$&$+e_0e_1$&$+e_0e_2$&$-e_1e_2e_3$&$-e_1$&$-e_2$&$-e_0e_1e_2$&$+e_1e_2$\\
+      $e_1e_2$&$-1$&$+e_2e_3$&$-e_1e_3$&$-e_0$&$+e_0e_2e_3$&$-e_0e_1e_3$&$-e_3$&$-e_0e_3$\\
+      $e_1e_3$&$-e_2e_3$&$-1$&$+e_1e_2$&$-e_0e_2e_3$&$-e_0$&$+e_0e_1e_2$&$+e_2$&$+e_0e_2$\\
+      $e_2e_3$&$+e_1e_3$&$-e_1e_2$&$-1$&$+e_0e_1e_3$&$-e_0e_1e_2$&$-e_0$&$-e_1$&$-e_0e_1$\\
+      $e_0e_1e_2$&$-e_0$&$+e_0e_2e_3$&$-e_0e_1e_3$&$-1$&$+e_2e_3$&$-e_1e_3$&$-e_0e_3$&$-e_3$\\
+      $e_0e_1e_3$&$-e_0e_2e_3$&$-e_0$&$+e_0e_1e_2$&$-e_2e_3$&$-1$&$+e_1e_2$&$+e_0e_2$&$+e_2$\\
+      $e_0e_2e_3$&$+e_0e_1e_3$&$-e_0e_1e_2$&$-e_0$&$+e_1e_3$&$-e_1e_2$&$-1$&$-e_0e_1$&$-e_1$\\
+      $e_1e_2e_3$&$-e_3$&$+e_2$&$-e_1$&$+e_0e_3$&$-e_0e_2$&$+e_0e_1$&$+1$&$-e_0$\\
+      $e_0e_1e_2e_3$&$-e_0e_3$&$+e_0e_2$&$-e_0e_1$&$+e_3$&$-e_2$&$+e_1$&$+e_0$&$-1$\\
+    \end{tabular}
+  \end{center}
+\end{table}
+
+この積の規則により、時空ベクトルについては2乗が不変量になります。
+\begin{equation}
+  \begin{split}
+    (te_0+xe_1+ye_2+ze_3)^2=~&t^2e_0e_0+txe_0e_1+tye_0e_2+tze_0e_3\\
+    &+txe_1e_0+x^2e_1e_1+xye_1e_2+xze_1e_3\\
+    &+tye_2e_0+xye_2e_1+y^2e_2e_2+yze_2e_3\\
+    &+tze_3e_0+xze_3e_1+yze_3e_2+z^2e_3e_3\\
+    =~&t^2+txe_0e_1+tye_0e_2+tze_0e_3\\
+    &-txe_0e_1-x^2+xye_1e_2+xze_1e_3\\
+    &-tye_0e_2-xye_1e_2-y^2+yze_2e_3\\
+    &-tze_0e_3-xze_1e_3-yze_2e_3-z^2\\
+    =~&t^2-x^2-y^2-z^2
+  \end{split}
+\end{equation}
+
+双ベクトルや3-ベクトルなどのベクトルの階層の事を、ブレード（Blade）という言葉で呼ぶことがあります。
+また、末尾の基底ベクトルの積については、擬スカラーと呼び、
+末尾から2番目の基底ベクトルの積については、擬ベクトルと呼ぶこともあります。
+\begin{itemize}
+  \item 0-ブレード:スカラー
+  \item 1-ブレード:1-ベクトル
+  \item 2-ブレード:双ベクトル（bivector）
+  \item 3-ブレード:3-ベクトル、擬ベクトル（trivector、pseudo-vector）
+  \item 4-ブレード:4-ベクトル、擬スカラー（4-vector、pseudo-scalar）
+\end{itemize}
+さらにそれぞれを階層に見立ててグレードと呼んだりもします。
+偶数グレードや奇数グレードとまとめて表現する事が出来るようになります。
+
+\section{クリフォード代数の内積と外積}
+
+クリフォード代数の内積は通常、幾何積のスカラー部分を取り出す形で定義されます。外積はそれ以外の部分とみなせます。
+\begin{equation}
+  ab=a\cdot b+a\wedge b
+\end{equation}
+正確な定義としては幾何積の可換部分が内積、反可換部分が外積になります。
+反可換部分とは順序を逆にすると符号が反転するという意味になります。
+\begin{equation}
+  a\cdot b=\frac{1}{2}(ab+ba)
+\end{equation}
+\begin{equation}
+  a\wedge b=\frac{1}{2}(ab-ba)
+\end{equation}
+
+交換子$[a,b]=ab-ba$、反交換子$\{a,b\}=ab+ba$の記法を使うと、
+\begin{equation}
+  2a\cdot b=\{a,b\},\quad 2a\wedge b=[a,b]
+\end{equation}
+と表記する事もできます。
+
+\section{クリフォード代数の共役}
+
+一般的には、クリフォード代数の共役には3種類あると考えられます。
+\begin{table}[ht]
   \centering
-  \begin{tabular}{rrrrrrrr}\hline
-        & $e_1$& $e_2$& $e_3$& $e_4$& $e_5$& $e_6$& $e_7$\\\hline
-    $e_1$& $ -1$& $e_3$&-$e_2$&-$e_5$& $e_4$&-$e_7$& $e_6$\\\hline
-    $e_2$&-$e_3$& $ -1$& $e_1$&-$e_6$& $e_7$& $e_4$&-$e_5$\\\hline
-    $e_3$& $e_2$&-$e_1$& $ -1$&-$e_7$&-$e_6$& $e_5$& $e_4$\\\hline
-    $e_4$& $e_5$& $e_6$& $e_7$& $  1$& $e_1$& $e_2$& $e_3$\\\hline
-    $e_5$&-$e_4$&-$e_7$& $e_6$&-$e_1$& $  1$& $e_3$&-$e_2$\\\hline
-    $e_6$& $e_7$&-$e_4$&-$e_5$&-$e_2$&-$e_3$& $  1$& $e_1$\\\hline
-    $e_7$&-$e_6$& $e_5$&-$e_4$&-$e_3$& $e_2$&-$e_1$& $  1$\\\hline
+  \caption{クリフォード代数の共役}
+  \begin{tabular}{|l|l|l|} \hline
+    名前 & 表記 & 操作 \\ \hline
+    リバース(Reverse) & $\widetilde{A}$ & 基底ベクトルの順序を逆にする \\ \hline
+    グレード対合(Grade Involution) & $GI(A)$ & 奇数グレードの符号反転 \\ \hline
+    クリフォード共役(Clifford Conjugate) & $\overline{A}$ & 他の共役の掛け合わせ \\ \hline
   \end{tabular}
-\end{wraptable}
+\end{table}
 
-分解型八元数についても可能性を調査してみましょう。
-分解型八元数は以下のように定義されます。
-\begin{multline}
-  \texttt{Split-octonion}:\\
-  \mathbb{O}_s\coloneq r_0+r_1e_1+r_2e_2+r_3e_3+r_4e_4+r_5e_5+r_6e_6+r_7e_7\\
-  \quad r_0,...,r_7\in\mathbb{R}
-\end{multline}
+通常、クリフォード代数の共役にはリバースが使用されます。
+クリフォード代数においてリバース演算は、要素の基底ベクトルの順序を逆にしたものです。例えば、
+\begin{itemize}
+  \item スカラー: $\widetilde{a}=a$（変化なし）
+  \item 1-ベクトル: $\widetilde{e_0}=e_0$（変化なし）
+  \item 双ベクトル: $\widetilde{e_0e_1}=-e_1e_0$（$-1$倍）
+  \item 3-ベクトル: $\widetilde{e_0e_1e_2}=e_2e_1e_0=-e_1e_2e_0=e_1e_0e_2=-e_0e_1e_2$（$-1$倍）
+  \item 4-ベクトル: $\widetilde{e_0e_1e_2e_3}=e_3e_2e_1e_0=e_0e_1e_2e_3$（変化なし）
+\end{itemize}
 
-$e_1,...,e_7$の乗法は表\ref{split-octonion-multiplication-table}に従います。
+各共役の符号についてまとめると以下の表になります。
+\begin{table}[ht]
+  \centering
+  \caption{グレード$k$の符号の一般式}
+  \begin{tabular}{|l|c|c|c|c|l|} \hline
+    k mod 4 & 0 & 1 & 2 & 3 & \\ \hline
+    $\widetilde{A}$ & $+$ & $+$ & $-$ & $-$ & $(-1)^{k(k-1)/2}$ \\ \hline
+    $GI(A)$ & $+$ & $-$ & $+$ & $-$ & $(-1)^k$ \\ \hline
+    $\overline{A}$ & $+$ & $-$ & $-$ & $+$ & $(-1)^{k(k+1)/2}$ \\ \hline
+  \end{tabular}
+\end{table}
 
-共役は八元数と同じ定義です。
+\section{クリフォード代数の回転子}
+
+クリフォード代数の回転子(Rotor)は偶数グレードから形成され、以下の条件を満たします。
 \begin{equation}
-  \begin{split}
-    s=~&r_0+r_1e_1+r_2e_2+r_3e_3+r_4e_4+r_5e_5+r_6e_6+r_7e_7\\
-    s^*=~&r_0-r_1e_1-r_2e_2-r_3e_3-r_4e_4-r_5e_5-r_6e_6-r_7e_7
-  \end{split}
+  R\widetilde{R}=\widetilde{R}R=1
 \end{equation}
+ここで$\widetilde{R}$は$R$のリバース(Reverse)です。
 
-ノルムについては少し様子が違って以下のようになります。
+この回転子を以下の様に対象$M$に作用させます。
 \begin{equation}
-  \begin{split}
-    N(s)=s^*s=(r_0^2+r_1^2+r_2^2+r_3^2)-(r_4^2+r_5^2+r_6^2+r_7^2)
-  \end{split}
+  RM\widetilde{R}=X'
 \end{equation}
-八元数同様に乗積表の右上と左下の符号が反転しているので共役をかけるとそれらが消えて実数部分のみになります。
+この様な挟み込みの掛け合わせで対象を変換することを、サンドウィッチ積(Sandwich Product)と呼びます。
+通常、サンドウィッチ積による操作は対象の示す座標を回転させる事になります。
 
-まず、任意の分解型八元数$s_0,s_1$の積をその実数成分で表現しておきましょう。
+\section{クリフォード代数のローレンツ変換}
+
+$Cl(1,3)$におけるローレンツ変換の計算を説明します。改めて時空については以下の定義です。
 \begin{equation}
-  \begin{split}
-    s_0=~&p_0+p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
-    s_1=~&q_0+q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7
-  \end{split}
+  \texttt{Spacetime}:\mathbb{M}\coloneq \{te_0+xe_1+ye_2+ze_3,\quad t,x,y,z\in\mathbb{R}\}
 \end{equation}
-
-スカラーパートを分けておきます。
 \begin{equation}
-  \begin{split}
-    u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
-    v=~&q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7
-  \end{split}
-\end{equation}
-
-\begin{equation}
-  \begin{split}
-    s_0s_1=~&(p_0+u)(q_0+v)\\
-    =~&p_0q_0+p_0v+q_0u+uv
-  \end{split}
+  \texttt{Invariant}:m^2=t^2-x^2-y^2-z^2,\quad m\in\mathbb{M}
 \end{equation}
 
-\begin{equation}
-  \begin{split}
-    uv=~&(p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7)(q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7)\\
-    =~&p_1e_1q_1e_1+p_1e_1q_2e_2+p_1e_1q_3e_3+p_1e_1q_4e_4+p_1e_1q_5e_5+p_1e_1q_6e_6+p_1e_1q_7e_7\\
-    &+p_2e_2q_1e_1+p_2e_2q_2e_2+p_2e_2q_3e_3+p_2e_2q_4e_4+p_2e_2q_5e_5+p_2e_2q_6e_6+p_2e_2q_7e_7\\
-    &+p_3e_3q_1e_1+p_3e_3q_2e_2+p_3e_3q_3e_3+p_3e_3q_4e_4+p_3e_3q_5e_5+p_3e_3q_6e_6+p_3e_3q_7e_7\\
-    &+p_4e_4q_1e_1+p_4e_4q_2e_2+p_4e_4q_3e_3+p_4e_4q_4e_4+p_4e_4q_5e_5+p_4e_4q_6e_6+p_4e_4q_7e_7\\
-    &+p_5e_5q_1e_1+p_5e_5q_2e_2+p_5e_5q_3e_3+p_5e_5q_4e_4+p_5e_5q_5e_5+p_5e_5q_6e_6+p_5e_5q_7e_7\\
-    &+p_6e_6q_1e_1+p_6e_6q_2e_2+p_6e_6q_3e_3+p_6e_6q_4e_4+p_6e_6q_5e_5+p_6e_6q_6e_6+p_6e_6q_7e_7\\
-    &+p_7e_7q_1e_1+p_7e_7q_2e_2+p_7e_7q_3e_3+p_7e_7q_4e_4+p_7e_7q_5e_5+p_7e_7q_6e_6+p_7e_7q_7e_7\\
-    =~&-p_1q_1+p_1q_2e_3-p_1q_3e_2-p_1q_4e_5+p_1q_5e_4-p_1q_6e_7+p_1q_7e_6\\
-    &-p_2q_1e_3-p_2q_2+p_2q_3e_1-p_2q_4e_6+p_2q_5e_7+p_2q_6e_4-p_2q_7e_5\\
-    &+p_3q_1e_2-p_3q_2e_1-p_3q_3-p_3q_4e_7-p_3q_5e_6+p_3q_6e_5+p_3q_7e_4\\
-    &+p_4q_1e_5+p_4q_2e_6+p_4q_3e_7+p_4q_4+p_4q_5e_1+p_4q_6e_2+p_4q_7e_3\\
-    &-p_5q_1e_4-p_5q_2e_7+p_5q_3e_6-p_5q_4e_1+p_5q_5+p_5q_6e_3-p_5q_7e_2\\
-    &+p_6q_1e_7-p_6q_2e_4-p_6q_3e_5-p_6q_4e_2-p_6q_5e_3+p_6q_6+p_6q_7e_1\\
-    &-p_7q_1e_6+p_7q_2e_5-p_7q_3e_4-p_7q_4e_3+p_7q_5e_2-p_7q_6e_1+p_7q_7\\
-    =~&-p_1q_1-p_2q_2-p_3q_3+p_4q_4+p_5q_5+p_6q_6+p_7q_7\\
-    &+(p_2q_3-p_3q_2+p_4q_5-p_5q_4+p_6q_7-p_7q_6)e_1\\
-    &+(p_3q_1-p_1q_3+p_4q_6-p_6q_4+p_7q_5-p_5q_7)e_2\\
-    &+(p_1q_2-p_2q_1+p_4q_7-p_7q_4+p_5q_6-p_6q_5)e_3\\
-    &+(p_1q_5-p_5q_1+p_2q_6-p_6q_2+p_3q_7-p_7q_3)e_4\\
-    &+(p_3q_6-p_6q_3+p_4q_1-p_1q_4+p_7q_2-p_2q_7)e_5\\
-    &+(p_1q_7-p_7q_1+p_4q_2-p_2q_4+p_5q_3-p_3q_5)e_6\\
-    &+(p_2q_5-p_5q_2+p_4q_3-p_3q_4+p_6q_1-p_1q_6)e_7\\
-  \end{split}
-\end{equation}
-この展開された式は八元数の七次元の外積とは別物のようです。何を表すのでしょうか？
-掘り下げて調査する必要がありそうです。
+1-ベクトルよりなる時空を双ベクトルによるサンドウィッチ積で回転変換する事を考えます。
+双ベクトルは6種類あります。様子を見るために具体的に一方向だけを計算してみましょう。
+$R=a+be_0e_1$とすると$\widetilde{R}=a-be_0e_1$になります。
+$Cl(1,3)$では、
+\[R\widetilde{R}=(a+be_0e_1)(a-be_0e_1)=a^2-b^2=1\]
+を満たすように係数が決定される必要があります。
+ご存知の様に、この数式に当てはまる適切な関数は双曲線関数です。
+$e_0$が含まれるため、これは時間方向の回転であり、ローレンツブーストを意味しています。
+$e_0e_2,e_0e_3$についても同様と考えられます。
+双ベクトルの内、$e_0$が含まれる双ベクトルは時間的な双ベクトルと考えられます。
 
-\section{分解型八元数の角度}
+一方、$e_0$が含まれない双ベクトルは空間的な双ベクトルと考えられます。
+$R=a+be_1e_2$で計算してみましょう。$\widetilde{R}=a-be_1e_2$になり、
+\[R\widetilde{R}=(a+be_0e_1)(a-be_0e_1)=a^2+b^2=1\]
+空間的双ベクトルによるサンドウィッチ積では、満たすべき係数の条件は単位円上という事になります。
+これは空間方向の回転ですので、ローレンツブーストにはなりません。
+$e_1e_3,e_2e_3$についても同様と考えられます。
 
-分解型八元数に内在する角度がオイラーの公式からどうなるかを調べましょう。
+\subsection{時間的双ベクトルの回転子}
+
+双ベクトルの内、時間的双ベクトル$e_0e_1,e_0e_2,e_0e_3$を使って回転子(Rotor)を定義します。
+2乗について確認します。
 \begin{equation}
-  s_L=~r_0+r_1e_1+r_2e_2+r_3e_3,\quad s_R=r_4e_4+r_5e_5+r_6e_6+r_7e_7
+  (e_0e_i)^2=1\quad(i=1,2,3)
 \end{equation}
-というように分解すると$s_L$は四元数と同様になり、$r_1^2+r_2^2+r_3^2\ne 0$の時、
+方向の単位三次元ベクトル$\bm{v}$とその大きさ$2\theta_t$から、時間的双ベクトルの和を構成します。
 \begin{equation}
-  \alpha v_L=r_1e_1+r_2e_2+r_3e_3,\quad v_L^2=-1,\quad \alpha\in\mathbb{R}
+  \bm{v}=(v_1,v_2,v_3),\quad \bm{v}^2=v_1^2+v_2^2+v_3^2=1,\quad v_1,v_2,v_3\in\mathbb{R}
 \end{equation}
-と置いて、
 \begin{equation}
-  \exp(s_L)=\exp(r_0+\alpha v_L)=\exp(r_0)(\cos \alpha+v_L\sin\alpha)
+  B_t=\theta_t(v_1e_0e_1+v_2e_0e_2+v_3e_0e_3),\quad\theta_t\in\mathbb{R}
 \end{equation}
-$s_R$については、$|s_R|\ne 0$の時、
+と定義して、回転子は以下の通りです。
 \begin{equation}
-  \beta v_R=r_4e_4+r_5e_5+r_6e_6+r_7e_7,\quad v_R^2=+1,\quad \beta\in\mathbb{R}
-\end{equation}
-と置くと、分解型複素数のオイラーの公式から、
-\begin{equation}
-  \exp(s_R)=\exp(\beta v_R)=\cosh \beta+v_R\sinh \beta
-\end{equation}
-従って、分解型八元数の角度表現は以下のようになります。
-\begin{equation}
-  \begin{split}
-    \exp(s)=~&\exp(s_L+s_R)=\exp(s_L)\exp(s_R)
-    =\exp(r_0)(\cos\alpha+v_L\sin\alpha)(\cosh\beta+v_R\sinh\beta)
-  \end{split}
-\end{equation}
-純虚分解型八元数について書き直すと、
-\begin{equation}
-  \exp(s)=\exp(\alpha v_L+\beta v_R)=(\cos\alpha+v_L\sin\alpha)(\cosh\beta+v_R\sinh\beta),\quad r_0=0
-\end{equation}
-以下のように展開してみます。
-\begin{equation}
-  \exp(s)=\cos\alpha\cosh\beta+v_Lv_R\sin\alpha\sinh\beta+v_L\sin\alpha\cosh\beta+v_R\cos\alpha\sinh\beta
-\end{equation}
-複素数による三角関数と加法定理より、$I^2=-1$という別の虚数単位を導入して、
-\begin{equation}
-  \begin{split}
-    \cos(\alpha-I\beta)=~&\cos\alpha\cos I\beta+\sin\alpha\sin I\beta\\
-    =~&\cos\alpha\cosh\beta+I\sin\alpha\sinh\beta\\
-    \sin(\alpha-I\beta)=~&\sin\alpha\cos I\beta-\cos\alpha\sin I\beta\\
-    =~&\sin\alpha\cosh\beta-I\cos\alpha\sinh\beta\\
-  \end{split}
-\end{equation}
-さらに$J^2=-1$という別の虚数単位を導入すると、
-\begin{equation}
-  J\sin(\alpha-I\beta)=J\sin\alpha\cosh\beta-JI\cos\alpha\sinh\beta
-\end{equation}
-$I=v_Lv_R,J=v_L$というように当てはめると、
-\begin{equation}
-  \begin{split}
-    \exp(s)=~&\cos\alpha\cosh\beta+v_Lv_R\sin\alpha\sinh\beta+v_L\sin\alpha\cosh\beta-v_Lv_Lv_R\cos\alpha\sinh\beta\\
-    =~&\cos(\alpha-v_Lv_R\beta)+v_L\sin(\alpha-v_Lv_R\beta)\\
-    =~&\exp(v_L(\alpha-v_Lv_R\beta))\\
-    =~&\exp(v_L\alpha+v_R\beta)\\
-    =~&\exp(s)\\
-  \end{split}
-\end{equation}
-元に戻ります。ここで$\theta=\alpha-v_Lv_R\beta$と置けば、四元数のオイラーの公式と同じ形が得られます。
-\begin{equation}
-  \exp(v_L\theta)=\cos\theta+v_L\sin\theta
+  \texttt{Rotor}:R_t=\exp(B_t)=\cosh\theta_t+\frac{B_t}{\theta_t}\sinh\theta_t
 \end{equation}
 
-\section{純虚分解型八元数の指数関数}
+\subsection{空間的双ベクトルの回転子}
 
-改めて純虚分解型八元数を以下のように定義し直します。
+次に、空間的双ベクトル$e_1e_2,e_1e_3,e_2e_3$を使って回転子(Rotor)を定義します。
+2乗について確認します。
 \begin{equation}
-  \begin{split}
-    \exp(s)=~&\exp(\alpha u+\beta v)=p_0+p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
-    &\alpha,\beta,p_0,...,p_7\in\mathbb{R}\\
-    u=~&a_1e_1+a_2e_2+a_3e_3,\quad a_1^2+a_2^2+a_3^2=1\\
-    v=~&a_4e_4+a_5e_5+a_6e_6+a_7e_7,\quad a_4^2+a_5^2+a_6^2+a_7^2=1\\
-    &a_1,...,a_7\in\mathbb{R}\\
-  \end{split}
+  (e_1e_2)^2=(e_1e_3)^2=(e_2e_3)^2=-1
 \end{equation}
-$p_0,...,p_7$を角度と方向からなる実数で表現してみましょう。
+方向の単位三次元ベクトル$\bm{u}$とその大きさ$2\theta_x$から、空間的双ベクトルの和を構成します。
 \begin{equation}
-  \begin{split}
-    \exp(s)=~&(\cos\alpha+u\sin\alpha)(\cosh\beta+v\sinh\beta)\\
-    =~&\cos\alpha\cosh\beta+uv\sin\alpha\sinh\beta+u\sin\alpha\cosh\beta+v\cos\alpha\sinh\beta\\
-  \end{split}
+  \bm{u}=(u_1,u_2,u_3),\quad \bm{u}^2=u_1^2+u_2^2+u_3^2=1,\quad u_1,u_2,u_3\in\mathbb{R}
 \end{equation}
-$uv$を先に展開して、
 \begin{equation}
-  \begin{split}
-    uv=~&(a_1e_1+a_2e_2+a_3e_3)(a_4e_4+a_5e_5+a_6e_6+a_7e_7)\\
-    =~&(a_1a_5+a_2a_6+a_3a_7)e_4\\
-    &+(a_3a_6-a_1a_4-a_2a_7)e_5\\
-    &+(a_1a_7-a_2a_4-a_3a_5)e_6\\
-    &+(a_2a_5-a_3a_4-a_1a_6)e_7\\
-  \end{split}
+  B_x=\theta_x(u_1e_1e_2+u_2e_1e_3+u_3e_2e_3),\quad\theta_x\in\mathbb{R}
 \end{equation}
-$e_1,e_2,e_3$の項が消えてしまうのが印象的です。
+と定義して、回転子は以下の通りです。
 \begin{equation}
-  \begin{split}
-    \exp(s)=~&\cos\alpha\cosh\beta+a_1e_1\sin\alpha\cosh\beta+a_2e_2\sin\alpha\cosh\beta+a_3e_3\sin\alpha\cosh\beta\\
-    &+((a_1a_5+a_2a_6+a_3a_7)\sin\alpha+a_4\cos\alpha)e_4\sinh\beta\\
-    &+((a_3a_6-a_1a_4-a_2a_7)\sin\alpha+a_5\cos\alpha)e_5\sinh\beta\\
-    &+((a_1a_7-a_2a_4-a_3a_5)\sin\alpha+a_6\cos\alpha)e_6\sinh\beta\\
-    &+((a_2a_5-a_3a_4-a_1a_6)\sin\alpha+a_7\cos\alpha)e_7\sinh\beta\\
-  \end{split}
+  \texttt{Rotor}:R_x=\exp(B_x)=\cos\theta_x+\frac{B_x}{\theta_x}\sin\theta_x
 \end{equation}
 
+ここまでは双四元数で実現できる計算と変わりません。
+
+\section{クリフォード代数の時空体積}
+
+$Cl(1,3)$において、擬スカラー$e_0e_1e_2e_3$を1-ベクトルにかけると以下のようになります。
 \begin{equation}
   \begin{split}
-    p_0=~&\cos\alpha\cosh\beta\\
-    p_1=~&a_1\sin\alpha\cosh\beta\\
-    p_2=~&a_2\sin\alpha\cosh\beta\\
-    p_3=~&a_3\sin\alpha\cosh\beta\\
-    p_4=~&((a_1a_5+a_2a_6+a_3a_7)\sin\alpha+a_4\cos\alpha)\sinh\beta\\
-    p_5=~&((a_3a_6-a_1a_4-a_2a_7)\sin\alpha+a_5\cos\alpha)\sinh\beta\\
-    p_6=~&((a_1a_7-a_2a_4-a_3a_5)\sin\alpha+a_6\cos\alpha)\sinh\beta\\
-    p_7=~&((a_2a_5-a_3a_4-a_1a_6)\sin\alpha+a_7\cos\alpha)\sinh\beta\\
+    (te_0+xe_1+ye_2+ze_3)e_0e_1e_2e_3=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2\\
+    e_0e_1e_2e_3(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)=te_0+xe_1+ye_2+ze_3
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    (te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)^2
+    =~&t^2+txe_0e_1+tye_0e_2+tze_0e_3\\
+    &-txe_0e_1-x^2-xye_1e_2+xze_1e_3\\
+    &-tye_0e_2-xye_1e_2-y^2+zye_2e_3\\
+    &-tze_0e_3-xze_1e_3-yze_2e_3-z^2\\
+    =~&t^2-x^2-y^2-z^2
+  \end{split}
+\end{equation}
+y軸について反転した時空に変換する操作になっています。
+この様に1-ベクトルに擬スカラーをかけて3-ベクトルにする操作を双対(Duality)と呼ぶ事とします。
+\begin{equation}
+  S=te_0+xe_1+ye_2+ze_3,\quad S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2
+\end{equation}
+と置くと、
+\begin{equation}
+  Se_0e_1e_2e_3=S^\dag, \quad e_0e_1e_2e_3S^\dag=S
+\end{equation}
+\begin{equation}
+  S^2=(S^\dag)^2=t^2-x^2-y^2-z^2
+\end{equation}
+\begin{equation}
+  \begin{split}
+    SS^\dag=~&(te_0+xe_1+ye_2+ze_3)(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\\
+    &+t^2e_1e_2e_3e_4+txe_2e_3-tye_1e_3+tze_1e_2\\
+    &-txe_2e_3-x^2e_0e_1e_2e_3-xye_0e_3+xze_0e_2\\
+    &+tye_1e_3+xye_0e_3-y^2e_0e_1e_2e_3-yze_0e_1\\
+    &-tze_1e_2-xze_0e_2+yze_0e_1-z^2e_0e_1e_2e_3\\
+    =~&(t^2-x^2-y^2-z^2)e_1e_2e_3e_4\\
+    =~&S^2e_1e_2e_3e_4\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    S^\dag S=~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)(te_0+xe_1+ye_2+ze_3)\\
+    &-t^2e_1e_2e_3e_4-txe_2e_3-tye_1e_3-tze_1e_2\\
+    &+txe_2e_3+x^2e_0e_1e_2e_3-xye_0e_3-xze_0e_2\\
+    &+tye_1e_3+xye_0e_3+y^2e_0e_1e_2e_3-yze_0e_1\\
+    &+tze_1e_2+xze_0e_2+yze_0e_1+z^2e_0e_1e_2e_3\\
+    =~&-(t^2-x^2-y^2-z^2)e_1e_2e_3e_4\\
+    =~&-S^2e_1e_2e_3e_4\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    (S+S^\dag)^2=~&S^2+(S^\dag)^2+SS^\dag+S^\dag S\\
+    =~&2S^2\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \frac{1}{2}(S+S^\dag)^2=t^2-x^2-y^2-z^2
+\end{equation}
+
+擬スカラー$e_0e_1e_2e_3$は幾何代数的には4次元時空の体積を表しています。
+双対で算出した3-ベクトルは時空の体積と関係していると考えられます。
+双対時空と呼ぶ事にします。
+
+\subsection{双対空間回転}
+
+双ベクトル$e_1e_2$によって、x-y平面における角度$2\theta$の回転を行ってみます。
+物体は速さ$\bm{v}$で移動しているとします。
+移動の方向転換になるのでローレンツブーストにはなりませんが、円運動になるので遠心力が働いていると考えられます。
+\begin{itemize}
+  \item 初期時空: $S=te_0+xe_1+ye_2+ze_3$
+  \item 回転子: $R=\exp(\theta e_1e_2)=\cos\theta+e_1e_2\sin\theta$
+  \item 回転子リバース: $\widetilde{R}=\cos\theta-e_1e_2\sin\theta$
+  \item 初期双対時空: $S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2$
+  \item 双対回転子: $R^\dag=\exp(\theta e_1e_2e_0e_1e_2e_3)=~\exp(-\theta e_0e_3)=\cosh\theta-e_0e_3\sinh\theta$
+  \item 双対回転子リバース: $\widetilde{R}^\dag=\cosh\theta+e_0e_3\sinh\theta$
+\end{itemize}
+
+$RS\widetilde{R}$を計算すると、x-y平面での回転になります。
+$R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
+
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag=~&(\cosh\theta-e_0e_3\sinh\theta)(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\\
+    =~&S^\dag\cosh\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\sinh\theta\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    RS^\dag\widetilde{R}^\dag=~&(S^\dag\cosh\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\sinh\theta)(\cosh\theta+e_0e_3\sinh\theta)\\
+    =~&S^\dag\cosh^2\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)e_0e_3\sinh^2\theta\\
+    &+(S^\dag e_0e_3+te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\cosh\theta\sinh\theta\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cosh^2\theta+(te_1e_2e_3-xe_0e_2e_3+ye_0e_1e_3+ze_0e_1e_2)\sinh^2\theta\\
+    &+((te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)e_0e_3+te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\cosh\theta\sinh\theta\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cosh^2\theta+(te_1e_2e_3-xe_0e_2e_3+ye_0e_1e_3+ze_0e_1e_2)\sinh^2\theta\\
+    &+(te_0e_1e_2-xe_2+ye_1+ze_1e_2e_3+te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\cosh\theta\sinh\theta\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cosh^2\theta+(te_1e_2e_3-xe_0e_2e_3+ye_0e_1e_3+ze_0e_1e_2)\sinh^2\theta\\
+    &+2(te_0e_1e_2+ze_1e_2e_3)\cosh\theta\sinh\theta\\
+    =~&(t\cosh^2\theta+t\sinh^2\theta+2z\cosh\theta\sinh\theta)e_1e_2e_3\\
+    &+(x\cosh^2\theta-x\sinh^2\theta)e_0e_2e_3+(-y\cosh^2\theta+y\sinh^2\theta)e_0e_1e_3\\
+    &+(z\cosh^2\theta+z\sinh^2\theta+2t\cosh\theta\sinh\theta)e_0e_1e_2\\
+    =~&(t\cosh^2\theta+t\sinh^2\theta+2z\cosh\theta\sinh\theta)e_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3\\
+    &+(z\cosh^2\theta+z\sinh^2\theta+2t\cosh\theta\sinh\theta)e_0e_1e_2\\
+    =~&(t\cosh(2\theta)+z\sinh(2\theta))e_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3
+    +(z\cosh(2\theta)+t\sinh(2\theta))e_0e_1e_2\\
+  \end{split}
+\end{equation}
+$\theta^\dag=-\theta$とすると、
+\begin{equation}
+  \begin{bmatrix}
+    t'\\z'
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \cosh(2\theta^\dag) & -\sinh(2\theta^\dag) \\
+    -\sinh(2\theta^\dag) & \cosh(2\theta^\dag) \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    t\\z
+  \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+  \begin{split}
+    RS^\dag=~&(\cos\theta+e_1e_2\sin\theta)(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\\
+    =~&(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\cos\theta
+    +(-t_0e_3-x_0e_0e_1e_3-y_0e_0e_2e_3-z_0e_0)\sin\theta\\
+    =~&S^\dag\cos\theta-(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\sin\theta
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    RS_0^\dag\widetilde{R}=~&(S_0^\dag\cos\theta-(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\sin\theta)(\cos\theta-e_1e_2\sin\theta)\\
+    =~&S_0^\dag\cos^2\theta+(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)e_1e_2\sin^2\theta\\
+    &-(S_0^\dag e_1e_2+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
+    =~&(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\cos^2\theta+(t_0e_1e_2e_3-x_0e_0e_2e_3+y_0e_0e_1e_3+z_0e_0e_1e_2)\sin^2\theta\\
+    &-((t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)e_1e_2+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
+    =~&t_0e_1e_2e_3+z_0e_0e_1e_2+(x_0e_0e_2e_3-y_0e_0e_1e_3)\cos^2\theta+(-x_0e_0e_2e_3+y_0e_0e_1e_3)\sin^2\theta\\
+    &-(-t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3-z_0e_0+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
+    =~&t_0e_1e_2e_3+z_0e_0e_1e_2+(x_0e_0e_2e_3-y_0e_0e_1e_3)\cos^2\theta+(-x_0e_0e_2e_3+y_0e_0e_1e_3)\sin^2\theta\\
+    &-2(x_0e_0e_1e_3+y_0e_0e_2e_3)\cos\theta\sin\theta\\
   \end{split}
 \end{equation}
 
-\section{分解型八元数による回転}
 
-分解型八元数に内在する角度が2つある事が分かってきました。
-方向を表す2つのベクトルもあります。
-三次元単位ベクトルと四次元単位ベクトルです。
-これらが組み合わさって七次元を構成しています。
+\section{クリフォード代数での4元運動量}
 
-2つの純虚分解型八元数$u,v$を以下のように定義して回転を計算してみます。
+相対性理論では、運動量$\bm{p}$、エネルギー$E$、質量$m$の間に以下の関係があります。
 \begin{equation}
-  \begin{split}
-    u=~&p_1e_1+p_2e_2+p_3e_3+p_4e_4+p_5e_5+p_6e_6+p_7e_7\\
-    &p_1^2+p_2^2+p_3^2=1,\quad p_4^2+p_5^2+p_6^2+p_7^2=1\\
-    v=~&q_1e_1+q_2e_2+q_3e_3+q_4e_4+q_5e_5+q_6e_6+q_7e_7\\
-    &q_1^2+q_2^2+q_3^2=1,\quad q_4^2+q_5^2+q_6^2+q_7^2=1\\
-    \cos\alpha=~&p_1q_1+p_2q_2+p_3q_3\\
-    \cos\beta=~&p_4q_4+p_5q_5+p_6q_6+p_7q_7\\
-  \end{split}
+  E^2=(\bm{p}c)^2+(mc^2)^2
 \end{equation}
-$u,v$のノルムは$0$になります。
+質量を左辺にして整理すると、
 \begin{equation}
-  N(u)=N(v)=N(uv)=0
+  (mc^2)^2=E^2-(\bm{p}c)^2=E^2-(p_1c)^2-(p_2c)^2-(p_3c)^2
 \end{equation}
-積の計算結果から、
-\begin{equation}
-  uv=-\cos\alpha+\cos\beta+s
-\end{equation}
-となるように$s$を置くと、
-\begin{gather}
-  N(uv)=(-\cos\alpha+\cos\beta)^2+N(s)=0\\
-  N(s)=-(-\cos\alpha+\cos\beta)^2
-\end{gather}
-というような関係性が見られます。回転軸$w$は、
-\begin{equation}
-  \begin{split}
-    &s=s_1e_1+s_2e_2+s_3e_3+s_4e_4+s_5e_5+s_6e_6+s_7e_7\\
-    &s_L=s_1e_1+s_2e_2+s_3e_3,\quad s_R=s_4e_4+s_5e_5+s_6e_6+s_7e_7\\
-  \end{split}
-\end{equation}
-として、
-\begin{equation}
-  \begin{split}
-    w_L=~&\frac{s_L}{|s_L|},\quad w_R=\frac{s_R}{|s_R|}\\
-    w=~&w_L+w_R,\quad N(w)=0\\
-  \end{split}
-\end{equation}
-回転子$\rho$は、$w_L$方向に$a\alpha$、$w_R$方向に$b\beta$回転させるとして、
-\begin{equation}
-  \rho=\exp(-0.5a\alpha w_L+b\beta w_R)=(\cos 0.5a\alpha-w_L\sin0.5a\alpha)(\cosh 0.5b\beta-w_R\sinh 0.5b\beta)
-\end{equation}
-純虚分解型八元数$f$を回転させて$f'$になるとすると、
-\begin{equation}
-  \begin{split}
-    f'=~&\rho^*f\rho\\
-    =~&(\cosh 0.5b\beta+w_R\sinh 0.5b\beta)(\cos 0.5a\alpha+w_L\sin0.5a\alpha)f
-    (\cos 0.5a\alpha-w_L\sin0.5a\alpha)(\cosh 0.5b\beta-w_R\sinh 0.5b\beta)
-  \end{split}
-\end{equation}
+
+
 
 \chapter{多体シミュレーションにおける物理法則}
 
@@ -1505,7 +1716,7 @@ $N$体あれば$N$回の計算で済みます。
   \end{split}
 \end{equation}
 部分に以下のような呼称があります。\\
-スカラーパート：$a$、疑似スカラーパート：$bi$\\
+スカラーパート：$a$、擬スカラーパート：$bi$\\
 ベクトルパート：$cj+sk$、バイベクトルパート：$m+ni$、トリベクトルパート：$dk+rj$\\
 
 四双四元数の積の計算をするにあたっては、四元数の実係数に四元数を当てはめれば算出できます。
@@ -1758,12 +1969,12 @@ $dA$は成分に関する普通微分です。展開すると、
 
 一次元の角度の歪みの話に戻ります。
 $XY$平面に描かれた円が$Z$軸方向に球面を歪んでいく事を想像してください。
-この歪みがどんどんと広がっていき、終には$180\tcdegree$を超える時にはどうなってしまうでしょうか？
+この歪みがどんどんと広がっていき、終には180°を超える時にはどうなってしまうでしょうか？
 
 ここで一つの仮定を導入します。
-歪みが$180\tcdegree$を超える時、歪みの方向が急に逆向きになって反対の方に歪むとします。
+歪みが180°を超える時、歪みの方向が急に逆向きになって反対の方に歪むとします。
 このように取り決めておくと、歪みをどんどん加算していっても計算が破綻する事がありません。
-この歪みの$180\tcdegree$の部分を今度は四次元時空に拡張して考えてみましょう。
+この歪みの180°の部分を今度は四次元時空に拡張して考えてみましょう。
 すると到達できる限界であるという意味からすると、一般相対性理論が想定した事象の地平面と同様であると考えられる訳です。
 そこでいっその事、事象の地平面の向こう側では重力が反転してしまうと考えます。
 つまり、ブラックホールの内側に入った途端に進行方向が逆転して跳ね返されるという事を言っています。

@@ -4,27 +4,22 @@
 
 int main(int argc, char **argv)
 {
-    // Define basis elements
-    auto e0 = Clifford13::basis(1);  // e0: index 1 (0b0001)
-    auto e1 = Clifford13::basis(2);  // e1: index 2 (0b0010)
-
-    // Compute e0 * e1
-    auto e0e1 = e0 * e1;
-    std::cout << "e0 * e1 = " << e0e1 << std::endl;  // Output: +1 e0e1
-
-    // Compute e1 * e1
-    auto e1e1 = e1 * e1;
-    std::cout << "e1 * e1 = " << e1e1 << std::endl;  // Output: -1
-
-    // Compute e0e1 * e1
-    auto result = e0e1 * e1;
-    std::cout << "e0e1 * e1 = " << result << std::endl;  // Output: -1 e0
-
-    // Compute e0 * e0
-    auto e0e0 = e0 * e0;
-    std::cout << "e0 * e0 = " << e0e0 << std::endl;  // Output: +1
-
     std::cout << Clifford13::to_table_string() << std::endl;
+    std::cout << Clifford13::to_table_string_tex1() << std::endl;
+    std::cout << Clifford13::to_table_string_tex2() << std::endl;
+
+    Clifford13::CoeffArray coeffs = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
+                                     9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
+    Clifford13 mv(coeffs);
+    Clifford13 rev = mv.reverse();
+    Clifford13 conj = mv.conjugation();
+
+    // Print original and reversed coefficients for verification
+    for (uint i = 0; i < 16; ++i) {
+        uint o = Clifford13::order[i];
+        printf("%2u: %8s: Original = %4.1f, Reversed = %5.1f, Conjugated = %5.1f\n",
+               i, Clifford13::labels[o], mv.get_coeff(o), rev.get_coeff(o), conj.get_coeff(o));
+    }
 
     QApplication app(argc, argv);
     app.setApplicationName("blackhole-simulator-2");

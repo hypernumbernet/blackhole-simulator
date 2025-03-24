@@ -38,4 +38,16 @@ constexpr bool fuzzyCompare(const std::complex<double>& p1, const std::complex<d
     return fuzzyCompare(p1.real(), p2.real()) && fuzzyCompare(p1.imag(), p2.imag());
 }
 
+inline std::string replaceString(const char* original, const std::string& from, const std::string& to) {
+    std::string str = original;
+
+    size_t pos = str.find(from);
+    while (pos != std::string::npos) {
+        str.replace(pos, from.length(), to);
+        pos = str.find(from, pos + to.length());
+    }
+
+    return str;
+}
+
 } // namespace
