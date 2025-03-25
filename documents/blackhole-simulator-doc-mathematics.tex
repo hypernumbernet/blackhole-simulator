@@ -1564,24 +1564,25 @@ y軸について反転した時空に変換する操作になっています。
 擬スカラー$e_0e_1e_2e_3$は幾何代数的には4次元時空の体積を表しています。
 双対で算出した3-ベクトルは時空の体積と関係していると考えられます。
 双対時空と呼ぶ事にします。
+通常時空と双対時空の和についても不変量となっている様子です。
 
 \subsection{双対空間回転}
 
 双ベクトル$e_1e_2$によって、x-y平面における角度$2\theta$の回転を行ってみます。
-物体は速さ$\bm{v}$で移動しているとします。
+物体は一定の速さ$|\bm{v}|$で移動しているとします。
 移動の方向転換になるのでローレンツブーストにはなりませんが、円運動になるので遠心力が働いていると考えられます。
 \begin{itemize}
   \item 初期時空: $S=te_0+xe_1+ye_2+ze_3$
   \item 回転子: $R=\exp(\theta e_1e_2)=\cos\theta+e_1e_2\sin\theta$
   \item 回転子リバース: $\widetilde{R}=\cos\theta-e_1e_2\sin\theta$
   \item 初期双対時空: $S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2$
-  \item 双対回転子: $R^\dag=\exp(\theta e_1e_2e_0e_1e_2e_3)=~\exp(-\theta e_0e_3)=\cosh\theta-e_0e_3\sinh\theta$
+  \item 双対回転子: $R^\dag=\exp(\theta e_1e_2e_0e_1e_2e_3)=\exp(-\theta e_0e_3)=\cosh\theta-e_0e_3\sinh\theta$
   \item 双対回転子リバース: $\widetilde{R}^\dag=\cosh\theta+e_0e_3\sinh\theta$
 \end{itemize}
 
-$RS\widetilde{R}$を計算すると、x-y平面での回転になります。
-$R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
+$RS\widetilde{R}$を計算すると、x-y平面での回転になります。こちらの計算の詳細は省略します。
 
+$R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
 \begin{equation}
   \begin{split}
     R^\dag S^\dag=~&(\cosh\theta-e_0e_3\sinh\theta)(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\\
@@ -1590,7 +1591,7 @@ $R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
 \end{equation}
 \begin{equation}
   \begin{split}
-    RS^\dag\widetilde{R}^\dag=~&(S^\dag\cosh\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\sinh\theta)(\cosh\theta+e_0e_3\sinh\theta)\\
+    R^\dag S^\dag\widetilde{R}^\dag=~&(S^\dag\cosh\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\sinh\theta)(\cosh\theta+e_0e_3\sinh\theta)\\
     =~&S^\dag\cosh^2\theta+(te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)e_0e_3\sinh^2\theta\\
     &+(S^\dag e_0e_3+te_0e_1e_2+xe_2-ye_1+ze_1e_2e_3)\cosh\theta\sinh\theta\\
     =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cosh^2\theta+(te_1e_2e_3-xe_0e_2e_3+ye_0e_1e_3+ze_0e_1e_2)\sinh^2\theta\\
@@ -1622,29 +1623,83 @@ $\theta^\dag=-\theta$とすると、
     t\\z
   \end{bmatrix}
 \end{equation}
+式の形からローレンツブーストを表している事がわかります。
 
+少しまとめます。1-ベクトルよりなる時空に擬ベクトルをかけると双対時空が現れました。
+時空の円運動を表現する空間回転の回転子に擬ベクトルをかけ、円運動の双対回転子を構成しました。
+双対回転子により双対時空をサンドウィッチ積すると、ローレンツブーストになりました。
+時空体積を表現していると考えられる擬ベクトルによる双対時空が時間方向へ歪むと解釈できます。
+円運動する物体が同時に双対時空の歪みを内部状態として持つと考えれば、双対回転子による計算が、
+円運動による加速度、つまり遠心力を表現している可能性が考えられます。
+
+この双対時空のz方向へのローレンツブーストの加速度の効果を考えます。
+$R^\dag=\exp(-\theta e_0e_3)$の双対計算をすると、
 \begin{equation}
   \begin{split}
-    RS^\dag=~&(\cos\theta+e_1e_2\sin\theta)(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\\
-    =~&(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\cos\theta
-    +(-t_0e_3-x_0e_0e_1e_3-y_0e_0e_2e_3-z_0e_0)\sin\theta\\
-    =~&S^\dag\cos\theta-(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\sin\theta
+    (R^\dag)^\dag=~&\exp(-\theta e_0e_3e_0e_1e_2e_3)=\exp(-\theta e_1e_2)=\cos\theta-e_1e_2\sin\theta
+  \end{split}
+\end{equation}
+この式は最初の円運動の回転の逆を意味しています。双対時空が通常時空に作用する結果は逆回転になるという事ですから、
+双対サンドウィッチ積後の双対時空$(S^\dag)'=R^\dag S^\dag\widetilde{R}^\dag$は、円運動の移動方向と逆方向の遠心力を表現していると示せました。
+
+この考え方を一般に押し広げて考えると、双対時空は時空構造に内在する加速度そのものであると見なす事ができます。
+そして、その時間方向の歪みが実際に時間の遅れとなって観測されると予想できます。
+
+\subsection{双対時空回転}
+
+それでは次に、物体が加速して速さが増大する計算をしてみます。
+\begin{itemize}
+  \item ラピディティ: $\tanh\phi=v/c$
+  \item 初期時空: $S=te_0+xe_1+ye_2+ze_3$
+  \item 回転子: $R=\exp(\phi e_0e_1)=\cosh\phi+e_0e_1\sinh\phi$
+  \item 回転子リバース: $\widetilde{R}=\cosh\phi-e_0e_1\sinh\phi$
+  \item 初期双対時空: $S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2$
+  \item 双対回転子: $R^\dag=\exp(\phi e_0e_1e_0e_1e_2e_3)=\exp(\phi e_2e_3)=\cos\phi+e_2e_3\sin\phi$
+  \item 双対回転子リバース: $\widetilde{R}^\dag=\cos\phi-e_2e_3\sin\phi$
+\end{itemize}
+
+$RS\widetilde{R}$を計算すると、t-x時空平面でのローレンツブーストになります。こちらの計算の詳細は省略します。
+
+$R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag=~&(\cos\phi+e_2e_3\sin\phi)(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\\
+    =~&S^\dag\cos\phi+(-te_1-xe_0+ye_0e_1e_2+ze_0e_1e_3)\sin\phi\\
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
-    RS_0^\dag\widetilde{R}=~&(S_0^\dag\cos\theta-(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\sin\theta)(\cos\theta-e_1e_2\sin\theta)\\
-    =~&S_0^\dag\cos^2\theta+(t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)e_1e_2\sin^2\theta\\
-    &-(S_0^\dag e_1e_2+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
-    =~&(t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)\cos^2\theta+(t_0e_1e_2e_3-x_0e_0e_2e_3+y_0e_0e_1e_3+z_0e_0e_1e_2)\sin^2\theta\\
-    &-((t_0e_1e_2e_3+x_0e_0e_2e_3-y_0e_0e_1e_3+z_0e_0e_1e_2)e_1e_2+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
-    =~&t_0e_1e_2e_3+z_0e_0e_1e_2+(x_0e_0e_2e_3-y_0e_0e_1e_3)\cos^2\theta+(-x_0e_0e_2e_3+y_0e_0e_1e_3)\sin^2\theta\\
-    &-(-t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3-z_0e_0+t_0e_3+x_0e_0e_1e_3+y_0e_0e_2e_3+z_0e_0)\cos\theta\sin\theta\\
-    =~&t_0e_1e_2e_3+z_0e_0e_1e_2+(x_0e_0e_2e_3-y_0e_0e_1e_3)\cos^2\theta+(-x_0e_0e_2e_3+y_0e_0e_1e_3)\sin^2\theta\\
-    &-2(x_0e_0e_1e_3+y_0e_0e_2e_3)\cos\theta\sin\theta\\
+    R^\dag S^\dag\widetilde{R}^\dag=~&(S^\dag\cos\phi+(-te_1-xe_0+ye_0e_1e_2+ze_0e_1e_3)\sin\phi)(\cos\phi-e_2e_3\sin\phi)\\
+    =~&S^\dag\cos^2\phi+(te_1+xe_0-ye_0e_1e_2-ze_0e_1e_3)e_2e_3\sin^2\phi\\
+    &+(-S^\dag e_2e_3-te_1-xe_0+ye_0e_1e_2+ze_0e_1e_3)\cos\phi\sin\phi\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cos^2\phi+(te_1e_2e_3+xe_0e_2e_3+ye_0e_1e_3-ze_0e_1e_2)\sin^2\phi\\
+    &+(-(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)e_2e_3-te_1-xe_0+ye_0e_1e_2+ze_0e_1e_3)\cos\phi\sin\phi\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cos^2\phi+(te_1e_2e_3+xe_0e_2e_3+ye_0e_1e_3-ze_0e_1e_2)\sin^2\phi\\
+    &+(te_0+xe_0+ye_0e_1e_2+ze_0e_1e_3-te_1-xe_0+ye_0e_1e_2+ze_0e_1e_3)\cos\phi\sin\phi\\
+    =~&(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)\cos^2\phi+(te_1e_2e_3+xe_0e_2e_3+ye_0e_1e_3-ze_0e_1e_2)\sin^2\phi\\
+    &+2(ye_0e_1e_2+ze_0e_1e_3)\cos\phi\sin\phi\\
+    =~&(t\cos^2\phi+t\sin^2\phi)e_1e_2e_3+(x\cos^2\phi+x\sin^2\phi)e_0e_2e_3\\
+    &+(-y\cos^2\phi+y\sin^2\phi+2z\cos\phi\sin\phi)e_0e_1e_3\\
+    &+(z\cos^2\phi-z\sin^2\phi+2y\cos\phi\sin\phi)e_0e_1e_2\\
+    =~&te_1e_2e_3+xe_0e_2e_3+(-y\cos^2\phi+y\sin^2\phi+2z\cos\phi\sin\phi)e_0e_1e_3\\
+    &+(z\cos^2\phi-z\sin^2\phi+2y\cos\phi\sin\phi)e_0e_1e_2\\
+    =~&te_1e_2e_3+xe_0e_2e_3(-y\cos(2\phi)+z\sin(2\phi))e_0e_1e_3+(z\cos(2\phi)+y\sin(2\phi))e_0e_1e_2\\
   \end{split}
 \end{equation}
-
+\begin{equation}
+  \begin{bmatrix}
+    -y'\\z'
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \cos(2\phi) & -\sin(2\phi) \\
+    \sin(2\phi) & \cos(2\phi) \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    y\\z
+  \end{bmatrix}
+\end{equation}
+y-z平面で回転します。yは符号反転していますが、これは双対時空の特徴と合致しています。
 
 \section{クリフォード代数での4元運動量}
 
