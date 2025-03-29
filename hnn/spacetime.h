@@ -196,12 +196,12 @@ public:
      * m^2 v^2 + p^2 v^2 / c^2 = p^2
      * (m^2 + p^2 / c^2) v^2 = p^2
      *
-     * v = p / sqrt(m^2 + |p|^2 / c^2 )
-     * |v| -> c (|p| -> ∞, m -> ∞)
-     * |v| = c (m = 0)
+     * v = pc / sqrt(m^2 + p^2 / c^2 )
+     * v -> c (p -> ∞, m -> ∞)
+     * v = c (m = 0)
      *
-     * v / c = p / sqrt(m^2 c^2 + |p|^2) = tanh(a) = pc / E
-     * tanh(a) < 1 (|p| -> ∞)
+     * v / c = p / sqrt(m^2 c^2 + p^2) = tanh(a) = pc / E
+     * tanh(a) < 1 (p -> ∞)
      *
      * @param p momentum
      * @param speed of light on your scale

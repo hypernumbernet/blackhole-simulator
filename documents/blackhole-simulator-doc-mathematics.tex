@@ -1430,6 +1430,72 @@ $Cl(0,0)$は実数$\mathbb{R}$と同型で、$Cl(0,1)$は複素数$\mathbb{C}$�
 この様な挟み込みの掛け合わせで対象を変換することを、サンドウィッチ積(Sandwich Product)と呼びます。
 通常、サンドウィッチ積による操作は対象の示す座標を回転させる事になります。
 
+\subsection{空間的双ベクトルの回転子}
+
+空間的双ベクトル$e_1e_2,e_1e_3,e_2e_3$を使って回転子(Rotor)を定義します。
+2乗について確認します。
+\begin{equation}
+  (e_1e_2)^2 = (e_1e_3)^2 = (e_2e_3)^2 = -1
+\end{equation}
+よってベルソル$\bm{v}$が定義できます。回転角を$2\theta$とすると、
+\begin{equation}
+  \bm{v} = v_1 e_1e_2 + v_2 e_1e_3 + v_3 e_2e_3 , \quad
+  \bm{v}^2 = - 1 , \quad v_1 , v_2 , v_3 \in \mathbb{R}
+\end{equation}
+\begin{equation}
+  B_x = \theta (v_1 e_1e_2 + v_2 e_1e_3 + v_3 e_2e_3) , \quad \theta \in \mathbb{R}
+\end{equation}
+と定義して、回転子は以下の通りです。
+\begin{equation}
+  \texttt{Rotor} : R_x = \exp(B_x) = \cos \theta + \bm{v} \sin \theta
+\end{equation}
+$\bm{v}^2$を展開すると、
+\begin{equation}
+  \begin{split}
+    \bm{v}^2 = ~ & (v_1 e_1e_2 + v_2 e_1e_3 + v_3 e_2e_3)^2\\
+    = ~ & v_1^2 e_1e_2e_1e_2 + v_1 v_2 e_1e_2e_1e_3 + v_1 v_3 e_1e_2e_2e_3\\
+    & + v_1 v_2 e_1e_3e_1e_2 + v_2^2 e_1e_3e_1e_3 + v_2 v_3 e_1e_3e_2e_3\\
+    & + v_1 v_3 e_2e_3e_1e_2 + v_2 v_3 e_2e_3e_1e_3 + v_3^2 e_2e_3e_2e_3\\
+    = ~ & - v_1^2 + v_1 v_2 e_2e_3 - v_1 v_3 e_1e_3
+    - v_1 v_2 e_2e_3 - v_2^2 + v_2 v_3 e_1e_2
+    + v_1 v_3 e_1e_3 - v_2 v_3 e_1e_2 - v_3^2\\
+    = ~ & - v_1^2 - v_2^2 - v_3^2\\
+  \end{split}
+\end{equation}
+
+\subsection{時間的双ベクトルの回転子}
+
+次に、双ベクトルの内、時間的双ベクトル$e_0e_1,e_0e_2,e_0e_3$を使って回転子(Rotor)を定義します。
+2乗について確認します。
+\begin{equation}
+  (e_0e_1)^2 = (e_0e_2)^2 = (e_0e_3)^2 = 1
+\end{equation}
+よって双曲的ベルソル$\bm{u}$が定義できます。回転角を$2\phi$とすると、
+\begin{equation}
+  \bm{u} = u_1 e_0e_1 + u_2 e_0e_2 + u_3 e_0e_3 , \quad
+  \bm{u}^2 = 1 , \quad u_1 , u_2 , u_3 \in \mathbb{R}
+\end{equation}
+\begin{equation}
+  B_t = \phi (u_1 e_0e_1 + u_2 e_0e_2 + u_3 e_0e_3) , \quad \phi \in \mathbb{R}
+\end{equation}
+と定義して、回転子は以下の通りです。
+\begin{equation}
+  \texttt{Rotor} : R_t = \exp(B_t) = \cosh \phi + \bm{u} \sinh \phi
+\end{equation}
+$\bm{u}^2$を展開すると、
+\begin{equation}
+  \begin{split}
+    \bm{u}^2 = ~ & (u_1 e_0e_1 + u_2 e_0e_2 + u_3 e_0e_3)^2\\
+    = ~ & u_1^2 e_0e_1e_0e_1 + u_1 u_2 e_0e_1e_0e_2 + u_1 u_3 e_0e_1e_0e_3\\
+    & + u_1 u_2 e_0e_2e_0e_1 + u_2^2 e_0e_2e_0e_2 + u_2 u_3 e_0e_2e_0e_3\\
+    & + u_1 u_3 e_0e_3e_0e_1 + u_2 u_3 e_0e_3e_0e_2 + u_3^2 e_0e_3e_0e_3\\
+    = ~ & u_1^2 - u_1 u_2 e_1e_2 - u_1 u_3 e_1e_3
+     + u_1 u_2 e_1e_2 + u_2^2 - u_2 u_3 e_2e_3
+     + u_1 u_3 e_1e_3 + u_2 u_3 e_2e_3 + u_3^2\\
+    = ~ & u_1^2 + u_2^2 + u_3^2\\
+  \end{split}
+\end{equation}
+
 \section{クリフォード代数のローレンツ変換}
 
 $Cl(1,3)$におけるローレンツ変換の計算を説明します。改めて時空については以下の定義です。
@@ -1458,44 +1524,6 @@ $R=a+be_1e_2$で計算してみましょう。$\widetilde{R}=a-be_1e_2$になり
 これは空間方向の回転ですので、ローレンツブーストにはなりません。
 $e_1e_3,e_2e_3$についても同様と考えられます。
 
-\subsection{時間的双ベクトルの回転子}
-
-双ベクトルの内、時間的双ベクトル$e_0e_1,e_0e_2,e_0e_3$を使って回転子(Rotor)を定義します。
-2乗について確認します。
-\begin{equation}
-  (e_0e_i)^2=1\quad(i=1,2,3)
-\end{equation}
-方向の単位三次元ベクトル$\bm{v}$とその大きさ$2\theta_t$から、時間的双ベクトルの和を構成します。
-\begin{equation}
-  \bm{v}=(v_1,v_2,v_3),\quad \bm{v}^2=v_1^2+v_2^2+v_3^2=1,\quad v_1,v_2,v_3\in\mathbb{R}
-\end{equation}
-\begin{equation}
-  B_t=\theta_t(v_1e_0e_1+v_2e_0e_2+v_3e_0e_3),\quad\theta_t\in\mathbb{R}
-\end{equation}
-と定義して、回転子は以下の通りです。
-\begin{equation}
-  \texttt{Rotor}:R_t=\exp(B_t)=\cosh\theta_t+\frac{B_t}{\theta_t}\sinh\theta_t
-\end{equation}
-
-\subsection{空間的双ベクトルの回転子}
-
-次に、空間的双ベクトル$e_1e_2,e_1e_3,e_2e_3$を使って回転子(Rotor)を定義します。
-2乗について確認します。
-\begin{equation}
-  (e_1e_2)^2=(e_1e_3)^2=(e_2e_3)^2=-1
-\end{equation}
-方向の単位三次元ベクトル$\bm{u}$とその大きさ$2\theta_x$から、空間的双ベクトルの和を構成します。
-\begin{equation}
-  \bm{u}=(u_1,u_2,u_3),\quad \bm{u}^2=u_1^2+u_2^2+u_3^2=1,\quad u_1,u_2,u_3\in\mathbb{R}
-\end{equation}
-\begin{equation}
-  B_x=\theta_x(u_1e_1e_2+u_2e_1e_3+u_3e_2e_3),\quad\theta_x\in\mathbb{R}
-\end{equation}
-と定義して、回転子は以下の通りです。
-\begin{equation}
-  \texttt{Rotor}:R_x=\exp(B_x)=\cos\theta_x+\frac{B_x}{\theta_x}\sin\theta_x
-\end{equation}
-
 ここまでは双四元数で実現できる計算と変わりません。
 
 \section{クリフォード代数の時空体積}
@@ -1507,6 +1535,8 @@ $Cl(1,3)$において、擬スカラー$e_0e_1e_2e_3$を1-ベクトルにかけ�
     e_0e_1e_2e_3(te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)=te_0+xe_1+ye_2+ze_3
   \end{split}
 \end{equation}
+左からかけると元に戻ります。
+y軸については符号が反転しており、P対称性が部分的に破れております。
 \begin{equation}
   \begin{split}
     (te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)^2
@@ -1517,7 +1547,7 @@ $Cl(1,3)$において、擬スカラー$e_0e_1e_2e_3$を1-ベクトルにかけ�
     =~&t^2-x^2-y^2-z^2
   \end{split}
 \end{equation}
-y軸について反転した時空に変換する操作になっています。
+2乗すると不変量になります。
 この様に1-ベクトルに擬スカラーをかけて3-ベクトルにする操作を双対(Duality)と呼ぶ事とします。
 \begin{equation}
   S=te_0+xe_1+ye_2+ze_3,\quad S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2
@@ -1560,11 +1590,19 @@ y軸について反転した時空に変換する操作になっています。
 \begin{equation}
   \frac{1}{2}(S+S^\dag)^2=t^2-x^2-y^2-z^2
 \end{equation}
-
 擬スカラー$e_0e_1e_2e_3$は幾何代数的には4次元時空の体積を表しています。
 双対で算出した3-ベクトルは時空の体積と関係していると考えられます。
 双対時空と呼ぶ事にします。
 通常時空と双対時空の和についても不変量となっている様子です。
+
+双対時空にさらに右から擬スカラーをかけると、
+\begin{equation}
+  \begin{split}
+    (t e_1e_2e_3 + x e_0e_2e_3 - y e_0e_1e_3 + z e_0e_1e_2) e_0e_1e_2e_3 = 
+    - t e_0 - x e_1 - y e_2 - z e_3 \\
+  \end{split}
+\end{equation}
+となり全符号が反転します。従って時空に擬スカラーを4回かけるごとに元に戻ります。
 
 \subsection{双対空間回転}
 
@@ -1573,11 +1611,11 @@ y軸について反転した時空に変換する操作になっています。
 移動の方向転換になるのでローレンツブーストにはなりませんが、円運動になるので遠心力が働いていると考えられます。
 \begin{itemize}
   \item 初期時空: $S=te_0+xe_1+ye_2+ze_3$
-  \item 回転子: $R=\exp(\theta e_1e_2)=\cos\theta+e_1e_2\sin\theta$
-  \item 回転子リバース: $\widetilde{R}=\cos\theta-e_1e_2\sin\theta$
+  \item 空間的回転子: $R=\exp(\theta e_1e_2)=\cos\theta+e_1e_2\sin\theta$
+  \item 空間的回転子リバース: $\widetilde{R}=\cos\theta-e_1e_2\sin\theta$
   \item 初期双対時空: $S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2$
-  \item 双対回転子: $R^\dag=\exp(\theta e_1e_2e_0e_1e_2e_3)=\exp(-\theta e_0e_3)=\cosh\theta-e_0e_3\sinh\theta$
-  \item 双対回転子リバース: $\widetilde{R}^\dag=\cosh\theta+e_0e_3\sinh\theta$
+  \item 空間的双対回転子: $R^\dag=\exp(\theta e_1e_2e_0e_1e_2e_3)=\exp(-\theta e_0e_3)=\cosh\theta-e_0e_3\sinh\theta$
+  \item 空間的双対回転子リバース: $\widetilde{R}^\dag=\cosh\theta+e_0e_3\sinh\theta$
 \end{itemize}
 
 $RS\widetilde{R}$を計算すると、x-y平面での回転になります。こちらの計算の詳細は省略します。
@@ -1649,13 +1687,13 @@ $R^\dag=\exp(-\theta e_0e_3)$の双対計算をすると、
 
 それでは次に、物体が加速して速さが増大する計算をしてみます。
 \begin{itemize}
-  \item ラピディティ: $\tanh\phi=v/c$
+  \item ラピディティ（速さの増大分）: $\tanh\phi=\Delta v/c$
   \item 初期時空: $S=te_0+xe_1+ye_2+ze_3$
-  \item 回転子: $R=\exp(\phi e_0e_1)=\cosh\phi+e_0e_1\sinh\phi$
-  \item 回転子リバース: $\widetilde{R}=\cosh\phi-e_0e_1\sinh\phi$
+  \item 時空的回転子: $R=\exp(\phi e_0e_1)=\cosh\phi+e_0e_1\sinh\phi$
+  \item 時空的回転子リバース: $\widetilde{R}=\cosh\phi-e_0e_1\sinh\phi$
   \item 初期双対時空: $S^\dag=te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2$
-  \item 双対回転子: $R^\dag=\exp(\phi e_0e_1e_0e_1e_2e_3)=\exp(\phi e_2e_3)=\cos\phi+e_2e_3\sin\phi$
-  \item 双対回転子リバース: $\widetilde{R}^\dag=\cos\phi-e_2e_3\sin\phi$
+  \item 時空的双対回転子: $R^\dag=\exp(\phi e_0e_1e_0e_1e_2e_3)=\exp(\phi e_2e_3)=\cos\phi+e_2e_3\sin\phi$
+  \item 時空的双対回転子リバース: $\widetilde{R}^\dag=\cos\phi-e_2e_3\sin\phi$
 \end{itemize}
 
 $RS\widetilde{R}$を計算すると、t-x時空平面でのローレンツブーストになります。こちらの計算の詳細は省略します。
@@ -1699,9 +1737,29 @@ $R^\dag S^\dag\widetilde{R}^\dag$を計算してみます。
     y\\z
   \end{bmatrix}
 \end{equation}
-y-z平面で回転します。yは符号反転していますが、これは双対時空の特徴と合致しています。
+y-z平面で回転します。y軸は符号反転していますが、これは双対時空の特徴と合致しています。
+なぜy軸だけ符号反転するのかという疑問が沸きます。
+正確な表現を使うと、3-ベクトルの係数は座標ではなく体積を表すための長さを表していると考えられます。
+例えば、$te_1e_2e_3$の$t$は、三次元空間から時間方向へのどのくらい膨らんでいるかの長さになるでしょう。
+その違いが、左手系と右手系の違いのような差になって現れて、y軸が符号反転することで辻褄が合うようになっていると考えられます。
 
-\section{クリフォード代数での4元運動量}
+$R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
+\begin{equation}
+  (R^\dag)^\dag=\exp(\phi e_2e_3e_0e_1e_2e_3)=\exp(-\phi e_0e_1)=\cosh\phi-e_0e_1\sinh\phi
+\end{equation}
+
+$(R^\dag)^\dag$が時空にサンドウィッチ積されると加速になります。
+双対時空の時空体積の歪みが加速度となって物体の速度に影響していくので、これは重力の算出と考えられます。
+一般相対性理論の重力の仕組みと似て非なる計算になっていますが、それについて詳しくはまた別の所で行います。
+一つ重力の定式化についての仮説が成立したと考えてください。
+
+$\phi$が大きくなると結果が循環しますが、それについても別途考察していきます。
+
+\section{クリフォード代数での重力計算}
+
+双対時空の歪みとその歪みによる速度の変化について、多体シミュレーションを意識しつつ、三次元で一般化された形を整えていきます。
+
+\subsection{クリフォード代数の4元運動量}
 
 相対性理論では、運動量$\bm{p}$、エネルギー$E$、質量$m$の間に以下の関係があります。
 \begin{equation}
@@ -1710,6 +1768,194 @@ y-z平面で回転します。yは符号反転していますが、これは双�
 質量を左辺にして整理すると、
 \begin{equation}
   (mc^2)^2=E^2-(\bm{p}c)^2=E^2-(p_1c)^2-(p_2c)^2-(p_3c)^2
+\end{equation}
+クリフォード代数$Cl(1,3)$に当てはめて、
+\begin{equation}
+  \begin{split}
+    S_p=~&Ee_0+cp_1e_1+cp_2e_2+cp_3e_3\\
+    S_p^2=~&m^4=E^2-c^2(p_1^2+p_2^2+p_3^2)=E^2-c^2\bm{p}^2\quad (不変量)\\
+  \end{split}
+\end{equation}
+質量がゼロなら光的になると思われます。$h$をプランク定数、$\nu_i$を各振動数として、
+\begin{equation}
+  0=E^2-c^2(p_1^2+p_2^2+p_3^2)=E^2-h^2(\nu_1^2+\nu_2^2+\nu_3^2)
+\end{equation}
+
+\subsection{4元運動量とラピディティの関係}
+
+相対性理論では運動量$\bm{p}$と速度$\bm{v}$は以下の関係があります。
+\begin{equation}
+  \bm{p}=\gamma m\bm{v}, \quad \gamma=\frac{1}{\sqrt{1-\beta^2}}, \quad \beta=\frac{|\bm{v}|}{c}
+\end{equation}
+ここで$\bm{p}$および$\bm{v}$は三次元ベクトルの範囲とします。展開して変形していきます。
+$p=|\bm{p}|, v=|\bm{v}|$とします。
+\begin{equation}
+  \begin{split}
+    &\bm{p} = \frac{m \bm{v}}{\sqrt{1 - \frac{v^2}{c^2}}} \quad \Leftrightarrow \quad
+    p^2(1 - \frac{v^2}{c^2}) = m^2 v^2 \quad \Leftrightarrow \quad
+    m^2 v^2 + \frac{p^2 v^2}{c^2} = p^2 \quad \Leftrightarrow \quad
+    (m^2 + \frac{p^2}{c^2}) v^2 = p^2\\
+    &\quad \Leftrightarrow \quad (\frac{m^2 c^2 + p^2}{c^2}) v^2 = p^2 \quad \Leftrightarrow \quad
+    v^2 = p^2(\frac{c^2}{m^2 c^2 + p^2})\\
+    &v = \frac{pc}{\sqrt{m^2 c^2 + p^2}}, \quad v \to c \quad (p \to \infty, \quad m \to \infty),
+    \quad v = c \quad (m = 0)\\
+    &\beta = \frac{v}{c} = \tanh \theta = \frac{p}{\sqrt{m^2 c^2 + p^2}} = \frac{pc}{E}\\
+    &\tanh \theta < 1, \quad (p \to \infty, \quad m \to \infty)\\
+    &\texttt{Rapidity}: \quad \theta = \arctanh \frac{p}{\sqrt{m^2 c^2 + p^2}}, \quad
+    \theta \to \infty \quad (p \to \infty)\\
+  \end{split}
+\end{equation}
+
+\subsection{双対時空での重力計算}
+
+物体もしくは粒子に働く力は、基本的に運動量の交換になります。
+相対論的に考えたとしてもこの原理は変わらず、$ S_p = E e_0 + c p_1 e_1 + c p_2 e_2 + c p_3 e_3 $の内、
+$ c p_1 e_1 + c p_2 e_2 + c p_3 e_3 $の三次元ベクトルにおいて交換されると考えられます。
+不変量$ S_p^2 $は$E$の大きさを調整することで保たれます。
+従って、多体で考えた場合でも運動量の交換量が線形的に加算されます。
+
+では、具体的な計算に入りましょう。まず2体で考えます。物体のパラメーターを以下の様に定義します。
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{|l|c|c|c|} \hline
+    & 質量 & 運動量(3次元ベクトル) & 位置(3次元座標) \\ \hline
+    物体A & $ m_a $ & $ \bm{p}_a $ & $ \bm{x}_a $ \\ \hline
+    物体B & $ m_b $ & $ \bm{p}_b $ & $ \bm{x}_b $ \\ \hline
+  \end{tabular}
+\end{table}
+
+物体Aと物体Bは重力によって運動量を交換し、交換の結果、運動量が反対向きに同じ量だけ変化します。
+\begin{itemize}
+  \item 物体Aの運動量変化: $ \Delta \bm{p}_a = \Delta \bm{p} $
+  \item 物体Bの運動量変化: $ \Delta \bm{p}_b = - \Delta \bm{p} $
+  \item 物体A,B間の距離： $ r = |\bm{x}_b - \bm{x}_a| $
+  \item 物体A,B間の方向： $ \hat{\bm{r}} = \frac{\bm{x}_b - \bm{x}_a}{r} $
+  \item 万有引力定数: $G$
+  \item 微小時間ステップ: $\Delta t$
+\end{itemize}
+重力による力積をニュートン近似を用いて次のように計算します。
+\begin{equation}
+  \Delta \bm{p} = \frac{G m_a m_b}{r^2} \hat{\bm{r}} \Delta t = \frac{G m_a m_b}{r^3} \Delta t (\bm{x}_b - \bm{x}_a)
+\end{equation}
+N体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係があります。この交換関係の内、1物体に関して和を計算します。
+\begin{equation}
+  \bm{p}_{total} = \sum_{i = 1}^{N - 1} \Delta \bm{p}_i
+\end{equation}
+運動量の大きさ$ p = |\bm{p}_{total}| $からラピディティ$ \phi $を算出し、方向$ \hat{\bm{r}} $と掛け合わせておきます。
+\begin{equation}
+  \bm{L} = \phi \hat{\bm{r}}
+\end{equation}
+この$ \bm{L} $が双対時空(時空体積)に作用し、局所的な体積を歪めると考えます。
+\begin{itemize}
+  \item 初期双対時空: $ S^\dag = z e_0 e_1 e_2 - y e_0 e_1 e_3 + x e_0 e_2 e_3 + t e_1 e_2 e_3 $
+\end{itemize}
+時空的回転子を三次元で表現すると、$ \hat{\bm{r}} $をベルソル化して、
+\begin{equation}
+  \hat{\bm{r}} = r_1 e_0 e_1 + r_2 e_0 e_2 + r_3 e_0 e_3, \quad r_1^2 + r_2^2 + r_3^2 = 1
+\end{equation}
+\begin{equation}
+  R = \exp(\frac{\phi}{2} \hat{\bm{r}}) = \exp(\frac{\phi}{2} (r_1 e_0 e_1 + r_2 e_0 e_2 + r_3 e_0 e_3))
+\end{equation}
+時空的双対回転子は、$ \hat{\bm{r}} $に$ e_0e_1e_2e_3 $をかけて構成するので、
+\begin{equation}
+  \begin{split}
+    \hat{\bm{r}}^\dag = \hat{\bm{r}} e_0e_1e_2e_3 = ~ & r_1 e_0e_1e_0e_1e_2e_3 + r_2 e_0e_2e_0e_1e_2e_3 + r_3 e_0e_3e_0e_1e_2e_3 \\
+    = ~ & r_1 e_2e_3 - r_2 e_1e_3 + r_3 e_1e_2 \\
+    = ~ & r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    (\hat{\bm{r}}^\dag)^2 = ~ & (r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3)^2 \\
+    = ~ & r_3^2 e_1e_2e_1e_2 - r_2 r_3 e_1e_2e_1e_3 + r_1 r_3 e_1e_2e_2e_3 \\
+    & - r_2 r_3 e_1e_3e_1e_2 + r_2^2 e_1e_3e_1e_3 - r_1 r_2 e_1e_3e_2e_3 \\
+    & + r_1 r_3 e_2e_3e_1e_2 - r_1 r_2 e_2e_3e_1e_3 + r_1^2 e_2e_3e_2e_3 \\
+    = ~ & - r_3^2 - r_2 r_3 e_2e_3 - r_1 r_3 e_1e_3 \\
+    & + r_2 r_3 e_2e_3 - r_2^2 - r_1 r_2 e_1e_2 \\
+    & + r_1 r_3 e_1e_3 + r_1 r_2 e_1e_2 - r_1^2 \\
+    = ~ & - r_1^2 - r_2^2 - r_3^2 \\
+  \end{split}
+\end{equation}
+従って、$ \hat{\bm{r}}^\dag $は四元数を使ったベルソルと同型となっています。
+\begin{equation}
+  R^\dag = \exp(\frac{\phi}{2} \hat{\bm{r}}^\dag) = \exp(\frac{\phi}{2}(r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3))
+  = \cos \phi + \hat{\bm{r}}^\dag \sin \phi
+\end{equation}
+サンドウィッチ積により重力の影響で歪んだ双対時空を計算します。
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag \widetilde{R^\dag}
+  \end{split}
+\end{equation}
+
+
+\subsection{衛星軌道から定数の決定}
+
+質量$M$の地球を半径$r$の円軌道で周回する衛星を考えます。
+衛星の速さは$v$で衛星の質量を$m$とし$G$を重力定数とすると、遠心力$mv^2/r$と重力$GMm/r^2$が等しいという事から、
+\begin{equation}
+  \frac{mv^2}{r}=\frac{GMm}{r^2}\quad\Rightarrow\quad v=\sqrt{\frac{GM}{r}}
+\end{equation}
+こちらを$Cl(1,3)$で表現します。x軸方向に速さ$v$として、
+\begin{itemize}
+  \item ラピディティ: $\tanh\theta=\frac{v}{c}$
+  \item 回転子: $R=\exp(\frac{\theta}{2}e_0e_1)=\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2}$
+  \item 回転子リバース: $\widetilde{R}=\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2}$
+\end{itemize}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})e_0(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
+    =~&(e_0\cosh\frac{\theta}{2}-e_1\sinh\frac{\theta}{2})(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
+    =~&e_0\cosh^2\frac{\theta}{2}+e_0\sinh^2\frac{\theta}{2}-2e_1\cosh\frac{\theta}{2}\sinh\frac{\theta}{2}\\
+    =~&e_0\cosh\theta-e_1\sinh\theta\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})e_1(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
+    =~&(e_1\cosh\frac{\theta}{2}-e_0\sinh\frac{\theta}{2})(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
+    =~&e_1\cosh^2\frac{\theta}{2}+e_1\sinh^2\frac{\theta}{2}-2e_0\cosh\frac{\theta}{2}\sinh\frac{\theta}{2}\\
+    =~&e_1\cosh\theta-e_0\sinh\theta\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})(cte_0+xe_1)(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
+    =~&cte_0\cosh\theta-cte_1\sinh\theta+xe_1\cosh\theta-xe_0\sinh\theta\\
+    =~&(ct\cosh\theta-x\sinh\theta)e_0+(x\cosh\theta-ct\sinh\theta)e_1\\
+    =~&t'e_0+x'e_1\\
+  \end{split}
+\end{equation}
+
+y軸の下の方に重力源があって力を受けるとします。力を自身の質量で割って加速度とします。
+\begin{itemize}
+  \item 回転子: $R_g=\exp(-\frac{\omega}{2}e_0e_2)=\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2}$
+  \item 回転子リバース: $\widetilde{R_g}=\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2}$
+\end{itemize}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})e_0(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
+    =~&(e_0\cosh\frac{\omega}{2}+e_2\sinh\frac{\omega}{2})(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
+    =~&e_0\cosh^2\frac{\omega}{2}+e_0\sinh^2\frac{\omega}{2}+2e_2\cosh\frac{\omega}{2}\sinh\frac{\omega}{2}\\
+    =~&e_0\cosh\omega+e_2\sinh\omega\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})e_1(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
+    =~&(e_1\cosh\frac{\omega}{2}+e_0e_1e_2\sinh\frac{\omega}{2})(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
+    =~&e_1\cosh^2\frac{\omega}{2}-e_1\sinh^2\frac{\omega}{2}\\
+    =~&e_1\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})(t'e_0+x'e_1)
+    (\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
+    =~&t'(e_0\cosh\omega+e_2\sinh\omega)+x'e_1\\
+    =~&t'e_0\cosh\omega+x'e_1+t'e_2\sinh\omega\\
+  \end{split}
 \end{equation}
 
 
