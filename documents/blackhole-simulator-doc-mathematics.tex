@@ -1848,14 +1848,14 @@ N体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係
 \end{equation}
 この$ \bm{L} $が双対時空(時空体積)に作用し、局所的な体積を歪めると考えます。
 \begin{itemize}
-  \item 初期双対時空: $ S^\dag = z e_0 e_1 e_2 - y e_0 e_1 e_3 + x e_0 e_2 e_3 + t e_1 e_2 e_3 $
+  \item 初期双対時空: $ S^\dag = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3 $
 \end{itemize}
 時空的回転子を三次元で表現すると、$ \hat{\bm{r}} $をベルソル化して、
 \begin{equation}
-  \hat{\bm{r}} = r_1 e_0 e_1 + r_2 e_0 e_2 + r_3 e_0 e_3, \quad r_1^2 + r_2^2 + r_3^2 = 1
+  \hat{\bm{r}} = r_1 e_0e_1 + r_2 e_0e_2 + r_3 e_0e_3, \quad r_1^2 + r_2^2 + r_3^2 = 1
 \end{equation}
 \begin{equation}
-  R = \exp(\frac{\phi}{2} \hat{\bm{r}}) = \exp(\frac{\phi}{2} (r_1 e_0 e_1 + r_2 e_0 e_2 + r_3 e_0 e_3))
+  R = \exp(\frac{\phi}{2} \hat{\bm{r}}) = \exp(\frac{\phi}{2} (r_1 e_0e_1 + r_2 e_0e_2 + r_3 e_0e_3))
 \end{equation}
 時空的双対回転子は、$ \hat{\bm{r}} $に$ e_0e_1e_2e_3 $をかけて構成するので、
 \begin{equation}
@@ -1880,83 +1880,203 @@ N体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係
 従って、$ \hat{\bm{r}}^\dag $は四元数を使ったベルソルと同型となっています。
 \begin{equation}
   R^\dag = \exp(\frac{\phi}{2} \hat{\bm{r}}^\dag) = \exp(\frac{\phi}{2}(r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3))
-  = \cos \phi + \hat{\bm{r}}^\dag \sin \phi
+  = \cos \frac{\phi}{2} + \hat{\bm{r}}^\dag \sin \frac{\phi}{2}
 \end{equation}
-サンドウィッチ積により重力の影響で歪んだ双対時空を計算します。
+サンドウィッチ積により重力の影響で歪んだ双対時空$ (S^\dag)' = R^\dag S^\dag \widetilde{R^\dag} $を計算します。
+$ p = \cos \frac{\phi}{2} , q = \sin \frac{\phi}{2} $とします。
 \begin{equation}
   \begin{split}
-    R^\dag S^\dag \widetilde{R^\dag}
+    R^\dag S^\dag \widetilde{R^\dag} = ~ & (p + \hat{\bm{r}}^\dag q)S^\dag(p - \hat{\bm{r}}^\dag q) \\
+    = ~ & (p S^\dag + q \hat{\bm{r}}^\dag S^\dag)(p - \hat{\bm{r}}^\dag q) \\
+    = ~ & p^2 S^\dag + p q \hat{\bm{r}}^\dag S^\dag - p q S^\dag \hat{\bm{r}}^\dag - q^2 \hat{\bm{r}}^\dag S^\dag \hat{\bm{r}}^\dag \\
   \end{split}
 \end{equation}
+\begin{equation}
+  \begin{split}
+    \hat{\bm{r}}^\dag S^\dag = ~ & (r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3)(z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3) \\
+    = ~ & z r_3 e_1e_2 e_0e_1e_2 - y r_3 e_1e_2 e_0e_1e_3 + x r_3 e_1e_2 e_0e_2e_3 + t r_3 e_1e_2 e_1e_2e_3 \\
+    & - z r_2 e_1e_3 e_0e_1e_2 + y r_2 e_1e_3 e_0e_1e_3 - x r_2 e_1e_3 e_0e_2e_3 - t r_2 e_1e_3 e_1e_2e_3 \\
+    & + z r_1 e_2e_3 e_0e_1e_2 - y r_1 e_2e_3 e_0e_1e_3 + x r_1 e_2e_3 e_0e_2e_3 + t r_1 e_2e_3 e_1e_2e_3 \\
+    = ~ & - z r_3 e_0 - y r_3 e_0e_2e_3 - x r_3 e_0e_1e_3 - t r_3 e_3 \\
+    & + z r_2 e_0e_2e_3 - y r_2 e_0 - x r_2 e_0e_1e_2 - t r_2 e_2 \\
+    & + z r_1 e_0e_1e_3 + y r_1 e_0e_1e_2 - x r_1 e_0 - t r_1 e_1 \\
+    = ~ & (- x r_1 - y r_2 - z r_3) e_0 - t r_1 e_1 - t r_2 e_2 - t r_3 e_3 \\
+    & + (y r_1 - x r_2) e_0e_1e_2 + (z r_1 - x r_3) e_0e_1e_3 + (z r_2 - y r_3) e_0e_2e_3\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    S^\dag \hat{\bm{r}}^\dag = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3) \\
+    = ~ & z r_3 e_0e_1e_2 e_1e_2 - y r_3 e_0e_1e_3 e_1e_2 + x r_3 e_0e_2e_3 e_1e_2 + t r_3 e_1e_2e_3 e_1e_2 \\
+    & - z r_2 e_0e_1e_2 e_1e_3 + y r_2 e_0e_1e_3 e_1e_3 - x r_2 e_0e_2e_3 e_1e_3 - t r_2 e_1e_2e_3 e_1e_3 \\
+    & + z r_1 e_0e_1e_2 e_2e_3 - y r_1 e_0e_1e_3 e_2e_3 + x r_1 e_0e_2e_3 e_2e_3 + t r_1 e_1e_2e_3 e_2e_3 \\
+    = ~ & - z r_3 e_0 + y r_3 e_0e_2e_3 + x r_3 e_0e_1e_3 - t r_3 e_3 \\
+    & - z r_2 e_0e_2e_3 - y r_2 e_0 + x r_2 e_0e_1e_2 - t r_2 e_2 \\
+    & - z r_1 e_0e_1e_3 - y r_1 e_0e_1e_2 - x r_1 e_0 - t r_1 e_1 \\
+    = ~ & (- x r_1 - y r_2 - z r_3) e_0 - t r_1 e_1 - t r_2 e_2 - t r_3 e_3 \\
+    & - (y r_1 - x r_2) e_0e_1e_2 - (z r_1 - x r_3) e_0e_1e_3 - (z r_2 - y r_3) e_0e_2e_3\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  A_0 = - x r_1 - y r_2 - z r_3 , \quad
+  A_1 = y r_1 - x r_2 , \quad
+  A_2 = z r_1 - x r_3 , \quad
+  A_3 = z r_2 - y r_3
+\end{equation}
+と置いて整理すると、
+\begin{equation}
+  \begin{split}
+    \hat{\bm{r}}^\dag S^\dag = ~ & A_0 e_0 - t r_1 e_1 - t r_2 e_2 - t r_3 e_3 + A_1 e_0e_1e_2 + A_2 e_0e_1e_3 + A_3 e_0e_2e_3\\
+    S^\dag \hat{\bm{r}}^\dag = ~ & A_0 e_0 - t r_1 e_1 - t r_2 e_2 - t r_3 e_3 - A_1 e_0e_1e_2 - A_2 e_0e_1e_3 - A_3 e_0e_2e_3\\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    p q \hat{\bm{r}}^\dag S^\dag - p q S^\dag \hat{\bm{r}}^\dag = ~ & 2 p q (A_1 e_0e_1e_2 + A_2 e_0e_1e_3 + A_3 e_0e_2e_3) \\
+    = ~ & 2 p q A_1 e_0e_1e_2 + 2 p q A_2 e_0e_1e_3 + 2 p q A_3 e_0e_2e_3 \\
+    = ~ & 2 p q (y r_1 - x r_2) e_0e_1e_2 + 2 p q (z r_1 - x r_3) e_0e_1e_3 + 2 p q (z r_2 - y r_3) e_0e_2e_3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \hat{\bm{r}}^\dag S^\dag \hat{\bm{r}}^\dag
+    = ~ & (A_0 e_0 - t r_1 e_1 - t r_2 e_2 - t r_3 e_3 + A_1 e_0e_1e_2 + A_2 e_0e_1e_3 + A_3 e_0e_2e_3)
+    (r_3 e_1e_2 - r_2 e_1e_3 + r_1 e_2e_3) \\
+    = ~ & A_0 r_3 e_0e_1e_2 + t r_1 r_3 e_2 - t r_2 r_3 e_1 - t r_3^2 e_1e_2e_3 - A_1 r_3 e_0 - A_2 r_3 e_0e_2e_3 + A_3 r_3 e_0e_1e_3 \\
+    & - A_0 r_2 e_0e_1e_3 - t r_1 r_2 e_3 - t r_2^2 e_1e_2e_3 + t r_2 r_3 e_1 - A_1 r_2 e_0e_2e_3 + A_2 r_2 e_0 + A_3 r_2 e_0e_1e_2 \\
+    & + A_0 r_1 e_0e_2e_3 - t r_1^2 e_1e_2e_3 + t r_1 r_2 e_3 - t r_1 r_3 e_2 - A_1 r_1 e_0e_1e_3 + A_2 r_1 e_0e_1e_2 - A_3 r_1 e_0 \\
+    = ~ & (- A_3 r_1 + A_2 r_2 - A_1 r_3) e_0 + (A_2 r_1 + A_3 r_2 + A_0 r_3) e_0e_1e_2 + (- A_1 r_1 - A_0 r_2 + A_3 r_3) e_0e_1e_3 \\
+    & + (A_0 r_1 - A_1 r_2 - A_2 r_3) e_0e_2e_3 - t e_1e_2e_3 \\
+  \end{split}
+\end{equation}
+係数を展開すると、
+\begin{equation}
+  \begin{split}
+    - A_3 r_1 + A_2 r_2 - A_1 r_3 = ~ & - (z r_2 - y r_3) r_1 + (z r_1 - x r_3) r_2 - (y r_1 - x r_2) r_3 \\
+    = ~ & - z r_1 r_2 + y r_1 r_3 + z r_1 r_2 - x r_2 r_3 - y r_1 r_3 + x r_2 r_3 \\
+    = ~ & 0 \\
+    A_2 r_1 + A_3 r_2 + A_0 r_3 = ~ & (z r_1 - x r_3) r_1 + (z r_2 - y r_3) r_2 + (- x r_1 - y r_2 - z r_3) r_3 \\
+    = ~ & z r_1^2 - x r_1 r_3 + z r_2^2 - y r_2 r_3 - x r_1 r_3 - y r_2 r_3 - z r_3^2 \\
+    = ~ & - 2 x r_1 r_3 - 2 y r_2 r_3 + z (r_1^2 + r_2^2 - r_3^2) \\
+    - A_1 r_1 - A_0 r_2 + A_3 r_3 = ~ & - (y r_1 - x r_2) r_1 - (- x r_1 - y r_2 - z r_3) r_2 + (z r_2 - y r_3) r_3 \\
+    = ~ & - y r_1^2 + x r_1 r_2 + x r_1  r_2 + y r_2^2 + z r_2 r_3 + z r_2 r_3 - y r_3^2 \\
+    = ~ & 2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3 \\
+    A_0 r_1 - A_1 r_2 - A_2 r_3 = ~ & (- x r_1 - y r_2 - z r_3) r_1 - (y r_1 - x r_2) r_2 - (z r_1 - x r_3) r_3 \\
+    = ~ & - x r_1^2 - y r_1 r_2 - z r_1 r_3 - y r_1 r_2 + x r_2^2 - z r_1 r_3 + x r_3^2 \\
+    = ~ & x ( - r_1^2 + r_2^2 + r_3^2) - 2 y r_1 r_2 - 2 z r_1 r_3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \hat{\bm{r}}^\dag S^\dag \hat{\bm{r}}^\dag
+    = ~ & (- 2 x r_1 r_3 - 2 y r_2 r_3 + z (r_1^2 + r_2^2 - r_3^2)) e_0e_1e_2 \\
+    & + (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3) e_0e_1e_3 \\
+    & + (x ( - r_1^2 + r_2^2 + r_3^2) - 2 y r_1 r_2 - 2 z r_1 r_3) e_0e_2e_3 - t e_1e_2e_3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag \widetilde{R^\dag} 
+    = ~ & p^2 S^\dag + p q \hat{\bm{r}}^\dag S^\dag - p q S^\dag \hat{\bm{r}}^\dag - q^2 \hat{\bm{r}}^\dag S^\dag \hat{\bm{r}}^\dag \\
+    = ~ & p^2 z e_0e_1e_2 - p^2 y e_0e_1e_3 + p^2 x e_0e_2e_3 + p^2 t e_1e_2e_3 \\
+    & + 2 p q (y r_1 - x r_2) e_0e_1e_2 + 2 p q (z r_1 - x r_3) e_0e_1e_3 + 2 p q (z r_2 - y r_3) e_0e_2e_3 \\
+    & - q^2 (- 2 x r_1 r_3 - 2 y r_2 r_3 + z (r_1^2 + r_2^2 - r_3^2)) e_0e_1e_2 \\
+    & - q^2 (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3) e_0e_1e_3 \\
+    & - q^2 (x ( - r_1^2 + r_2^2 + r_3^2) - 2 y r_1 r_2 - 2 z r_1 r_3) e_0e_2e_3 \\
+    & + q^2 t e_1e_2e_3 \\
+    = ~ &(p^2 z + 2 p q (y r_1 - x r_2) - q^2 (- 2 x r_1 r_3 - 2 y r_2 r_3 + z (r_1^2 + r_2^2 - r_3^2))) e_0e_1e_2 \\
+    & + (- p^2 y + 2 p q (z r_1 - x r_3) - q^2 (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3)) e_0e_1e_3 \\
+    & + (p^2 x + 2 p q (z r_2 - y r_3) - q^2 (x ( - r_1^2 + r_2^2 + r_3^2) - 2 y r_1 r_2 - 2 z r_1 r_3)) e_0e_2e_3 \\
+    & + t e_1e_2e_3 \\
+    = ~ &(p^2 z + 2 p q (y r_1 - x r_2) + q^2 (2 x r_1 r_3 + 2 y r_2 r_3 + z ( - r_1^2 - r_2^2 + r_3^2))) e_0e_1e_2 \\
+    & - (p^2 y + 2 p q (x r_3 - z r_1) + q^2 (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3)) e_0e_1e_3 \\
+    & + (p^2 x + 2 p q (z r_2 - y r_3) + q^2 (x (r_1^2 - r_2^2 - r_3^2) + 2 y r_1 r_2 + 2 z r_1 r_3)) e_0e_2e_3 \\
+    & + t e_1e_2e_3 \\
+  \end{split}
+\end{equation}
+これは四元数による三次元の回転と同型と考えられます。以下の様に置き換えます。
+\begin{equation}
+  q_1 = q r_1 , \quad q_2 = q r_2 , \quad q_3 = q r_3
+\end{equation}
+\begin{equation}
+  R^\dag = \cos \frac{\phi}{2} + \hat{\bm{r}}^\dag \sin \frac{\phi}{2}
+  = p + q r_3 e_1e_2 - q r_2 e_1e_3 + q r_1 e_2e_3
+  = p + q_3 e_1e_2 - q_2 e_1e_3 + q_1 e_2e_3
+\end{equation}
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &x' = p^2 x + 2 p q (z r_2 - y r_3) + q^2 (x (r_1^2 - r_2^2 - r_3^2) + 2 y r_1 r_2 + 2 z r_1 r_3) \\
+      &y' = p^2 y + 2 p q (x r_3 - z r_1) + q^2 (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3) \\
+      &z' = p^2 z + 2 p q (y r_1 - x r_2) + q^2 (2 x r_1 r_3 + 2 y r_2 r_3 + z ( - r_1^2 - r_2^2 + r_3^2)) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = p^2 x + 2 p (z q_2 - y q_3) + x (q_1^2 - q_2^2 - q_3^2) + 2 y q_1 q_2 + 2 z q_1 q_3 \\
+      &y' = p^2 y + 2 p (x q_3 - z q_1) + 2 x q_1 q_2 + y ( - q_1^2 + q_2^2 - q_3^2) + 2 z q_2 q_3 \\
+      &z' = p^2 z + 2 p (y q_1 - x q_2) + 2 x q_1 q_3 + 2 y q_2 q_3 + z ( - q_1^2 - q_2^2 + q_3^2) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = (p^2 + q_1^2 - q_2^2 - q_3^2) x + 2 (z p q_2 - y p q_3 + y q_1 q_2 + z q_1 q_3) \\
+      &y' = (p^2 - q_1^2 + q_2^2 - q_3^2) y + 2 (x p q_3 - z p q_1 + x q_1 q_2 + z q_2 q_3) \\
+      &z' = (p^2 - q_1^2 - q_2^2 + q_3^2) z + 2 (y p q_1 - x p q_2 + x q_1 q_3 + y q_2 q_3) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = (p^2 + q_1^2 - q_2^2 - q_3^2) x + 2 ((q_1 q_2 - p q_3) y + (q_1 q_3 + p q_2) z) \\
+      &y' = (p^2 - q_1^2 + q_2^2 - q_3^2) y + 2 ((q_1 q_2 + p q_3) x + (q_2 q_3 - p q_1) z) \\
+      &z' = (p^2 - q_1^2 - q_2^2 + q_3^2) z + 2 ((q_1 q_3 - p q_2) x + (q_2 q_3 + p q_1) y) \\
+    \end{aligned}
+  \right.
+\end{equation}
+四元数による三次元の回転計算とは符号が異なる部分がありますが、
+サンドウィッチ積の順序が逆になっていて回転角度が逆になったと考えられます。
+本質的な部分は変わりません。
 
+一方向だけで計算してみましょう。
+$ r_1 = 1 , r_2 = 0 , r_3 = 0$とすると、
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag \widetilde{R^\dag} 
+    = ~ & (p^2 z + 2 p q y - q^2 z) e_0e_1e_2 - (p^2 y - 2 p q z - q^2 y) e_0e_1e_3
+    + x e_0e_2e_3 + t e_1e_2e_3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    2 p q = 2 \cos \frac{\phi}{2} \sin \frac{\phi}{2} = \sin \phi , \quad
+    p^2 - q^2 = \cos \phi
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R^\dag S^\dag \widetilde{R^\dag} 
+    = ~ & (\sin \phi y + \cos \phi z) e_0e_1e_2 - (\cos \phi y - \sin \phi z) e_0e_1e_3
+    + x e_0e_2e_3 + t e_1e_2e_3 \\
+  \end{split}
+\end{equation}
+この式はz軸と-y軸に関しての時空立方体の回転を表していると考えます。
 
-\subsection{衛星軌道から定数の決定}
+ラピディティの総和を直接時空にかけるても重力多体シミュレーションとして一応成立します。
+例えば、水星と太陽の要素をインプットすれば回転する楕円軌道が再現できます。
+しかし、このシミュレーション方式では重力が大きくなりすぎると無限大でエラーになって粒子の動きが止まってしまいます。
+重力の増大で計算不能になる原因はコンピューターの能力の限界もありますが、
+物理法則としての実在性についても疑問に思っています。
+無限大が出現する原因は双曲線関数の適用にあるので、ただの三角関数による回転によればその矛盾は回避されると考えました。
 
-質量$M$の地球を半径$r$の円軌道で周回する衛星を考えます。
-衛星の速さは$v$で衛星の質量を$m$とし$G$を重力定数とすると、遠心力$mv^2/r$と重力$GMm/r^2$が等しいという事から、
-\begin{equation}
-  \frac{mv^2}{r}=\frac{GMm}{r^2}\quad\Rightarrow\quad v=\sqrt{\frac{GM}{r}}
-\end{equation}
-こちらを$Cl(1,3)$で表現します。x軸方向に速さ$v$として、
-\begin{itemize}
-  \item ラピディティ: $\tanh\theta=\frac{v}{c}$
-  \item 回転子: $R=\exp(\frac{\theta}{2}e_0e_1)=\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2}$
-  \item 回転子リバース: $\widetilde{R}=\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2}$
-\end{itemize}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})e_0(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
-    =~&(e_0\cosh\frac{\theta}{2}-e_1\sinh\frac{\theta}{2})(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
-    =~&e_0\cosh^2\frac{\theta}{2}+e_0\sinh^2\frac{\theta}{2}-2e_1\cosh\frac{\theta}{2}\sinh\frac{\theta}{2}\\
-    =~&e_0\cosh\theta-e_1\sinh\theta\\
-  \end{split}
-\end{equation}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})e_1(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
-    =~&(e_1\cosh\frac{\theta}{2}-e_0\sinh\frac{\theta}{2})(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
-    =~&e_1\cosh^2\frac{\theta}{2}+e_1\sinh^2\frac{\theta}{2}-2e_0\cosh\frac{\theta}{2}\sinh\frac{\theta}{2}\\
-    =~&e_1\cosh\theta-e_0\sinh\theta\\
-  \end{split}
-\end{equation}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\theta}{2}+e_0e_1\sinh\frac{\theta}{2})(cte_0+xe_1)(\cosh\frac{\theta}{2}-e_0e_1\sinh\frac{\theta}{2})\\
-    =~&cte_0\cosh\theta-cte_1\sinh\theta+xe_1\cosh\theta-xe_0\sinh\theta\\
-    =~&(ct\cosh\theta-x\sinh\theta)e_0+(x\cosh\theta-ct\sinh\theta)e_1\\
-    =~&t'e_0+x'e_1\\
-  \end{split}
-\end{equation}
-
-y軸の下の方に重力源があって力を受けるとします。力を自身の質量で割って加速度とします。
-\begin{itemize}
-  \item 回転子: $R_g=\exp(-\frac{\omega}{2}e_0e_2)=\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2}$
-  \item 回転子リバース: $\widetilde{R_g}=\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2}$
-\end{itemize}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})e_0(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
-    =~&(e_0\cosh\frac{\omega}{2}+e_2\sinh\frac{\omega}{2})(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
-    =~&e_0\cosh^2\frac{\omega}{2}+e_0\sinh^2\frac{\omega}{2}+2e_2\cosh\frac{\omega}{2}\sinh\frac{\omega}{2}\\
-    =~&e_0\cosh\omega+e_2\sinh\omega\\
-  \end{split}
-\end{equation}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})e_1(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
-    =~&(e_1\cosh\frac{\omega}{2}+e_0e_1e_2\sinh\frac{\omega}{2})(\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
-    =~&e_1\cosh^2\frac{\omega}{2}-e_1\sinh^2\frac{\omega}{2}\\
-    =~&e_1\\
-  \end{split}
-\end{equation}
-\begin{equation}
-  \begin{split}
-    &(\cosh\frac{\omega}{2}-e_0e_2\sinh\frac{\omega}{2})(t'e_0+x'e_1)
-    (\cosh\frac{\omega}{2}+e_0e_2\sinh\frac{\omega}{2})\\
-    =~&t'(e_0\cosh\omega+e_2\sinh\omega)+x'e_1\\
-    =~&t'e_0\cosh\omega+x'e_1+t'e_2\sinh\omega\\
-  \end{split}
-\end{equation}
 
 
 
