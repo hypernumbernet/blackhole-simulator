@@ -1536,7 +1536,7 @@ $Cl(1,3)$において、擬スカラー$e_0e_1e_2e_3$を1-ベクトルにかけ�
   \end{split}
 \end{equation}
 左からかけると元に戻ります。
-y軸については符号が反転しており、P対称性が破れております。
+y軸については符号が反転しています。
 \begin{equation}
   \begin{split}
     (te_1e_2e_3+xe_0e_2e_3-ye_0e_1e_3+ze_0e_1e_2)^2
@@ -2071,21 +2071,123 @@ $ r_1 = 1 , r_2 = 0 , r_3 = 0$とすると、
 \end{equation}
 この式はz軸と-y軸に関しての時空立方体の回転を表していると考えます。
 
-なぜ、双対時空へかける計算を行うかを説明します。
+角度を中心にまとめると、
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &x' = p^2 x + 2 p q (z r_2 - y r_3) + q^2 (x (r_1^2 - r_2^2 - r_3^2) + 2 y r_1 r_2 + 2 z r_1 r_3) \\
+      &y' = p^2 y + 2 p q (x r_3 - z r_1) + q^2 (2 x r_1 r_2 + y ( - r_1^2 + r_2^2 - r_3^2) + 2 z r_2 r_3) \\
+      &z' = p^2 z + 2 p q (y r_1 - x r_2) + q^2 (2 x r_1 r_3 + 2 y r_2 r_3 + z ( - r_1^2 - r_2^2 + r_3^2)) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = (1 - q^2) x + 2 p q (z r_2 - y r_3) + q^2 (x (r_1^2 - r_2^2 - r_3^2) + 2 y r_1 r_2 + 2 z r_1 r_3) \\
+      &y' = (1 - q^2) y + 2 p q (x r_3 - z r_1) + q^2 (y ( - r_1^2 + r_2^2 - r_3^2) + 2 x r_1 r_2 + 2 z r_2 r_3) \\
+      &z' = (1 - q^2) z + 2 p q (y r_1 - x r_2) + q^2 (z ( - r_1^2 - r_2^2 + r_3^2) + 2 x r_1 r_3 + 2 y r_2 r_3) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = x + 2 p q (z r_2 - y r_3) + q^2 (x (r_1^2 - r_2^2 - r_3^2 - 1) + 2 (y r_1 r_2 + z r_1 r_3)) \\
+      &y' = y + 2 p q (x r_3 - z r_1) + q^2 (y (r_2^2 - r_3^2 - r_1^2 - 1) + 2 (x r_1 r_2 + z r_2 r_3)) \\
+      &z' = z + 2 p q (y r_1 - x r_2) + q^2 (z (r_3^2 - r_1^2 - r_2^2 - 1) + 2 (x r_1 r_3 + y r_2 r_3)) \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = x + (z r_2 - y r_3) \sin \phi + (x (r_1^2 - r_2^2 - r_3^2 - 1) + 2 (y r_1 r_2 + z r_1 r_3)) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x r_3 - z r_1) \sin \phi + (y (r_2^2 - r_3^2 - r_1^2 - 1) + 2 (x r_1 r_2 + z r_2 r_3)) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y r_1 - x r_2) \sin \phi + (z (r_3^2 - r_1^2 - r_2^2 - 1) + 2 (x r_1 r_3 + y r_2 r_3)) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = x + (z r_2 - y r_3) \sin \phi + ( - 2 x (r_1^2 - 1) + 2 (y r_1 r_2 + z r_1 r_3)) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x r_3 - z r_1) \sin \phi + ( - 2 y (r_2^2 - 1) + 2 (x r_1 r_2 + z r_2 r_3)) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y r_1 - x r_2) \sin \phi + ( - 2 z (r_3^2 - 1) + 2 (x r_1 r_3 + y r_2 r_3)) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \Longleftrightarrow
+  \left\{
+    \begin{aligned}
+      &x' = x + (z r_2 - y r_3) \sin \phi + 2 (x (1 - r_1^2) + y r_1 r_2 + z r_1 r_3) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x r_3 - z r_1) \sin \phi + 2 (y (1 - r_2^2) + x r_1 r_2 + z r_2 r_3) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y r_1 - x r_2) \sin \phi + 2 (z (1 - r_3^2) + x r_1 r_3 + y r_2 r_3) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+循環関数になりますので重力の増大の結果、運動量への影響が反転するという事を言っています。
+重力反転が起きるという事は信じられない主張かと思いますが、天文学的観測結果との整合性について後ほど議論していきたいと思います。
+
+どうして、直接的に時空に重力の影響を考えるのではなく、双対時空へかける計算を行うか、その必然性を説明します。
 ラピディティの総和を直接時空にかけても重力多体シミュレーションとして一応成立します。
 例えば、水星と太陽の要素をインプットすれば回転する楕円軌道が再現できます。
 しかし、このシミュレーション方式では重力が大きくなりすぎると無限大でエラーになって粒子の動きが止まってしまいます。
-重力の増大で計算不能になる原因はコンピューターの能力の限界もありますが、
-物理法則としての実在性についても疑問に思っています。
-無限大が出現する原因は双曲線関数の適用にあるので、ただの三角関数による回転によればその矛盾は回避されると考えました。
-なぜ一般相対性理論を頼らないのかについても理由がありますが、長くなりすぎるので別の機会にします。
+重力の増大で計算不能になる原因はコンピューターの能力の限界ではなく、
+物理法則としての実在性について問題がある事を示していると考えます。
+無限大が出現する原因は双曲線関数の適用にあるので、三角関数による回転によればその矛盾は回避されると考えました。
+なぜ一般相対性理論を頼らないのかについても理由がありますが、長くなるので別の機会にします。
 
-\subsection{双対時空での重力計算}
+\subsection{双対時空から速度への変換}
 
 これまで重力による影響の結果、双対時空の時空立方体が回転する様子を具体的に三次元で見てきました。
 この時空立方体の回転効果がどのように自由落下の見せかけの加速度に変換されるかを考えて計算していきます。
-回転した時空立方体に四元数における対数関数と同型の計算を行って、角度を抽出し直します。
-要するに、一回転すると元に戻る計算を三次元でしています。
+回転した時空立方体の角度を抽出し直します。
+前節で計算した様に$ X $が重力の影響で$ X' $に変換されているとします。
+\begin{equation}
+  X = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3, \quad
+  X' = z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3
+\end{equation}
+内積からこれらの角度を計算します。幾何積から計算してみます。
+\begin{equation}
+  \begin{split}
+    X X' = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3) \\
+    = ~ & z z' e_0e_1e_2 e_0e_1e_2 - z y' e_0e_1e_2 e_0e_1e_3 + z x' e_0e_1e_2 e_0e_2e_3 + z t' e_0e_1e_2 e_1e_2e_3 \\
+    & - y z' e_0e_1e_3 e_0e_1e_2 + y y' e_0e_1e_3 e_0e_1e_3 - y x' e_0e_1e_3 e_0e_2e_3 - y t' e_0e_1e_3 e_1e_2e_3 \\
+    & + x z' e_0e_2e_3 e_0e_1e_2 - x y' e_0e_2e_3 e_0e_1e_3 + x x' e_0e_2e_3 e_0e_2e_3 + x t' e_0e_2e_3 e_1e_2e_3 \\
+    & + t z' e_0e_2e_3 e_0e_1e_2 - t y' e_0e_2e_3 e_0e_1e_3 + t x' e_0e_2e_3 e_0e_2e_3 + t t' e_0e_2e_3 e_1e_2e_3 \\
+    = ~ & - z z' - z y' e_2e_3 - z x' e_1e_3 - z t' e_0e_3 \\
+    & + y z' e_2e_3 - y y' - y x' e_1e_2 - y t' e_0e_2 \\
+    & + x z' e_1e_3 + x y' e_1e_2 - x x' - x t' e_0e_1 \\
+    & + t z' e_0e_3 + t y' e_0e_2 + t x' e_0e_1 + t t' \\
+    = ~ & t t' - x x' - y y' - z z' + (t x' - x t') e_0e_1 + (t y' - y t') e_0e_2 + (t z' - z t') e_0e_3 \\
+    & + (x y' - y x') e_1e_2 + (x z' - z x') e_1e_3 + (y z' - z y') e_2e_3 \\
+  \end{split}
+\end{equation}
+内積は幾何積のスカラー部分だから、
+\begin{equation}
+  X \cdot X' = t t' - x x' - y y' - z z'
+\end{equation}
+扱う時空が時間的(timelike)であるとすると、$ X \cdot X > 0$かつ$X' \cdot X' > 0 $となり、
+ミンコフスキー時空の内積の性質から、
+\begin{equation}
+  X \cdot X' = \sqrt{X \cdot X} \sqrt{X' \cdot X'} \cosh \theta
+\end{equation}
+$ X' $の不変量は$ X $の不変量と一致しているはずですから、
+\begin{equation}
+  X \cdot X' = \sqrt{X^2} \sqrt{X^2} \cosh \theta = X^2 \cosh \theta
+\end{equation}
+従って、
+\begin{equation}
+  \theta = \arccosh \frac{X \cdot X'}{X^2}
+\end{equation}
+
+
 
 
 
