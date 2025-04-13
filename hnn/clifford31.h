@@ -1,138 +1,271 @@
 #pragma once
 
+#include "constants.h"
+#include "clifford_common.h"
 #include <array>
-#include <cmath>
-#include <ostream>
+#include <cstdint>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <string>
 
-// Simple 4D vector class for coordinates (x, y, z, t)
-struct Vector4D {
-    double x, y, z, t;
-    Vector4D(double x_ = 0.0, double y_ = 0.0, double z_ = 0.0, double t_ = 0.0)
-        : x(x_), y(y_), z(z_), t(t_) {}
-};
-
-// Class to handle 16-dimensional representation of Clifford Algebra Cl(3,1)
+namespace hnn // https://github.com/hypernumbernet
+{
+// Header-only class for the Clifford algebra Cl(1,3) with signature (+,-,-,-)
 class Clifford31 {
 public:
-    std::array<double, 16> coeffs;
 
+    // Array to hold coefficients for the 16 basis elements
+    using CoeffArray = std::array<double, 16>;
+
+    CoeffArray coeffs; // Coefficients of the multivector
+
+    // Default constructor: initializes all coefficients to zero
     Clifford31() : coeffs{} {}
-    explicit Clifford31(const std::array<double, 16>& values) : coeffs(values) {}
 
-    Clifford31 operator+(const Clifford31& other) const {
-        Clifford31 result;
-        for (size_t i = 0; i < 16; ++i) {
-            result.coeffs[i] = coeffs[i] + other.coeffs[i];
-        }
-        return result;
+    // Constructor from an array of coefficients
+    explicit Clifford31(CoeffArray coeffs) : coeffs(coeffs) {}
+
+    // Signature of the quadratic form: (+,-,-,-)
+    static constexpr std::array<int8_t, 4> signature = {-1, 1, 1, 1};
+
+    static constexpr const char* labels[] = {
+        "1", "e0", "e1", "e0e1", "e2", "e0e2", "e2e1", "e0e2e1",
+        "e3", "e0e3", "e1e3", "e0e1e3", "e3e2", "e0e3e2", "e1e2e3", "e0e1e2e3"
+    };
+
+    static constexpr const uint8_t order[] = {
+        0, 1, 2, 4, 8, 3, 5, 9, 12, 10, 6, 14, 13, 11, 7, 15
+    };
+
+    // Compute the grade of a basis element (number of 1s in the bit pattern)
+    static constexpr int grade(size_t index) {
+        int count = 0;
+        for (; index; index >>= 1) count += index & 1;
+        return count;
     }
 
-    Clifford31 operator-(const Clifford31& other) const {
-        Clifford31 result;
-        for (size_t i = 0; i < 16; ++i) {
-            result.coeffs[i] = coeffs[i] - other.coeffs[i];
-        }
-        return result;
+    // Determine the sign for the reverse operation based on the grade
+    static constexpr int reverse_sign(int grade) {
+        return (grade == 2 || grade == 3) ? -1 : 1;
     }
 
-    Clifford31 operator*(const Clifford31& other) const {
-        Clifford31 result;
-        result.coeffs[0] += coeffs[0] * other.coeffs[0];
-        for (int i = 1; i <= 3; ++i) {
-            result.coeffs[0] += coeffs[i] * other.coeffs[i];
-        }
-        result.coeffs[0] -= coeffs[4] * other.coeffs[4];
-        result.coeffs[5] += coeffs[1] * other.coeffs[2] - coeffs[2] * other.coeffs[1];
-        result.coeffs[6] += coeffs[1] * other.coeffs[3] - coeffs[3] * other.coeffs[1];
-        result.coeffs[7] += coeffs[2] * other.coeffs[3] - coeffs[3] * other.coeffs[2];
-        result.coeffs[8] += coeffs[4] * other.coeffs[1] - coeffs[1] * other.coeffs[4];
-        result.coeffs[9] += coeffs[4] * other.coeffs[2] - coeffs[2] * other.coeffs[4];
-        result.coeffs[10] += coeffs[4] * other.coeffs[3] - coeffs[3] * other.coeffs[4];
-        return result;
-    }
-
-    Clifford31 operator*(double scalar) const {
-        Clifford31 result;
-        for (size_t i = 0; i < 16; ++i) {
-            result.coeffs[i] = coeffs[i] * scalar;
-        }
-        return result;
-    }
-
-    bool operator==(const Clifford31& other) const {
-        return coeffs == other.coeffs;
-    }
-
-    // Reverse (conjugate) of the multivector
+    // Compute the reverse of the multivector
     Clifford31 reverse() const {
-        Clifford31 result = *this;
-        // Reverse signs of bivectors (5-10) and trivectors (11-14)
-        for (int i = 5; i <= 14; ++i) {
-            result.coeffs[i] = -result.coeffs[i];
-        }
-        return result;
-    }
-
-    // Method to distort coordinates using bivector part as a rotor
-    Vector4D distort(const Vector4D& v) const {
-        // Extract bivector part and compute magnitude
-        double magnitude = 0.0;
-        for (int i = 5; i <= 10; ++i) {
-            magnitude += coeffs[i] * coeffs[i];
-        }
-        magnitude = std::sqrt(magnitude);
-        if (magnitude == 0.0) return v; // No distortion if bivector is zero
-
-        // Create rotor R = cos(theta/2) + sin(theta/2) * B/|B|
-        double theta = magnitude; // Angle of rotation proportional to bivector magnitude
-        Clifford31 R;
-        R.coeffs[0] = std::cos(theta / 2.0); // Scalar part
-        double scale = std::sin(theta / 2.0) / magnitude;
-        for (int i = 5; i <= 10; ++i) {
-            R.coeffs[i] = coeffs[i] * scale; // Bivector part
-        }
-
-        // Convert vector to Clifford form
-        Clifford31 vec;
-        vec.coeffs[1] = v.x; // e1
-        vec.coeffs[2] = v.y; // e2
-        vec.coeffs[3] = v.z; // e3
-        vec.coeffs[4] = v.t; // e0 (time)
-
-        // Apply distortion: R * v * ~R
-        Clifford31 R_conj = R.reverse();
-        Clifford31 result = R * vec * R_conj;
-
-        // Extract vector part
-        return Vector4D(result.coeffs[1], result.coeffs[2], result.coeffs[3], result.coeffs[4]);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Clifford31& c) {
-        os << "[ ";
+        CoeffArray new_coeffs;
         for (size_t i = 0; i < 16; ++i) {
-            if (c.coeffs[i] != 0) {
-                os << c.coeffs[i];
-                if (i == 0) os << " + ";
-                else if (i <= 3) os << "e" << i << " + ";
-                else if (i == 4) os << "e0 + ";
-                else if (i == 5) os << "e12 + ";
-                else if (i == 6) os << "e13 + ";
-                else if (i == 7) os << "e23 + ";
-                else if (i == 8) os << "e01 + ";
-                else if (i == 9) os << "e02 + ";
-                else if (i == 10) os << "e03 + ";
-                else if (i == 11) os << "e123 + ";
-                else if (i == 12) os << "e012 + ";
-                else if (i == 13) os << "e013 + ";
-                else if (i == 14) os << "e023 + ";
-                else if (i == 15) os << "e0123 + ";
+            int g = grade(i);              // Calculate the grade of the basis element
+            int sign = reverse_sign(g);    // Determine the sign based on the grade
+            new_coeffs[i] = coeffs[i] * sign; // Apply the sign to the coefficient
+        }
+        return Clifford31(new_coeffs);     // Return the new multivector
+    }
+
+    // Determine the sign for the conjugation operation based on the grade
+    static constexpr int conjugation_sign(int grade) {
+        return (grade % 2 == 0) ? 1 : -1; // Returns 1 for even grades, -1 for odd grades
+    }
+
+    // Compute the conjugation of the multivector
+    Clifford31 conjugation() const {
+        CoeffArray new_coeffs;
+        for (size_t i = 0; i < 16; ++i) {
+            int g = grade(i);              // Calculate the grade of the basis element
+            int sign = conjugation_sign(g); // Determine the sign based on the grade
+            new_coeffs[i] = coeffs[i] * sign; // Apply the sign to the coefficient
+        }
+        return Clifford31(new_coeffs);     // Return the new multivector
+    }
+
+    // Addition of two multivectors
+    Clifford31 operator+(const Clifford31& other) const {
+        CoeffArray new_coeffs;
+        for (size_t i = 0; i < 16; ++i) {
+            new_coeffs[i] = coeffs[i] + other.coeffs[i];
+        }
+        return Clifford31(new_coeffs);
+    }
+
+    // Subtraction of two multivectors
+    Clifford31 operator-(const Clifford31& other) const {
+        CoeffArray new_coeffs;
+        for (size_t i = 0; i < 16; ++i) {
+            new_coeffs[i] = coeffs[i] - other.coeffs[i];
+        }
+        return Clifford31(new_coeffs);
+    }
+
+    // Scalar multiplication
+    Clifford31 operator*(double scalar) const {
+        CoeffArray new_coeffs;
+        for (size_t i = 0; i < 16; ++i) {
+            new_coeffs[i] = coeffs[i] * scalar;
+        }
+        return Clifford31(new_coeffs);
+    }
+
+    // Geometric product of two multivectors
+    Clifford31 operator*(const Clifford31& other) const {
+        CoeffArray new_coeffs{};
+        for (size_t i = 0; i < 16; ++i) {
+            for (size_t j = 0; j < 16; ++j) {
+                auto [k, s] = multiplication_table[i][j];
+                new_coeffs[k] += coeffs[i] * other.coeffs[j] * s;
             }
         }
-        os << "]";
+        return Clifford31(new_coeffs);
+    }
+
+    // Get the coefficient of a specific basis element
+    double get_coeff(size_t index) const {
+        return (index < 16) ? coeffs[index] : 0.0;
+    }
+
+    // Set the coefficient of a specific basis element
+    void set_coeff(size_t index, double value) {
+        if (index < 16) {
+            coeffs[index] = value;
+        }
+    }
+
+    // Create a multivector representing a basis element
+    static Clifford31 basis(size_t index) {
+        Clifford31 mv;
+        if (index < 16) {
+            mv.coeffs[index] = 1.0;
+        }
+        return mv;
+    }
+
+    // Output stream operator for debugging
+    friend std::ostream& operator<<(std::ostream& os, const Clifford31& mv) {
+        bool first = true;
+        for (size_t i = 0; i < 16; ++i) {
+            if (std::abs(mv.coeffs[i]) > 1e-10) { // Avoid printing near-zero terms
+                if (!first) os << " + ";
+                os << mv.coeffs[i] << " " << labels[i];
+                first = false;
+            }
+        }
+        if (first) os << "0"; // If all coefficients are zero
         return os;
     }
+
+    // String representation of the multiplication table
+    static std::string to_table_string() {
+        static const int width = 10;
+        std::ostringstream oss;
+
+        // Table header
+        oss << "Cl(1,3) Multiplication Table\n";
+        oss << std::setw(width) << " "; // Space for row labels
+        for (int j = 1; j < 16; ++j) {
+            oss << std::setw(width) << labels[order[j]];
+        }
+        oss << "\n";
+
+        // Separator line
+        oss << std::string(width + 15 * width, '-') << "\n";
+
+        // Table body
+        for (int i = 1; i < 16; ++i) {
+            int order_i = order[i];
+            oss << std::setw(width - 1) << labels[order_i] << "|";
+            for (int j = 1; j < 16; ++j) {
+                auto [index, sign] = multiplication_table[order_i][order[j]];
+                std::string entry = (sign == 1 ? "+" : "-") + std::string(labels[index]);
+                oss << std::setw(width) << entry;
+            }
+            oss << "\n";
+        }
+
+        return oss.str();
+    }
+
+    static std::string to_table_string_tex1() {
+        std::ostringstream oss;
+
+        oss << R"(\begin{tabular}{r|rrrrrrrrrrrrrrr})" << "\n";
+        for (int j = 1; j < 8; ++j) {
+            oss << "&$" << replaceString(labels[order[j]], "e", "e_") << "$";
+        }
+        oss << R"(\\\hline)" << "\n";
+        for (int i = 1; i < 16; ++i) {
+            oss << "$" << replaceString(labels[order[i]], "e", "e_") << "$";
+            for (int j = 1; j < 8; ++j) {
+                auto [index, sign] = multiplication_table[order[i]][order[j]];
+                std::string entry = (sign == 1 ? "+" : "-") + std::string(labels[index]);
+                oss << "&$" << replaceString(entry.c_str(), "e", "e_") << "$";
+            }
+            oss << R"(\\)" << "\n";
+        }
+        oss << R"(\end{tabular})" << "\n";
+
+        return oss.str();
+    }
+
+    static std::string to_table_string_tex2() {
+        std::ostringstream oss;
+
+        oss << R"(\begin{tabular}{r|rrrrrrrrrrrrrrr})" << "\n";
+        for (int j = 8; j < 16; ++j) {
+            oss << "&$" << replaceString(labels[order[j]], "e", "e_") << "$";
+        }
+        oss << R"(\\\hline)" << "\n";
+        for (int i = 1; i < 16; ++i) {
+            oss << "$" << replaceString(labels[order[i]], "e", "e_") << "$";
+            for (int j = 8; j < 16; ++j) {
+                auto [index, sign] = multiplication_table[order[i]][order[j]];
+                std::string entry = (sign == 1 ? "+" : "-") + std::string(labels[index]);
+                oss << "&$" << replaceString(entry.c_str(), "e", "e_") << "$";
+            }
+            oss << R"(\\)" << "\n";
+        }
+        oss << R"(\end{tabular})" << "\n";
+
+        return oss.str();
+    }
+
+    static std::string to_table_string_tex() {
+        std::ostringstream oss;
+
+        oss << R"(\begin{tabular}{r|rrrrrrrrrrrrrrr})" << "\n";
+        for (int j = 1; j < 16; ++j) {
+            oss << "&$" << replaceString(labels[order[j]], "e", "") << "$";
+        }
+        oss << R"(\\\hline)" << "\n";
+        for (int i = 1; i < 16; ++i) {
+            oss << "$" << replaceString(labels[order[i]], "e", "") << "$";
+            for (int j = 1; j < 16; ++j) {
+                int8_t signswap = 1;
+                if (i == 8 || i == 10 || i == 12 || i == 14)
+                    signswap *= -1;
+                if (j == 8 || j == 10 || j == 12 || j == 14)
+                    signswap *= -1;
+                auto [index, sign] = multiplication_table[order[i]][order[j]];
+                std::string entry = std::string(labels[index]);
+                if (entry.length() == 1)
+                    entry = replaceString(entry.c_str(), "1", "");
+                if (entry.find("e2e1") != std::string::npos || entry.find("e3e2") != std::string::npos)
+                    sign *= -1;
+                entry = ((sign * signswap) == 1 ? "+" : "-") + replaceString(entry.c_str(), "e", "");
+                oss << "&$" << entry << "$";
+            }
+            oss << R"(\\)" << "\n";
+        }
+        oss << R"(\end{tabular})" << "\n";
+
+        return oss.str();
+    }
+
+private:
+    // Multiplication table for basis elements
+    static constexpr std::array<std::array<Product, 16>, 16> multiplication_table = make_multiplication_table(signature);
 };
 
-inline Clifford31 operator*(double scalar, const Clifford31& c) {
-    return c * scalar;
+// Scalar multiplication (left side)
+inline Clifford31 operator*(double scalar, const Clifford31& mv) {
+    return mv * scalar;
 }
+
+} // namespace

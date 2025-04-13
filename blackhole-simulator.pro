@@ -73,6 +73,7 @@ HEADERS += \
     hnn/biquaternion.h \
     hnn/clifford13.h \
     hnn/clifford31.h \
+    hnn/clifford_common.h \
     hnn/constants.h \
     hnn/octonion.h \
     hnn/quaternion.h \
