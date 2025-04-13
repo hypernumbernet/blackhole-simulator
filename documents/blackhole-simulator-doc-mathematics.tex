@@ -1690,8 +1690,8 @@ $Cl(0,0)$は実数$\mathbb{R}$と同型で、$Cl(0,1)$は複素数$\mathbb{C}$�
   \begin{tabular}{|l|l|l|} \hline
     名前 & 表記 & 操作 \\ \hline
     リバース(Reverse) & $\widetilde{A}$ & 基底ベクトルの順序を逆にする \\ \hline
-    グレード対合(Grade Involution) & $GI(A)$ & 奇数グレードの符号反転 \\ \hline
-    クリフォード共役(Clifford Conjugate) & $\overline{A}$ & 他の共役の掛け合わせ \\ \hline
+    グレード対合(Grade Involution) & $\overline{A}$ & 奇数グレードの符号反転 \\ \hline
+    クリフォード共役(Clifford Conjugate) & $A^*$ & 他の共役の掛け合わせ \\ \hline
   \end{tabular}
 \end{table}
 
@@ -1712,8 +1712,8 @@ $Cl(0,0)$は実数$\mathbb{R}$と同型で、$Cl(0,1)$は複素数$\mathbb{C}$�
   \begin{tabular}{|l|c|c|c|c|l|} \hline
     k mod 4 & 0 & 1 & 2 & 3 & \\ \hline
     $\widetilde{A}$ & $+$ & $+$ & $-$ & $-$ & $(-1)^{k(k-1)/2}$ \\ \hline
-    $GI(A)$ & $+$ & $-$ & $+$ & $-$ & $(-1)^k$ \\ \hline
-    $\overline{A}$ & $+$ & $-$ & $-$ & $+$ & $(-1)^{k(k+1)/2}$ \\ \hline
+    $\overline{A}$ & $+$ & $-$ & $+$ & $-$ & $(-1)^k$ \\ \hline
+    $A^*$ & $+$ & $-$ & $-$ & $+$ & $(-1)^{k(k+1)/2}$ \\ \hline
   \end{tabular}
 \end{table}
 
@@ -1856,7 +1856,7 @@ $e_1e_3,e_2e_3$についても同様と考えられます。
 \begin{itemize}
   \item スカラー: $ a $
   \item 1-ベクトル: $ c j + s k = c j + s_1 kI + s_2 kJ + s_3 kK $
-  \item 双ベクトル: $ m + n i = m_1 I + m_2 J + m_3 K + n_1 iI + n_2 iJ + n_3 iK $
+  \item 双ベクトル: $ n i + m = n_1 iI + n_2 iJ + n_3 iK + m_1 I + m_2 J + m_3 K $
   \item 3-ベクトル: $ dk + rj = dk + r_1 jI+r_2 jJ+r_3 jK $
   \item 擬スカラー: $ bi $
 \end{itemize}
@@ -1924,22 +1924,9 @@ $ Cl(3,1) $の変形は以下の様に一部の順序を置き換えます。
     \end{tabular}
   \end{center}
 \end{table}
+これらは一致しています。
 
-四双四元数の積の計算をするにあたっては、四元数の実係数に四元数を当てはめれば算出できます。
-コンピューターの計算であっても係数を四元数として定義すれば実装は容易なので、全部を実数係数に落とし込む事はしません。
-
-四双四元数$A$の共役は以下のように定義できます。
-\begin{equation}
-  A^*=a+bi-cj+dk-m-ni+rj-sk
-\end{equation}
-四双四元数$A,B$の共役の関係は以下のようになります。
-\begin{equation}
-  (AB)^*=B^*A^*
-\end{equation}
-交換子は以下のようになります。
-\begin{equation}
-  2[A,B]=AB-BA
-\end{equation}
+\section{四双四元数の内積と外積}
 
 さて、四元数の積には以下のように内積と外積が組み込まれています。
 \begin{equation}
@@ -1955,20 +1942,20 @@ $ Cl(3,1) $の変形は以下の様に一部の順序を置き換えます。
     &+(a_0b_1+a_1b_0+a_2b_3-a_3b_2)i\\
     &+(a_0b_2+a_2b_0+a_3b_1-a_1b_3)j\\
     &+(a_0b_3+a_3b_0+a_1b_2-a_2b_1)k\\
-    =~&a_0b_0-u\cdot v+a_0v+ub_0+u\times v
+    = ~ & a_0 b_0 - u \cdot v + a_0 v + b_0 u + u \times v
   \end{split}
 \end{equation}
-実数部分を取り除いて考えれば、
+スカラー部分を取り除くと、
 \begin{equation}
   uv=-u\cdot v+u\times v
 \end{equation}
 
-四双四元数のベクトルパートの内積と外積を考えます。
-ベクトルパートを実数係数で具体化すると以下のようになっています。
+1-ベクトルの内積と外積を考えます。1-ベクトルを実数係数で具体化すると以下のようになっています。
 \begin{equation}
   \begin{split}
-    p=~&p_0j+p_1Ik+p_2Jk+p_3Kk\\
-    q=~&q_0j+q_1Ik+q_2Jk+q_3Kk,\quad p_0,...,q_3,q_0,...,q_3\in\mathbb{R}
+    p = ~ & p_0 e_0 + p_1 e_1 + p_2 e_2 + p_3 e_3 \\
+    q = ~ & q_0 e_0 + q_1 e_1 + q_2 e_2 + q_3 e_3 , \quad
+    p_0 , ... , q_3 , q_0 , ... , q_3 \in \mathbb{R}
   \end{split}
 \end{equation}
 内積と外積の極めて一般的な定義としてはウェッジ積を用いて以下の定義になります。
@@ -1986,71 +1973,68 @@ $ Cl(3,1) $の変形は以下の様に一部の順序を置き換えます。
   \begin{split}
     2p\cdot q=~&-(pq+qp)\\
     2p\wedge q=~&-(pq-qp)\\
-    p\cdot q=~&-0.5(pq+qp)\\
-    p\wedge q=~&-0.5(pq-qp)
+    p \cdot q = ~ & - \frac{1}{2} (p q + q p) \\
+    p \wedge q = ~ & - \frac{1}{2} (p q - q p)
   \end{split}
 \end{equation}
-
-ベクトルパート$p$とマルチベクトル\footnote{複数回ウェッジ積を重ねた結果の事}$A_n=p_1\wedge p_2...\wedge p_n$の内積と外積は以下のようになります。
+一般的に、1-ベクトル$ p $とnグレードのマルチベクトル \footnote{複数回ウェッジ積を重ねた結果の事で、双ベクトルや3-ベクトルが構成される}
+$ A_n = p_1 \wedge p_2 ... \wedge p_n $の
+内積と外積は以下のようになります。
 \begin{equation}
   \begin{split}
-    2p\cdot A_n=~&(-1)^n(pA_n-(-1)^nA_np)\\
-    2p\wedge A_n=~&(-1)^n(pA_n+(-1)^nA_np)
+    2p \cdot A_n = ~ & (-1)^n (p A_n - (-1)^n A_n p) \\
+    2p \wedge A_n = ~ & (-1)^n (p A_n + (-1)^n A_n p) \\
   \end{split}
 \end{equation}
-ベクトルパート$p=p_0j+\bm{p_1}k,q=q_0j+\bm{q_1}k$のウェッジ積について計算すると、
+特に双ベクトル$ B $の場合は、$ n = 2 $なので、$ 2p \cdot B = p B - B p $となります。
+具体的に、$ p = p_0 j + p_1 kI, B = b_0 iI + b_1 iJ $の内積について計算すると、
 \begin{equation}
   \begin{split}
-    pq=~&(p_0j+\bm{p_1}k)(q_0j+\bm{q_1}k)=-p_0q_0-\bm{p_1}\bm{q_1}+(p_0\bm{q_1}-\bm{p_1}q_0)i\\
-    qp=~&(q_0j+\bm{q_1}k)(p_0j+\bm{p_1}k)=-p_0q_0-\bm{p_1}\bm{q_1}-(p_0\bm{q_1}-\bm{p_1}q_0)i\\
-    2p\wedge q=~&-(pq-qp)=-2(p_0\bm{q_1}-\bm{p_1}q_0)i\\
-    p\wedge q=~&-(p_0\bm{q_1}-\bm{p_1}q_0)i
+    pB = ~ & (p_0 j + p_1 kI)(b_0 iI + b_1 iJ) = - p_0 b_0 kI - p_0 b_1 kJ - p_1 b_0 j + p_1 b_1 jK \\
+    Bp = ~ & (b_0 iI + b_1 iJ)(p_0 j + p_1 kI) = p_0 b_0 kI + p_0 b_1 kJ + p_1 b_0 j + p_1 b_1 jK \\
+    2 p \cdot B = ~ & p B - B p = - 2 p_0 b_0 kI - 2 p_0 b_1 kJ - 2 p_1 b_0 j \\
+    p \cdot B = ~ & - p_1 b_0 j - p_0 b_0 kI - p_0 b_1 kJ \\
   \end{split}
 \end{equation}
-$p\wedge q$がバイベクトルパートの範囲内になるのでバイベクトルパートは$n=2$である事がわかります。
-従って、バイベクトルパート$B=\bm{b_1}i$とベクトルパートの内積は、
-\begin{equation}
-  2p\cdot B=pB-Bp,\quad 2B\cdot p=Bp-pB
-\end{equation}
-
-マルチベクトル$A_m,B_n$の内積と外積は、
+または、
 \begin{equation}
   \begin{split}
-    A_m\cdot B_n=~&(a_1\wedge ...\wedge a_{m-1})\cdot(a_m\cdot B_n)\\
-    A_m\wedge B_n=~&a_1\wedge(a_2\wedge ...a_m\wedge B_n)
+    pB = ~ & (p_0 e_0 + p_1 e_1)(b_0 e_0e_1 + b_1 e_0e_2) = - p_0 b_0 e_1 - p_0 b_1 e_2 - p_1 b_0 e_0 + p_1 b_1 e_0e_2e_1 \\
+    Bp = ~ & (b_0 e_0e_1 + b_1 e_0e_2)(p_0 e_0 + p_1 e_1) = p_0 b_0 e_1 + p_0 b_1 e_2 + p_1 b_0 e_0 + p_1 b_1 e_0e_2e_1 \\
+    p \cdot B = ~ & - p_1 b_0 e_0 - p_0 b_0 e_1 - p_0 b_1 e_2 \\
   \end{split}
 \end{equation}
 
 \section{四双四元数による擬ユークリッド空間}
 
-ベクトルパートの実数係数を以下のように定めて内積を計算すると、
+1-ベクトルの実数係数を以下のように定めて内積を計算すると、
 \begin{gather}
-  s=tj+xIk+yJk+zKk,\quad t,x,y,z\in\mathbb{R}\\
-  s\cdot s=-ss=t^2-x^2-y^2-z^2
+  s = t j + x kI + y kJ + z kK, \quad t, x, y, z \in \mathbb{R} \\
+  s \cdot s = - ss = t^2 - x^2 - y^2 - z^2
 \end{gather}
 内積は相対論的不変量になります。ローレンツ変換は以下のように定義されます。
 \begin{gather}
-  s'=g^*sg
+  X'= R X R^*
 \end{gather}
-ここで$g$は$gg^*=1$を満たし、偶数個のベクトルパートをウェッジ積で乗算したマルチベクトルです。
-同様に任意のマルチベクトル$A$に対して、
+ここで$ R $は$ R R^* = 1 $を満たす偶数グレード（通常、双ベクトル）です。
+同様に任意の3-ベクトル$ A $に対して、
 \begin{gather}
-  A'=g^*Ag
+  A' = R A R^*
 \end{gather}
-が成り立ち、相対論的不変量$AA^*$が得られます。
-ラピディティ$\theta$が、$\tanh\theta=v/c$で与えられ、方向を表す単位ベクトルが、
+が成り立ち、相対論的不変量$ A \cdot A $が得られます。
+ラピディティ$ \theta $が、$ \tanh \theta = v/c $で与えられ、方向を表す単位ベクトル（ベルソル）が、
 \begin{gather}
   d=d_1I+d_2J+d_3K,\quad d_1^2+d_2^2+d_3^2=1,\quad d_1,d_2,d_3\in\mathbb{R}
 \end{gather}
 で与えられる時、
 \begin{equation}
   \begin{split}
-    g=~&\exp(-0.5\theta di)\\
-    =~&\cosh 0.5\theta-di\sinh 0.5\theta\\
-    =~&\cosh 0.5\theta-(d_1Ii+d_2Ji+d_3Ki)\sinh 0.5\theta
+    R = ~ & \exp(\frac{1}{2} \theta d i) \\
+    = ~ & \cosh \frac{1}{2} \theta + d i \sinh \frac{1}{2} \theta \\
+    = ~ & \cosh \frac{1}{2} \theta + (d_1 iI + d_2 iJ + d_3 iK) \sinh \frac{1}{2} \theta
   \end{split}
 \end{equation}
-として$g$が定まります。
+として$ R $が定まります。
 
 \section{斜交座標と基底ベクトル}
 
@@ -2096,16 +2080,15 @@ $e_1=e^1,e_2=e^2$になり、長さが一斉に$1$にそろい直交座標とな
 \end{equation}
 となるように、
 \begin{equation}
-  g=
+  g =
   \begin{pmatrix}
     {g^1}_1&{g^1}_2\\{g^2}_1&{g^2}_2
   \end{pmatrix}
 \end{equation}
-を定めると$g$が空間の特徴を表すようになります。
-\footnote{縮約記法で行列は${g^i}_j$というように行$i$を上添え字で列$j$を下添え字で表記します。}
-$g$を計量テンソルと呼びます。通常の平面であれば、
+を定めると$ g $が空間の特徴を表すようになります。
+$ g $を計量テンソルと呼びます。通常の平面であれば、
 \begin{equation}
-  g=
+  g =
   \begin{pmatrix}
     1&0\\0&1
   \end{pmatrix}
@@ -2113,7 +2096,7 @@ $g$を計量テンソルと呼びます。通常の平面であれば、
 となります。$g$は一般的に対称テンソルです。
 四次元ベクトルを持ってきて、以下のように$g$を定めれば、
 \begin{equation}
-  g=
+  g =
   \begin{pmatrix}
     1&0&0&0\\
     0&-1&0&0\\
@@ -2122,7 +2105,18 @@ $g$を計量テンソルと呼びます。通常の平面であれば、
   \end{pmatrix}
 \end{equation}
 特殊相対論的時空の不変量が表現できます。
+特殊相対論の時間と空間を論じる時に斜交座標で説明される事もありますが、リーマン幾何学の斜交座標とは異なるので注意しましょう。
+特殊相対論では計量$ g $は変化しませんが、リーマン幾何学では$ g $が変化していきます。
+
 斜交座標を持ってきても物差しが変わっただけで空間は曲がっていない事に注意してください。
+$ g $を変化させると内積の計算規則が変更されていきます。
+$ g $は場所によって変化していくので、位置の関数として表現されます。
+空間が曲がるとは、場所によって計量$ g(x) $が変化していく事によって検出されます。
+位置の関数となる計量$ g(x) $が、平行移動したときに計量の様態がどのように変化するかが空間の歪曲となります。
+ある位置の$ g(x) $が標準と異なっていたとしても、平行移動して$ g(x) $に変化がなければ空間は曲がっていません。
+
+逆に言うと、空間の歪曲を算出するにあたって$ g(x) $の関数の中身を知る必要はありません。
+微小移動量$dx$で、$ g(x) $と$ g(x + dx) $の違いが分かればそれで歪曲の度合いが算出できます。
 
 \section{四双四元数によるリーマン空間}
 
