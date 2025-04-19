@@ -2458,11 +2458,52 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
 
 双対時空の歪みとその歪みによる速度の変化について、多体シミュレーションを意識しつつ、三次元で一般化された形を整えていきます。
 双対空間回転と双対時空回転の様子見から、加速度と重力の数理的な本質が見えてきました。
-1-ブレードで表現された時空の回転により、3-ブレードで表現された双対時空とのズレが生じ加速度の圧となります。
+1-ブレードで表現された時空の回転により、3-ブレードで表現された双対時空とのズレが生じ加速度の慣性力となります。
 逆に双対時空から時空への双対の双対回転子による作用が重力による圧のない自然落下となると考えられます。
 重力による時空超平面の変形は、空間回転子とブースト回転子の混合による事が見えてきました。
 物体の進行方向と重力の作用が直角の場合は空間回転子になり、平行の場合はブースト回転子になり、
 それ以外は、両者の角度により配合率が決定されると考えるのが自然です。
+ベルソルを使ってまとめてみます。
+\begin{table}[ht]
+  \centering
+  \caption{時空回転のパラメーター}
+  \begin{tabular}{|l|c|l|l|} \hline
+    回転種別 & 角度 & ベルソル & 双対回転 \\ \hline
+    ブースト & $ \phi $ & $ \bm{u}^2 = {u_1}^2 + {u_2}^2 + {u_3}^2 = 1 $ & 空間回転 \\ \hline
+    空間回転 & $ \theta $ & $ \bm{v}^2 = -({v_1}^2 + {v_2}^2 + {v_3}^2) = -1 $ & ブースト \\ \hline
+    混合 & $ \eta $ & $ ??? $ & 双対混合 \\ \hline
+  \end{tabular}
+\end{table}
+\begin{equation}
+  \begin{split}
+    R_{boost} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3)
+    = \exp \left( \bm{u} \frac{\phi}{2} \right)
+    = \cosh \frac{\phi}{2} + \bm{u} \sinh \frac{\phi}{2} \\
+    R_{space} = ~ & \exp(\gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3)
+    = \exp \left( \bm{v} \frac{\theta}{2} \right)
+    = \cos \frac{\theta}{2} + \bm{v} \sin \frac{\theta}{2} \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R_{hybrid} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3
+    + \gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3) \\
+    = ~ & \exp \left( \bm{u} \frac{\phi}{2} + \bm{v} \frac{\theta}{2} \right) \\
+    = ~ & \exp \left( \frac{1}{2} (\bm{u} \phi + \bm{v} \theta) \right) \\
+    = ~ & \exp \left( \frac{1}{2} (u_1 \phi iI + u_2 \phi iJ + u_3 \phi iK
+    + v_1 \theta I + v_2 \theta J + v_3 \theta K) \right) \\
+    = ~ & \exp \left( \frac{1}{2} \Big( (u_1 \phi i + v_1 \theta)I + (u_2 \phi i + v_2 \theta)J 
+    + (u_3 \phi i + v_3 \theta)K \Big) \right) \\
+  \end{split}
+\end{equation}
+混合角$ \eta $を以下の様に定義して、
+\begin{equation}
+  \begin{split}
+    \exp (\eta i) = \cos \eta + i \sin \eta = \theta + i \phi, \quad \eta \in \mathbb{R}
+  \end{split}
+\end{equation}
+
+
 
 
 \subsection{クリフォード代数の4元運動量}
@@ -2482,10 +2523,14 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
     S_p^2=~&m^4=E^2-c^2(p_1^2+p_2^2+p_3^2)=E^2-c^2\bm{p}^2\quad (不変量)\\
   \end{split}
 \end{equation}
-質量がゼロなら光的になると思われます。$h$をプランク定数、$\nu_i$を各振動数として、
+質量がゼロなら光的になります。$h$をプランク定数、$\nu_i$を各振動数として、
 \begin{equation}
   0=E^2-c^2(p_1^2+p_2^2+p_3^2)=E^2-h^2(\nu_1^2+\nu_2^2+\nu_3^2)
 \end{equation}
+
+4元速度を扱う場合、単純に速度を足していくと光速を超えてしまう事になるので出来ませんが、
+4元運動量であれば、3次元運動量として加算していっても、エネルギーが自動的に調整されるので、
+相対論的に破綻する事がありません。
 
 \subsection{4元運動量とラピディティの関係}
 
