@@ -2469,8 +2469,8 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
   \caption{時空回転のパラメーター}
   \begin{tabular}{|l|c|l|l|l|} \hline
     回転種別 & 角度 & 方向 & ベルソル & 双対回転 \\ \hline
-    ブースト & $ \phi $ & 進行方向 & $ \bm{u}^2 = {u_1}^2 + {u_2}^2 + {u_3}^2 = 1 $ & 空間回転 \\ \hline
-    空間回転 & $ \theta $ & 進行方向と直角 & $ \bm{v}^2 = -({v_1}^2 + {v_2}^2 + {v_3}^2) = -1 $ & ブースト \\ \hline
+    ブースト & $ 2 \phi $ & 進行方向 & $ \bm{u}^2 = {u_1}^2 + {u_2}^2 + {u_3}^2 = 1 $ & 空間回転 \\ \hline
+    空間回転 & $ 2 \theta $ & 進行方向と直角 & $ \bm{v}^2 = -({v_1}^2 + {v_2}^2 + {v_3}^2) = -1 $ & ブースト \\ \hline
   \end{tabular}
 \end{table}
 \begin{equation}
@@ -2492,23 +2492,22 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
 \begin{equation}
   \begin{split}
     R_{boost} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3)
-    = \exp \left( \bm{u} \frac{\phi}{2} \right)
-    = \cosh \frac{\phi}{2} + \bm{u} \sinh \frac{\phi}{2} \\
+    = \exp ( \bm{u} \phi )
+    = \cosh \phi + \bm{u} \sinh \phi \\
     R_{space} = ~ & \exp(\gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3)
-    = \exp \left( \bm{v} \frac{\theta}{2} \right)
-    = \cos \frac{\theta}{2} + \bm{v} \sin \frac{\theta}{2} \\
+    = \exp ( \bm{v} \theta )
+    = \cos \theta + \bm{v} \sin \theta \\
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
     R_{hybrid} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3
     + \gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3) \\
-    = ~ & \exp \left( \bm{u} \frac{\phi}{2} + \bm{v} \frac{\theta}{2} \right) \\
-    = ~ & \exp \left( \frac{1}{2} (\bm{u} \phi + \bm{v} \theta) \right) \\
-    = ~ & \exp \left( \frac{1}{2} (u_1 \phi iI + u_2 \phi iJ + u_3 \phi iK
-    + v_1 \theta I + v_2 \theta J + v_3 \theta K) \right) \\
-    = ~ & \exp \left( \frac{1}{2} \Big( (v_1 \theta + u_1\phi i)I + (v_2 \theta + u_2 \phi i)J 
-    + (v_3 \theta + u_3 \phi i)K \Big) \right) \\
+    = ~ & \exp (\bm{u} \phi + \bm{v} \theta) \\
+    = ~ & \exp (u_1 \phi iI + u_2 \phi iJ + u_3 \phi iK
+    + v_1 \theta I + v_2 \theta J + v_3 \theta K) \\
+    = ~ & \exp \Big( (v_1 \theta + u_1\phi i)I + (v_2 \theta + u_2 \phi i)J 
+    + (v_3 \theta + u_3 \phi i)K \Big) \\
   \end{split}
 \end{equation}
 $ \eta_n $で置き換えて見通しを良くします。
@@ -2516,7 +2515,7 @@ $ \eta_n $で置き換えて見通しを良くします。
   \eta_n = v_n \theta + u_n \phi i, \quad n = 1,2,3
 \end{equation}
 \begin{equation}
-  R_{hybrid} = \exp \left( \frac{1}{2} (\eta_1 I + \eta_2 J + \eta_3 K) \right)
+  R_{hybrid} = \exp (\eta_1 I + \eta_2 J + \eta_3 K)
 \end{equation}
 ベルソルの方向としてはお互いが直角になっているので、
 \begin{equation}
@@ -2540,7 +2539,7 @@ $ \alpha = \phi^2 - \theta^2 , \quad \alpha \in \mathbb{R}
 , \quad \eta = \eta_1 I + \eta_2 J + \eta_3 K $と置くと、
 \begin{equation}
   \eta^2 = \alpha
-  , \quad R_{hybrid} = \exp \left( \frac{1}{2} \eta \right)
+  , \quad R_{hybrid} = \exp (\eta)
 \end{equation}
 $ \alpha $の平方根について、$ Cl(1,1) $の基底$ \epsilon_0, \epsilon_1 $で表すと、
 \begin{equation}
@@ -2549,17 +2548,19 @@ $ \alpha $の平方根について、$ Cl(1,1) $の基底$ \epsilon_0, \epsilon_
 \end{equation}
 の様に、$ \alpha $の平方根を定める事が出来ます。
 \begin{equation}
-  R_{hybrid} = \exp \left( \frac{1}{2} (\phi \epsilon_0 + \theta \epsilon_1) \right)
+  R_{hybrid} = \exp(\phi \epsilon_0 + \theta \epsilon_1)
 \end{equation}
 テイラー展開を行うと、
 \begin{equation}
   \begin{split}
-    R_{hybrid} = ~ & \sum_{n=0}^{∞} \frac{1}{n!} \left( \frac{\eta}{2} \right) ^ {n} \\
-    = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} \left( \frac{\eta}{2} \right) ^ {2n}
-    + \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \left( \frac{\eta}{2} \right) ^ {2n + 1} \\
+    R_{hybrid} = ~ & \sum_{n=0}^{∞} \frac{1}{n!} \eta^n \\
+    = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} \eta^{2n}
+    + \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \eta^{2n + 1} \\
   \end{split}
 \end{equation}
+
 $ \alpha $の符号によって場合分けします。
+
 \begin{itemize}
   \item $ \alpha > 0 : $
 \end{itemize}
@@ -2568,11 +2569,11 @@ $ \alpha $の符号によって場合分けします。
 \end{equation}
 \begin{equation}
   \begin{split}
-    R_{hybrid} = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} \left( \frac{\alpha}{4} \right)^n
-    + \frac{\eta}{2} \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \left( \frac{\alpha}{4} \right)^n \\
-    = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} \left( \frac{\sqrt{\alpha}}{2} \right)^{2n}
-    + \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \left( \frac{\sqrt{\alpha}}{2} \right)^{2n + 1} \\
-    = ~ & \cosh \left( \frac{\sqrt{\alpha}}{2} \right) + \sinh \left( \frac{\sqrt{\alpha}}{2} \right) \\
+    R_{hybrid} = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} \alpha^n
+    + \eta \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \alpha^n \\
+    = ~ & \sum_{n=0}^{∞} \frac{1}{(2n)!} (\sqrt{\alpha})^{2n}
+    + \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} (\sqrt{\alpha})^{2n + 1} \\
+    = ~ & \cosh(\sqrt{\alpha}) + \sinh(\sqrt{\alpha}) \\
   \end{split}
 \end{equation}
 双曲線関数の加法定理から、
@@ -2580,22 +2581,71 @@ $ \alpha $の符号によって場合分けします。
   \begin{split}
     \cosh(\phi \epsilon_0 + \theta \epsilon_1)
     = ~ & \cosh(\phi \epsilon_0) \cosh(\theta \epsilon_1) + \sinh(\phi \epsilon_0) \sinh(\theta \epsilon_1) \\
-    = ~ & \cosh(\phi) \cos(\theta) + \epsilon_0 \epsilon_1 \sinh(\phi) \sin(\theta) \\
+    = ~ & \cosh \phi \cos \theta + \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
     \sinh(\phi \epsilon_0 + \theta \epsilon_1)
     = ~ & \sinh(\phi \epsilon_0) \cosh(\theta \epsilon_1) + \cosh(\phi \epsilon_0) \sinh(\theta \epsilon_1) \\
-    = ~ & \epsilon_0 \sinh(\phi) \cos(\theta) + \epsilon_1 \cosh(\phi) \sin(\theta) \\
+    = ~ & \epsilon_0 \sinh \phi \cos \theta + \epsilon_1 \cosh \phi \sin \theta \\
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
-    R_{hybrid} = ~ & \cosh \left(\frac{\phi}{2} \right) \cos \left(\frac{\theta}{2} \right)
-    + \epsilon_0 \sinh \left(\frac{\phi}{2} \right) \cos \left(\frac{\theta}{2} \right)
-    + \epsilon_1 \cosh \left(\frac{\phi}{2} \right) \sin \left(\frac{\theta}{2} \right)
-    + \epsilon_0 \epsilon_1 \sinh \left(\frac{\phi}{2} \right) \sin \left(\frac{\theta}{2} \right) \\
+    R_{hybrid} = ~ & \cosh \phi \cos \theta + \epsilon_0 \sinh \phi \cos \theta 
+    + \epsilon_1 \cosh \phi \sin \theta + \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
+    = ~ & (\cosh \phi + \epsilon_0 \sinh \phi)
+    (\cos \theta + \epsilon_1 \sin \theta) \\
   \end{split}
 \end{equation}
 
+\begin{itemize}
+  \item $ \alpha < 0 : $
+\end{itemize}
+\begin{equation}
+  \alpha^n = (-1)^n |\alpha|^n
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R_{hybrid} = ~ & \sum_{n=0}^{∞} \frac{(-1)^n}{(2n)!} |\alpha|^n
+    + \eta \sum_{n=0}^{∞} \frac{(-1)^n}{(2n + 1)!} |\alpha|^n \\
+    = ~ & \sum_{n=0}^{∞} \frac{(-1)^n}{(2n)!} (\sqrt{|\alpha|})^{2n}
+    + \frac{\eta}{\sqrt{|\alpha|}} \sum_{n=0}^{∞} \frac{(-1)^n}{(2n + 1)!} (\sqrt{|\alpha|})^{2n + 1} \\
+    = ~ & \cos(\sqrt{|\alpha|}) + \sin(\sqrt{|\alpha|}) \\
+  \end{split}
+\end{equation}
+ここで、$ |\alpha| = \theta^2 - \phi^2 > 0 $だから、
+$ \sqrt{|\alpha|} = \theta \epsilon_0 + \phi \epsilon_1 $
+\begin{equation}
+  \begin{split}
+    \frac{\eta}{\sqrt{|\alpha|}} = ~ & \frac{\phi \epsilon_0 + \theta \epsilon_1}{\theta \epsilon_0 + \phi \epsilon_1}
+    = \frac{(\phi \epsilon_0 + \theta \epsilon_1)(\theta \epsilon_0 + \phi \epsilon_1)}{(\theta \epsilon_0 + \phi \epsilon_1)^2}
+    = \frac{(\phi \epsilon_0 + \theta \epsilon_1)(\theta \epsilon_0 + \phi \epsilon_1)}{\theta^2 - \phi^2} \\
+    = ~ & \frac{\phi \theta - \phi \theta + (\phi^2 - \theta^2) \epsilon_0 \epsilon_1}{\theta^2 - \phi^2} \\
+    = ~ & \epsilon_0 \epsilon_1 \\
+  \end{split}
+\end{equation}
+三角関数の加法定理から、
+\begin{equation}
+  \begin{split}
+    \cos(\theta \epsilon_0 + \phi \epsilon_1)
+    = ~ & \cos(\theta \epsilon_0) \cos(\phi \epsilon_1) - \sin(\theta \epsilon_0) \sin(\phi \epsilon_1) \\
+    = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
+    \sinh(\theta \epsilon_0 + \phi \epsilon_1)
+    = ~ & \sin(\theta \epsilon_0) \cos(\phi \epsilon_1) + \cos(\theta \epsilon_0) \sin(\phi \epsilon_1) \\
+    = ~ & \epsilon_0 \cosh \phi \sin \theta + \epsilon_1 \sinh \phi \cos \theta \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R_{hybrid} = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta
+    + \epsilon_0 \epsilon_1 (\epsilon_0 \cosh \phi \sin \theta + \epsilon_1 \sinh \phi \cos \theta) \\
+    = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta
+    - \epsilon_1 \cosh \phi \sin \theta - \epsilon_0 \sinh \phi \cos \theta \\
+    = ~ & (\cos \theta - \epsilon_1 \sin \theta)(\cosh \phi - \epsilon_0 \sinh \phi) \\
+  \end{split}
+\end{equation}
 
+\begin{itemize}
+  \item $ \alpha = 0 : $
+\end{itemize}
 
 
 
