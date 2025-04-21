@@ -2153,12 +2153,12 @@ $ \omega_{ij} $は16個の係数です。つまり、各$ \nu_i $について全
 \end{equation}
 四双四元数では、
 \begin{equation}
-  R = \exp(\mu_0 iI + \mu_1 iJ + \mu_2 iK + \mu_3 I + \mu_4 J + \mu_5 K)
+  R = \exp(\omega_0 iI + \omega_1 iJ + \omega_2 iK + \omega_3 I + \omega_4 J + \omega_5 K)
 \end{equation}
 変形Cl(3,1)では、
 \begin{equation}
-  R = \exp(\mu_0 \epsilon_0\epsilon_1 + \mu_1 \epsilon_0\epsilon_2 + \mu_2 \epsilon_0\epsilon_3 + 
-  \mu_3 \epsilon_3\epsilon_2 + \mu_4 \epsilon_1\epsilon_3 + \mu_5 \epsilon_2\epsilon_1)
+  R = \exp(\omega_0 \epsilon_0\epsilon_1 + \omega_1 \epsilon_0\epsilon_2 + \omega_2 \epsilon_0\epsilon_3 + 
+  \omega_3 \epsilon_3\epsilon_2 + \omega_4 \epsilon_1\epsilon_3 + \omega_5 \epsilon_2\epsilon_1)
 \end{equation}
 これらの内、左側の時空的な3成分がもたらす回転はローレンツブーストになり、右側の空間的な3成分がもたらす回転は空間回転になります。
 \begin{equation}
@@ -2475,14 +2475,14 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
 \end{table}
 \begin{equation}
   \begin{split}
-    u = ~ & u_1 iI + u_2 iJ + u_3 iK \\
-    u^2 = ~ & (u_1 iI + u_2 iJ + u_3 iK)(u_1 iI + u_2 iJ + u_3 iK) \\
+    \bm{u} = ~ & u_1 iI + u_2 iJ + u_3 iK \\
+    \bm{u}^2 = ~ & (u_1 iI + u_2 iJ + u_3 iK)(u_1 iI + u_2 iJ + u_3 iK) \\
     = ~ & {u_1}^2 - u_1 u_2 K + u_1 u_3 J
     + u_1 u_2 K + {u_2}^2 - u_2 u_3 I
     - u_1 u_3 J + u_2 u_3 I + {u_3}^2 \\
     = ~ & {u_1}^2 + {u_2}^2 + {u_3}^2 = 1 \\
-    v = ~ & v_1 I + v_2 J + v_3 K \\
-    v^2 = ~ & (v_1 I + v_2 J + v_3 K)(v_1 I + v_2 J + v_3 K) \\
+    \bm{v} = ~ & v_1 I + v_2 J + v_3 K \\
+    \bm{v}^2 = ~ & (v_1 I + v_2 J + v_3 K)(v_1 I + v_2 J + v_3 K) \\
     = ~ & - {v_1}^2 + v_1 v_2 K - v_1 v_3 J
     - v_1 v_2 K - {v_2}^2 + v_2 v_3 I
     + v_1 v_3 J - v_2 v_3 I - {v_3}^2 \\
@@ -2492,10 +2492,10 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
 \begin{equation}
   \begin{split}
     R_{boost} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3)
-    = \exp ( \bm{u} \phi )
+    = \exp ( \phi \bm{u} )
     = \cosh \phi + \bm{u} \sinh \phi \\
     R_{space} = ~ & \exp(\gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3)
-    = \exp ( \bm{v} \theta )
+    = \exp ( \theta \bm{v} )
     = \cos \theta + \bm{v} \sin \theta \\
   \end{split}
 \end{equation}
@@ -2503,16 +2503,16 @@ $R^\dag=\exp(\phi e_2e_3)$の双対計算をすると、
   \begin{split}
     R_{hybrid} = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3
     + \gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3) \\
-    = ~ & \exp (\bm{u} \phi + \bm{v} \theta) \\
+    = ~ & \exp (\phi \bm{u} + \theta \bm{v}) \\
     = ~ & \exp (u_1 \phi iI + u_2 \phi iJ + u_3 \phi iK
-    + v_1 \theta I + v_2 \theta J + v_3 \theta K) \\
-    = ~ & \exp \Big( (v_1 \theta + u_1\phi i)I + (v_2 \theta + u_2 \phi i)J 
-    + (v_3 \theta + u_3 \phi i)K \Big) \\
+    + \theta v_1 I + \theta v_2 J + \theta v_3 K) \\
+    = ~ & \exp \Big( (\theta v_1 + \phi u_1 i)I + (\theta v_2 + \phi i u_2)J 
+    + (\theta v_3 + \phi u_3 i)K \Big) \\
   \end{split}
 \end{equation}
 $ \eta_n $で置き換えて見通しを良くします。
 \begin{equation}
-  \eta_n = v_n \theta + u_n \phi i, \quad n = 1,2,3
+  \eta_n = \theta v_n + \phi u_n i, \quad n = 1,2,3
 \end{equation}
 \begin{equation}
   R_{hybrid} = \exp (\eta_1 I + \eta_2 J + \eta_3 K)
@@ -2534,21 +2534,37 @@ $ \eta_n $で置き換えて見通しを良くします。
   (\eta_1 I + \eta_2 J + \eta_3 K)^2 = - {\eta_1}^2 - {\eta_2}^2 - {\eta_3}^2
   = - (\theta^2 - \phi^2)
 \end{equation}
-ベルソルは消去されました。
 $ \alpha = \phi^2 - \theta^2 , \quad \alpha \in \mathbb{R} 
 , \quad \eta = \eta_1 I + \eta_2 J + \eta_3 K $と置くと、
 \begin{equation}
   \eta^2 = \alpha
   , \quad R_{hybrid} = \exp (\eta)
 \end{equation}
-$ \alpha $の平方根について、$ Cl(1,1) $の基底$ \epsilon_0, \epsilon_1 $で表すと、
+$ \alpha $の平方根については、
 \begin{equation}
-  \eta = \sqrt{\alpha} = \phi \epsilon_0 + \theta \epsilon_1
-  , \quad {\epsilon_0}^2 = 1 , {\epsilon_1}^2 = -1
+  \eta = \sqrt{\alpha} = \phi \bm{u} + \theta \bm{v}
 \end{equation}
-の様に、$ \alpha $の平方根を定める事が出来ます。
+ここで$ \bm{u}, \bm{v} $について更に調べると、
 \begin{equation}
-  R_{hybrid} = \exp(\phi \epsilon_0 + \theta \epsilon_1)
+  \begin{split}
+    \bm{u} \bm{v} = ~ & (u_1 iI + u_2 iJ + u_3 iK)(v_1 I + v_2 J + v_3 K) \\
+    = ~ & - u_1 v_1 i + u_1 v_2 iK - u_1 v_3 iJ
+    - u_2 v_1 iK - u_2 v_2 i + u_2 v_3 iI
+    + u_3 v_1 iJ - u_3 v_2 iI - u_3 v_3 i \\
+    = ~ & (u_2 v_3 - u_3 v_2) iI + (u_3 v_1 - u_1 v_3) iJ + (u_1 v_2 - u_2 v_1) iK \\
+    \bm{v} \bm{u} = ~ & (v_1 I + v_2 J + v_3 K)(u_1 iI + u_2 iJ + u_3 iK) \\
+    = ~ & - u_1 v_1 i + u_2 v_1 iK - u_3 v_1 iJ
+    - u_1 v_2 iK - u_2 v_2 i + u_3 v_2 iI
+    + u_1 v_3 iJ - u_2 v_3 iI - u_3 v_3 i \\
+    = ~ & (u_3 v_2 - u_2 v_3) iI + (u_1 v_3 - u_3 v_1) iJ + (u_2 v_1 - u_1 v_2) iK \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \bm{u}^2 = 1 , \quad \bm{v}^2 = -1 , \quad \bm{u} \bm{v} = - \bm{v} \bm{u}
+\end{equation}
+になっているので、$ \bm{u}, \bm{v} $については、$ Cl(1,1) $の基底と同等になります。
+\begin{equation}
+  (\phi \bm{u} + \theta \bm{v})^2 = \phi^2 - \theta^2
 \end{equation}
 テイラー展開を行うと、
 \begin{equation}
@@ -2558,6 +2574,8 @@ $ \alpha $の平方根について、$ Cl(1,1) $の基底$ \epsilon_0, \epsilon_
     + \sum_{n=0}^{∞} \frac{1}{(2n + 1)!} \eta^{2n + 1} \\
   \end{split}
 \end{equation}
+
+\subsection{混合回転の具体化}
 
 $ \alpha $の符号によって場合分けします。
 
@@ -2579,20 +2597,19 @@ $ \alpha $の符号によって場合分けします。
 双曲線関数の加法定理から、
 \begin{equation}
   \begin{split}
-    \cosh(\phi \epsilon_0 + \theta \epsilon_1)
-    = ~ & \cosh(\phi \epsilon_0) \cosh(\theta \epsilon_1) + \sinh(\phi \epsilon_0) \sinh(\theta \epsilon_1) \\
-    = ~ & \cosh \phi \cos \theta + \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
-    \sinh(\phi \epsilon_0 + \theta \epsilon_1)
-    = ~ & \sinh(\phi \epsilon_0) \cosh(\theta \epsilon_1) + \cosh(\phi \epsilon_0) \sinh(\theta \epsilon_1) \\
-    = ~ & \epsilon_0 \sinh \phi \cos \theta + \epsilon_1 \cosh \phi \sin \theta \\
+    \cosh(\phi \bm{u} + \theta \bm{v})
+    = ~ & \cosh(\phi \bm{u}) \cosh(\theta \bm{v}) + \sinh(\phi \bm{u}) \sinh(\theta \bm{v}) \\
+    = ~ & \cosh \phi \cos \theta + \bm{u} \bm{v} \sinh \phi \sin \theta \\
+    \sinh(\phi \bm{u} + \theta \bm{v})
+    = ~ & \sinh(\phi \bm{u}) \cosh(\theta \bm{v}) + \cosh(\phi \bm{u}) \sinh(\theta \bm{v}) \\
+    = ~ & \bm{u} \sinh \phi \cos \theta + \bm{v} \cosh \phi \sin \theta \\
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
-    R_{hybrid} = ~ & \cosh \phi \cos \theta + \epsilon_0 \sinh \phi \cos \theta 
-    + \epsilon_1 \cosh \phi \sin \theta + \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
-    = ~ & (\cosh \phi + \epsilon_0 \sinh \phi)
-    (\cos \theta + \epsilon_1 \sin \theta) \\
+    R_{hybrid} = ~ & \cosh \phi \cos \theta + \bm{u} \sinh \phi \cos \theta 
+    + \bm{v} \cosh \phi \sin \theta + \bm{u} \bm{v} \sinh \phi \sin \theta \\
+    = ~ & (\cosh \phi + \bm{u} \sinh \phi)(\cos \theta + \bm{v} \sin \theta) \\
   \end{split}
 \end{equation}
 
@@ -2612,42 +2629,153 @@ $ \alpha $の符号によって場合分けします。
   \end{split}
 \end{equation}
 ここで、$ |\alpha| = \theta^2 - \phi^2 > 0 $だから、
-$ \sqrt{|\alpha|} = \theta \epsilon_0 + \phi \epsilon_1 $
+$ \sqrt{|\alpha|} = \theta \bm{u} + \phi \bm{v} $
 \begin{equation}
   \begin{split}
-    \frac{\eta}{\sqrt{|\alpha|}} = ~ & \frac{\phi \epsilon_0 + \theta \epsilon_1}{\theta \epsilon_0 + \phi \epsilon_1}
-    = \frac{(\phi \epsilon_0 + \theta \epsilon_1)(\theta \epsilon_0 + \phi \epsilon_1)}{(\theta \epsilon_0 + \phi \epsilon_1)^2}
-    = \frac{(\phi \epsilon_0 + \theta \epsilon_1)(\theta \epsilon_0 + \phi \epsilon_1)}{\theta^2 - \phi^2} \\
-    = ~ & \frac{\phi \theta - \phi \theta + (\phi^2 - \theta^2) \epsilon_0 \epsilon_1}{\theta^2 - \phi^2} \\
-    = ~ & \epsilon_0 \epsilon_1 \\
+    \frac{\eta}{\sqrt{|\alpha|}} = ~ & \frac{\phi \bm{u} + \theta \bm{v}}{\theta \bm{u} + \phi \bm{v}}
+    = \frac{(\phi \bm{u} + \theta \bm{v})(\theta \bm{u} + \phi \bm{v})}{(\theta \bm{u} + \phi \bm{v})^2}
+    = \frac{(\phi \bm{u} + \theta \bm{v})(\theta \bm{u} + \phi \bm{v})}{\theta^2 - \phi^2} \\
+    = ~ & \frac{\phi \theta - \phi \theta + (\phi^2 - \theta^2) \bm{u} \bm{v}}{\theta^2 - \phi^2} \\
+    = ~ & \bm{u} \bm{v} \\
   \end{split}
 \end{equation}
 三角関数の加法定理から、
 \begin{equation}
   \begin{split}
-    \cos(\theta \epsilon_0 + \phi \epsilon_1)
-    = ~ & \cos(\theta \epsilon_0) \cos(\phi \epsilon_1) - \sin(\theta \epsilon_0) \sin(\phi \epsilon_1) \\
-    = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta \\
-    \sinh(\theta \epsilon_0 + \phi \epsilon_1)
-    = ~ & \sin(\theta \epsilon_0) \cos(\phi \epsilon_1) + \cos(\theta \epsilon_0) \sin(\phi \epsilon_1) \\
-    = ~ & \epsilon_0 \cosh \phi \sin \theta + \epsilon_1 \sinh \phi \cos \theta \\
+    \cos(\theta \bm{u} + \phi \bm{v})
+    = ~ & \cos(\theta \bm{u}) \cos(\phi \bm{v}) - \sin(\theta \bm{u}) \sin(\phi \bm{v}) \\
+    = ~ & \cosh \phi \cos \theta - \bm{u} \bm{v} \sinh \phi \sin \theta \\
+    \sinh(\theta \bm{u} + \phi \bm{v})
+    = ~ & \sin(\theta \bm{u}) \cos(\phi \bm{v}) + \cos(\theta \bm{u}) \sin(\phi \bm{v}) \\
+    = ~ & \bm{u} \cosh \phi \sin \theta + \bm{v} \sinh \phi \cos \theta \\
   \end{split}
 \end{equation}
 \begin{equation}
   \begin{split}
-    R_{hybrid} = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta
-    + \epsilon_0 \epsilon_1 (\epsilon_0 \cosh \phi \sin \theta + \epsilon_1 \sinh \phi \cos \theta) \\
-    = ~ & \cosh \phi \cos \theta - \epsilon_0 \epsilon_1 \sinh \phi \sin \theta
-    - \epsilon_1 \cosh \phi \sin \theta - \epsilon_0 \sinh \phi \cos \theta \\
-    = ~ & (\cos \theta - \epsilon_1 \sin \theta)(\cosh \phi - \epsilon_0 \sinh \phi) \\
+    R_{hybrid} = ~ & \cosh \phi \cos \theta - \bm{u} \bm{v} \sinh \phi \sin \theta
+    + \bm{u} \bm{v} (\bm{u} \cosh \phi \sin \theta + \bm{v} \sinh \phi \cos \theta) \\
+    = ~ & \cosh \phi \cos \theta - \bm{u} \bm{v} \sinh \phi \sin \theta
+    - \bm{v} \cosh \phi \sin \theta - \bm{u} \sinh \phi \cos \theta \\
+    = ~ & \cosh \phi \cos \theta - \bm{u} \sinh \phi \cos \theta 
+    - \bm{v} \cosh \phi \sin \theta - \bm{u} \bm{v} \sinh \phi \sin \theta \\
+    = ~ & (\cos \theta - \bm{v} \sin \theta)(\cosh \phi - \bm{u} \sinh \phi) \\
   \end{split}
 \end{equation}
 
 \begin{itemize}
   \item $ \alpha = 0 : $
 \end{itemize}
+\begin{equation}
+  R_{hybrid} = \sum_{n=0}^{∞} \frac{1}{n!} \eta^n = 1 + \phi \bm{u} + \theta \bm{v}
+\end{equation}
 
+\subsection{ユニタリ性の確認}
 
+それぞれについての共役を選択してユニタリ性を確かめていきます。
+\begin{itemize}
+  \item $ \alpha = 0 : $
+\end{itemize}
+\begin{equation}
+  \begin{split}
+    R R^* = ~ & (1 + \phi \bm{u} + \theta \bm{v})(1 - \phi \bm{u} - \theta \bm{v}) \\
+    = ~ & 1 - \phi \bm{u} - \theta \bm{v}
+    + \phi \bm{u} - \phi^2 - \phi \theta \bm{u} \bm{v}
+    + \theta \bm{v} + \phi \theta \bm{u} \bm{v} + \theta^2 \\
+    = ~ & 1 - \phi^2 + \theta^2 \\
+    = ~ & 1 \\
+  \end{split}
+\end{equation}
+
+\begin{itemize}
+  \item $ \alpha > 0: $
+\end{itemize}
+\begin{equation}
+  \begin{split}
+    R = ~ & \cosh \phi \cos \theta + \bm{u} \sinh \phi \cos \theta 
+    + \bm{v} \cosh \phi \sin \theta + \bm{u} \bm{v} \sinh \phi \sin \theta \\
+    R^* = ~ & \cosh \phi \cos \theta - \bm{u} \sinh \phi \cos \theta 
+    - \bm{v} \cosh \phi \sin \theta - \bm{u} \bm{v} \sinh \phi \sin \theta \\
+  \end{split}
+\end{equation}
+ここの$ R^* $は、$ \alpha < 0 $の場合の$ R $と同じになっています。
+式の短縮のために$\cosh \phi = a, \sinh \phi = b, \cos \theta = p, \sin \theta = q$と置いて、
+\begin{equation}
+  \begin{split}
+    R R^* = ~ & (a p + b p \bm{u} + a q \bm{v} + b q \bm{u} \bm{v})
+    (a p - b p \bm{u} - a q \bm{v} - b q \bm{u} \bm{v}) \\
+    = ~ & a^2 p^2 - a b p^2 \bm{u} - a^2 p q \bm{v} - a b p q \bm{u} \bm{v}
+    + a b p^2 \bm{u} - b^2 p^2 - a b p q \bm{u} \bm{v} - b^2 p q \bm{v} \\
+    & + a^2 p q \bm{v} + a b p q \bm{u} \bm{v} + a^2 q^2 - a b q^2 \bm{u}
+    + a b p q \bm{u} \bm{v} + b^2 p q \bm{v} + a b q^2 \bm{u} - b^2 q^2 \\
+    = ~ & a^2 p^2 - b^2 p^2 + a^2 q^2 - b^2 q^2 \\
+    = ~ & (a^2 - b^2) (p^2 + q^2) \\
+    = ~ & 1 \\
+  \end{split}
+\end{equation}
+
+\begin{itemize}
+  \item $ \alpha < 0: $
+\end{itemize}
+逆も同様なので、
+\begin{equation}
+  R R^* = R^* R = 1
+\end{equation}
+
+\subsection{混合回転の双対}
+
+双対混合回転を計算します。
+$ Cl(1,3) $で考えると、
+\begin{equation}
+  \begin{split}
+    R = ~ & \exp(\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3
+    + \gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3) \\
+    R^\dag = ~ & \exp((\gamma_0 e_0e_1 + \gamma_1 e_0e_2 + \gamma_2 e_0e_3
+    + \gamma_3 e_1e_2 + \gamma_4 e_1e_3 + \gamma_5 e_2e_3)e_0e_1e_2e_3) \\
+    = ~ & \exp(\gamma_0 e_2e_3 - \gamma_1 e_1e_3 + \gamma_2 e_1e_2
+    - \gamma_3 e_0e_3 + \gamma_4 e_0e_2 - \gamma_5 e_0e_1) \\
+  \end{split}
+\end{equation}
+四双四元数で考えると、
+\begin{equation}
+  \begin{split}
+    R = ~ & \exp(\omega_0 iI + \omega_1 iJ + \omega_2 iK + \omega_3 I + \omega_4 J + \omega_5 K) \\
+    R^\dag = ~ & \exp((\omega_0 iI + \omega_1 iJ + \omega_2 iK + \omega_3 I + \omega_4 J + \omega_5 K)i) \\
+    = ~ & \exp(- \omega_0 I - \omega_1 J - \omega_2 K + \omega_3 iI + \omega_4 iJ + \omega_5 iK) \\
+  \end{split}
+\end{equation}
+ベルソルの双対は、
+\begin{equation}
+  \begin{split}
+    \bm{u}^\dag = ~ & \bm{u} i = - u_1 I - u_2 J - u_3 K \\
+    (\bm{u}^\dag)^2 = ~ & - {u_1}^2 - {u_2}^2 - {u_3}^2 = -1 \\
+    \bm{v}^\dag = ~ & \bm{v} i = v_1 iI + v_2 iJ + v_3 iK \\
+    (\bm{v}^\dag)^2 = ~ & {v_1}^2 + {v_2}^2 + {v_3}^2 = 1 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    R_{boost}^\dag = ~ & \exp(- \omega_0 I - \omega_1 J - \omega_2 K)
+    = \exp ( \phi \bm{u}^\dag )
+    = \cos \phi + \bm{u}^\dag \sin \phi \\
+    R_{space}^\dag = ~ & \exp(\omega_3 iI + \omega_4 iJ + \omega_5 iK)
+    = \exp ( \theta \bm{v}^\dag )
+    = \cosh \theta + \bm{v}^\dag \sinh \theta \\
+  \end{split}
+\end{equation}
+
+\begin{table}[ht]
+  \centering
+  \caption{時空歪曲の混合回転}
+  \begin{tabular}{|c|l|l|} \hline
+    $ \alpha = \phi^2 - \theta^2 $ & 回転子(Rotor) & 双対回転子(Duality Rotor) \\ \hline
+    $ \alpha > 0 $ & $ (\cosh \phi + \bm{u} \sinh \phi)(\cos \theta + \bm{v} \sin \theta) $
+    & $ (\cos \phi + \bm{u}^\dag \sin \phi)(\cosh \theta + \bm{v}^\dag \sinh \theta) $ \\ \hline
+    $ \alpha < 0 $ & $ (\cos \theta - \bm{v} \sin \theta)(\cosh \phi - \bm{u} \sinh \phi) $
+    & $ (\cosh \theta - \bm{v}^\dag \sinh \theta)(\cos \phi - \bm{u}^\dag \sin \phi) $ \\ \hline
+    $ \alpha = 0 $ & $ 1 + \phi \bm{u} + \theta \bm{v} $
+    & $ 1 + \phi \bm{u}^\dag + \theta \bm{v}^\dag $ \\ \hline
+  \end{tabular}
+\end{table}
 
 \subsection{クリフォード代数の4元運動量}
 
