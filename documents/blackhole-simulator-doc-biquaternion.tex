@@ -1,0 +1,448 @@
+\documentclass[a4paper,12pt,notitlepage]{jsreport}
+\usepackage[left=10truemm,right=10truemm,top=25truemm,bottom=20truemm]{geometry}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\usepackage{docmute}
+\DeclareMathOperator\arctanh{arctanh}
+\DeclareMathOperator\arccosh{arccosh}
+
+\begin{document}
+
+\chapter{双四元数による特殊相対性理論}
+
+\section{双四元数とは}
+
+まず、複素数は以下のように定義されることを復習しましょう。
+\begin{equation}
+  \texttt{Complex number}:\mathbb{C}\coloneq ~r_0+r_1i,\quad r_0,r_1\in\mathbb{R},\quad i^2=-1
+\end{equation}
+
+四元数は以下のようになります。クォータニオンとも呼びます。
+\begin{equation}
+  \begin{split}
+    \texttt{Quaternion}:\mathbb{H}\coloneq ~&r_0+r_1i+r_2j+r_3k,\quad r_0,r_1,r_2,r_3\in\mathbb{R}\\
+    &i^2=j^2=k^2=-1
+  \end{split}
+\end{equation}
+
+四元数の演算規則です。
+\begin{gather}
+  ij=k,~jk=i,~ki=j,~ji=-k,~kj=-i,~ik=-j
+\end{gather}
+
+双四元数とは四元数の4つの係数を複素数にしたもので、8つの実数を内包します。バイクォータニオンとも呼びます。
+\begin{equation}
+  \begin{split}
+    \texttt{Biquaternion}:\mathbb{B}\coloneq ~&w_0+w_1i+w_2j+w_3k,\quad w_0,w_1,w_2,w_3\in\mathbb{C}\\
+    =~&r_0+r_1I+(r_2+r_3I)i+(r_4+r_5I)j+(r_6+r_7I)k\\
+    &r_0,...,r_7\in\mathbb{R},\quad I^2=-1
+  \end{split}
+\end{equation}
+
+新たに導入した虚数$I$と四元数部分の虚数$i, j, k$は互いに干渉しません。
+\begin{equation}
+  iI=Ii,~jI=Ij,~kI=Ik
+\end{equation}
+
+\section{双四元数の共役は2種類}
+
+複素数の共役と絶対値は以下のようでした。
+\begin{equation}
+  \begin{split}
+    w=~&r_0+r_1i,\quad w\in\mathbb{C}\\
+    \overline{w}=~&r_0-r_1i\\
+    |w|=~&\sqrt{w\overline{w}}=\sqrt{r_0^2+r_1^2}
+  \end{split}
+\end{equation}
+
+四元数での共役とノルムです。ここでは*を使って表現します。ノルムは絶対値の二乗とします。
+\begin{equation}
+  \begin{split}
+    h=~&r_0+r_1i+r_2j+r_3k,\quad h\in\mathbb{H}\\
+    h^*=~&r_0-r_1i-r_2j-r_3k\\
+    N(h)=~&hh^*=r_0^2+r_1^2+r_2^2+r_3^2\\
+    |h|=~&\sqrt{N(h)}=\sqrt{r_0^2+r_1^2+r_2^2+r_3^2}
+  \end{split}
+\end{equation}
+
+双四元数では共役は以下のように2種類が定義されます。
+\begin{equation}
+  \begin{split}
+    b=~&w_0+w_1i+w_2j+w_3k,\quad w_0,w_1,w_2,w_3\in\mathbb{C},\quad b\in\mathbb{B}\\
+    =~&r_0+r_1I+(r_2+r_3I)i+(r_4+r_5I)j+(r_6+r_7I)k,\quad r_0,...,r_7\in\mathbb{R}\\
+    b^*=~&w_0-w_1i-w_2j-w_3k\\
+    =~&r_0+r_1I-(r_2+r_3I)i-(r_4+r_5I)j-(r_6+r_7I)k\\
+    \overline{b}=~&\overline{w_0}+\overline{w_1}i+\overline{w_2}j+\overline{w_3}k\\
+    =~&r_0-r_1I+(r_2-r_3I)i+(r_4-r_5I)j+(r_6-r_7I)k
+  \end{split}
+\end{equation}
+
+双四元数のノルムの定義は四元数としての共役の定義を使用して定義します。
+\begin{equation}
+  N(b)=bb^*=w_0^2+w_1^2+w_2^2+w_3^2
+\end{equation}
+
+\section{双四元数で表現する特殊相対論的時空}
+
+双四元数の一部を使って相対論の4次元時空を表現できます。
+\begin{equation}
+  \begin{split}
+    \texttt{Spacetime}:\mathbb{M}\coloneq &\{m:m^*=\overline{m}\}\\
+    =&\{t+xIi+yIj+zIk,\quad t,x,y,z\in\mathbb{R}\}
+  \end{split}
+\end{equation}
+
+ノルムが丁度不変量になります。
+\begin{equation}
+  \texttt{Invariant}:mm^*=t^2-x^2-y^2-z^2,\quad m\in\mathbb{M}
+\end{equation}
+このような集合をミンコフスキー空間とも呼びます。
+
+以下のような双四元数の集合を定義します。ノルムが1になるという意味で単位双四元数と呼びます。
+\begin{equation}
+  \mathbb{G}\coloneq\{g:gg^*=1,\quad g\in\mathbb{B}\}
+\end{equation}
+
+するとローレンツ変換は以下の計算で成立します。
+\begin{equation}
+  \texttt{Lorentz transformation}:T(m)=g^*m\overline{g},\quad m\in\mathbb{M}
+\end{equation}
+
+変換後の値も時空を表しています。
+\begin{equation}
+  T(m)\in\mathbb{M}
+\end{equation}
+
+変換後も不変量は変化しません。
+\footnote{簡潔な証明が可能です。WikipediaのBiquaternionを参照してください。}
+\begin{equation}
+  T(m)(T(m))^*=mm^*
+\end{equation}
+
+\section{単位双四元数が広げる可能性}
+
+以上のように、時空の不変量を変化させないように時空を変換する道具として双四元数が使えます。
+光速度不変の原理を壊すことなくローレンツ変換を行う双四元数の条件を得ています。
+任意の単位双四元数です。
+4つの実数からなる時空$\mathbb{M}$を8つの実数からなる単位双四元数$\mathbb{G}$で変換する事になるので、
+4次元を超越した次元へのアクセスが出来るのではないかと期待できます。
+もしかしたら、4次元時空を破綻させないまま超空間へ転移する挙動を表現できるかもしれません。
+
+\section{特殊相対論的速度との関係}
+
+単位双四元数の集合全体について一般的に位相群を解明する事は困難です。
+しかし、その一部である$\mathbb{G}\cap\mathbb{M}$については以下のように計算できることが分かっています。
+
+三次元空間の方向を表現する単位四元数の集合を定義します。ノルムが1の純虚四元数となっており、ベルソルとも呼びます。
+\begin{equation}
+  \begin{split}
+    \texttt{Versor}:\mathbb{V}\coloneq&\{d:d=\sqrt{-1},\quad d\in\mathbb{H}\}\\
+    =&\{d_1i+d_2j+d_3k,\quad d_1,d_2,d_3\in\mathbb{R},\quad d_1^2+d_2^2+d_3^2=1\}
+  \end{split}
+\end{equation}
+
+以下のように計算すると、$Id$が分解型複素数(Split-complex number)を表現している事が分かります。
+\begin{equation}
+  (Id)^2=I^2d^2=(-1)(-1)=+1
+\end{equation}
+
+分解型複素数のオイラーの公式を調べてみます。
+\begin{equation}
+  \begin{split}
+    \exp(aId)=&\cosh a+Id\sinh a,\quad a\in\mathbb{R}\\
+    &\cosh a+(d_1Ii+d_2Ij+d_3Ik)\sinh a
+  \end{split}
+\end{equation}
+
+この至宝の公式は四次元時空の集合の範囲内にあることがわかります。
+\begin{equation}
+  \exp(aId)\in\mathbb{M}
+\end{equation}
+
+四次元時空の双曲幾何学的な性質からこの公式内での速さは丁度以下のようになります。
+\begin{equation}
+  \texttt{Speed}:v=c\tanh a,\quad c:\texttt{Speed of light},\quad v\in\mathbb{R}
+\end{equation}
+
+速さから逆に角度を求めると以下のようになります。この角度はラピディティという名前があります。
+\begin{equation}
+  \texttt{Rapidity}:a=\arctanh\frac{|\bm{v}|}{c}
+\end{equation}
+
+ラピディティには単純な足し算が出来るというメリットがあります。
+
+\section{双四元数によるローレンツ変換の計算方法}
+
+四元数による回転計算からの類推で双四元数によるローレンツ変換の角度も半角化すれば丁度良いことがわかります。
+\begin{equation}
+  g=\exp(0.5aId) \to g^*=\overline{g}=\exp(-0.5aId)
+\end{equation}
+
+と置けば、
+\begin{equation}
+  \begin{split}
+    T(\exp(aId))=&g^*\exp(aId)\overline{g}\\
+    =&\exp(-0.5aId)\exp(aId)\exp(-0.5aId)\\
+    =&\exp(-0.5aId+aId-0.5aId)\\
+    =&1
+  \end{split}
+\end{equation}
+
+この変換を双四元数の実数成分で表現してみると、
+\begin{equation}
+  g=\exp(0.5aId)=r_0+r_1Ii+r_2Ij+r_3Ik
+\end{equation}
+
+と置いて、
+\begin{equation}
+  r_0=\cosh 0.5a,\quad (r_1,r_2,r_3)=(d_1,d_2,d_3)\sinh 0.5a,\quad d_1^2+d_2^2+d_3^2=1
+\end{equation}
+
+となります。変換に使用する単位双四元数を得ました。変換元の四次元時空を
+\begin{equation}
+  m=t+xIi+yIj+zIk
+\end{equation}
+
+と置くと、
+\begin{equation}
+  \begin{split}
+    T(m)=~&g^*m\overline{g}\\
+    =~&(r_0-r_1Ii-r_2Ij-r_3Ik)(t+xIi+yIj+zIk)(r_0-r_1Ii-r_2Ij-r_3Ik)\\
+    =~&(r_0t-r_1tIi-r_2tIj-r_3tIk+r_0xIi-r_1xIiIi-r_2xIjIi-r_3xIkIi+r_0yIj-r_1yIiIj-r_2yIjIj-r_3yIkIj\\
+    &+r_0zIk-r_1zIiIk-r_2zIjIk-r_3zIkIk)(r_0-r_1Ii-r_2Ij-r_3Ik)\\
+    =~&(r_0t-r_1tIi-r_2tIj-r_3tIk+r_0xIi-r_1x-r_2xk+r_3xj+r_0yIj+r_1yk-r_2y-r_3yi\\
+    &+r_0zIk+r_1zj+r_2zi-r_3z)(r_0-r_1Ii-r_2Ij-r_3Ik)\\
+    =~&(r_0t-r_1x-r_2y-r_3z+(r_2z-r_3y)i+(r_1z+r_3x)j+(r_1y-r_2x)k\\
+    &+(r_0x-r_1t)Ii+(r_0y-r_2t)Ij+(r_0z-r_3t)Ik)(r_0-r_1Ii-r_2Ij-r_3Ik)\\
+  \end{split}
+\end{equation}
+
+\begin{equation}
+  \begin{split}
+    =~&r_0^2t-r_0r_1x-r_0r_2y-r_0r_3z+r_0(r_2z-r_3y)i+r_0(r_1z+r_3x)j+r_0(r_1y-r_2x)k\\
+    &+r_0(r_0x-r_1t)Ii+r_0(r_0y-r_2t)Ij+r_0(r_0z-r_3t)Ik\\
+    &+(-r_0r_1t+r_1^2x+r_1r_2y+r_1r_3z)Ii+r_1(r_2z-r_3y)I+r_1(r_1z+r_3x)Ik-r_1(r_1y-r_2x)Ij\\
+    &-r_1(r_0x-r_1t)-r_1(r_0y-r_2t)k+r_1(r_0z-r_3t)j\\
+    &+(-r_0r_2t+r_1r_2x+r_2^2y+r_2r_3z)Ij-r_2(r_2z-r_3y)Ik+r_2(r_1z+r_3x)I+r_2(r_1y-r_2x)Ii\\
+    &+r_2(r_0x-r_1t)k-r_2(r_0y-r_2t)-r_2(r_0z-r_3t)i\\
+    &+(-r_0r_3t+r_1r_3x+r_2r_3y+r_3^2z)Ik+r_3(r_2z-r_3y)Ij-r_3(r_1z+r_3x)Ii+r_3(r_1y-r_2x)I\\
+    &-r_3(r_0x-r_1t)j+r_3(r_0y-r_2t)i-r_3(r_0z-r_3t)\\
+    =~&r_0^2t-r_0r_1x-r_0r_2y-r_0r_3z-r_1(r_0x-r_1t)-r_2(r_0y-r_2t)-r_3(r_0z-r_3t)\\
+    &+r_0(r_2z-r_3y)i-r_2(r_0z-r_3t)i+r_3(r_0y-r_2t)i\\
+    &+r_0(r_1z+r_3x)j+r_1(r_0z-r_3t)j-r_3(r_0x-r_1t)j\\
+    &+r_0(r_1y-r_2x)k-r_1(r_0y-r_2t)k+r_2(r_0x-r_1t)k\\
+    &+r_1(r_2z-r_3y)I+r_2(r_1z+r_3x)I+r_3(r_1y-r_2x)I\\
+    &+r_0(r_0x-r_1t)Ii+(-r_0r_1t+r_1^2x+r_1r_2y+r_1r_3z)Ii+r_2(r_1y-r_2x)Ii-r_3(r_1z+r_3x)Ii\\
+    &+r_0(r_0y-r_2t)Ij-r_1(r_1y-r_2x)Ij+(-r_0r_2t+r_1r_2x+r_2^2y+r_2r_3z)Ij+r_3(r_2z-r_3y)Ij\\
+    &+r_0(r_0z-r_3t)Ik+r_1(r_1z+r_3x)Ik-r_2(r_2z-r_3y)Ik+(-r_0r_3t+r_1r_3x+r_2r_3y+r_3^2z)Ik\\
+  \end{split}
+\end{equation}
+
+$i,j,k,I$の項はきれいに消えます。
+\begin{equation}
+  \begin{split}
+    T(m)=~&(r_0^2+r_1^2+r_2^2+r_3^2)t-2r_0(r_1x+r_2y+r_3z)\\
+    &+((r_0^2+r_1^2-r_2^2-r_3^2)x-2r_1(r_0t-r_2y-r_3z))Ii\\
+    &+((r_0^2-r_1^2+r_2^2-r_3^2)y-2r_2(r_0t-r_1x-r_3z))Ij\\
+    &+((r_0^2-r_1^2-r_2^2+r_3^2)z-2r_3(r_0t-r_1x-r_2y))Ik
+  \end{split}
+\end{equation}
+
+従って、四次元時空各成分に注目したローレンツ変換は以下となります。
+\begin{equation}
+  \begin{split}
+    t'=~&(r_0^2+r_1^2+r_2^2+r_3^2)t-2r_0(r_1x+r_2y+r_3z)\\
+    x'=~&(r_0^2+r_1^2-r_2^2-r_3^2)x-2r_1(r_0t-r_2y-r_3z)\\
+    y'=~&(r_0^2-r_1^2+r_2^2-r_3^2)y-2r_2(r_0t-r_1x-r_3z)\\
+    z'=~&(r_0^2-r_1^2-r_2^2+r_3^2)z-2r_3(r_0t-r_1x-r_2y)
+  \end{split}
+\end{equation}
+コンピューターによる計算にとってはこの最適化が有用になるでしょう。
+
+\section{ラピディティによるもう一つの計算方法}
+
+ラピディティの足し算による計算方法もあります。以下のように変換対象の時空を定義します。
+\begin{equation}
+  \begin{split}
+    mv=~&\exp(qIp),\quad p=p_1i+p_2j+p_3k\\
+    t=~&\cosh q,\quad (x,y,z)=(p_1,p_2,p_3)\sinh q\\
+    &m\in\mathbb{M},\quad q,p_1,p_2,p_3\in\mathbb{R},\quad p\in\mathbb{D}
+  \end{split}
+\end{equation}
+
+$t,x,y,z$から$q,p_1,p_2,p_3$を算出する必要があり、方法はいくつか考えられますが、一つとしては以下のようになります。
+\begin{equation}
+  q=\arccosh t,\quad (p_1,p_2,p_3)=\frac{(x,y,z)}{\sqrt{x^2+y^2+z^2}}
+\end{equation}
+
+この変換では原点座標ではゼロの除算になるので特別な配慮が必要です。
+
+ここまで準備できればローレンツ変換は単純に加法減法になります。
+
+変換した分の速度をラピディティ$a\in\mathbb{R}$方向$d\in\mathbb{D}$として、
+\begin{equation}
+  \begin{split}
+    T(m)=~&g^*m\overline{g}\\
+    =~&\exp(-0.5aId)\exp(qIp)\exp(-0.5aId)\\
+    =~&\exp((qp-ad)I)
+  \end{split}
+\end{equation}
+
+全ての計算をラピディティで完結させることが出来ればこれ程単純な計算方法はないです。
+しかし、実際は現実世界の座標に以下のように変換する必要があります。
+\begin{equation}
+  q'p'=qp-ad,\quad q'\in\mathbb{R},\quad p'\in\mathbb{D},\quad p'=p'_1i+p'_2j+p'_3k
+\end{equation}
+
+\begin{equation}
+  q'=|qp-ad|,\quad p'=\frac{qp-ad}{|qp-ad|}
+\end{equation}
+
+\begin{equation}
+  t'=\cosh q',\quad (x',y',z')=(p'_1,p'_2,p'_3)\sinh q'\\
+\end{equation}
+
+\section{行列を使ったローレンツ変換}
+
+比較のために行列を使った算出方法を掲載しておきます。
+\begin{equation}
+  \bm{v}=(v_1,v_2,v_3),\quad v_1,v_2,v_3\in\mathbb{R}
+\end{equation}
+
+\begin{equation}
+  \beta=\frac{|\bm{v}|}{c},\quad \gamma=\frac{1}{\sqrt{1-\beta^2}}
+\end{equation}
+
+\begin{equation}
+  \setstretch{2.7}
+  \begin{bmatrix}
+    ct'\\x'\\y'\\z'
+  \end{bmatrix}
+  =
+  \setstretch{1.6}
+  \begin{bmatrix}
+    \gamma & -\cfrac{v_1}{c}\gamma & -\cfrac{v_2}{c}\gamma & -\cfrac{v_3}{c}\gamma \\[3pt]
+    -\cfrac{v_1}{c}\gamma & 1+\cfrac{v_1^2}{|\bm{v}|}(\gamma-1) & \cfrac{v_1v_2}{|\bm{v}|}(\gamma-1) & \cfrac{v_1v_3}{|\bm{v}|}(\gamma-1)\\
+    -\cfrac{v_2}{c}\gamma & \cfrac{v_1v_2}{|\bm{v}|}(\gamma-1) & 1+\cfrac{v_2^2}{|\bm{v}|}(\gamma-1) & \cfrac{v_2v_3}{|\bm{v}|}(\gamma-1)\\
+    -\cfrac{v_3}{c}\gamma & \cfrac{v_1v_3}{|\bm{v}|}(\gamma-1) & \cfrac{v_2v_3}{|\bm{v}|}(\gamma-1) & 1+\cfrac{v_3^2}{|\bm{v}|}(\gamma-1)
+  \end{bmatrix}
+  \setstretch{2.7}
+  \begin{bmatrix}
+    ct\\x\\y\\z
+  \end{bmatrix}
+\end{equation}
+
+\section{単位双四元数は高次元の回転}
+
+任意の双四元数$b_0,b_1$の積をその実数成分で表現しておきます。
+\begin{equation}
+  \begin{split}
+    b_0=~&p_0+p_1I+(p_2+p_3I)i+(p_4+p_5I)j+(p_6+p_7I)k,\quad p_0,...,p_7\in\mathbb{R}\\
+    =~&w_0+w_1i+w_2j+w_3k,\quad w_0,w_1,w_2,w_3\in\mathbb{H}\\
+    b_1=~&q_0+q_1I+(q_2+q_3I)i+(q_4+q_5I)j+(q_6+q_7I)k,\quad p_0,...,p_7\in\mathbb{R}\\
+    =~&u_0+u_1i+u_2j+u_3k,\quad u_0,u_1,u_2,u_3\in\mathbb{H}
+  \end{split}
+\end{equation}
+
+まずは、通常の四元数の乗算を行います。
+\begin{equation}
+  \begin{split}
+    b_0b_1=~&(w_0+w_1i+w_2j+w_3k)(u_0+u_1i+u_2j+u_3k)\\
+    =~&w_0u_0+w_0u_1i+w_0u_2j+w_0u_3k\\
+    &+w_1iu_0+w_1iu_1i+w_1iu_2j+w_1iu_3k\\
+    &+w_2ju_0+w_2ju_1i+w_2ju_2j+w_2ju_3k\\
+    &+w_3ku_0+w_3ku_1i+w_3ku_2j+w_3ku_3k\\
+    =~&w_0u_0+w_0u_1i+w_0u_2j+w_0u_3k\\
+    &+w_1u_0i-w_1u_1+w_1u_2k-w_1u_3j\\
+    &+w_2u_0j-w_2u_1k-w_2u_2+w_2u_3i\\
+    &+w_3u_0k+w_3u_1j-w_3u_2i-w_3u_3\\
+    =~&w_0u_0-w_1u_1-w_2u_2-w_3u_3\\
+    &+(w_0u_1+w_1u_0+w_2u_3-w_3u_2)i\\
+    &+(w_0u_2-w_1u_3+w_2u_0+w_3u_1)j\\
+    &+(w_0u_3+w_1u_2-w_2u_1+w_3u_0)k
+  \end{split}
+\end{equation}
+
+次に実数に展開します。
+\begin{equation}
+  \begin{split}
+    b_0b_1=~&(p_0+p_1I)(q_0+q_1I)-(p_2+p_3I)(q_2+q_3I)-(p_4+p_5I)(q_4+q_5I)-(p_6+p_7I)(q_6+q_7I)\\
+    &+((p_0+p_1I)(q_2+q_3I)+(p_2+p_3I)(q_0+q_1I)+(p_4+p_5I)(q_6+q_7I)-(p_6+p_7I)(q_4+q_5I))i\\
+    &+((p_0+p_1I)(q_4+q_5I)-(p_2+p_3I)(q_6+q_7I)+(p_4+p_5I)(q_0+q_1I)+(p_6+p_7I)(q_2+q_3I))j\\
+    &+((p_0+p_1I)(q_6+q_7I)+(p_2+p_3I)(q_4+q_5I)-(p_4+p_5I)(q_2+q_3I)+(p_6+p_7I)(q_0+q_1I))k
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    =~&(p_0q_0-p_1q_1+(p_0q_1+p_1q_0)I)-(p_2q_2-p_3q_3+(p_2q_3+p_3q_2)I)\\
+    &-(p_4q_4-p_5q_5+(p_4q_5+p_5q_4)I)-(p_6q_6-p_7q_7+(p_6q_7+p_7q_6)I)\\
+    &+((p_0q_2-p_1q_3+(p_0q_3+p_1q_2)I)+(p_2q_0-p_3q_1+(p_2q_1+p_3q_0)I)\\
+    &+(p_4q_6-p_5q_7+(p_4q_7+p_5q_6)I)-(p_6q_4-p_7q_5+(p_6q_5+p_7q_4)I))i\\
+    &+((p_0q_4-p_1q_5+(p_0q_5+p_1q_4)I)-(p_2q_6-p_3q_7+(p_2q_7+p_3q_6)I)\\
+    &+(p_4q_0-p_5q_1+(p_4q_1+p_5q_0)I)+(p_6q_2-p_7q_3+(p_6q_3+p_7q_2)I))j\\
+    &+((p_0q_6-p_1q_7+(p_0q_7+p_1q_6)I)+(p_2q_4-p_3q_5+(p_2q_5+p_3q_4)I)\\
+    &-(p_4q_2-p_5q_3+(p_4q_3+p_5q_2)I)+(p_6q_0-p_7q_1+(p_6q_1+p_7q_0)I))k
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    =~&p_0q_0-p_1q_1-p_2q_2+p_3q_3-p_4q_4+p_5q_5-p_6q_6+p_7q_7\\
+    &+(p_0q_1+p_1q_0-p_2q_3-p_3q_2-p_4q_5-p_5q_4-p_6q_7-p_7q_6)I\\
+    &+(p_0q_2-p_1q_3+p_2q_0-p_3q_1+p_4q_6-p_5q_7-p_6q_4+p_7q_5)i\\
+    &+(p_0q_3+p_1q_2+p_2q_1+p_3q_0+p_4q_7+p_5q_6-p_6q_5-p_7q_4)Ii\\
+    &+(p_0q_4-p_1q_5-p_2q_6+p_3q_7+p_4q_0-p_5q_1+p_6q_2-p_7q_3)j\\
+    &+(p_0q_5+p_1q_4-p_2q_7-p_3q_6+p_4q_1+p_5q_0+p_6q_3+p_7q_2)Ij\\
+    &+(p_0q_6-p_1q_7+p_2q_4-p_3q_5-p_4q_2+p_5q_3+p_6q_0-p_7q_1)k\\
+    &+(p_0q_7+p_1q_6+p_2q_5+p_3q_4-p_4q_3-p_5q_2+p_6q_1+p_7q_0)Ik
+  \end{split}
+\end{equation}
+
+双四元数のノルムを実数成分で表しておくと以下のようになります。
+\begin{equation}
+  g=a_0+a_1I+(a_2+a_3I)i+(a_4+a_5I)j+(a_6+a_7I)k,\quad a_0,..., a_7\in\mathbb{R}
+\end{equation}
+
+\begin{equation}
+  \begin{split}
+    gg^*=~&(a_0+a_1I)^2+(a_2+a_3I)^2+(a_4+a_5I)^2+(a_6+a_7I)^2\\
+    =~&a_0^2-a_1^2+a_2^2-a_3^2+a_4^2-a_5^2+a_6^2-a_7^2+2(a_0a_1+a_2a_3+a_4a_5+a_6a_7)I
+  \end{split}
+\end{equation}
+
+参考までに
+\begin{equation}
+  gg^*=1\iff
+  \begin{cases}
+    a_0^2-a_1^2+a_2^2-a_3^2+a_4^2-a_5^2+a_6^2-a_7^2=1\\
+    a_0a_1+a_2a_3+a_4a_5+a_6a_7=0
+  \end{cases}
+\end{equation}
+
+双四元数のノルムは双四元数の積に対して乗法的である事が示せます。
+つまり、任意の双四元数$(b_0,b_1)$に対して次の式が成り立ちます。
+\begin{equation}
+  N(b_0b_1)=N(b_0)N(b_1)
+\end{equation}
+
+幸いな事に実数に展開しなくても証明できます。
+\begin{equation}
+  N(b_0b_1)=(b_0b_1)(b_0b_1)^*=b_0b_1b_1^*b_0^*=b_0N(b_1)b_0^*=N(b_1)b_0b_0^*=N(b_1)N(b_0)=N(b_0)N(b_1)
+\end{equation}
+
+$b_0$と$b_1$のノルムがどちらも$1$の場合、
+\begin{equation}
+  b_0,b_1\in\mathbb{G}\iff N(b_0)=N(b_1)=1\iff N(b_0b_1)=1
+\end{equation}
+従って、単位双四元数の乗算は回転を意味しています。双曲的な高次元の角度となっています。
+
+特殊相対性理論のローレンツ変換は光速を1とした場合、三次元の角度と捉える事ができます。
+それを回転させる単位双四元数についても角度でありますから、
+ここまでの所は物理的有意性のある計量として角度のみでの記述が可能という事になります。
+
+\end{document}
