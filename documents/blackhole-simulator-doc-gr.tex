@@ -238,17 +238,15 @@ y軸については符号が反転しています。
 $ e_1 e_2 e_3 $は、空間超平面を構成しています。
 他の$ e_0 $が関わる3つ$ e_0 e_1 e_2, e_0 e_1 e_3, e_0 e_2 e_3 $は、それぞれ時空超平面を構成しています。
 
-単位超立方体を考えてみます。時間と空間を同じスケールで考えると光円錐外になってしまうので、長さは光速と比べ十分小さい単位で考えます。
-体積は光速$ c $になり、$ e_1 e_2 e_3 $の超面積は$ 1 $で、$ e_0 e_1 e_2, e_0 e_1 e_3, e_0 e_2 e_3 $の超面積は$ c $です。
-
-原点と座標$ (t, x, y, z) $が張る超立方体は、かける順序を小さい順にすれば超体積が$txyz$で超面積は$txy, txz, tyz, xyz$になります。
-\begin{equation}
-  h = txy ~ e_0e_1e_2 - txz ~ e_0e_1e_3 + tyz ~ e_0e_2e_3 + xyz ~ e_1e_2e_3
-\end{equation}
-これは、双対時空とは違う大きさになっています。
-\begin{equation}
-  d = z ~ e_0e_1e_2 - y ~ e_0e_1e_3 + x ~ e_0e_2e_3 + t ~ e_1e_2e_3
-\end{equation}
+単位超立方体を考えてみます。時間と空間を同じスケールで考えると光円錐外になってしまうので、空間は光速と比べ十分小さい単位で考えます。
+\begin{itemize}
+  \item 単位時空: $ (t, x, y, z) = (c, 1, 1, 1) $
+  \item 単位時空超平面: $ (xyz, tyz, txz, txy) = (1, c, c, c) $
+\end{itemize}
+単位体積は光速$ c $になり、$ e_1 e_2 e_3 $の単位超面積は$ 1 $で、
+$ e_0 e_2 e_3, e_0 e_1 e_3, e_0 e_1 e_2 $の単位超面積は$ c $です。
+原点と座標$ (c t, x, y, z) $が張る超立方体は、超体積が$ c t x y z $で超面積は、
+$ x y z, c t y z, c t x z, c t x y $になります。
 
 \subsection{超平面の法線}
 
@@ -726,9 +724,9 @@ $ Cl(1,3) $で考えると、
 ベルソルの双対は、
 \begin{equation}
   \begin{split}
-    \bm{u}^\dag = ~ & \bm{u} i = - u_1 I - u_2 J - u_3 K \\
+    \bm{u}^\dag = ~ & i \bm{u} = - u_1 I - u_2 J - u_3 K \\
     (\bm{u}^\dag)^2 = ~ & - {u_1}^2 - {u_2}^2 - {u_3}^2 = -1 \\
-    \bm{v}^\dag = ~ & \bm{v} i = v_1 iI + v_2 iJ + v_3 iK \\
+    \bm{v}^\dag = ~ & i \bm{v} = v_1 iI + v_2 iJ + v_3 iK \\
     (\bm{v}^\dag)^2 = ~ & {v_1}^2 + {v_2}^2 + {v_3}^2 = 1 \\
   \end{split}
 \end{equation}
@@ -757,10 +755,10 @@ $ Cl(1,3) $で考えると、
   \end{tabular}
 \end{table}
 
-物体の進行方向と重力の作用する方向のなす角度を$ \beta $、重力の大きさを$ \rho $とすると、
+物体の進行方向と重力の作用する方向のなす角度を$ \sigma $、重力の大きさを$ \rho $とすると、
 \begin{equation}
-  \phi = \rho \cos \beta , \quad \theta = \rho \sin \beta
-  , \quad 0 \le \beta \le \pi , \quad \rho \ge 0 , \quad \beta,\rho \in \mathbb{R}
+  \phi = \rho \cos \sigma , \quad \theta = \rho \sin \sigma
+  , \quad 0 \le \sigma \le \pi , \quad \rho \ge 0 , \quad \sigma,\rho \in \mathbb{R}
 \end{equation}
 
 \subsection{クリフォード代数の4元運動量}
@@ -776,18 +774,83 @@ $ Cl(1,3) $で考えると、
 クリフォード代数$Cl(1,3)$に当てはめて、
 \begin{equation}
   \begin{split}
-    S_p=~&Ee_0+cp_1e_1+cp_2e_2+cp_3e_3\\
-    {S_p}^2 = ~ & E^2 - c^2({p_1}^2 + {p_2}^2 + {p_3}^2) = E^2 - c^2 \bm{p}^2 = (m c^2)^2 \quad (不変量)\\
+    P = ~ & E e_0 + c p_1 e_1 + c p_2 e_2 + c p_3 e_3 \\
+    P^2 = ~ & E^2 - c^2 {p_1}^2 - c^2 {p_2}^2 - c^2 {p_3}^2 = E^2 - c^2 \bm{p}^2 = (m c^2)^2 \\
+    |P| = ~ & m c^2, \quad (m \ge 0) \\
   \end{split}
 \end{equation}
-質量がゼロなら光的になります。$h$をプランク定数、$\nu_i$を各振動数として、
+この様に1-ブレードで表現しても不変量は保たれますが、$ c $の位置が丁度、単位超平面になっています。
 \begin{equation}
-  0 = E^2 - c^2({p_1}^2 + {p_2}^2 + {p_3}^2) = E^2 - h^2({\nu_1}^2 + {\nu_2}^2 + {\nu_3}^2)
+  E (e_1e_2e_3), \quad p_1 (c ~ e_0e_2e_3), \quad p_2 (c ~ e_0e_1e_3), \quad p_3 (c ~ e_0e_1e_2)
 \end{equation}
+双対時空として表現すると、
+\begin{equation}
+  \begin{split}
+    P^\dag = ~ & E e_1e_2e_3 + c p_1 e_0e_2e_3 - c p_2 e_0e_1e_3 + c p_3 e_0e_1e_2 \\
+    (P^\dag)^2 = ~ & E^2 - c^2 {p_1}^2 - c^2 {p_2}^2 - c^2 {p_3}^2 = E^2 - c^2 \bm{p}^2 = (m c^2)^2 \\
+    |P^\dag| = ~ & m c^2, \quad (m \ge 0) \\
+  \end{split}
+\end{equation}
+クリフォード代数表現からすると、4元運動量はどうやら時空超立方体と関連が深い様子です。
+1-ブレードの4元速度$ U $を考えてみます。
+3次元速度を$ \bm{v} = (v_1, v_2, v_3) $、固有時間を$ \tau $とすると、
+ローレンツ因子$ \gamma $は、
+\begin{equation}
+  \gamma = \frac{dt}{d\tau} = \frac{1}{\sqrt{1 - \bm{v}^2 / c^2}}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    U = ~ & \frac{c dt}{d\tau} e_0 + \frac{dx}{d\tau} e_1 + \frac{dy}{d\tau} e_2 + \frac{dz}{d\tau} e_3 \\
+    = ~ & \gamma c e_0 + \gamma v_1 e_1 + \gamma v_2 e_2 + \gamma v_3 e_3 \\
+    = ~ & \gamma (c e_0 + v_1 e_1 + v_2 e_2 + v_3 e_3) \\
+    U^2 = ~ & \gamma^2 (c^2 - v_1^2 - v_2^2 - v_3^2) \\
+    = ~ & \gamma^2 (c^2 - \bm{v}^2) = c^2 \gamma^2 (1 - \bm{v}^2 / c^2) \\
+    = ~ & c^2 \\
+    |U| = ~ & c \\
+  \end{split}
+\end{equation}
+4元速度のノルムと4元運動量のノルムは以下のような関係になっています。
+\begin{equation}
+  |U| m c = |P^\dag|
+\end{equation}
+4元速度と双対4元運動量の擬スカラーでの変換を考えると、
+\begin{equation}
+  \begin{split}
+    U \frac{m c}{\gamma} e_0e_1e_2e_3 = ~ & m c^2 e_1e_2e_3 + c m v_1 e_0e_2e_3 - c m v_2 e_0e_1e_3 + c m v_3 e_0e_1e_2 \\
+    = ~ & E e_1e_2e_3 + c p_1 e_0e_2e_3 - c p_2 e_0e_1e_3 + c p_3 e_0e_1e_2 \\
+    = ~ & P^\dag \\
+    e_0e_1e_2e_3 \frac{\gamma}{m c} P^\dag = ~ 
+    & \frac{\gamma}{m c} (E e_0 + c p_1 e_1 + c p_2 e_2 + c p_3 e_3) \\
+    = ~ & U \\
+  \end{split}
+\end{equation}
+$ \gamma $を取り除けば、
+\begin{equation}
+  e_0e_1e_2e_3 \frac{P^\dag}{m c} = c e_0 + v_1 e_1 + v_2 e_2 + v_3 e_3
+\end{equation}
+となるので、直接3次元速度を算出できます。
 
 4元速度を扱う場合、単純に速度を足していくと光速を超えてしまう事になるので出来ませんが、
 4元運動量であれば、3次元運動量として加算していっても、エネルギーが自動的に調整されるので、
 相対論的に破綻する事がありません。
+
+\subsubsection{光の場合}
+
+質量がゼロなら光的になります。$ h $をプランク定数、$ \bm{\nu} $を振動数として、
+\begin{equation}
+  E^2 - c^2 \bm{p}^2 = E^2 - h^2 \bm{\nu}^2 = 0
+\end{equation}
+\begin{equation}
+  \begin{split}
+    P^\dag_{light} = ~ & E e_1e_2e_3 + c p_1 e_0e_2e_3 - c p_2 e_0e_1e_3 + c p_3 e_0e_1e_2 \\
+    = ~ & E e_1e_2e_3 + h \nu_1 e_0e_2e_3 - h \nu_2 e_0e_1e_3 + h \nu_3 e_0e_1e_2 \\
+    (P^\dag_{light})^2 = ~ & |P^\dag_{light}| = 0 \\
+  \end{split}
+\end{equation}
+光の場合、4元速度は固有時間$ \tau = 0 $のため定義できませんが、速度の方向と大きさは明確なので算出は容易です。
+光は進行方向の空間の長さがローレンツ収縮によりゼロになっています。
+潰れた時空超立方体で光の振動が起きていると考えると、光が横波を持ち偏光する事が自然に理解できます。
+重力によって時空超立方体が変形すると光の進行方向が変化します。
 
 \subsection{4元運動量とラピディティの関係}
 
@@ -811,17 +874,99 @@ $p=|\bm{p}|, v=|\bm{v}|$とします。
 \end{equation}
 運動量や質量が無限大に増大しても破綻しません。速さは光速に近づいていきます。
 質量がゼロの時、速度は光速になります。
-ラピディティを求めていくと、
+ラピディティ$ a $を求めていくと、
 \begin{equation}
   \begin{split}
-    &\beta = \frac{v}{c} = \tanh \theta = \frac{p}{\sqrt{m^2 c^2 + p^2}} = \frac{pc}{E}\\
-    &\tanh \theta < 1, \quad (p \to \infty, \quad m \to \infty)\\
-    &\texttt{Rapidity}: \quad \theta = \arctanh \frac{p}{\sqrt{m^2 c^2 + p^2}}, \quad
-    \theta \to \infty \quad (p \to \infty)\\
+    &\beta = \frac{v}{c} = \tanh a = \frac{p}{\sqrt{m^2 c^2 + p^2}} = \frac{pc}{E}
+    < 1, \quad (p \to \infty, \quad m \to \infty)\\
+    &\texttt{Rapidity}: \quad a = \arctanh \frac{p}{\sqrt{m^2 c^2 + p^2}}, \quad
+    a \to \infty \quad (p \to \infty)\\
   \end{split}
 \end{equation}
 
+\subsection{双対時空から速度への変換}
+
+重力による影響の結果、双対時空の時空立方体が回転し歪む様子を、三角関数と双曲線関数の混合回転で見てきました。
+物体の運動量は時空立方体に沿って進行すると考えられるので、時空立方体が変形すれば運動量が見かけ上変化するように見えます。
+物体側からすると、運動量を保っているので、慣性力は感じられず無重力浮遊の状態です。
+
+
+
+双対時空を四双四元数で表現すると、
+\begin{equation}
+  \begin{split}
+    S = ~ & t j + x kI + y kJ + z kK \\
+    S^\dag = ~ & i (t j + x kI + y kJ + z kK) = t k - x jI - y jJ - z jK \\
+  \end{split}
+\end{equation}
+\begin{itemize}
+  \item ある瞬間の物体の双対時空: $ S^\dag = t k - x jI - y jJ - z jK $
+  \item $ Cl(1,3) $表現 : $ S^\dag = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3 $
+\end{itemize}
+
+
+
+
+
+双対時空$ P $が重力の影響で$ P' $に変換されているとします。
+\begin{equation}
+  P = - t k + x jI + y jJ + z jK, \quad
+  P' = - t' k + x' jI + y' jJ + z' jK
+\end{equation}
+幾何積から内積からこれらの角度を計算します。
+\begin{equation}
+  \begin{split}
+    P P' = ~ & (- t k + x jI + y jJ + z jK)(- t' k + x' jI + y' jJ + z' jK) \\
+    = ~ & - t t' + t x' iI + t y' iJ + t z' iK \\
+    & - x t' iI + x x' - x y' K + x z' J \\
+    & - y t' iJ + y x' K + y y' - y z' I \\
+    & - z t' iK - z x' J + z y' I + z z' \\
+    = ~ & - t t' + x x' + y y' + z z' \\
+    & + t x' iI - x t' iI + t y' iJ - y t' iJ + t z' iK - z t' iK \\
+    & + z y' I - y z' I + x z' J - z x' J + y x' K - x y' K \\
+    = ~ & - t t' + x x' + y y' + z z' \\
+    & + (t x' - x t') iI + (t y' - y t') iJ + (t z' - z t') iK
+    + (z y' - y z') I + (x z' - z x') J + (y x' - x y') K \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \begin{split}
+    P P' = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3) \\
+    = ~ & z z' e_0e_1e_2 e_0e_1e_2 - z y' e_0e_1e_2 e_0e_1e_3 + z x' e_0e_1e_2 e_0e_2e_3 + z t' e_0e_1e_2 e_1e_2e_3 \\
+    & - y z' e_0e_1e_3 e_0e_1e_2 + y y' e_0e_1e_3 e_0e_1e_3 - y x' e_0e_1e_3 e_0e_2e_3 - y t' e_0e_1e_3 e_1e_2e_3 \\
+    & + x z' e_0e_2e_3 e_0e_1e_2 - x y' e_0e_2e_3 e_0e_1e_3 + x x' e_0e_2e_3 e_0e_2e_3 + x t' e_0e_2e_3 e_1e_2e_3 \\
+    & + t z' e_0e_2e_3 e_0e_1e_2 - t y' e_0e_2e_3 e_0e_1e_3 + t x' e_0e_2e_3 e_0e_2e_3 + t t' e_0e_2e_3 e_1e_2e_3 \\
+    = ~ & - z z' - z y' e_2e_3 - z x' e_1e_3 - z t' e_0e_3 \\
+    & + y z' e_2e_3 - y y' - y x' e_1e_2 - y t' e_0e_2 \\
+    & + x z' e_1e_3 + x y' e_1e_2 - x x' - x t' e_0e_1 \\
+    & + t z' e_0e_3 + t y' e_0e_2 + t x' e_0e_1 + t t' \\
+    = ~ & t t' - x x' - y y' - z z' \\
+    & + (t x' - x t') e_0e_1 + (t y' - y t') e_0e_2 + (t z' - z t') e_0e_3
+    + (x y' - y x') e_1e_2 + (x z' - z x') e_1e_3 + (y z' - z y') e_2e_3 \\
+  \end{split}
+\end{equation}
+内積は幾何積のスカラー部分だから、
+\begin{equation}
+  X \cdot X' = t t' - x x' - y y' - z z'
+\end{equation}
+扱う時空が時間的(timelike)であるとすると、$ X \cdot X > 0$かつ$X' \cdot X' > 0 $となり、
+ミンコフスキー時空の内積の性質から、
+\begin{equation}
+  X \cdot X' = \sqrt{X \cdot X} \sqrt{X' \cdot X'} \cosh \theta
+\end{equation}
+$ X' $の不変量は$ X $の不変量と一致しているはずですから、
+\begin{equation}
+  X \cdot X' = \sqrt{X^2} \sqrt{X^2} \cosh \theta = X^2 \cosh \theta
+\end{equation}
+従って、
+\begin{equation}
+  \theta = \arccosh \frac{X \cdot X'}{X^2}
+\end{equation}
+
+
 \subsection{双対時空での重力計算}
+
+
 
 物体もしくは粒子に働く力は、基本的に運動量の交換になります。
 相対論的に考えたとしてもこの原理は変わらず、$ S_p = E e_0 + c p_1 e_1 + c p_2 e_2 + c p_3 e_3 $の内、
@@ -845,34 +990,45 @@ $ c p_1 e_1 + c p_2 e_2 + c p_3 e_3 $の三次元ベクトルにおいて交換�
   \item 物体Aの運動量変化: $ \Delta \bm{p}_a = \Delta \bm{p} $
   \item 物体Bの運動量変化: $ \Delta \bm{p}_b = - \Delta \bm{p} $
   \item 物体A,B間の距離： $ r = |\bm{x}_b - \bm{x}_a| $
-  \item 物体A,B間の方向： $ \hat{\bm{r}} = \frac{\bm{x}_b - \bm{x}_a}{r} $
+  \item 物体AからBへの方向： $ \hat{\bm{r}} = (\bm{x}_b - \bm{x}_a) / r $
   \item 万有引力定数: $G$
   \item 微小時間ステップ: $\Delta t$
 \end{itemize}
 重力による力積をニュートン近似を用いて次のように計算します。
 \begin{equation}
-  \Delta \bm{p} = \frac{G m_a m_b}{r^2} \hat{\bm{r}} \Delta t = \frac{G m_a m_b}{r^3} \Delta t (\bm{x}_b - \bm{x}_a)
+  \Delta \bm{p} = \Delta t \frac{G m_a m_b}{r^2} \hat{\bm{r}} = \Delta t \frac{G m_a m_b}{r^3} (\bm{x}_b - \bm{x}_a)
 \end{equation}
-N体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係があります。この交換関係の内、1物体に関して和を計算します。
+物体Aに働くラピディティは、
 \begin{equation}
-  \bm{p}_{total} = \sum_{i = 1}^{N - 1} \Delta \bm{p}_i
+  \begin{split}
+    a = \arctanh \frac{p}{\sqrt{{m_a}^2 c^2 + p^2}}
+  \end{split}
 \end{equation}
-運動量の大きさ$ p = |\bm{p}_{total}| $からラピディティ$ \phi $を算出し、方向$ \hat{\bm{r}} $と掛け合わせておきます。
+
+次に、物体Aを含めてN体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係があります。物体Aに関して和を計算します。
 \begin{equation}
-  \bm{L} = \phi \hat{\bm{r}}
+  \bm{p}_{total} = \sum_{n = 1}^{N - 1} \Delta \bm{p}_n
 \end{equation}
-この$ \bm{L} $が双対時空(時空立方体)に作用し、局所的な体積を歪めると考えます。
-\begin{itemize}
-  \item 初期双対時空: $ S^\dag = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3 $
-\end{itemize}
-四双四元数で考えると、
+運動量の大きさ$ p = |\bm{p}_{total}| $からラピディティ$ a $を算出し、その方向と掛け合わせておきます。
+\begin{equation}
+  \bm{L} = a \frac{\bm{p}_{total}}{|\bm{p}_{total}|}
+\end{equation}
+この$ \bm{L} $が物体の持つ双対時空に作用します。
+つまり、その物体が状態として持つ局所的な時空立方体を歪めます。
+ある瞬間に浮遊する物体が持っている双対時空は物体の持つ座標と一致しています。
+その双対時空を四双四元数で表現すると、
 \begin{equation}
   \begin{split}
     S = ~ & t j + x kI + y kJ + z kK \\
     S^\dag = ~ & (t j + x kI + y kJ + z kK)i = - t k + x jI + y jJ + z jK \\
   \end{split}
 \end{equation}
-時空的回転子を三次元で表現すると、$ \hat{\bm{r}} $をベルソル化して、
+\begin{itemize}
+  \item ある瞬間の物体の双対時空: $ S^\dag = - t k + x jI + y jJ + z jK $
+\end{itemize}
+$ \bm{L} $の影響を双対混合回転子で表現すると、
+
+$ \hat{\bm{r}} $をベルソル化して、
 \begin{equation}
   \hat{\bm{r}} = r_1 e_0e_1 + r_2 e_0e_2 + r_3 e_0e_3, \quad r_1^2 + r_2^2 + r_3^2 = 1
 \end{equation}
@@ -1163,48 +1319,5 @@ $ r_1 = 1 , r_2 = 0 , r_3 = 0$とすると、
 物理法則としての実在性について問題がある事を示していると考えます。
 無限大が出現する原因は双曲線関数の適用にあるので、三角関数による回転によればその矛盾は回避されると考えました。
 
-\subsection{双対時空から速度への変換}
-
-これまで重力による影響の結果、双対時空の時空立方体が回転する様子を具体的に三次元で見てきました。
-この時空立方体の回転効果がどのように自由落下の見せかけの加速度に変換されるかを考えて計算していきます。
-回転した時空立方体の角度を抽出し直します。
-前節で計算した様に$ X $が重力の影響で$ X' $に変換されているとします。
-\begin{equation}
-  X = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3, \quad
-  X' = z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3
-\end{equation}
-内積からこれらの角度を計算します。幾何積から計算してみます。
-\begin{equation}
-  \begin{split}
-    X X' = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3) \\
-    = ~ & z z' e_0e_1e_2 e_0e_1e_2 - z y' e_0e_1e_2 e_0e_1e_3 + z x' e_0e_1e_2 e_0e_2e_3 + z t' e_0e_1e_2 e_1e_2e_3 \\
-    & - y z' e_0e_1e_3 e_0e_1e_2 + y y' e_0e_1e_3 e_0e_1e_3 - y x' e_0e_1e_3 e_0e_2e_3 - y t' e_0e_1e_3 e_1e_2e_3 \\
-    & + x z' e_0e_2e_3 e_0e_1e_2 - x y' e_0e_2e_3 e_0e_1e_3 + x x' e_0e_2e_3 e_0e_2e_3 + x t' e_0e_2e_3 e_1e_2e_3 \\
-    & + t z' e_0e_2e_3 e_0e_1e_2 - t y' e_0e_2e_3 e_0e_1e_3 + t x' e_0e_2e_3 e_0e_2e_3 + t t' e_0e_2e_3 e_1e_2e_3 \\
-    = ~ & - z z' - z y' e_2e_3 - z x' e_1e_3 - z t' e_0e_3 \\
-    & + y z' e_2e_3 - y y' - y x' e_1e_2 - y t' e_0e_2 \\
-    & + x z' e_1e_3 + x y' e_1e_2 - x x' - x t' e_0e_1 \\
-    & + t z' e_0e_3 + t y' e_0e_2 + t x' e_0e_1 + t t' \\
-    = ~ & t t' - x x' - y y' - z z' + (t x' - x t') e_0e_1 + (t y' - y t') e_0e_2 + (t z' - z t') e_0e_3 \\
-    & + (x y' - y x') e_1e_2 + (x z' - z x') e_1e_3 + (y z' - z y') e_2e_3 \\
-  \end{split}
-\end{equation}
-内積は幾何積のスカラー部分だから、
-\begin{equation}
-  X \cdot X' = t t' - x x' - y y' - z z'
-\end{equation}
-扱う時空が時間的(timelike)であるとすると、$ X \cdot X > 0$かつ$X' \cdot X' > 0 $となり、
-ミンコフスキー時空の内積の性質から、
-\begin{equation}
-  X \cdot X' = \sqrt{X \cdot X} \sqrt{X' \cdot X'} \cosh \theta
-\end{equation}
-$ X' $の不変量は$ X $の不変量と一致しているはずですから、
-\begin{equation}
-  X \cdot X' = \sqrt{X^2} \sqrt{X^2} \cosh \theta = X^2 \cosh \theta
-\end{equation}
-従って、
-\begin{equation}
-  \theta = \arccosh \frac{X \cdot X'}{X^2}
-\end{equation}
 
 \end{document}
