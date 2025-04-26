@@ -1257,35 +1257,32 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
 
 重力による影響の結果、双対時空の時空立方体が回転し歪む様子を、三角関数と双曲線関数の混合回転で見てきました。
 物体の運動量は時空立方体に沿って進行すると考えられるので、時空立方体が変形すれば運動量が見かけ上変化するように見えます。
-物体側からすると、運動量を保っているので、慣性力は感じられず無重力浮遊の状態です。
+物体側からすると運動量を保っているので、慣性力は感じられず無重力浮遊の状態です。
+双対時空で双対回転子によって回転した角度をもって、今度は時空側に通常回転子としてサンドイッチ積を行う事で、
+最終的に速度を得る事が出来ます。
 
-
-
-双対時空を四双四元数で表現すると、
+双対時空を今度は四双四元数で表現してみます。
 \begin{equation}
   \begin{split}
     S = ~ & t j + x kI + y kJ + z kK \\
-    S^\dag = ~ & i (t j + x kI + y kJ + z kK) = t k - x jI - y jJ - z jK \\
+    S^\dag = ~ & (t j + x kI + y kJ + z kK)i = - t k + x jI + y jJ + z jK \\
   \end{split}
 \end{equation}
 \begin{itemize}
-  \item ある瞬間の物体の双対時空: $ S^\dag = t k - x jI - y jJ - z jK $
-  \item $ Cl(1,3) $表現 : $ S^\dag = z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3 $
+  \item ある瞬間の物体の双対時空: $ S^\dag = - t k + x jI + y jJ + z jK $
+  \item $ Cl(1,3) $表現 : $ S^\dag = t e_1e_2e_3 + x e_0e_2e_3 - y e_0e_1e_3 + z e_0e_1e_2 $
 \end{itemize}
+四双四元数の方が符号が整っている印象です。クリフォード代数でも基底の順序を入れ替える事で符号を揃えることは可能です。
 
-
-
-
-
-双対時空$ P $が重力の影響で$ P' $に変換されているとします。
+双対時空$ S^\dag $が重力の影響で$ (S^\dag)' $に変換されているとします。
 \begin{equation}
-  P = - t k + x jI + y jJ + z jK, \quad
-  P' = - t' k + x' jI + y' jJ + z' jK
+  S^\dag = - t k + x jI + y jJ + z jK, \quad
+  (S^\dag)' = - t' k + x' jI + y' jJ + z' jK
 \end{equation}
 幾何積から内積からこれらの角度を計算します。
 \begin{equation}
   \begin{split}
-    P P' = ~ & (- t k + x jI + y jJ + z jK)(- t' k + x' jI + y' jJ + z' jK) \\
+    S^\dag (S^\dag)' = ~ & (- t k + x jI + y jJ + z jK)(- t' k + x' jI + y' jJ + z' jK) \\
     = ~ & - t t' + t x' iI + t y' iJ + t z' iK \\
     & - x t' iI + x x' - x y' K + x z' J \\
     & - y t' iJ + y x' K + y y' - y z' I \\
@@ -1298,9 +1295,10 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
     + (z y' - y z') I + (x z' - z x') J + (y x' - x y') K \\
   \end{split}
 \end{equation}
+内積の符号は四双四元数が$ Cl(3,1) $と同型である事を反映しています。
 \begin{equation}
   \begin{split}
-    P P' = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3) \\
+    S^\dag (S^\dag)' = ~ & (z e_0e_1e_2 - y e_0e_1e_3 + x e_0e_2e_3 + t e_1e_2e_3)(z' e_0e_1e_2 - y' e_0e_1e_3 + x' e_0e_2e_3 + t' e_1e_2e_3) \\
     = ~ & z z' e_0e_1e_2 e_0e_1e_2 - z y' e_0e_1e_2 e_0e_1e_3 + z x' e_0e_1e_2 e_0e_2e_3 + z t' e_0e_1e_2 e_1e_2e_3 \\
     & - y z' e_0e_1e_3 e_0e_1e_2 + y y' e_0e_1e_3 e_0e_1e_3 - y x' e_0e_1e_3 e_0e_2e_3 - y t' e_0e_1e_3 e_1e_2e_3 \\
     & + x z' e_0e_2e_3 e_0e_1e_2 - x y' e_0e_2e_3 e_0e_1e_3 + x x' e_0e_2e_3 e_0e_2e_3 + x t' e_0e_2e_3 e_1e_2e_3 \\
@@ -1314,22 +1312,23 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
     + (x y' - y x') e_1e_2 + (x z' - z x') e_1e_3 + (y z' - z y') e_2e_3 \\
   \end{split}
 \end{equation}
-内積は幾何積のスカラー部分だから、
+外積については、四双四元数と$ Cl(1,3) $は一致しています。
 \begin{equation}
-  X \cdot X' = t t' - x x' - y y' - z z'
+  S^\dag \cdot (S^\dag)' = t t' - x x' - y y' - z z'
 \end{equation}
-扱う時空が時間的(timelike)であるとすると、$ X \cdot X > 0$かつ$X' \cdot X' > 0 $となり、
+扱う時空が時間的であるとすると、$ S^\dag \cdot S^\dag > 0 $かつ$ (S^\dag)' \cdot (S^\dag)' > 0 $となり、
 ミンコフスキー時空の内積の性質から、
 \begin{equation}
-  X \cdot X' = \sqrt{X \cdot X} \sqrt{X' \cdot X'} \cosh \theta
+  S^\dag \cdot (S^\dag)' = \sqrt{S^\dag \cdot S^\dag} \sqrt{(S^\dag)' \cdot (S^\dag)'} \cosh \theta
 \end{equation}
-$ X' $の不変量は$ X $の不変量と一致しているはずですから、
+$ (S^\dag)' $の不変量は$ S^\dag $の不変量と一致しているはずですから、
 \begin{equation}
-  X \cdot X' = \sqrt{X^2} \sqrt{X^2} \cosh \theta = X^2 \cosh \theta
+  S^\dag \cdot (S^\dag)' = \sqrt{(S^\dag)^2} \sqrt{(S^\dag)^2} \cosh \theta = (S^\dag)^2 \cosh \theta
 \end{equation}
 従って、
 \begin{equation}
-  \theta = \arccosh \frac{X \cdot X'}{X^2}
+  \theta = \arccosh \frac{S^\dag \cdot (S^\dag)'}{(S^\dag)^2}
+  = \arccosh \frac{t t' - x x' - y y' - z z'}{t^2 - x^2 - y^2 - z^2}
 \end{equation}
 
 
