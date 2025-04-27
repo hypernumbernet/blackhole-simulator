@@ -842,8 +842,9 @@ $ c $の位置から4元速度は、単位時空基底で構成されていま�
 \end{equation}
 光の場合、4元速度は固有時間$ \tau = 0 $のため定義できませんが、速度の方向と大きさは明確なので算出は容易です。
 光は進行方向の空間の長さがローレンツ収縮によりゼロになっています。
-潰れた時空超立方体で光の振動が起きていると考えると、光が横波を持ち偏光する事が自然に理解できます。
-重力によって時空超立方体が変形すると光の進行方向が変化します。
+このようなゼロの空間で光の活動がどの様になっているかを考える事は困難です。
+しかし、時空超立方体で光の振動が起きていると考えると、光に関する円偏光などの現象が理解しやすくなります。
+また、重力によって時空超立方体が変形すると光の進行方向が変化すると想定できます。
 
 \subsection{4元運動量とラピディティの関係}
 
@@ -1226,9 +1227,9 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
   \Longleftrightarrow
   \left\{
     \begin{aligned}
-      &x' = x + (z u_2 - y u_3) \sin \phi + ( - 2 x (u_1^2 - 1) + 2 (y u_1 u_2 + z u_1 u_3)) \sin^2 \frac{\phi}{2} \\
-      &y' = y + (x u_3 - z u_1) \sin \phi + ( - 2 y (u_2^2 - 1) + 2 (x u_1 u_2 + z u_2 u_3)) \sin^2 \frac{\phi}{2} \\
-      &z' = z + (y u_1 - x u_2) \sin \phi + ( - 2 z (u_3^2 - 1) + 2 (x u_1 u_3 + y u_2 u_3)) \sin^2 \frac{\phi}{2} \\
+      &x' = x + (z u_2 - y u_3) \sin \phi + ( - 2 x (1 - u_1^2) + 2 (y u_1 u_2 + z u_1 u_3)) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x u_3 - z u_1) \sin \phi + ( - 2 y (1 - u_2^2) + 2 (x u_1 u_2 + z u_2 u_3)) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y u_1 - x u_2) \sin \phi + ( - 2 z (1 - u_3^2) + 2 (x u_1 u_3 + y u_2 u_3)) \sin^2 \frac{\phi}{2} \\
     \end{aligned}
   \right.
 \end{equation}
@@ -1236,9 +1237,9 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
   \Longleftrightarrow
   \left\{
     \begin{aligned}
-      &x' = x + (z u_2 - y u_3) \sin \phi + 2 (x (1 - u_1^2) + y u_1 u_2 + z u_1 u_3) \sin^2 \frac{\phi}{2} \\
-      &y' = y + (x u_3 - z u_1) \sin \phi + 2 (y (1 - u_2^2) + x u_1 u_2 + z u_2 u_3) \sin^2 \frac{\phi}{2} \\
-      &z' = z + (y u_1 - x u_2) \sin \phi + 2 (z (1 - u_3^2) + x u_1 u_3 + y u_2 u_3) \sin^2 \frac{\phi}{2} \\
+      &x' = x + (z u_2 - y u_3) \sin \phi + 2 (x (u_1^2 - 1) + y u_1 u_2 + z u_1 u_3) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x u_3 - z u_1) \sin \phi + 2 (y (u_2^2 - 1) + x u_1 u_2 + z u_2 u_3) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y u_1 - x u_2) \sin \phi + 2 (z (u_3^2 - 1) + x u_1 u_3 + y u_2 u_3) \sin^2 \frac{\phi}{2} \\
     \end{aligned}
   \right.
 \end{equation}
@@ -1253,7 +1254,7 @@ $ u_1 = 1 , u_2 = 0 , u_3 = 0$とすると、
 物理法則としての実在性について問題がある事を示していると考えます。
 無限大が出現する原因は双曲線関数の適用にあるので、三角関数による回転によればその矛盾は回避されると考えました。
 
-\subsection{双対時空から速度への変換}
+\subsection{双対時空から加速度として速度に反映}
 
 重力による影響の結果、双対時空の時空立方体が回転し歪む様子を、三角関数と双曲線関数の混合回転で見てきました。
 物体の運動量は時空立方体に沿って進行すると考えられるので、時空立方体が変形すれば運動量が見かけ上変化するように見えます。
@@ -1330,6 +1331,78 @@ $ (S^\dag)' $の不変量は$ S^\dag $の不変量と一致しているはずで
   \theta = \arccosh \frac{S^\dag \cdot (S^\dag)'}{(S^\dag)^2}
   = \arccosh \frac{t t' - x x' - y y' - z z'}{t^2 - x^2 - y^2 - z^2}
 \end{equation}
+しかし、この方法では1種類の角度しか求められません。欲しいのは2種類の角度になります。
+双対時空へのブーストはそのまま時空への空間回転になるので再計算の必要はないと考えられます。
 
+\subsubsection{ブーストの回転角}
+
+双対時空の空間回転の双対は時空へのブーストになります。
+\begin{itemize}
+  \item 双対時空単位基底: $ k, c jI, c jJ, c jK $
+  \item 回転後: $ k + b_1 c jI + b_2 c jJ + b_3 c jK $
+  \item 進行方向の回転子ベルソル: $ \bm{u} = u_1 iI + u_2 iJ + u_3 iK $
+  \item 進行方向の回転角: $ \phi $
+\end{itemize}
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &b_1 = 1 + (u_2 - u_3) \sin \phi + 2 ((u_1^2 - 1) + u_1 u_2 + u_1 u_3) \sin^2 \frac{\phi}{2} \\
+      &b_2 = 1 + (u_3 - u_1) \sin \phi + 2 ((u_2^2 - 1) + u_1 u_2 + u_2 u_3) \sin^2 \frac{\phi}{2} \\
+      &b_3 = 1 + (u_1 - u_2) \sin \phi + 2 ((u_3^2 - 1) + u_1 u_3 + u_2 u_3) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+空間部分の内積から、
+\begin{equation}
+  \begin{split}
+    (c jI + c jJ + c jK) \cdot (b_1 c jI + b_2 c jJ + b_3 c jK)
+    = ~ & \sqrt{c^2 + c^2 + c^2} \sqrt{b_1^2 c^2 + b_2^2 c^2 + b_3^2 c^2} \cos \phi' \\
+    b_1 c^2 + b_2 c^2 + b_3 c^2
+    = ~ & c \sqrt{3} c \sqrt{b_1^2 + b_2^2 + b_3^2} \cos \phi' \\
+    b_1 + b_2 + b_3
+    = ~ & \sqrt{3} \sqrt{b_1^2 + b_2^2 + b_3^2} \cos \phi' \\
+  \end{split}
+\end{equation}
+回転後の長さは変わらないので、
+\begin{equation}
+  \begin{split}
+    & c^2 + c^2 + c^2 = b_1^2 c^2 + b_2^2 c^2 + b_3^2 c^2 \\
+    & b_1^2 + b_2^2 + b_3^2 = 3 \\
+  \end{split}
+\end{equation}
+\begin{equation}
+  \phi' = \arccos \frac{b_1 + b_2 + b_3}{3}
+\end{equation}
+$ u_1 = 1, u_2 = 0, u_3 = 0 $の時は、
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &b_1 = 1 \\
+      &b_2 = 1 - \sin \phi - 2 \sin^2 \frac{\phi}{2} \\
+      &b_3 = 1 + \sin \phi - 2 \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \frac{b_1 + b_2 + b_3}{3} = 1 - \frac{4}{3} \sin^2 \frac{\phi}{2}
+\end{equation}
+この式は時空超立方体における時間が関わる超平面の3つの合計値が小さくなる事を意味しています。
+つまり、物体が速度を持つことによる時間の遅れ（特殊相対論的な時間の遅れ）とは別に、
+時空超立方体が歪むことによる時間の遅れを定義する事が出来ます。
+通常の時間の流れの速さを1とすると時間の遅れは以下の式になります。
+\begin{equation}
+  \texttt{Time dilation}: \frac{4}{3} \sin^2 \frac{\phi}{2}
+\end{equation}
+この値は1よりも大きくなるので時間反転を起こすことを意味しています。
+時間反転の境界の条件は、
+\begin{equation}
+  \begin{split}
+    & \frac{4}{3} \sin^2 \frac{\phi}{2} = 1 \\
+    & \leftrightarrow \quad \sin^2 \frac{\phi}{2} = \frac{3}{4} \\
+    & \leftrightarrow \quad \sin \frac{\phi}{2} = \frac{\sqrt{3}}{2} \\
+    & \leftrightarrow \quad \phi = 2 \arcsin \frac{\sqrt{3}}{2} 
+    = \frac{2}{3} \pi = 120^\circ \\
+  \end{split}
+\end{equation}
 
 \end{document}
