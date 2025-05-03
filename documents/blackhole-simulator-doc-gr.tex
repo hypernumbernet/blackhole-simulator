@@ -868,13 +868,13 @@ $p=|\bm{p}|, v=|\bm{v}|$とします。
 \end{equation}
 運動量や質量が無限大に増大しても破綻しません。速さは光速に近づいていきます。
 質量がゼロの時、速度は光速になります。
-ラピディティ$ a $を求めていくと、
+ラピディティ$ \Theta $を求めていくと、
 \begin{equation}
   \begin{split}
-    &\beta = \frac{v}{c} = \tanh a = \frac{p}{\sqrt{m^2 c^2 + p^2}} = \frac{pc}{E}
-    < 1, \quad (p \to \infty, \quad m \to \infty)\\
-    &\texttt{Rapidity}: \quad a = \arctanh \frac{p}{\sqrt{m^2 c^2 + p^2}}, \quad
-    a \to \infty \quad (p \to \infty)\\
+    &\beta = \frac{v}{c} = \tanh \Theta = \frac{p}{\sqrt{m^2 c^2 + p^2}} = \frac{pc}{E} < 1
+    , \quad (p \to \infty, \quad m \to \infty)\\
+    &\texttt{Rapidity}: \quad \Theta = \arctanh \frac{p}{\sqrt{m^2 c^2 + p^2}}
+    , \quad \Theta \to \infty \quad (p \to \infty)\\
   \end{split}
 \end{equation}
 
@@ -912,22 +912,12 @@ $ (p_1, p_2, p_3) $の三次元ベクトルにおいて交換されると考え�
 \begin{equation}
   \Delta \bm{p} = \Delta t \frac{G m_a m_b}{r^2} \hat{\bm{r}} = \Delta t \frac{G m_a m_b}{r^3} (\bm{x}_b - \bm{x}_a)
 \end{equation}
-物体Aに働くラピディティは、
-\begin{equation}
-  \begin{split}
-    a = \arctanh \frac{p}{\sqrt{{m_a}^2 c^2 + p^2}}
-  \end{split}
-\end{equation}
-
-次に、物体Aを含めてN体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係があります。物体Aに関して和を計算します。
+物体Aを含めてN体の物体があるとすると、$ N(N - 1) / 2 $の運動量の交換関係があります。物体Aに関して和を計算します。
 \begin{equation}
   \bm{p}_{total} = \sum_{n = 1}^{N - 1} \Delta \bm{p}_n
 \end{equation}
-運動量の大きさ$ p = |\bm{p}_{total}| $からラピディティ$ a $を算出し、その方向と掛け合わせておきます。
-\begin{equation}
-  \bm{L} = a \frac{\bm{p}_{total}}{|\bm{p}_{total}|}
-\end{equation}
-この$ \bm{L} $が物体の持つ双対時空に作用します。
+運動量に関しては線形的にどれだけでも加算することが出来るという前提です。
+この$ \bm{p}_{total} $が物体の持つ双対時空に作用します。
 つまり、その物体が状態として持つ局所的な時空立方体を歪めます。
 ある瞬間に浮遊する物体が持っている双対時空は物体の持つ座標と一致しています。
 \begin{equation}
@@ -947,7 +937,7 @@ $ (p_1, p_2, p_3) $の三次元ベクトルにおいて交換されると考え�
 \begin{itemize}
   \item ある瞬間の物体の双対時空: $ S^\dag = t e_1e_2e_3 + x e_0e_2e_3 - y e_0e_1e_3 + z e_0e_1e_2 $
 \end{itemize}
-$ \bm{L} $の影響を双対混合回転子で表現すると、
+双対混合回転子で表現すると、
 \begin{equation}
   \bm{u} = \frac{\bm{p}_a}{|\bm{p}_a|}
   , \quad \bm{p} = \frac{\bm{p}_{total}}{|\bm{p}_{total}|}
@@ -1334,7 +1324,7 @@ $ (S^\dag)' $の不変量は$ S^\dag $の不変量と一致しているはずで
 しかし、この方法では1種類の角度しか求められません。欲しいのは2種類の角度になります。
 双対時空へのブーストはそのまま時空への空間回転になるので再計算の必要はないと考えられます。
 
-\subsubsection{ブーストの回転角}
+\subsubsection{空間部分の回転角}
 
 双対時空の空間回転の双対は時空へのブーストになります。
 \begin{itemize}
@@ -1343,6 +1333,15 @@ $ (S^\dag)' $の不変量は$ S^\dag $の不変量と一致しているはずで
   \item 進行方向の回転子ベルソル: $ \bm{u} = u_1 iI + u_2 iJ + u_3 iK $
   \item 進行方向の回転角: $ \phi $
 \end{itemize}
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &x' = x + (z u_2 - y u_3) \sin \phi + 2 (x (u_1^2 - 1) + y u_1 u_2 + z u_1 u_3) \sin^2 \frac{\phi}{2} \\
+      &y' = y + (x u_3 - z u_1) \sin \phi + 2 (y (u_2^2 - 1) + x u_1 u_2 + z u_2 u_3) \sin^2 \frac{\phi}{2} \\
+      &z' = z + (y u_1 - x u_2) \sin \phi + 2 (z (u_3^2 - 1) + x u_1 u_3 + y u_2 u_3) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
 \begin{equation}
   \left\{
     \begin{aligned}
@@ -1373,7 +1372,10 @@ $ (S^\dag)' $の不変量は$ S^\dag $の不変量と一致しているはずで
 \begin{equation}
   \phi' = \arccos \frac{b_1 + b_2 + b_3}{3}
 \end{equation}
-$ u_1 = 1, u_2 = 0, u_3 = 0 $の時は、
+
+\subsubsection{時空立方体の歪みによる時間の遅れ}
+
+$ u_1 = 1, u_2 = 0, u_3 = 0 $の時の回転後の係数は、
 \begin{equation}
   \left\{
     \begin{aligned}
@@ -1384,12 +1386,30 @@ $ u_1 = 1, u_2 = 0, u_3 = 0 $の時は、
   \right.
 \end{equation}
 \begin{equation}
-  \frac{b_1 + b_2 + b_3}{3} = 1 - \frac{4}{3} \sin^2 \frac{\phi}{2}
+  \cos \phi' = \frac{b_1 + b_2 + b_3}{3} = 1 - \frac{4}{3} \sin^2 \frac{\phi}{2}
 \end{equation}
 この式は時空超立方体における時間が関わる超平面の3つの合計値が小さくなる事を意味しています。
 つまり、物体が速度を持つことによる時間の遅れ（特殊相対論的な時間の遅れ）とは別に、
 時空超立方体が歪むことによる時間の遅れを定義する事が出来ます。
-通常の時間の流れの速さを1とすると時間の遅れは以下の式になります。
+全方位的に計算してみると、
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      &b_1 = 1 + (u_2 - u_3) \sin \phi + (2 u_1^2 - 2 + 2 u_1 u_2 + 2 u_1 u_3) \sin^2 \frac{\phi}{2} \\
+      &b_2 = 1 + (u_3 - u_1) \sin \phi + (2 u_2^2 - 2 + 2 u_1 u_2 + 2 u_2 u_3) \sin^2 \frac{\phi}{2} \\
+      &b_3 = 1 + (u_1 - u_2) \sin \phi + (2 u_3^2 - 2 + 2 u_1 u_3 + 2 u_2 u_3) \sin^2 \frac{\phi}{2} \\
+    \end{aligned}
+  \right.
+\end{equation}
+\begin{equation}
+  \begin{split}
+    \frac{b_1 + b_2 + b_3}{3} = ~ & 1 + \frac{4}{3} (-1 + u_1 u_2 + u_1 u_3 + u_2 u_3) \sin^2 \frac{\phi}{2} \\
+    = ~ & 1 - \frac{4}{3} \sin^2 \frac{\phi}{2} + \frac{4}{3} (u_1 u_2 + u_1 u_3 + u_2 u_3) \sin^2 \frac{\phi}{2} \\
+  \end{split}
+\end{equation}
+立方体の斜め方向に回転すると値が変わって来ますが、実は直交座標表現の立方体というのは虚実であって、
+根底にある角度という本質への変換に必要な項目と考えられます。
+座標の方向に合わせた場合については、通常の時間の流れの速さを1とすると時間の遅れは以下の式になります。
 \begin{equation}
   \texttt{Time dilation}: \frac{4}{3} \sin^2 \frac{\phi}{2}
 \end{equation}
@@ -1397,12 +1417,27 @@ $ u_1 = 1, u_2 = 0, u_3 = 0 $の時は、
 時間反転の境界の条件は、
 \begin{equation}
   \begin{split}
-    & \frac{4}{3} \sin^2 \frac{\phi}{2} = 1 \\
-    & \leftrightarrow \quad \sin^2 \frac{\phi}{2} = \frac{3}{4} \\
-    & \leftrightarrow \quad \sin \frac{\phi}{2} = \frac{\sqrt{3}}{2} \\
+    & \frac{4}{3} \sin^2 \frac{\phi}{2} = 1
+    \quad \leftrightarrow \quad \sin^2 \frac{\phi}{2} = \frac{3}{4}
+    \quad \leftrightarrow \quad \sin \frac{\phi}{2} = \frac{\sqrt{3}}{2} \\
     & \leftrightarrow \quad \phi = 2 \arcsin \frac{\sqrt{3}}{2} 
-    = \frac{2}{3} \pi = 120^\circ \\
+    = \frac{2}{3} \pi, \frac{4}{3} \pi, ... = 120^\circ, 240^\circ, ... \\
   \end{split}
 \end{equation}
+時間の流れが変われば加速度$ a $も影響を受けるので、時間成分を掛け合わせたラピディティは、
+\begin{equation}
+  \Theta = \phi' \cos \phi'
+\end{equation}
+速度ゼロからの加速度で考えると、
+\begin{equation}
+  \frac{a}{c} = \tanh( \phi' \cos \phi' )
+\end{equation}
+$ 0 \le \phi < \frac{2}{3} \pi $の範囲で重力が正の方向で、
+$ \frac{2}{3} \pi < \phi < \frac{4}{3} \pi $の範囲では重力が負の方向になり、重力反転を起こします。
+$ \frac{4}{3} \pi < \phi < \frac{8}{3} \pi $の範囲では重力は再び正の方向で、
+$ \frac{8}{3} \pi < \phi < \frac{10}{3} \pi $の範囲で再度重力反転を起こします。
+
+なお、ここで扱っている回転子の角度については一切の物理定数が関わってこない事が式から判明しています。
+従って、角度と実際の物理定数との突合は観測によらなければならないです。
 
 \end{document}
