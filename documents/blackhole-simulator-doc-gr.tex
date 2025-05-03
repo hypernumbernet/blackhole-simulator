@@ -1439,5 +1439,20 @@ $ \frac{8}{3} \pi < \phi < \frac{10}{3} \pi $の範囲で再度重力反転を�
 
 なお、ここで扱っている回転子の角度については一切の物理定数が関わってこない事が式から判明しています。
 従って、角度と実際の物理定数との突合は観測によらなければならないです。
+地球表面上での時間の遅れの観測値は、時間の流れを1とした時、$ 6.95 \times 10^{-10} $です。
+\begin{equation}
+  dt = \frac{4}{3} \sin^2 \frac{\phi}{2}
+  \quad \leftrightarrow \quad \sin \frac{\phi}{2} = \sqrt{\frac{3}{4} dt}
+  \quad \leftrightarrow \quad \phi = 2 \arcsin \sqrt{\frac{3}{4} dt}
+\end{equation}
+微小角近似$\arcsin x \approx x$を使って、
+\begin{equation}
+  \phi = 2 \sqrt{\frac{3}{4} dt} = \sqrt{3 dt} = 4.566 \times 10^{-5}
+\end{equation}
+地球表面の重力加速度$ 9.8 m/s^2 $に比例しているとすると比例定数$ k $は、
+\begin{equation}
+  k = 4.66 \times 10^{-6}
+\end{equation}
+
 
 \end{document}
