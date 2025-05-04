@@ -15,13 +15,14 @@ namespace bhs // Black Hole Simulator
 // Do Not sort or delete for save files
 enum class Engine
 {
-    Gravity3D,
-    Universe1,
-    Relativity1,
-    Universe2,
-    GravityCollision,
-    Relativity2,
-    Relativity3,
+    Gravity3D = 0,
+    Universe1 = 1,
+    Relativity1 = 2,
+    Universe2 = 3,
+    GravityCollision = 4,
+    Relativity2 = 5,
+    Relativity3 = 6,
+    Relativity4 = 7,
 };
 
 enum class Precision

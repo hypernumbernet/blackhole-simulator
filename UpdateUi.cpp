@@ -14,6 +14,7 @@ QHash<bhs::Engine, QString>& UpdateUi::engineLabel()
         {bhs::Engine::Relativity1, tr("Relativity 1")},
         {bhs::Engine::Relativity2, tr("Relativity 2")},
         {bhs::Engine::Relativity3, tr("Relativity 3")},
+        {bhs::Engine::Relativity4, tr("Relativity 4")},
         {bhs::Engine::Universe1, tr("Universe1")},
         {bhs::Engine::Universe2, tr("Universe2")},
     };
@@ -28,6 +29,7 @@ QList<bhs::Engine>& UpdateUi::engineUse()
         bhs::Engine::Relativity1,
         bhs::Engine::Relativity2,
         bhs::Engine::Relativity3,
+        bhs::Engine::Relativity4,
         bhs::Engine::Universe1,
         bhs::Engine::Universe2,
     };

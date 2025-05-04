@@ -1,16 +1,8 @@
 #include "MainWidget.h"
 #include <QApplication>
-#include "hnn/clifford13.h"
-#include "hnn/clifford31.h"
 
 int main(int argc, char **argv)
 {
-    // std::cout << Clifford13::to_table_string() << std::endl;
-    // std::cout << Clifford13::to_table_string_tex1() << std::endl;
-    // std::cout << Clifford13::to_table_string_tex2() << std::endl;
-    std::cout << Clifford13::to_table_string_tex() << std::endl;
-    std::cout << Clifford31::to_table_string_tex() << std::endl;
-
     QApplication app(argc, argv);
     app.setApplicationName("blackhole-simulator-2");
     app.setApplicationVersion("2.0 beta");

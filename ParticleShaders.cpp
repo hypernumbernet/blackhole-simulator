@@ -15,6 +15,8 @@
 #include "engine/Relativity2/CoreDoubleRelativity2.h"
 #include "engine/Relativity3/EngineRelativity3.h"
 #include "engine/Relativity3/CoreDoubleRelativity3.h"
+#include "engine/Relativity4/EngineRelativity4.h"
+#include "engine/Relativity4/CoreDoubleRelativity4.h"
 
 using namespace bhs;
 
@@ -95,6 +97,10 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
             m_NBodyEngineFloat = new EngineRelativity3<float>(sim);
             m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
             break;
+        case Engine::Relativity4:
+            m_NBodyEngineFloat = new EngineRelativity4<float>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineFloat, CoreTrapezoid::factory);
+            break;
         }
     } else {
         switch (sim.engine)
@@ -128,6 +134,10 @@ void ParticleShaders::setNBodyEngine(const SimCondition& sim)
         case Engine::Relativity3:
             m_NBodyEngineDouble = new EngineRelativity3<double>(sim);
             m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleRelativity3::factory);
+            break;
+        case Engine::Relativity4:
+            m_NBodyEngineDouble = new EngineRelativity4<double>(sim);
+            m_threadAdmin->initialize(m_NBodyEngineDouble, CoreDoubleRelativity4::factory);
             break;
         }
     }
